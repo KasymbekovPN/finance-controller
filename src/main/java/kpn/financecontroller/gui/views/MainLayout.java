@@ -3,11 +3,16 @@ package kpn.financecontroller.gui.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.views.mainDetails.MainDetails;
+import kpn.financecontroller.security.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +50,11 @@ public class MainLayout extends AppLayout {
     }
 
     private final H1 viewTitle = new H1();
+    private final SecurityService securityService;
 
-    public MainLayout() {
+    @Autowired
+    public MainLayout(SecurityService securityService) {
+        this.securityService = securityService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerComponent());
@@ -59,10 +67,20 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createAndCustomizeHeader(DrawerToggle toggle, H1 viewTitle) {
-        Header header = new Header(toggle, viewTitle);
+
+        Button logout = new Button("Log out", e -> securityService.logout());
+
+//        Header header = new Header(toggle, viewTitle, logout);
+        HorizontalLayout header = new HorizontalLayout(toggle, viewTitle, logout);
         // TODO: 03.01.2022 how set class names
-        header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
-                "w-full");
+//        header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
+//                "w-full");
+
+        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        header.expand(viewTitle);
+        header.setWidth("100%");
+        header.addClassNames("py-0", "px-m");
+
         return header;
     }
 
