@@ -1,0 +1,12 @@
+server.port: 5000
+
+jasypt:
+  passwordName: JASYPT_PASSWORD
+  postgres:
+    url: jdbc:postgresql://localhost/
+    dbName: YLO21L6CWBODK/eL0+/AFg==
+    username: Dyyf9Ao7KkG4LAoRwZsNIYfd2outTYao
+    password: TNKoHuelZHlW3wx91Kk9fg==
+
+spring:
+  jpa.generate-ddl: true

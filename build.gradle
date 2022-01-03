@@ -21,9 +21,15 @@ repositories {
 
 ext {
 	set('vaadinVersion', "22.0.0")
+	set('assertjVersion', '3.21.0')
+	set('jasyptVersion', '1.9.3')
 }
 
 dependencies {
+
+	implementation "org.assertj:assertj-core:$assertjVersion"
+	implementation "org.jasypt:jasypt:$jasyptVersion"
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.vaadin:vaadin-spring-boot-starter'
