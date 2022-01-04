@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,6 +53,16 @@ class UserRepoTest {
         Optional<UserEntity> maybeUserEntity = userRepo.findById(expectedId);
         assertThat(maybeUserEntity).isPresent();
         UserEntity userEntity = maybeUserEntity.get();
+        assertThat(OLD_USERNAME).isEqualTo(userEntity.getUsername());
+        assertThat(OLD_PASSWORD).isEqualTo(userEntity.getPassword());
+        assertThat(OLD_ROLE).isEqualTo(userEntity.getRole());
+    }
+
+    @Test
+    void shouldCheckFindingByUserName() {
+        List<UserEntity> userEntities = userRepo.findByUsername(OLD_USERNAME);
+        assertThat(1).isEqualTo(userEntities.size());
+        UserEntity userEntity = userEntities.get(0);
         assertThat(OLD_USERNAME).isEqualTo(userEntity.getUsername());
         assertThat(OLD_PASSWORD).isEqualTo(userEntity.getPassword());
         assertThat(OLD_ROLE).isEqualTo(userEntity.getRole());
