@@ -15,11 +15,11 @@ public class UserEntityTest {
     }
 
     @Test
-    void shouldCheckNameSettingGetting() {
+    void shouldCheckUsernameSettingGetting() {
         UserEntity userEntity = new UserEntity();
         String expectedUsername = "some-user-name";
-        userEntity.setName(expectedUsername);
-        assertThat(expectedUsername).isEqualTo(userEntity.getName());
+        userEntity.setUsername(expectedUsername);
+        assertThat(expectedUsername).isEqualTo(userEntity.getUsername());
     }
 
     @Test

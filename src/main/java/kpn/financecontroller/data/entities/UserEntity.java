@@ -10,9 +10,9 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @Getter
 @Entity(name = "usr")
-public class UserEntity extends AbstractEntity{
+public class UserEntity extends AbstractEntity {
     @NotEmpty
-    private String name;
+    private String username;
     @JsonIgnore
     private String password;
     private Role role;
