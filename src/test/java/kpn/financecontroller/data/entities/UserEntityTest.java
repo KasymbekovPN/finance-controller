@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.entities;
 
+import kpn.financecontroller.data.domain.user.Role;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

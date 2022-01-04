@@ -1,6 +1,5 @@
-package kpn.financecontroller.data.domain;
+package kpn.financecontroller.data.domain.user;
 
-import kpn.financecontroller.data.entities.Role;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

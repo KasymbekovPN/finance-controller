@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.repo;
 
-import kpn.financecontroller.data.entities.Role;
+import kpn.financecontroller.data.domain.user.Role;
 import kpn.financecontroller.data.entities.UserEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

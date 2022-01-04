@@ -1,19 +1,18 @@
 package kpn.financecontroller.data.service;
 
-import kpn.financecontroller.data.entities.Role;
+import kpn.financecontroller.data.domain.user.Role;
 import kpn.financecontroller.data.entities.UserEntity;
 import kpn.financecontroller.data.repo.UserRepo;
-import org.assertj.core.api.Assertions;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -21,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class UserServiceTest {
 
     private static final String WRONG_USER_NAME = "wrong user name";

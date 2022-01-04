@@ -1,6 +1,7 @@
 package kpn.financecontroller.data.domain;
 
-import kpn.financecontroller.data.entities.Role;
+import kpn.financecontroller.data.domain.user.User;
+import kpn.financecontroller.data.domain.user.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
