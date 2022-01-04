@@ -4,7 +4,10 @@ jasypt:
   passwordName: JASYPT_PASSWORD
   postgres:
     url: jdbc:postgresql://localhost/
-    dbName: YLO21L6CWBODK/eL0+/AFg==
+#    prod
+#    dbName: YLO21L6CWBODK/eL0+/AFg==
+#    dev
+    dbName: DvJdNxS89e5TeRFQp+slpQ==
     username: Dyyf9Ao7KkG4LAoRwZsNIYfd2outTYao
     password: TNKoHuelZHlW3wx91Kk9fg==
 
