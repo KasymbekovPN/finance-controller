@@ -1,7 +1,8 @@
-package kpn.financecontroller.data.entities;
+package kpn.financecontroller.data.entities.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kpn.financecontroller.data.domain.user.Role;
+import kpn.financecontroller.data.entities.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 

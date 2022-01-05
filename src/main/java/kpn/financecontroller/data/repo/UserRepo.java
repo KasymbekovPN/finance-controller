@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.repo;
 
-import kpn.financecontroller.data.entities.UserEntity;
+import kpn.financecontroller.data.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

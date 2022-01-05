@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.entities;
+package kpn.financecontroller.data.entities.user;
 
 import kpn.financecontroller.data.domain.user.Role;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserEntityTest {
 
     @Test
-    void shouldCheckIsSettingGetting() {
+    void shouldCheckIdSettingGetting() {
         UserEntity userEntity = new UserEntity();
         long expectedId = 123L;
         userEntity.setId(expectedId);
