@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -14,5 +15,6 @@ import javax.validation.constraints.NotEmpty;
 public class CurrencyEntity extends AbstractEntity {
     @NotEmpty
     @Column(unique = true)
+    @Size(min = 3, max = 3)
     private String code;
 }

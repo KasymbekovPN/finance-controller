@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.repo;
+package kpn.financecontroller.data.repo.user;
 
 import kpn.financecontroller.data.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

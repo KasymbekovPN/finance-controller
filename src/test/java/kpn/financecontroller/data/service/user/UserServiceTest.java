@@ -1,8 +1,8 @@
-package kpn.financecontroller.data.service;
+package kpn.financecontroller.data.service.user;
 
 import kpn.financecontroller.data.domain.user.Role;
 import kpn.financecontroller.data.entities.user.UserEntity;
-import kpn.financecontroller.data.repo.UserRepo;
+import kpn.financecontroller.data.repo.user.UserRepo;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
