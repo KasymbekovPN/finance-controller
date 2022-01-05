@@ -1,6 +1,7 @@
 package kpn.financecontroller.data.domain.user;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Builder
+@EqualsAndHashCode
 public class User implements UserDetails {
     @Getter
     private String username;
