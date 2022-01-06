@@ -22,6 +22,7 @@ import kpn.financecontroller.result.Result;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
+import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Currency")
@@ -122,7 +123,7 @@ public class CurrencyView extends VerticalLayout {
     private void saveContact(CurrencyForm.CurrencySaveFormEvent event) {
         Result<Currency> savingResult = service.save(new CurrencyEntity(event.getValue()));
         if (!savingResult.getSuccess()){
-            String text = extractResultMessage(savingResult.getCode(), savingResult.getArgs());
+            String text = extractResultMessage(savingResult.getCode(), List.of(savingResult.getArgs()));
             createClosableErrorNotification(text, 60_000).open();
         }
         updateList();

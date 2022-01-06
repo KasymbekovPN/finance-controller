@@ -10,3 +10,9 @@ jasypt:
 
 spring:
   jpa.generate-ddl: true
+
+message.seed:
+  non-exist:
+    code: non-exist.code
+    args: []
+  default-locale-code: en

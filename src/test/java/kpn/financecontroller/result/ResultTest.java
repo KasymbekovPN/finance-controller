@@ -32,9 +32,9 @@ public class ResultTest {
     @Test
     void shouldCheckArgs() {
         Result.Builder<String> builder = Result.<String>builder();
-        List<Integer> expectedArgs = List.of(1, 2, 3);
-        expectedArgs.forEach(builder::arg);
+        List<Integer> list = List.of(1, 2, 3);
+        list.forEach(builder::arg);
         Result<String> result = builder.build();
-        assertThat(expectedArgs).isEqualTo(result.getArgs());
+        assertThat(list.toArray()).isEqualTo(result.getArgs());
     }
 }

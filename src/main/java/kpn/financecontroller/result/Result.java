@@ -1,22 +1,23 @@
 package kpn.financecontroller.result;
 
+import kpn.financecontroller.message.MessageSeed;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class Result<T> {
+public class Result<T> implements MessageSeed {
     private final Boolean success;
     private final T value;
     private final String code;
-    private final List<Object> args;
+    private final Object[] args;
 
     public static <T> Builder<T> builder(){
         return new Builder<>();
     }
 
-    private Result(boolean success, T value, String code, List<Object> args) {
+    private Result(boolean success, T value, String code, Object[] args) {
         this.success = success;
         this.value = value;
         this.code = code;
@@ -50,7 +51,7 @@ public class Result<T> {
         }
 
         public Result<T> build(){
-            return new Result<>(success, value, code, args);
+            return new Result<>(success, value, code, args.toArray());
         }
     }
 }
