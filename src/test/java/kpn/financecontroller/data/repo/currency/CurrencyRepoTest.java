@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,15 @@ public class CurrencyRepoTest {
 
     private static final String FIRST_CODE = "RUB";
     private static final String SECOND_CODE = "USD";
+
+    private static final String[] OTHER_CODES = {
+            "AAA",
+            "AAB",
+            "AAC",
+            "BAA",
+            "BAB",
+            "BAC",
+    };
 
     private final CurrencyRepo currencyRepo;
 
@@ -75,9 +85,32 @@ public class CurrencyRepoTest {
         assertThat(maybeCurrencyEntity).isEmpty();
     }
 
+    @Test
+    void shouldCheckAllFinding() {
+        saveOtherCodes();
+        List<CurrencyEntity> entities = currencyRepo.findAll();
+        assertThat(entities.size()).isEqualTo(1 + OTHER_CODES.length);
+    }
+
+    @Test
+    void shouldCheckSearching() {
+        saveOtherCodes();
+        String filter = "AA";
+        List<CurrencyEntity> entities = currencyRepo.search(filter);
+        assertThat(entities.size()).isEqualTo(4);
+    }
+
     @AfterEach
     void tearDown() {
         currencyRepo.deleteAll();
+    }
+
+    private void saveOtherCodes() {
+        Arrays.stream(OTHER_CODES).map(code -> {
+            CurrencyEntity currencyEntity = new CurrencyEntity();
+            currencyEntity.setCode(code);
+            return currencyEntity;
+        }).forEach(currencyRepo::save);
     }
 
     private CurrencyEntity createCurrencyEntity(String code) {

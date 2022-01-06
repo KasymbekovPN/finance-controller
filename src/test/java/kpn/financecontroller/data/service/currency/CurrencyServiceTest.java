@@ -75,6 +75,21 @@ public class CurrencyServiceTest {
         assertThat(result.getSuccess()).isFalse();
     }
 
+    @Test
+    void shouldCheckFindAll() {
+        Result<List<Currency>> result = currencyService.findAll();
+        assertThat(result.getSuccess()).isTrue();
+        assertThat(result.getValue().size()).isEqualTo(1);
+    }
+
+    @Test
+    void shouldCheckSearchingByFilter() {
+        String filter = "UB";
+        Result<List<Currency>> result = currencyService.search(filter);
+        assertThat(result.getSuccess()).isTrue();
+        assertThat(result.getValue().size()).isEqualTo(1);
+    }
+
     @AfterEach
     void tearDown() {
         currencyRepo.deleteAll();

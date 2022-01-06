@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import kpn.financecontroller.gui.views.currency.CurrencyView;
 import kpn.financecontroller.gui.views.mainDetails.MainDetails;
 import kpn.financecontroller.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,7 +134,8 @@ public class MainLayout extends AppLayout {
     // TODO: 03.01.2022 refact
     private List<RouterLink> createLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{
-            new MenuItemInfo("Main details", "la la-globe", MainDetails.class)
+                new MenuItemInfo("Main details", "la la-globe", MainDetails.class),
+                new MenuItemInfo("Currencies", "la la-globe", CurrencyView.class)
         };
         List<RouterLink> links = new ArrayList<>();
         for (MenuItemInfo menuItemInfo : menuItems) {

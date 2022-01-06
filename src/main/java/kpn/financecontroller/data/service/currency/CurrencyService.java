@@ -5,10 +5,11 @@ import kpn.financecontroller.data.entities.currency.CurrencyEntity;
 import kpn.financecontroller.data.repo.currency.CurrencyRepo;
 import kpn.financecontroller.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CurrencyService {
@@ -25,7 +26,7 @@ public class CurrencyService {
             currencyRepo.save(currencyEntity);
             return Result.<Currency>builder()
                     .success(true)
-                    .value(new Currency(currencyEntity.getCode()))
+                    .value(new Currency(currencyEntity))
                     .build();
         } catch (Throwable ex){
             // TODO: 05.01.2022 extend definition
@@ -41,7 +42,7 @@ public class CurrencyService {
         if (maybeEntity.isPresent()){
             return Result.<Currency>builder()
                     .success(true)
-                    .value(new Currency(maybeEntity.get().getCode()))
+                    .value(new Currency(maybeEntity.get()))
                     .build();
         }
         return Result.<Currency>builder()
@@ -51,7 +52,23 @@ public class CurrencyService {
                 .build();
     }
 
+    public Result<List<Currency>> findAll(){
+        List<CurrencyEntity> entities = currencyRepo.findAll();
+        List<Currency> currencies = entities.stream().map(Currency::new).collect(Collectors.toList());
+        return Result.<List<Currency>>builder().success(true).value(currencies).build();
+    }
+
     public void deleteById(Long id) {
         currencyRepo.deleteById(id);
+    }
+
+    public Result<List<Currency>> search(String filter) {
+        if (filter == null || filter.isEmpty()){
+            return findAll();
+        }
+
+        List<CurrencyEntity> entities = currencyRepo.search(filter);
+        List<Currency> currencies = entities.stream().map(Currency::new).collect(Collectors.toList());
+        return Result.<List<Currency>>builder().success(true).value(currencies).build();
     }
 }

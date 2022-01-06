@@ -1,12 +1,19 @@
 package kpn.financecontroller.data.domain.currency;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import kpn.financecontroller.data.entities.currency.CurrencyEntity;
+import lombok.*;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode
 public class Currency {
-    private final String code;
+    private Long id;
+    private String code;
+
+    public Currency(CurrencyEntity entity) {
+        this.id = entity.getId();
+        this.code = entity.getCode();
+    }
 }

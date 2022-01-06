@@ -8,8 +8,10 @@ public class CurrencyTest {
 
     @Test
     void shouldCheckGetting() {
-        String expectedValue = "RUB";
-        Currency currency = new Currency(expectedValue);
-        assertThat(expectedValue).isEqualTo(currency.getCode());
+        String expectedCode = "RUB";
+        long expectedId = 123L;
+        Currency currency = new Currency(expectedId, expectedCode);
+        assertThat(expectedId).isEqualTo(currency.getId());
+        assertThat(expectedCode).isEqualTo(currency.getCode());
     }
 }

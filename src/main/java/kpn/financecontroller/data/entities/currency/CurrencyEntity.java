@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.entities.currency;
 
+import kpn.financecontroller.data.domain.currency.Currency;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,12 @@ public class CurrencyEntity extends AbstractEntity {
     @Column(unique = true)
     @Size(min = 3, max = 3)
     private String code;
+
+    public CurrencyEntity() {
+    }
+
+    public CurrencyEntity(Currency currency) {
+        this.id = currency.getId();
+        this.code = currency.getCode();
+    }
 }
