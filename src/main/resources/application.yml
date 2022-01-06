@@ -19,3 +19,10 @@ message.seed:
     code: non-exist.code
     args: []
   default-locale-code: en
+
+i18n:
+  encoding: en
+  resource: translations
+  providedLocales:
+    - en
+    - ru

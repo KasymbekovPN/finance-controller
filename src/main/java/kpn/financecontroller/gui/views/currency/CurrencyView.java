@@ -22,7 +22,6 @@ import kpn.financecontroller.result.Result;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
-import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Currency")

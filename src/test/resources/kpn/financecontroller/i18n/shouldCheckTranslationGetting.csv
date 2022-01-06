@@ -1,0 +1,5 @@
+test0,,en,test string
+test1,arg,en,test string with value arg
+test0,,ru,тестовая строка
+test1,arg,ru,тестовая строка со значением arg
+test2,arg,en,test2 [arg]
