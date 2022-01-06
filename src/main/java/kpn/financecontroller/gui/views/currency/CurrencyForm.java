@@ -13,7 +13,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domain.currency.Currency;
-import lombok.Getter;
+import kpn.financecontroller.gui.events.CloseFormEvent;
+import kpn.financecontroller.gui.events.DeleteFormEvent;
+import kpn.financecontroller.gui.events.SaveFormEvent;
 
 public class CurrencyForm extends FormLayout {
     private final TextField code = new TextField("Code", "type code...");
@@ -42,62 +44,52 @@ public class CurrencyForm extends FormLayout {
     }
 
     private Component createButtonsLayout() {
-          save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-          delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-          close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-          save.addClickShortcut(Key.ENTER);
-          close.addClickShortcut(Key.ESCAPE);
+        save.addClickShortcut(Key.ENTER);
+        close.addClickShortcut(Key.ESCAPE);
 
-          save.addClickListener(event -> validateAndSave());
-          delete.addClickListener(event -> fireEvent(new DeleteEvent(this, currency)));
-          close.addClickListener(event -> fireEvent(new CloseEvent(this)));
+        save.addClickListener(event -> validateAndSave());
 
-          binder.addStatusChangeListener(event -> save.setEnabled(binder.isValid()));
+        delete.addClickListener(event -> fireEvent(new CurrencyDeleteFormEvent(this, currency)));
+        close.addClickListener(event -> fireEvent(new CurrencyCloseFormEvent(this)));
 
-          return new HorizontalLayout(save, delete, close);
+        binder.addStatusChangeListener(event -> save.setEnabled(binder.isValid()));
+
+        return new HorizontalLayout(save, delete, close);
     }
 
     private void validateAndSave() {
       try{
            binder.writeBean(currency);
-           fireEvent(new SaveEvent(this, currency));
+           fireEvent(new CurrencySaveFormEvent(this, currency));
       } catch (ValidationException ex){
            ex.printStackTrace();
       }
     }
 
-    // TODO: 05.01.2022 remake it as generic class
-     @Getter
-     public static abstract class ContactFormEvent extends ComponentEvent<CurrencyForm>{
-          private final Currency currency;
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
+         return getEventBus().addListener(eventType, listener);
+    }
 
-          public ContactFormEvent(CurrencyForm source, Currency currency) {
-               super(source, false);
-               this.currency = currency;
-          }
-     }
+    public static class CurrencySaveFormEvent extends SaveFormEvent<CurrencyForm, Currency>{
+        public CurrencySaveFormEvent(CurrencyForm source, Currency value) {
+            super(source, value);
+        }
+    }
 
-     public static class SaveEvent extends ContactFormEvent{
-          public SaveEvent(CurrencyForm source, Currency contact) {
-               super(source, contact);
-          }
-     }
+    public static class CurrencyDeleteFormEvent extends DeleteFormEvent<CurrencyForm, Currency>{
+        public CurrencyDeleteFormEvent(CurrencyForm source, Currency value) {
+            super(source, value);
+        }
+    }
 
-     public static class DeleteEvent extends ContactFormEvent{
-          public DeleteEvent(CurrencyForm source, Currency contact) {
-               super(source, contact);
-          }
-     }
-
-     public static class CloseEvent extends ContactFormEvent{
-          public CloseEvent(CurrencyForm source) {
-               super(source, null);
-          }
-     }
-
-     @Override
-     protected <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
-          return getEventBus().addListener(eventType, listener);
-     }
+    public static class CurrencyCloseFormEvent extends CloseFormEvent<CurrencyForm, Currency>{
+        public CurrencyCloseFormEvent(CurrencyForm source) {
+            super(source);
+        }
+    }
 }

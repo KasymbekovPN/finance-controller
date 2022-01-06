@@ -65,9 +65,9 @@ public class CurrencyView extends VerticalLayout {
         form = new CurrencyForm();
         form.setWidth("25em");
 
-        form.addListener(CurrencyForm.SaveEvent.class, this::saveContact);
-        form.addListener(CurrencyForm.DeleteEvent.class, this::deleteEvent);
-        form.addListener(CurrencyForm.CloseEvent.class, e -> closeEditor());
+        form.addListener(CurrencyForm.CurrencySaveFormEvent.class, this::saveContact);
+        form.addListener(CurrencyForm.CurrencyDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(CurrencyForm.CurrencyCloseFormEvent.class, e -> closeEditor());
     }
 
     private Component getToolBar() {
@@ -113,14 +113,14 @@ public class CurrencyView extends VerticalLayout {
         }
     }
 
-    private void deleteEvent(CurrencyForm.DeleteEvent event) {
-        service.deleteById(event.getCurrency().getId());
+    private void deleteEvent(CurrencyForm.CurrencyDeleteFormEvent event) {
+        service.deleteById(event.getValue().getId());
         updateList();
         closeEditor();
     }
 
-    private void saveContact(CurrencyForm.SaveEvent event) {
-        Result<Currency> savingResult = service.save(new CurrencyEntity(event.getCurrency()));
+    private void saveContact(CurrencyForm.CurrencySaveFormEvent event) {
+        Result<Currency> savingResult = service.save(new CurrencyEntity(event.getValue()));
         if (!savingResult.getSuccess()){
             String text = extractResultMessage(savingResult.getCode(), savingResult.getArgs());
             createClosableErrorNotification(text, 60_000).open();
