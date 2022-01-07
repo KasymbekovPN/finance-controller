@@ -1,13 +1,10 @@
 package kpn.financecontroller.gui.views.currency;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,12 +14,17 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domain.currency.Currency;
 import kpn.financecontroller.data.entities.currency.CurrencyEntity;
 import kpn.financecontroller.data.service.currency.CurrencyService;
+import kpn.financecontroller.gui.notifications.NotificationFactory;
+import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.financecontroller.gui.views.MainLayout;
+import kpn.financecontroller.i18n.I18nService;
+import kpn.financecontroller.message.LocaledMessageSeed;
+import kpn.financecontroller.message.MessageSeedFactory;
 import kpn.financecontroller.result.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
-import java.util.List;
 
 @PageTitle("Currency")
 @org.springframework.stereotype.Component
@@ -34,11 +36,18 @@ public class CurrencyView extends VerticalLayout {
     private final Grid<Currency> grid = new Grid<>(Currency.class);
     private final TextField filter = new TextField("", "filter by code...");
     private final CurrencyService service;
+    private final MessageSeedFactory seedFactory;
+    private final I18nService i18nService;
+    private final NotificationFactory notificationFactory;
 
     private CurrencyForm form;
 
-    public CurrencyView(CurrencyService service) {
+    @Autowired
+    public CurrencyView(CurrencyService service, MessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
         this.service = service;
+        this.seedFactory = seedFactory;
+        this.i18nService = i18nService;
+        this.notificationFactory = notificationFactory;
 
         addClassName("currency-view");
         setSizeFull();
@@ -122,8 +131,16 @@ public class CurrencyView extends VerticalLayout {
     private void saveContact(CurrencyForm.CurrencySaveFormEvent event) {
         Result<Currency> savingResult = service.save(new CurrencyEntity(event.getValue()));
         if (!savingResult.getSuccess()){
-            String text = extractResultMessage(savingResult.getCode(), List.of(savingResult.getArgs()));
-            createClosableErrorNotification(text, 60_000).open();
+            LocaledMessageSeed seed = seedFactory.create(savingResult);
+            String text = i18nService.getTranslation(seed);
+            notificationFactory.getBuilder(Notifications.ERROR)
+                    .duration(60_000)
+                    .text(text)
+                    .buttonIcon(new Icon("lumo", "cross"))
+                    .buttonThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE)
+                    .buttonAttribute("aria-label", "Close")
+                    .build()
+                    .open();
         }
         updateList();
         closeEditor();
@@ -132,29 +149,5 @@ public class CurrencyView extends VerticalLayout {
     private void addContact() {
         grid.asSingleSelect().clear();
         editCurrency(new Currency());
-    }
-
-    // TODO: 06.01.2022 it must be bean
-    private String extractResultMessage(String code, List<Object> args){
-        return code + " " + args;
-    }
-
-    // TODO: 06.01.2022 it must be bean
-    private Notification createClosableErrorNotification(String text, int duration){
-        Notification notification = new Notification("", duration);
-
-        Div textDiv = new Div(new Text(String.format("[ERROR] %s", text)));
-
-        Button closeButton = new Button(new Icon("lumo", "cross"));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.getElement().setAttribute("aria-label", "Close");
-        closeButton.addClickListener(event -> notification.close());
-
-        HorizontalLayout layout = new HorizontalLayout(textDiv, closeButton);
-        layout.setAlignItems(Alignment.CENTER);
-
-        notification.add(layout);
-
-        return notification;
     }
 }
