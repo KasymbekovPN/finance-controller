@@ -65,7 +65,7 @@ public class CurrencyServiceTest {
         Result<Currency> result = currencyService.loadById(expectedId);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("service.currency.loadById.noOne");
-        assertThat(result.getArgs()).isEqualTo(List.of(expectedId));
+        assertThat(result.getArgs()).isEqualTo(List.of(expectedId).toArray());
     }
 
     @Test
