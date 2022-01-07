@@ -90,6 +90,7 @@ public class CurrencyServiceTest {
         assertThat(result.getValue().size()).isEqualTo(1);
     }
 
+    // TODO: 07.01.2022 must use service
     @AfterEach
     void tearDown() {
         currencyRepo.deleteAll();
