@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import kpn.financecontroller.gui.views.country.CountryView;
 import kpn.financecontroller.gui.views.currency.CurrencyView;
 import kpn.financecontroller.gui.views.mainDetails.MainDetails;
 import kpn.financecontroller.gui.views.measure.MeasureView;
@@ -137,7 +138,8 @@ public class MainLayout extends AppLayout {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{
                 new MenuItemInfo("Main details", "la la-globe", MainDetails.class),
                 new MenuItemInfo("Currencies", "la la-globe", CurrencyView.class),
-                new MenuItemInfo("Measures", "la la-globe", MeasureView.class)
+                new MenuItemInfo("Measures", "la la-globe", MeasureView.class),
+                new MenuItemInfo("Countries", "la la-globe", CountryView.class)
         };
         List<RouterLink> links = new ArrayList<>();
         for (MenuItemInfo menuItemInfo : menuItems) {
