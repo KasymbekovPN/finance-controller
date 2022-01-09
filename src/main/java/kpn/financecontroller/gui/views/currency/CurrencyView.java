@@ -129,7 +129,7 @@ public class CurrencyView extends VerticalLayout {
     }
 
     private void saveContact(CurrencyForm.CurrencySaveFormEvent event) {
-        Result<Currency> savingResult = service.save(new CurrencyEntity(event.getValue()));
+        Result<Currency> savingResult = service.saveOld(new CurrencyEntity(event.getValue()));
         if (!savingResult.getSuccess()){
             LocaledMessageSeed seed = seedFactory.create(savingResult);
             String text = i18nService.getTranslation(seed);

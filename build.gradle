@@ -23,12 +23,15 @@ ext {
 	set('vaadinVersion', "22.0.0")
 	set('assertjVersion', '3.21.0')
 	set('jasyptVersion', '1.9.3')
+	set('mockitoVersion', '1.10.19')
 }
 
 dependencies {
 
 	implementation "org.assertj:assertj-core:$assertjVersion"
 	implementation "org.jasypt:jasypt:$jasyptVersion"
+
+	implementation "org.mockito:mockito-all:$mockitoVersion"
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'

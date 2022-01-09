@@ -46,21 +46,20 @@ public class CountryServiceTest {
     void shouldCheckFailSavingAttempt() {
         Result<Country> result = countryService.save(createCountryEntity(FIRST_NAME));
         assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("service.country.save.fail");
+        assertThat(result.getCode()).isEqualTo("service.CountryService.save.fail");
     }
 
     @Test
-    void shouldCheckFindAll() {
-        Result<List<Country>> result = countryService.findAll();
+    void shouldCheckLoadAll() {
+        Result<List<Country>> result = countryService.loadAll();
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue().size()).isEqualTo(1);
     }
 
-
     @Test
     void shouldAllDeleting() {
         countryService.deleteAll();
-        Result<List<Country>> result = countryService.findAll();
+        Result<List<Country>> result = countryService.loadAll();
         assertThat(result.getValue()).isEmpty();
     }
 
@@ -76,7 +75,7 @@ public class CountryServiceTest {
         long expectedId = -1L;
         Result<Country> result = countryService.loadById(expectedId);
         assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("service.country.loadById.noOne");
+        assertThat(result.getCode()).isEqualTo("service.CountryService.loadById.noOne");
         assertThat(result.getArgs()).isEqualTo(List.of(expectedId).toArray());
     }
 

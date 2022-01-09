@@ -3,77 +3,70 @@ package kpn.financecontroller.data.service.country;
 import kpn.financecontroller.data.domain.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.repo.country.CountryRepo;
+import kpn.financecontroller.data.service.AbstractDTOService;
 import kpn.financecontroller.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CountryService {
+public class CountryService extends AbstractDTOService<Country, CountryEntity> {
 
-    private final CountryRepo countryRepo;
+    private final CountryRepo repo;
 
     @Autowired
-    public CountryService(CountryRepo countryRepo) {
-        this.countryRepo = countryRepo;
+    public CountryService(CountryRepo repo) {
+        this.repo = repo;
     }
 
     public Result<Country> save(CountryEntity entity) {
-        try{
-            countryRepo.save(entity);
-            return Result.<Country>builder()
-                    .success(true)
-                    .value(new Country(entity))
-                    .build();
-        } catch (Throwable ex){
-            // TODO: 05.01.2022 extend definition
-            return Result.<Country>builder()
-                    .success(false)
-                    .code("service.country.save.fail")
-                    .build();
-        }
+        return saveImpl(entity, repo);
     }
 
-    // TODO: 07.01.2022 rename to loadAll
-    public Result<List<Country>> findAll() {
-        List<CountryEntity> entities = countryRepo.findAll();
-        List<Country> currencies = entities.stream().map(Country::new).collect(Collectors.toList());
-        return Result.<List<Country>>builder().success(true).value(currencies).build();
+    public Result<List<Country>> loadAll() {
+        return loadAllImpl(repo);
     }
 
     public void deleteAll() {
-        countryRepo.deleteAll();
+        deleteAllImpl(repo);
     }
 
     public Result<Country> loadById(Long id) {
-        Optional<CountryEntity> maybeEntity = countryRepo.findById(id);
-        if (maybeEntity.isPresent()){
-            return Result.<Country>builder()
-                    .success(true)
-                    .value(new Country(maybeEntity.get()))
-                    .build();
-        }
-        return Result.<Country>builder()
-                .success(false)
-                .code("service.country.loadById.noOne")
-                .arg(id)
-                .build();
+        return loadByIdImpl(id, repo);
     }
 
     public void deleteById(Long id) {
-        countryRepo.deleteById(id);
+        deleteByIdImpl(id, repo);
     }
 
     public Result<List<Country>> search(String filter) {
-        if (filter == null || filter.isEmpty()){
-            return findAll();
-        }
+        return searchImpl(filter, repo);
+    }
 
-        List<CountryEntity> entities = countryRepo.search(filter);
-        List<Country> currencies = entities.stream().map(Country::new).collect(Collectors.toList());
-        return Result.<List<Country>>builder().success(true).value(currencies).build();
+    @Override
+    protected Result.Builder<Country> getResultBuilder() {
+        return Result.<Country>builder();
+    }
+
+    @Override
+    protected Result.Builder<List<Country>> getListResultBuilder() {
+        return Result.<List<Country>>builder();
+    }
+
+    @Override
+    protected Country convertEntityToDomain(CountryEntity entity) {
+        return new Country(entity);
+    }
+
+    @Override
+    protected List<Country> convertEntitiesToDomains(List<CountryEntity> entities) {
+        return entities.stream().map(Country::new).collect(Collectors.toList());
+    }
+
+    @Override
+    protected List<CountryEntity> getSearchedEntities(String filter) {
+        return repo.search(filter);
     }
 }

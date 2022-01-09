@@ -3,6 +3,8 @@ package kpn.financecontroller.data.service.currency;
 import kpn.financecontroller.data.domain.currency.Currency;
 import kpn.financecontroller.data.entities.currency.CurrencyEntity;
 import kpn.financecontroller.data.repo.currency.CurrencyRepo;
+import kpn.financecontroller.data.service.Loader;
+import kpn.financecontroller.data.service.Saver;
 import kpn.financecontroller.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,17 +13,33 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// TODO: 08.01.2022 add interface + add generic Service + creation in ...Config
 @Service
 public class CurrencyService {
 
     private final CurrencyRepo currencyRepo;
 
+    private final CurrencySaver saver;
+    private final CurrencyLoader loader;
+
     @Autowired
-    public CurrencyService(CurrencyRepo currencyRepo) {
+    public CurrencyService(CurrencyRepo currencyRepo, CurrencySaver saver, CurrencyLoader loader) {
         this.currencyRepo = currencyRepo;
+        this.saver = saver;
+        this.loader = loader;
     }
 
-    public Result<Currency> save(CurrencyEntity currencyEntity) {
+    // TODO: 08.01.2022 to interface
+    public Saver<Currency, CurrencyEntity> saver(){
+        return saver;
+    }
+
+    public Loader<Currency, CurrencyEntity, Long> loader(){
+        return loader;
+    };
+
+    // TODO: 08.01.2022 del
+    public Result<Currency> saveOld(CurrencyEntity currencyEntity) {
         try{
             currencyRepo.save(currencyEntity);
             return Result.<Currency>builder()
@@ -37,7 +55,7 @@ public class CurrencyService {
         }
     }
 
-    public Result<Currency> loadById(Long id) {
+    public Result<Currency> loadByIdOld(Long id) {
         Optional<CurrencyEntity> maybeEntity = currencyRepo.findById(id);
         if (maybeEntity.isPresent()){
             return Result.<Currency>builder()
@@ -52,7 +70,7 @@ public class CurrencyService {
                 .build();
     }
 
-    public Result<List<Currency>> findAll(){
+    public Result<List<Currency>> findAllOld(){
         List<CurrencyEntity> entities = currencyRepo.findAll();
         List<Currency> currencies = entities.stream().map(Currency::new).collect(Collectors.toList());
         return Result.<List<Currency>>builder().success(true).value(currencies).build();
@@ -64,7 +82,7 @@ public class CurrencyService {
 
     public Result<List<Currency>> search(String filter) {
         if (filter == null || filter.isEmpty()){
-            return findAll();
+            return findAllOld();
         }
 
         List<CurrencyEntity> entities = currencyRepo.search(filter);

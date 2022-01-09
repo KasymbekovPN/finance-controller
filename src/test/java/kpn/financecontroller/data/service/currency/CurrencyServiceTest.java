@@ -40,21 +40,21 @@ public class CurrencyServiceTest {
 
     @Test
     void shouldCheckSaving() {
-        Result<Currency> result = currencyService.save(createCurrencyEntity(SECOND_CODE));
+        Result<Currency> result = currencyService.saver().save(createCurrencyEntity(SECOND_CODE));
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isNotNull();
     }
 
     @Test
     void shouldCheckFailSavingAttempt() {
-        Result<Currency> result = currencyService.save(createCurrencyEntity(FIRST_CODE));
+        Result<Currency> result = currencyService.saver().save(createCurrencyEntity(FIRST_CODE));
         assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("service.currency.save.fail");
+        assertThat(result.getCode()).isEqualTo("service.CurrencySaver.save.fail");
     }
 
     @Test
     void shouldCheckLoadingById() {
-        Result<Currency> result = currencyService.loadById(expectedId);
+        Result<Currency> result = currencyService.loader().byId(expectedId);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue().getCode()).isEqualTo(FIRST_CODE);
     }
@@ -62,22 +62,22 @@ public class CurrencyServiceTest {
     @Test
     void shouldCheckFailLoadingAttemptById() {
         long expectedId = -1L;
-        Result<Currency> result = currencyService.loadById(expectedId);
+        Result<Currency> result = currencyService.loader().byId(expectedId);
         assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("service.currency.loadById.noOne");
-        assertThat(result.getArgs()).isEqualTo(List.of(expectedId).toArray());
+        assertThat(result.getCode()).isEqualTo("loader.byId.noOne");
+        assertThat(result.getArgs()).isEqualTo(List.of("CurrencyLoader", expectedId).toArray());
     }
 
     @Test
     void shouldCheckDeleting() {
         currencyService.deleteById(expectedId);
-        Result<Currency> result = currencyService.loadById(expectedId);
+        Result<Currency> result = currencyService.loadByIdOld(expectedId);
         assertThat(result.getSuccess()).isFalse();
     }
 
     @Test
     void shouldCheckFindAll() {
-        Result<List<Currency>> result = currencyService.findAll();
+        Result<List<Currency>> result = currencyService.loader().all();
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue().size()).isEqualTo(1);
     }
