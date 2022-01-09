@@ -27,7 +27,6 @@ public abstract class AbstractLoader<D, E, I> implements Loader<D, E, I> {
 
     @Override
     public Result<List<D>> by(String attribute, Object value) {
-
         Result.Builder<List<D>> builder = getListResultBuilder();
         if (checkAttribute(attribute)){
             if (checkValue(attribute, value)){
