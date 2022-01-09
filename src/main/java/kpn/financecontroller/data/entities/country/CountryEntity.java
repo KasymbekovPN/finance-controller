@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.entities.country;
 
-import kpn.financecontroller.data.domain.country.Country;
+import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

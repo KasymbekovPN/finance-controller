@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.entities.currency;
 
-import kpn.financecontroller.data.domain.currency.Currency;
+import kpn.financecontroller.data.domains.currency.Currency;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;

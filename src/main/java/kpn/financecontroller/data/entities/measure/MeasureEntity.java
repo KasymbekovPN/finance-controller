@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.entities.measure;
 
-import kpn.financecontroller.data.domain.measure.Measure;
+import kpn.financecontroller.data.domains.measure.Measure;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

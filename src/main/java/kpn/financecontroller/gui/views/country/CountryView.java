@@ -11,9 +11,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import kpn.financecontroller.data.domain.country.Country;
+import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.data.service.country.CountryService;
+import kpn.financecontroller.data.services.country.CountryServiceOLd;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.financecontroller.gui.views.MainLayout;
@@ -37,7 +37,7 @@ public class CountryView extends VerticalLayout {
 
     private final Grid<Country> grid = new Grid<>(Country.class);
     private final TextField filter = new TextField("", "filter by name..."); // TODO: 08.01.2022 translate it
-    private final CountryService service;
+    private final CountryServiceOLd service;
     private final MessageSeedFactory seedFactory;
     private final I18nService i18nService;
     private final NotificationFactory notificationFactory;
@@ -45,7 +45,7 @@ public class CountryView extends VerticalLayout {
     private CountryForm form;
 
     @Autowired
-    public CountryView(CountryService service, MessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
+    public CountryView(CountryServiceOLd service, MessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
         this.service = service;
         this.seedFactory = seedFactory;
         this.i18nService = i18nService;

@@ -11,9 +11,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import kpn.financecontroller.data.domain.currency.Currency;
+import kpn.financecontroller.data.domains.currency.Currency;
 import kpn.financecontroller.data.entities.currency.CurrencyEntity;
-import kpn.financecontroller.data.service.currency.CurrencyService;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.financecontroller.gui.views.MainLayout;
@@ -35,7 +35,7 @@ public class CurrencyView extends VerticalLayout {
 
     private final Grid<Currency> grid = new Grid<>(Currency.class);
     private final TextField filter = new TextField("", "filter by code...");
-    private final CurrencyService service;
+    private final DTOService<Currency, CurrencyEntity, Long> service;
     private final MessageSeedFactory seedFactory;
     private final I18nService i18nService;
     private final NotificationFactory notificationFactory;
@@ -43,7 +43,7 @@ public class CurrencyView extends VerticalLayout {
     private CurrencyForm form;
 
     @Autowired
-    public CurrencyView(CurrencyService service, MessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
+    public CurrencyView(DTOService<Currency, CurrencyEntity, Long> service, MessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
         this.service = service;
         this.seedFactory = seedFactory;
         this.i18nService = i18nService;
@@ -103,7 +103,7 @@ public class CurrencyView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.search(filter.getValue()).getValue());
+        grid.setItems(service.loader().all().getValue());
     }
 
     private void closeEditor() {
@@ -123,13 +123,14 @@ public class CurrencyView extends VerticalLayout {
     }
 
     private void deleteEvent(CurrencyForm.CurrencyDeleteFormEvent event) {
-        service.deleteById(event.getValue().getId());
+        service.deleter().byId(event.getValue().getId());
+
         updateList();
         closeEditor();
     }
 
     private void saveContact(CurrencyForm.CurrencySaveFormEvent event) {
-        Result<Currency> savingResult = service.saveOld(new CurrencyEntity(event.getValue()));
+        Result<Currency> savingResult = service.saver().save(new CurrencyEntity(event.getValue()));
         if (!savingResult.getSuccess()){
             LocaledMessageSeed seed = seedFactory.create(savingResult);
             String text = i18nService.getTranslation(seed);
