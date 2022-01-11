@@ -13,13 +13,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.data.services.country.CountryServiceOLd;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.message.LocaledMessageSeed;
-import kpn.financecontroller.message.MessageSeedFactory;
+import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.financecontroller.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,15 +37,17 @@ public class CountryView extends VerticalLayout {
 
     private final Grid<Country> grid = new Grid<>(Country.class);
     private final TextField filter = new TextField("", "filter by name..."); // TODO: 08.01.2022 translate it
-    private final CountryServiceOLd service;
-    private final MessageSeedFactory seedFactory;
+
+    private final DTOService<Country, CountryEntity, Long> service;
+
+    private final LocaledMessageSeedFactory seedFactory;
     private final I18nService i18nService;
     private final NotificationFactory notificationFactory;
 
     private CountryForm form;
 
     @Autowired
-    public CountryView(CountryServiceOLd service, MessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
+    public CountryView(DTOService<Country, CountryEntity, Long> service, LocaledMessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
         this.service = service;
         this.seedFactory = seedFactory;
         this.i18nService = i18nService;
@@ -105,7 +107,7 @@ public class CountryView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.search(filter.getValue()).getValue());
+        grid.setItems(service.loader().all().getValue());
     }
 
     private void closeEditor() {
@@ -125,13 +127,14 @@ public class CountryView extends VerticalLayout {
     }
 
     private void deleteEvent(CountryForm.CountryDeleteFormEvent event) {
-        service.deleteById(event.getValue().getId());
+        service.deleter().byId(event.getValue().getId());
+
         updateList();
         closeEditor();
     }
 
     private void saveContact(CountryForm.CountrySaveFormEvent event) {
-        Result<Country> savingResult = service.save(new CountryEntity(event.getValue()));
+        Result<Country> savingResult = service.saver().save(new CountryEntity(event.getValue()));
         if (!savingResult.getSuccess()){
             LocaledMessageSeed seed = seedFactory.create(savingResult);
             String text = i18nService.getTranslation(seed);

@@ -1,10 +1,10 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.deleters.Deleter;
-import kpn.financecontroller.data.domains.currency.Currency;
-import kpn.financecontroller.data.entities.currency.CurrencyEntity;
-import kpn.financecontroller.data.loaders.Loader;
-import kpn.financecontroller.data.savers.Saver;
+import kpn.financecontroller.data.services.deleters.Deleter;
+import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.entities.country.CountryEntity;
+import kpn.financecontroller.data.services.loaders.Loader;
+import kpn.financecontroller.data.services.savers.Saver;
 import kpn.financecontroller.data.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Configuration;
 public class DTOServiceConfig {
 
     @Bean
-    public DTOService<Currency, CurrencyEntity, Long> currencyService(Saver<Currency, CurrencyEntity> saver,
-                                                                      Loader<Currency, CurrencyEntity, Long> loader,
-                                                                      Deleter<Currency, CurrencyEntity, Long> deleter){
-        return new DTOServiceImpl<Currency, CurrencyEntity, Long>(saver, loader, deleter);
+    DTOService<Country, CountryEntity, Long> countryService(Saver<Country, CountryEntity> saver,
+                                                            Loader<Country, CountryEntity, Long> loader,
+                                                            Deleter<Country, CountryEntity, Long> deleter){
+        return new DTOServiceImpl<>(saver, loader, deleter);
     }
 }

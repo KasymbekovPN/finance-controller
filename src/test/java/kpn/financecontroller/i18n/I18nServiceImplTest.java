@@ -1,7 +1,7 @@
 package kpn.financecontroller.i18n;
 
 import kpn.financecontroller.message.LocaledMessageSeed;
-import kpn.financecontroller.message.MessageSeedFactory;
+import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class I18nServiceImplTest {
 
     private final I18nServiceImpl service;
-    private final MessageSeedFactory seedFactory;
+    private final LocaledMessageSeedFactory seedFactory;
 
     @Autowired
-    public I18nServiceImplTest(I18nServiceImpl service, MessageSeedFactory seedFactory) {
+    public I18nServiceImplTest(I18nServiceImpl service, LocaledMessageSeedFactory seedFactory) {
         this.service = service;
         this.seedFactory = seedFactory;
     }

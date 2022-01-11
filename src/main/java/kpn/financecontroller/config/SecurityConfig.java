@@ -2,7 +2,7 @@ package kpn.financecontroller.config;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import kpn.financecontroller.data.repos.user.UserRepo;
-import kpn.financecontroller.data.services.user.UserService;
+import kpn.financecontroller.data.services.UserService;
 import kpn.financecontroller.gui.views.login.LoginView;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;

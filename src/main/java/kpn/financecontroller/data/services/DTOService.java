@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.services;
 
-import kpn.financecontroller.data.deleters.Deleter;
-import kpn.financecontroller.data.loaders.Loader;
-import kpn.financecontroller.data.savers.Saver;
+import kpn.financecontroller.data.services.deleters.Deleter;
+import kpn.financecontroller.data.services.loaders.Loader;
+import kpn.financecontroller.data.services.savers.Saver;
 
 public interface DTOService<D, E, I> {
     Saver<D, E> saver();

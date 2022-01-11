@@ -22,7 +22,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterListener {
 
         login.setAction("login");
 
-        add(new H1("Vaadin CRM"), login);
+        add(new H1("CRM"), login);
     }
 
 
