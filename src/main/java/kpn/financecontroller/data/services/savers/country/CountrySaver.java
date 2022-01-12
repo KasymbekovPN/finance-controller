@@ -5,7 +5,6 @@ import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.repos.country.CountryRepo;
 import kpn.financecontroller.data.services.DTOServiceException;
 import kpn.financecontroller.data.services.savers.AbstractSaver;
-import kpn.financecontroller.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,16 +25,10 @@ final public class CountrySaver extends AbstractSaver<Country, CountryEntity> {
         } catch (Throwable t){
             throw new DTOServiceException("saver.saveImpl.fail");
         }
-
     }
 
     @Override
     protected Country convertEntityToDomain(CountryEntity entity) {
         return new Country(entity);
-    }
-
-    @Override
-    protected Result.Builder<Country> getResultBuilder() {
-        return Result.<Country>builder();
     }
 }

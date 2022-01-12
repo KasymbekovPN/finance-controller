@@ -34,7 +34,7 @@ class RegionRepoTest {
     void setUp() {
         countryEntity = new CountryEntity();
         countryEntity.setName("Russia");
-        Long countryId = countryRepo.save(countryEntity).getId();
+        countryRepo.save(countryEntity);
 
         expectedRegionId = regionRepo.save(createRegion("Prokopjevsk", countryEntity)).getId();
     }
