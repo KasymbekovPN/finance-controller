@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.entities.region;
 
+import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import lombok.Getter;
@@ -25,4 +26,10 @@ public class RegionEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private CountryEntity countryEntity;
+
+    public RegionEntity(Region region) {
+        id = region.getId();
+        name = region.getName();
+        countryEntity = new CountryEntity(region.getCountry());
+    }
 }
