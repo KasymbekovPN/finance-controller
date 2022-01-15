@@ -2,6 +2,7 @@ package kpn.financecontroller.data.domains.city;
 
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.city.CityEntity;
+import kpn.financecontroller.data.entities.street.StreetEntity;
 import lombok.*;
 
 @NoArgsConstructor
