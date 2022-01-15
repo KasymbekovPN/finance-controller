@@ -19,4 +19,8 @@ public class Region {
         name = regionEntity.getName();
         country = new Country(regionEntity.getCountryEntity());
     }
+
+    public String getFullName(){
+        return getName() + ", " + getCountry().getName();
+    }
 }

@@ -19,4 +19,8 @@ public class City {
         name = entity.getName();
         region = entity.getRegionEntity() != null ? new Region(entity.getRegionEntity()) : null;
     }
+
+    public String getFullName(){
+        return getName() + ", " + getRegion().getFullName();
+    }
 }
