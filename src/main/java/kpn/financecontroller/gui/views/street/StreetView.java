@@ -130,7 +130,7 @@ public class StreetView extends VerticalLayout {
     }
 
     private void deleteEvent(StreetForm.StreetDeleteFormEvent event) {
-        cityService.deleter().byId(event.getValue().getId());
+        streetService.deleter().byId(event.getValue().getId());
 
         updateList();
         closeEditor();
