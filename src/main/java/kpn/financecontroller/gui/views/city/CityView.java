@@ -16,6 +16,7 @@ import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.message.LocaledMessageSeed;
@@ -41,7 +42,7 @@ public class CityView extends VerticalLayout {
     private final I18nService i18nService;
     private final NotificationFactory notificationFactory;
 
-    private CityForm form;
+    private EditForm<City> form;
 
     @Autowired
     public CityView(DTOService<City, CityEntity, Long> cityService,
@@ -114,7 +115,7 @@ public class CityView extends VerticalLayout {
     }
 
     private void closeEditor() {
-        form.setCity(null);
+        form.setValue(null);
         form.setVisible(false);
         removeClassName("editing");
     }
@@ -123,7 +124,7 @@ public class CityView extends VerticalLayout {
         if (city == null){
             closeEditor();
         } else {
-            form.setCity(city);
+            form.setValue(city);
             form.setVisible(true);
             addClassName("editing");
         }
