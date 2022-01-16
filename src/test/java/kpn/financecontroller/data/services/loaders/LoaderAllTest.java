@@ -1,6 +1,5 @@
 package kpn.financecontroller.data.services.loaders;
 
-import kpn.financecontroller.data.services.DTOServiceException;
 import kpn.financecontroller.data.services.utils.TestEntity;
 import kpn.financecontroller.data.services.utils.TestModel;
 import kpn.financecontroller.data.services.utils.TestRepo;
