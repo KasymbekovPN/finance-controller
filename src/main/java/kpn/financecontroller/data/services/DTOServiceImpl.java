@@ -7,12 +7,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DTOServiceImpl<D, E, I> implements DTOService<D, E, I> {
-    private final Saver<D, E> saver;
+    private final Saver<D, E, I> saver;
     private final Loader<D, E, I> loader;
     private final Deleter<D, E, I> deleter;
 
     @Override
-    public Saver<D, E> saver() {
+    public Saver<D, E, I> saver() {
         return saver;
     }
 

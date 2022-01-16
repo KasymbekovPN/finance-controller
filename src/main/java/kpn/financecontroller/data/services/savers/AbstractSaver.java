@@ -4,7 +4,7 @@ import kpn.financecontroller.data.services.DTOServiceException;
 import kpn.financecontroller.data.services.Operator;
 import kpn.financecontroller.result.Result;
 
-public abstract class AbstractSaver<D, E> extends Operator<D> implements Saver<D, E> {
+public abstract class AbstractSaver<D, E, I> extends Operator<D> implements Saver<D, E, I> {
 
     @Override
     public Result<D> save(E entity) {

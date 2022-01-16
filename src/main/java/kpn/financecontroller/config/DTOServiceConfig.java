@@ -19,28 +19,28 @@ import org.springframework.context.annotation.Configuration;
 public class DTOServiceConfig {
 
     @Bean
-    public DTOService<Country, CountryEntity, Long> countryService(Saver<Country, CountryEntity> saver,
+    public DTOService<Country, CountryEntity, Long> countryService(Saver<Country, CountryEntity, Long> saver,
                                                                    Loader<Country, CountryEntity, Long> loader,
                                                                    Deleter<Country, CountryEntity, Long> deleter){
         return new DTOServiceImpl<>(saver, loader, deleter);
     }
 
     @Bean
-    public DTOService<Region, RegionEntity, Long> regionService(Saver<Region, RegionEntity> saver,
+    public DTOService<Region, RegionEntity, Long> regionService(Saver<Region, RegionEntity, Long> saver,
                                                                 Loader<Region, RegionEntity, Long> loader,
                                                                 Deleter<Region, RegionEntity, Long> deleter){
         return new DTOServiceImpl<>(saver, loader, deleter);
     }
 
     @Bean
-    public DTOService<City, CityEntity, Long> cityService(Saver<City, CityEntity> saver,
+    public DTOService<City, CityEntity, Long> cityService(Saver<City, CityEntity, Long> saver,
                                                             Loader<City, CityEntity, Long> loader,
                                                             Deleter<City, CityEntity, Long> deleter){
         return new DTOServiceImpl<>(saver, loader, deleter);
     }
 
     @Bean
-    public DTOService<Street, StreetEntity, Long> streetService(Saver<Street, StreetEntity> saver,
+    public DTOService<Street, StreetEntity, Long> streetService(Saver<Street, StreetEntity, Long> saver,
                                                               Loader<Street, StreetEntity, Long> loader,
                                                               Deleter<Street, StreetEntity, Long> deleter){
         return new DTOServiceImpl<>(saver, loader, deleter);
