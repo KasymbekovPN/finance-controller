@@ -111,7 +111,7 @@ public class CountryView extends VerticalLayout {
     }
 
     private void closeEditor() {
-        form.setCountry(null);
+        form.setValue(null);
         form.setVisible(false);
         removeClassName("editing");
     }
@@ -120,7 +120,7 @@ public class CountryView extends VerticalLayout {
         if (country == null){
             closeEditor();
         } else {
-            form.setCountry(country);
+            form.setValue(country);
             form.setVisible(true);
             addClassName("editing");
         }

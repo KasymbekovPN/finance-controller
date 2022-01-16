@@ -114,7 +114,7 @@ public class StreetView extends VerticalLayout {
     }
 
     private void closeEditor() {
-        form.setStreet(null);
+        form.setValue(null);
         form.setVisible(false);
         removeClassName("editing");
     }
@@ -123,7 +123,7 @@ public class StreetView extends VerticalLayout {
         if (street == null){
             closeEditor();
         } else {
-            form.setStreet(street);
+            form.setValue(street);
             form.setVisible(true);
             addClassName("editing");
         }

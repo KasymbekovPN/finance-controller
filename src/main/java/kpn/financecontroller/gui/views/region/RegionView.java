@@ -112,7 +112,7 @@ public class RegionView extends VerticalLayout {
     }
 
     private void closeEditor() {
-        form.setRegion(null);
+        form.setValue(null);
         form.setVisible(false);
         removeClassName("editing");
     }
@@ -121,7 +121,7 @@ public class RegionView extends VerticalLayout {
         if (region == null){
             closeEditor();
         } else {
-            form.setRegion(region);
+            form.setValue(region);
             form.setVisible(true);
             addClassName("editing");
         }

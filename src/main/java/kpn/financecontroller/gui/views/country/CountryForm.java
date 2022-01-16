@@ -1,36 +1,19 @@
 package kpn.financecontroller.gui.views.country;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
+import kpn.financecontroller.gui.views.EditForm;
 
-// TODO: 08.01.2022 make base class ???
-public class CountryForm extends FormLayout {
+public class CountryForm extends EditForm<Country> {
 
     private final TextField name = new TextField("Name", "type name...");
 
-    private final Button save = new Button("Save");
-    private final Button delete = new Button("Delete");
-    private final Button close = new Button("Cancel");
-
-    private final Binder<Country> binder = new Binder<>(Country.class);
-
-    private Country country;
-
     public CountryForm() {
+        super(new Binder<>(Country.class));
         addClassName("country-form");
         binder.bindInstanceFields(this);
 
@@ -40,57 +23,35 @@ public class CountryForm extends FormLayout {
         );
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
-        binder.readBean(country);
-    }
-
-    private Component createButtonsLayout() {
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-        save.addClickShortcut(Key.ENTER);
-        close.addClickShortcut(Key.ESCAPE);
-
-        save.addClickListener(event -> validateAndSave());
-
-        delete.addClickListener(event -> fireEvent(new CountryDeleteFormEvent(this, country)));
-        close.addClickListener(event -> fireEvent(new CountryCloseFormEvent(this)));
-
-        binder.addStatusChangeListener(event -> save.setEnabled(binder.isValid()));
-
-        return new HorizontalLayout(save, delete, close);
-    }
-
-    private void validateAndSave() {
-      try{
-           binder.writeBean(country);
-           fireEvent(new CountrySaveFormEvent(this, country));
-      } catch (ValidationException ex){
-           ex.printStackTrace();
-      }
+    @Override
+    protected SaveFormEvent<EditForm<Country>, Country> createSaveEvent() {
+        return new CountrySaveFormEvent(this, value);
     }
 
     @Override
-    protected <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
-         return getEventBus().addListener(eventType, listener);
+    protected DeleteFormEvent<EditForm<Country>, Country> createDeleteEvent() {
+        return new CountryDeleteFormEvent(this, value);
     }
 
-    public static class CountrySaveFormEvent extends SaveFormEvent<CountryForm, Country> {
-        public CountrySaveFormEvent(CountryForm source, Country value) {
+    @Override
+    protected CloseFormEvent<EditForm<Country>, Country> createCloseEvent() {
+        return new CountryCloseFormEvent(this);
+    }
+
+    public static class CountrySaveFormEvent extends SaveFormEvent<EditForm<Country>, Country> {
+        public CountrySaveFormEvent(EditForm<Country> source, Country value) {
             super(source, value);
         }
     }
 
-    public static class CountryDeleteFormEvent extends DeleteFormEvent<CountryForm, Country> {
-        public CountryDeleteFormEvent(CountryForm source, Country value) {
+    public static class CountryDeleteFormEvent extends DeleteFormEvent<EditForm<Country>, Country> {
+        public CountryDeleteFormEvent(EditForm<Country> source, Country value) {
             super(source, value);
         }
     }
 
-    public static class CountryCloseFormEvent extends CloseFormEvent<CountryForm, Country> {
-        public CountryCloseFormEvent(CountryForm source) {
+    public static class CountryCloseFormEvent extends CloseFormEvent<EditForm<Country>, Country> {
+        public CountryCloseFormEvent(EditForm<Country> source) {
             super(source);
         }
     }
