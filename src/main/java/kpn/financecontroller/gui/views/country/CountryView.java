@@ -1,80 +1,65 @@
 package kpn.financecontroller.gui.views.country;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.gui.events.DeleteFormEvent;
+import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.financecontroller.i18n.I18nService;
-import kpn.financecontroller.message.LocaledMessageSeed;
 import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.financecontroller.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
+import java.util.List;
 
-// TODO: 08.01.2022 make base class ???
-
-@PageTitle("Country") // TODO: 08.01.2022 translation
+@PageTitle("Country")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "country", layout = MainLayout.class)
 @PermitAll
-public class CountryView extends VerticalLayout {
+public class CountryView extends GridView<Country>{
 
-    private final Grid<Country> grid = new Grid<>(Country.class);
-    private final TextField filter = new TextField("", "filter by name..."); // TODO: 08.01.2022 translate it
-
-    private final DTOService<Country, CountryEntity, Long> service;
-
-    private final LocaledMessageSeedFactory seedFactory;
-    private final I18nService i18nService;
-    private final NotificationFactory notificationFactory;
-
-    private CountryForm form;
+    private final DTOService<Country, CountryEntity, Long> countryService;
 
     @Autowired
-    public CountryView(DTOService<Country, CountryEntity, Long> service, LocaledMessageSeedFactory seedFactory, I18nService i18nService, NotificationFactory notificationFactory) {
-        this.service = service;
-        this.seedFactory = seedFactory;
-        this.i18nService = i18nService;
-        this.notificationFactory = notificationFactory;
-
-        addClassName("country-view");
-        setSizeFull();
-
-        configureGrid();
-        configureForm();
-
-        add(getToolBar(), getContent());
-
-        updateList();
-        closeEditor();
+    public CountryView(LocaledMessageSeedFactory seedFactory,
+                       I18nService i18nService,
+                       NotificationFactory notificationFactory,
+                       DTOService<Country, CountryEntity, Long> countryService) {
+        super(new Grid<>(Country.class), seedFactory, i18nService, notificationFactory);
+        this.countryService = countryService;
     }
 
-    private void configureGrid() {
+    @Override
+    protected Result<?> updateListImpl() {
+        Result<List<Country>> result = countryService.loader().all();
+        if (result.getSuccess()){
+            grid.setItems(result.getValue());
+        }
+        return result;
+    }
+
+    @Override
+    protected void configureGrid() {
         grid.addClassName("country-grid");
         grid.setSizeFull();
         grid.setColumns("id", "name");
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
-        grid.asSingleSelect().addValueChangeListener(e -> editCountry(e.getValue()));
+        grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
-    private void configureForm() {
+    @Override
+    protected void configureForm() {
         form = new CountryForm();
         form.setWidth("25em");
 
@@ -83,76 +68,19 @@ public class CountryView extends VerticalLayout {
         form.addListener(CountryForm.CountryCloseFormEvent.class, e -> closeEditor());
     }
 
-    private Component getToolBar() {
-        filter.setClearButtonVisible(true);
-        filter.setValueChangeMode(ValueChangeMode.LAZY);
-        filter.addValueChangeListener(e -> updateList());
-
-        Button addContactButton = new Button("Add");
-        addContactButton.addClickListener(e -> addContact());
-
-        HorizontalLayout toolbar = new HorizontalLayout(filter, addContactButton);
-        toolbar.addClassName("toolbar");
-
-        return toolbar;
-    }
-
-    private Component getContent() {
-        HorizontalLayout content = new HorizontalLayout(grid, form);
-        content.addClassName("content");
-        content.setFlexGrow(2, grid);
-        content.setFlexGrow(1, form);
-        content.setSizeFull();
-        return content;
-    }
-
-    private void updateList() {
-        grid.setItems(service.loader().all().getValue());
-    }
-
-    private void closeEditor() {
-        form.setValue(null);
-        form.setVisible(false);
-        removeClassName("editing");
-    }
-
-    private void editCountry(Country country){
-        if (country == null){
-            closeEditor();
-        } else {
-            form.setValue(country);
-            form.setVisible(true);
-            addClassName("editing");
-        }
-    }
-
-    private void deleteEvent(CountryForm.CountryDeleteFormEvent event) {
-        service.deleter().byId(event.getValue().getId());
-
-        updateList();
-        closeEditor();
-    }
-
-    private void saveContact(CountryForm.CountrySaveFormEvent event) {
-        Result<Country> savingResult = service.saver().save(new CountryEntity(event.getValue()));
-        if (!savingResult.getSuccess()){
-            LocaledMessageSeed seed = seedFactory.create(savingResult);
-            String text = i18nService.getTranslation(seed);
-            notificationFactory.getBuilder(Notifications.ERROR)
-                    .duration(60_000)
-                    .text(text)
-                    .buttonIcon(new Icon("lumo", "cross"))
-                    .buttonThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE)
-                    .buttonAttribute("aria-label", "Close")
-                    .build()
-                    .open();
-        }
-        updateList();
-        closeEditor();
-    }
-
-    private void addContact() {
+    @Override
+    protected void add() {
         grid.asSingleSelect().clear();
-        editCountry(new Country());
+        editValue(new Country());
+    }
+
+    @Override
+    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Country>, Country> event) {
+        return countryService.deleter().byId(event.getValue().getId());
+    }
+
+    @Override
+    protected Result<Country> handleSaveEvent(SaveFormEvent<EditForm<Country>, Country> event) {
+        return countryService.saver().save(new CountryEntity(event.getValue()));
     }
 }
