@@ -2,11 +2,13 @@ package kpn.financecontroller.config;
 
 import kpn.financecontroller.data.domains.building.Building;
 import kpn.financecontroller.data.domains.city.City;
+import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.entities.building.BuildingEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
+import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
@@ -62,6 +64,13 @@ public class DTOServiceConfig {
     public DTOService<Product, ProductEntity, Long> productService(Saver<Product, ProductEntity, Long> saver,
                                                                     Loader<Product, ProductEntity, Long> loader,
                                                                     Deleter<Product, ProductEntity, Long> deleter){
+        return new DTOServiceImpl<>(saver, loader, deleter);
+    }
+
+    @Bean
+    public DTOService<Payment, PaymentEntity, Long> paymentService(Saver<Payment, PaymentEntity, Long> saver,
+                                                                   Loader<Payment, PaymentEntity, Long> loader,
+                                                                   Deleter<Payment, PaymentEntity, Long> deleter){
         return new DTOServiceImpl<>(saver, loader, deleter);
     }
 }
