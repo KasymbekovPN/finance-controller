@@ -15,6 +15,7 @@ import kpn.financecontroller.gui.views.building.BuildingView;
 import kpn.financecontroller.gui.views.city.CityView;
 import kpn.financecontroller.gui.views.country.CountryView;
 import kpn.financecontroller.gui.views.mainDetails.MainDetails;
+import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.region.RegionView;
 import kpn.financecontroller.gui.views.street.StreetView;
 import kpn.financecontroller.security.SecurityService;
@@ -144,7 +145,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Regions", "la la-globe", RegionView.class),
                 new MenuItemInfo("Cities",  "la la-globe", CityView.class),
                 new MenuItemInfo("Streets",  "la la-globe", StreetView.class),
-                new MenuItemInfo("Buildings",  "la la-globe", BuildingView.class)
+                new MenuItemInfo("Buildings",  "la la-globe", BuildingView.class),
+                new MenuItemInfo("Products",  "la la-globe", ProductView.class)
         };
         List<RouterLink> links = new ArrayList<>();
         for (MenuItemInfo menuItemInfo : menuItems) {

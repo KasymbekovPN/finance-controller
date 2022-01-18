@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.entities.product;
 
+import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,9 @@ public class ProductEntity extends AbstractEntity {
     @Column(unique = true)
     @Size(max = 256)
     private String name;
+
+    public ProductEntity(Product value) {
+        id = value.getId();
+        name = value.getName();
+    }
 }
