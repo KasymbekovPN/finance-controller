@@ -5,6 +5,7 @@ import kpn.financecontroller.data.domains.payment.Measure;
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.product.ProductEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Setter
@@ -22,17 +24,25 @@ public class PaymentEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "building_id")
     private BuildingEntity buildingEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private ProductEntity productEntity;
+
     private Float amount;
     private Measure measure;
+    private Float price;
     private Currency currency;
-    private Date date;
+    private LocalDate createdAt;
 
     public PaymentEntity(Payment payment) {
         id = payment.getId();
+        productEntity = new ProductEntity(payment.getProduct());
         buildingEntity = new BuildingEntity(payment.getBuilding());
         amount = payment.getAmount();
         measure = payment.getMeasure();
+        price = payment.getPrice();
         currency = payment.getCurrency();
-        date = payment.getDate();
+        createdAt = payment.getCreatedAt();
     }
 }
