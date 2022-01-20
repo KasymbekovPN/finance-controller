@@ -19,6 +19,7 @@ import kpn.financecontroller.gui.views.payment.PaymentView;
 import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.region.RegionView;
 import kpn.financecontroller.gui.views.street.StreetView;
+import kpn.financecontroller.gui.views.tag.TagView;
 import kpn.financecontroller.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -148,6 +149,7 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Streets",  "la la-globe", StreetView.class),
                 new MenuItemInfo("Buildings",  "la la-globe", BuildingView.class),
                 new MenuItemInfo("Products",  "la la-globe", ProductView.class),
+                new MenuItemInfo("Tags",  "la la-globe", TagView.class),
                 new MenuItemInfo("Payments",  "la la-globe", PaymentView.class)
         };
         List<RouterLink> links = new ArrayList<>();
