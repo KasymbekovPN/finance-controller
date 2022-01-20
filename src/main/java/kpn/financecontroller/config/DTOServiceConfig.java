@@ -6,12 +6,14 @@ import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
+import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.building.BuildingEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
+import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.deleters.Deleter;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
@@ -71,6 +73,13 @@ public class DTOServiceConfig {
     public DTOService<Payment, PaymentEntity, Long> paymentService(Saver<Payment, PaymentEntity, Long> saver,
                                                                    Loader<Payment, PaymentEntity, Long> loader,
                                                                    Deleter<Payment, PaymentEntity, Long> deleter){
+        return new DTOServiceImpl<>(saver, loader, deleter);
+    }
+
+    @Bean
+    public DTOService<Tag, TagEntity, Long> tagService(Saver<Tag, TagEntity, Long> saver,
+                                                           Loader<Tag, TagEntity, Long> loader,
+                                                           Deleter<Tag, TagEntity, Long> deleter){
         return new DTOServiceImpl<>(saver, loader, deleter);
     }
 }

@@ -7,6 +7,7 @@ import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
+import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.building.BuildingEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
@@ -14,6 +15,7 @@ import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
+import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.loaders.Loader;
 import kpn.financecontroller.data.services.loaders.LoaderAll;
 import org.springframework.context.annotation.Bean;
@@ -81,5 +83,13 @@ public class LoaderConfig {
             return entities.stream().map(Payment::new).collect(Collectors.toList());
         };
         return new LoaderAll<>(repo, Payment::new, toDomains);
+    }
+
+    @Bean
+    public Loader<Tag, TagEntity, Long> tagLoader(JpaRepository<TagEntity, Long> repo){
+        Function<List<TagEntity>, List<Tag>> toDomains = (entities) -> {
+            return entities.stream().map(Tag::new).collect(Collectors.toList());
+        };
+        return new LoaderAll<>(repo, Tag::new, toDomains);
     }
 }
