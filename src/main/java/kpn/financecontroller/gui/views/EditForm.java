@@ -67,23 +67,4 @@ abstract public class EditForm<D> extends FormLayout {
     protected abstract SaveFormEvent<EditForm<D>, D> createSaveEvent();
     protected abstract DeleteFormEvent<EditForm<D>, D> createDeleteEvent();
     protected abstract CloseFormEvent<EditForm<D>, D> createCloseEvent();
-
-    // TODO: 16.01.2022 del
-//    public static class SaveEditFormEvent<D> extends SaveFormEvent<EditForm<D>, D>{
-//        public SaveEditFormEvent(EditForm<D> source, D value) {
-//            super(source, value);
-//        }
-//    }
-//
-//    public static class DeleteEditFormEvent<D> extends DeleteFormEvent<EditForm<D>, D>{
-//        public DeleteEditFormEvent(EditForm<D> source, D value) {
-//            super(source, value);
-//        }
-//    }
-//
-//    public static class CloseEditEvent<D> extends CloseFormEvent<EditForm<D>, D>{
-//        public CloseEditEvent(EditForm<D> source) {
-//            super(source);
-//        }
-//    }
 }

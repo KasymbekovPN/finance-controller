@@ -1,24 +1,32 @@
 package kpn.financecontroller.gui.views.product;
 
+import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 
+import java.util.List;
+
 public class ProductForm extends EditForm<Product> {
 
     private final TextField name = new TextField("Name", "type name...");
+    private final MultiSelectListBox<Tag> tags = new MultiSelectListBox<>();
 
-    public ProductForm() {
+    public ProductForm(List<Tag> tagList) {
         super(new Binder<>(Product.class));
         addClassName("product-form");
         binder.bindInstanceFields(this);
 
+        tags.setItems(tagList);
+
         add(
                 name,
+                tags,
                 createButtonsLayout()
         );
     }

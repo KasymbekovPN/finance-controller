@@ -16,4 +16,9 @@ public class Tag {
         id = entity.getId();
         name = entity.getName();
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -4,7 +4,9 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.product.ProductEntity;
+import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
@@ -29,14 +31,17 @@ import java.util.List;
 public class ProductView extends GridView<Product> {
 
     private final DTOService<Product, ProductEntity, Long> service;
+    private final DTOService<Tag, TagEntity, Long> tagService;
 
     @Autowired
     public ProductView(LocaledMessageSeedFactory seedFactory,
-                        I18nService i18nService,
-                        NotificationFactory notificationFactory,
-                        DTOService<Product, ProductEntity, Long> service) {
+                       I18nService i18nService,
+                       NotificationFactory notificationFactory,
+                       DTOService<Product, ProductEntity, Long> service,
+                       DTOService<Tag, TagEntity, Long> tagService) {
         super(new Grid<>(Product.class), seedFactory, i18nService, notificationFactory);
         this.service = service;
+        this.tagService = tagService;
     }
 
     @Override
@@ -53,6 +58,9 @@ public class ProductView extends GridView<Product> {
         grid.addClassName("product-grid");
         grid.setSizeFull();
         grid.setColumns("id", "name");
+
+        grid.addColumn(p -> p.getTagsAsStr()).setHeader("tags");
+
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
@@ -60,7 +68,7 @@ public class ProductView extends GridView<Product> {
 
     @Override
     protected void configureForm() {
-        form = new ProductForm();
+        form = new ProductForm(tagService.loader().all().getValue());
         form.setWidth("25em");
 
         form.addListener(ProductForm.ProductSaveFormEvent.class, this::saveContact);

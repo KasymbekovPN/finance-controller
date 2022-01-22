@@ -10,11 +10,9 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.gui.views.building.BuildingView;
 import kpn.financecontroller.gui.views.city.CityView;
 import kpn.financecontroller.gui.views.country.CountryView;
-import kpn.financecontroller.gui.views.mainDetails.MainDetails;
 import kpn.financecontroller.gui.views.payment.PaymentView;
 import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.region.RegionView;
@@ -142,7 +140,6 @@ public class MainLayout extends AppLayout {
     // TODO: 03.01.2022 refact
     private List<RouterLink> createLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{
-                new MenuItemInfo("Main details", "la la-globe", MainDetails.class),
                 new MenuItemInfo("Countries", "la la-globe", CountryView.class),
                 new MenuItemInfo("Regions", "la la-globe", RegionView.class),
                 new MenuItemInfo("Cities",  "la la-globe", CityView.class),
