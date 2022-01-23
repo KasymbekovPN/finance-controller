@@ -19,6 +19,8 @@ import kpn.financecontroller.gui.views.region.RegionView;
 import kpn.financecontroller.gui.views.street.StreetView;
 import kpn.financecontroller.gui.views.tag.TagView;
 import kpn.financecontroller.security.SecurityService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -28,32 +30,23 @@ import java.util.List;
 @PageTitle("Main")
 public class MainLayout extends AppLayout {
 
+    private static final MenuItemInfo[] MENU_ITEMS = new MenuItemInfo[]{
+            new MenuItemInfo("Payments",  "la la-globe", PaymentView.class),
+            new MenuItemInfo("Products",  "la la-globe", ProductView.class),
+            new MenuItemInfo("Tags",  "la la-globe", TagView.class),
+            new MenuItemInfo("Buildings",  "la la-globe", BuildingView.class),
+            new MenuItemInfo("Streets",  "la la-globe", StreetView.class),
+            new MenuItemInfo("Cities",  "la la-globe", CityView.class),
+            new MenuItemInfo("Regions", "la la-globe", RegionView.class),
+            new MenuItemInfo("Countries", "la la-globe", CountryView.class)
+    };
 
-    // TODO: 03.01.2022 refactoring
+    @Getter
+    @AllArgsConstructor
     public static class MenuItemInfo {
-
         private String text;
         private String iconClass;
         private Class<? extends Component> view;
-
-        public MenuItemInfo(String text, String iconClass, Class<? extends Component> view) {
-            this.text = text;
-            this.iconClass = iconClass;
-            this.view = view;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public String getIconClass() {
-            return iconClass;
-        }
-
-        public Class<? extends Component> getView() {
-            return view;
-        }
-
     }
 
     private final H1 viewTitle = new H1();
@@ -77,11 +70,9 @@ public class MainLayout extends AppLayout {
 
         Button logout = new Button("Log out", e -> securityService.logout());
 
-//        Header header = new Header(toggle, viewTitle, logout);
         HorizontalLayout header = new HorizontalLayout(toggle, viewTitle, logout);
-        // TODO: 03.01.2022 how set class names
-//        header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
-//                "w-full");
+        header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
+                "w-full");
 
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(viewTitle);
@@ -109,7 +100,8 @@ public class MainLayout extends AppLayout {
     }
 
     private H2 createAndCustomizeAppName() {
-        H2 appName = new H2("My App");
+        // TODO: 23.01.2022 translate
+        H2 appName = new H2("Finance controller");
         appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
         return appName;
     }
@@ -125,7 +117,6 @@ public class MainLayout extends AppLayout {
         nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
 
-        // Wrap the links in a list; improves accessibility
         UnorderedList list = new UnorderedList();
         list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
@@ -137,20 +128,9 @@ public class MainLayout extends AppLayout {
         return nav;
     }
 
-    // TODO: 03.01.2022 refact
-    private List<RouterLink> createLinks() {
-        MenuItemInfo[] menuItems = new MenuItemInfo[]{
-                new MenuItemInfo("Countries", "la la-globe", CountryView.class),
-                new MenuItemInfo("Regions", "la la-globe", RegionView.class),
-                new MenuItemInfo("Cities",  "la la-globe", CityView.class),
-                new MenuItemInfo("Streets",  "la la-globe", StreetView.class),
-                new MenuItemInfo("Buildings",  "la la-globe", BuildingView.class),
-                new MenuItemInfo("Products",  "la la-globe", ProductView.class),
-                new MenuItemInfo("Tags",  "la la-globe", TagView.class),
-                new MenuItemInfo("Payments",  "la la-globe", PaymentView.class)
-        };
+    private static List<RouterLink> createLinks() {
         List<RouterLink> links = new ArrayList<>();
-        for (MenuItemInfo menuItemInfo : menuItems) {
+        for (MenuItemInfo menuItemInfo : MENU_ITEMS) {
             links.add(createLink(menuItemInfo));
 
         }

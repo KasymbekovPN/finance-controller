@@ -27,7 +27,7 @@ import java.util.List;
 @PageTitle("Payment")
 @org.springframework.stereotype.Component
 @Scope("prototype")
-@Route(value = "payment", layout = MainLayout.class)
+@Route(value = "", layout = MainLayout.class)
 @PermitAll
 public class PaymentView extends GridView<Payment> {
 
