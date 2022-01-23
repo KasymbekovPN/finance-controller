@@ -19,6 +19,7 @@ public class I18nServiceImpl implements I18nService {
     private final MessageSource messageSource;
 
     private List<Locale> providedLocales;
+    private Locale defaultLocale;
 
     @Autowired
     public I18nServiceImpl(MessageSource messageSource) {
@@ -28,6 +29,11 @@ public class I18nServiceImpl implements I18nService {
     @Override
     public String getTranslation(LocaledMessageSeed seed) {
         return getTranslation(seed.getCode(), seed.getLocale(), seed.getArgs());
+    }
+
+    @Override
+    public String getTranslation(String key, Object... params) {
+        return getTranslation(key, defaultLocale, params);
     }
 
     @Override

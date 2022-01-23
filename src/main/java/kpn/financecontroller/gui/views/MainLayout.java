@@ -18,29 +18,30 @@ import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.region.RegionView;
 import kpn.financecontroller.gui.views.street.StreetView;
 import kpn.financecontroller.gui.views.tag.TagView;
+import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.security.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: 03.01.2022 translation
-@PageTitle("Main")
 public class MainLayout extends AppLayout {
 
     private static final MenuItemInfo[] MENU_ITEMS = new MenuItemInfo[]{
-            new MenuItemInfo("Payments",  "la la-globe", PaymentView.class),
-            new MenuItemInfo("Products",  "la la-globe", ProductView.class),
-            new MenuItemInfo("Tags",  "la la-globe", TagView.class),
-            new MenuItemInfo("Buildings",  "la la-globe", BuildingView.class),
-            new MenuItemInfo("Streets",  "la la-globe", StreetView.class),
-            new MenuItemInfo("Cities",  "la la-globe", CityView.class),
-            new MenuItemInfo("Regions", "la la-globe", RegionView.class),
-            new MenuItemInfo("Countries", "la la-globe", CountryView.class)
+            new MenuItemInfo("gui.payments",  "la la-globe", PaymentView.class),
+            new MenuItemInfo("gui.products",  "la la-globe", ProductView.class),
+            new MenuItemInfo("gui.tags",  "la la-globe", TagView.class),
+            new MenuItemInfo("gui.buildings",  "la la-globe", BuildingView.class),
+            new MenuItemInfo("gui.streets",  "la la-globe", StreetView.class),
+            new MenuItemInfo("gui.cities",  "la la-globe", CityView.class),
+            new MenuItemInfo("gui.regions", "la la-globe", RegionView.class),
+            new MenuItemInfo("gui.countries", "la la-globe", CountryView.class)
     };
 
+    @Setter
     @Getter
     @AllArgsConstructor
     public static class MenuItemInfo {
@@ -51,10 +52,12 @@ public class MainLayout extends AppLayout {
 
     private final H1 viewTitle = new H1();
     private final SecurityService securityService;
+    private final I18nService i18nService;
 
     @Autowired
-    public MainLayout(SecurityService securityService) {
+    public MainLayout(SecurityService securityService, I18nService i18nService) {
         this.securityService = securityService;
+        this.i18nService = i18nService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerComponent());
@@ -100,8 +103,7 @@ public class MainLayout extends AppLayout {
     }
 
     private H2 createAndCustomizeAppName() {
-        // TODO: 23.01.2022 translate
-        H2 appName = new H2("Finance controller");
+        H2 appName = new H2("FC");
         appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
         return appName;
     }
@@ -128,7 +130,7 @@ public class MainLayout extends AppLayout {
         return nav;
     }
 
-    private static List<RouterLink> createLinks() {
+    private List<RouterLink> createLinks() {
         List<RouterLink> links = new ArrayList<>();
         for (MenuItemInfo menuItemInfo : MENU_ITEMS) {
             links.add(createLink(menuItemInfo));
@@ -137,7 +139,7 @@ public class MainLayout extends AppLayout {
         return links;
     }
 
-    private static RouterLink createLink(MenuItemInfo menuItemInfo) {
+    private RouterLink createLink(MenuItemInfo menuItemInfo) {
         RouterLink link = new RouterLink();
         link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
         link.setRoute(menuItemInfo.getView());
@@ -148,7 +150,7 @@ public class MainLayout extends AppLayout {
             icon.addClassNames(menuItemInfo.getIconClass());
         }
 
-        Span text = new Span(menuItemInfo.getText());
+        Span text = new Span(i18nService.getTranslation(menuItemInfo.getText()));
         text.addClassNames("font-medium", "text-s");
 
         link.add(icon, text);
@@ -169,7 +171,11 @@ public class MainLayout extends AppLayout {
     }
 
     private String getCurrentPageTitle() {
-        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
-        return title == null ? "" : title.value();
+        Class<? extends Component> contentClass = getContent().getClass();
+        if (contentClass.isAnnotationPresent(PageTitle.class)){
+            String key = contentClass.getAnnotation(PageTitle.class).value();
+            return i18nService.getTranslation(key);
+        }
+        return "";
     }
 }

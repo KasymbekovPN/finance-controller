@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("Country")
+@PageTitle("gui.countries")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "country", layout = MainLayout.class)

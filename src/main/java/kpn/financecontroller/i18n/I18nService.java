@@ -5,4 +5,5 @@ import kpn.financecontroller.message.LocaledMessageSeed;
 
 public interface I18nService extends I18NProvider {
     String getTranslation(LocaledMessageSeed seed);
+    String getTranslation(String key, Object... params);
 }

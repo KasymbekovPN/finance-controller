@@ -18,8 +18,9 @@ message.seed:
   default-locale-code: en
 
 i18n:
-  encoding: en
-  resource: translations
+  defaultLocale: en
+  encoding: UTF-8
+  resource: classpath:translations
   providedLocales:
     - en
     - ru
