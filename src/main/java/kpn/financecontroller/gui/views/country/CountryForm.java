@@ -10,12 +10,14 @@ import kpn.financecontroller.gui.views.EditForm;
 
 public class CountryForm extends EditForm<Country> {
 
-    private final TextField name = new TextField("Name", "type name...");
+    private final TextField name;
 
     public CountryForm() {
         super(new Binder<>(Country.class));
         addClassName("country-form");
         binder.bindInstanceFields(this);
+
+        name = new TextField(getTranslation("gui.name"), getTranslation("gui.placeholder.type-name"));
 
         add(
                 name,

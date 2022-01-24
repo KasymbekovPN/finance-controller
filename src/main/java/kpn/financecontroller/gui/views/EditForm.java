@@ -17,9 +17,9 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 
 abstract public class EditForm<D> extends FormLayout {
 
-    protected final Button save = new Button("Save");
-    protected final Button delete = new Button("Delete");
-    protected final Button close = new Button("Cancel");
+    protected final Button save = new Button();
+    protected final Button delete = new Button();
+    protected final Button close = new Button();
     protected final Binder<D> binder;
 
     protected D value;
@@ -34,6 +34,10 @@ abstract public class EditForm<D> extends FormLayout {
     }
 
      protected Component createButtonsLayout() {
+        save.setText(getTranslation("gui.button.save"));
+        delete.setText(getTranslation("gui.button.delete"));
+        close.setText(getTranslation("gui.button.cancel"));
+
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);

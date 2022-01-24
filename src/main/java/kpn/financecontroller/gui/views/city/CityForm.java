@@ -14,13 +14,16 @@ import java.util.List;
 
 public class CityForm extends EditForm<City> {
 
-    private final TextField name = new TextField("Name", "type name");
-    private final ComboBox<Region> region = new ComboBox<>("Region");
+    private final TextField name;
+    private final ComboBox<Region> region;
 
     public CityForm(List<Region> regions) {
         super(new Binder<>(City.class));
         addClassName("city-form");
         binder.bindInstanceFields(this);
+
+        name = new TextField(getTranslation("gui.name"), getTranslation("gui.placeholder.type-name"));
+        region = new ComboBox<>(getTranslation("gui.region"));
 
         region.setItems(regions);
         region.setItemLabelGenerator(Region::getFullName);

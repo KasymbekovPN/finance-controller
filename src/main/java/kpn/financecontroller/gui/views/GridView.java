@@ -23,7 +23,7 @@ abstract public class GridView<D> extends VerticalLayout {
     protected final Grid<D> grid;
 
     private final LocaledMessageSeedFactory seedFactory;
-    private final I18nService i18nService;
+    protected final I18nService i18nService; // TODO: 24.01.2022 del
     private final NotificationFactory notificationFactory;
 
     protected EditForm<D> form;
@@ -49,7 +49,7 @@ abstract public class GridView<D> extends VerticalLayout {
     }
 
     private Component getToolBar() {
-        Button addContactButton = new Button("Add");
+        Button addContactButton = new Button(getTranslation("gui.add"));
         addContactButton.addClickListener(e -> add());
 
         HorizontalLayout toolbar = new HorizontalLayout(addContactButton);

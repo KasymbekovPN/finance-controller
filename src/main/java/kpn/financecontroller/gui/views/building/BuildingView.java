@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("Building")
+@PageTitle("gui.buildings")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "building", layout = MainLayout.class)
@@ -55,14 +55,16 @@ public class BuildingView extends GridView<Building> {
     protected void configureGrid() {
         grid.addClassName("building-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name");
-        grid.addColumn(b -> b.getStreet().getName()).setHeader("Street");
-        grid.addColumn(b -> b.getStreet().getCity().getName()).setHeader("City");
-        grid.addColumn(b -> b.getStreet().getCity().getRegion().getName()).setHeader("Region");
-        grid.addColumn(b -> b.getStreet().getCity().getRegion().getCountry().getName()).setHeader("Country");
+
+        grid.setColumns();
+        grid.addColumn(Building::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(Building::getName).setHeader(getTranslation("gui.name"));
+        grid.addColumn(b -> b.getStreet().getName()).setHeader(getTranslation("gui.street"));
+        grid.addColumn(b -> b.getStreet().getCity().getName()).setHeader(getTranslation("gui.city"));
+        grid.addColumn(b -> b.getStreet().getCity().getRegion().getName()).setHeader(getTranslation("gui.region"));
+        grid.addColumn(b -> b.getStreet().getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.country"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 

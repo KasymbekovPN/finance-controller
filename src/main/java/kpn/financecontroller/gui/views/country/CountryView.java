@@ -52,7 +52,10 @@ public class CountryView extends GridView<Country>{
     protected void configureGrid() {
         grid.addClassName("country-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name");
+
+        grid.setColumns();
+        grid.addColumn(Country::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(Country::getName).setHeader(getTranslation("gui.name"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));

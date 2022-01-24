@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("City")
+@PageTitle("gui.cities")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "city", layout = MainLayout.class)
@@ -57,10 +57,12 @@ public class CityView extends GridView<City> {
     protected void configureGrid() {
         grid.addClassName("country-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name");
 
-        grid.addColumn(city -> city.getRegion().getName()).setHeader("Region");
-        grid.addColumn(city -> city.getRegion().getCountry().getName()).setHeader("Country");
+        grid.setColumns();
+        grid.addColumn(City::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(City::getName).setHeader(getTranslation("gui.name"));
+        grid.addColumn(city -> city.getRegion().getName()).setHeader(getTranslation("gui.region"));
+        grid.addColumn(city -> city.getRegion().getCountry().getName()).setHeader(getTranslation("gui.country"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 

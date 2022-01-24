@@ -18,7 +18,6 @@ import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.region.RegionView;
 import kpn.financecontroller.gui.views.street.StreetView;
 import kpn.financecontroller.gui.views.tag.TagView;
-import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.security.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,12 +51,10 @@ public class MainLayout extends AppLayout {
 
     private final H1 viewTitle = new H1();
     private final SecurityService securityService;
-    private final I18nService i18nService;
 
     @Autowired
-    public MainLayout(SecurityService securityService, I18nService i18nService) {
+    public MainLayout(SecurityService securityService) {
         this.securityService = securityService;
-        this.i18nService = i18nService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerComponent());
@@ -150,7 +147,7 @@ public class MainLayout extends AppLayout {
             icon.addClassNames(menuItemInfo.getIconClass());
         }
 
-        Span text = new Span(i18nService.getTranslation(menuItemInfo.getText()));
+        Span text = new Span(getTranslation(menuItemInfo.getText()));
         text.addClassNames("font-medium", "text-s");
 
         link.add(icon, text);
@@ -174,7 +171,7 @@ public class MainLayout extends AppLayout {
         Class<? extends Component> contentClass = getContent().getClass();
         if (contentClass.isAnnotationPresent(PageTitle.class)){
             String key = contentClass.getAnnotation(PageTitle.class).value();
-            return i18nService.getTranslation(key);
+            return getTranslation(key);
         }
         return "";
     }
