@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("Tag")
+@PageTitle("gui.tags")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "tag", layout = MainLayout.class)
@@ -52,7 +52,10 @@ public class TagView extends GridView<Tag> {
     protected void configureGrid() {
         grid.addClassName("tag-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name");
+
+        grid.setColumns();
+        grid.addColumn(Tag::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(Tag::getName).setHeader(getTranslation("gui.name"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));

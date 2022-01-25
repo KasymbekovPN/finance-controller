@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("Product")
+@PageTitle("gui.products")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "product", layout = MainLayout.class)
@@ -57,9 +57,11 @@ public class ProductView extends GridView<Product> {
     protected void configureGrid() {
         grid.addClassName("product-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name");
 
-        grid.addColumn(p -> p.getTagsAsStr()).setHeader("tags");
+        grid.setColumns();
+        grid.addColumn(Product::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(Product::getName).setHeader(getTranslation("gui.name"));
+        grid.addColumn(Product::getTagsAsStr).setHeader(getTranslation("gui.tags"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 

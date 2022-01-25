@@ -10,12 +10,14 @@ import kpn.financecontroller.gui.views.EditForm;
 
 public class TagForm extends EditForm<Tag> {
 
-    private final TextField name = new TextField("Name", "type name...");
+    private final TextField name;
 
     public TagForm() {
         super(new Binder<>(Tag.class));
         addClassName("tag-form");
         binder.bindInstanceFields(this);
+
+        name = new TextField(getTranslation("gui.name"), getTranslation("gui.placeholder.type-name"));
 
         add(
                 name,

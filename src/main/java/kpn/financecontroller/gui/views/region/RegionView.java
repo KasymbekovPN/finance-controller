@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("Region")
+@PageTitle("gui.regions")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "region", layout = MainLayout.class)
@@ -57,8 +57,11 @@ public class RegionView extends GridView<Region>{
     protected void configureGrid() {
         grid.addClassName("country-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name");
-        grid.addColumn(region -> region.getCountry().getName()).setHeader("Country");
+
+        grid.setColumns();
+        grid.addColumn(Region::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(Region::getName).setHeader(getTranslation("gui.name"));
+        grid.addColumn(region -> region.getCountry().getName()).setHeader(getTranslation("gui.country"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));

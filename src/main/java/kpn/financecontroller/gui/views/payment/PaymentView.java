@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("Payment")
+@PageTitle("gui.payments")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "", layout = MainLayout.class)
@@ -60,14 +60,16 @@ public class PaymentView extends GridView<Payment> {
     protected void configureGrid() {
         grid.addClassName("payment-grid");
         grid.setSizeFull();
-        grid.setColumns("id");
-        grid.addColumn(p -> p.getProduct().getName()).setHeader("Product");
-        grid.addColumn(Payment::getPrice).setHeader("Price");
-        grid.addColumn(p -> p.getCurrency().name()).setHeader("Currency");
-        grid.addColumn(Payment::getAmount).setHeader("Amount");
-        grid.addColumn(p -> p.getMeasure().name()).setHeader("Measure");
-        grid.addColumn(p -> p.getBuilding().getFullName()).setHeader("Building");
-        grid.addColumn(Payment::getCreatedAt).setHeader("Created at");
+
+        grid.setColumns();
+        grid.addColumn(Payment::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(p -> p.getProduct().getName()).setHeader(getTranslation("gui.product"));
+        grid.addColumn(Payment::getPrice).setHeader(getTranslation("gui.price"));
+        grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.currency"));
+        grid.addColumn(Payment::getAmount).setHeader(getTranslation("gui.amount"));
+        grid.addColumn(p -> p.getMeasure().name()).setHeader(getTranslation("gui.measure"));
+        grid.addColumn(p -> p.getBuilding().getFullName()).setHeader(getTranslation("gui.building"));
+        grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.createdAt"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 

@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("Street")
+@PageTitle("gui.streets")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "street", layout = MainLayout.class)
@@ -55,11 +55,13 @@ public class StreetView extends GridView<Street>{
     protected void configureGrid() {
         grid.addClassName("country-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name");
-        grid.addColumn(street -> street.getCity().getName()).setHeader("City");
-        grid.addColumn(street -> street.getCity().getRegion().getName()).setHeader("Region");
-        grid.addColumn(street -> street.getCity().getRegion().getCountry().getName()).setHeader("Country");
 
+        grid.setColumns();
+        grid.addColumn(Street::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(Street::getName).setHeader(getTranslation("gui.name"));
+        grid.addColumn(street -> street.getCity().getName()).setHeader(getTranslation("gui.city"));
+        grid.addColumn(street -> street.getCity().getRegion().getName()).setHeader(getTranslation("gui.region"));
+        grid.addColumn(street -> street.getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.country"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));

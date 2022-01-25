@@ -1,6 +1,7 @@
 package kpn.financecontroller.gui.views.city;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.city.City;
@@ -28,7 +29,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "city", layout = MainLayout.class)
 @PermitAll
-public class CityView extends GridView<City> {
+public class CityView extends GridView<City> implements HasDynamicTitle {
 
     private final DTOService<City, CityEntity, Long> cityService;
     private final DTOService<Region, RegionEntity, Long> regionService;
@@ -93,5 +94,10 @@ public class CityView extends GridView<City> {
     @Override
     protected Result<City> handleSaveEvent(SaveFormEvent<EditForm<City>, City> event) {
         return cityService.saver().save(new CityEntity(event.getValue()));
+    }
+
+    @Override
+    public String getPageTitle() {
+        return "+++++";
     }
 }
