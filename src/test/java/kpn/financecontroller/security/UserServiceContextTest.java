@@ -1,9 +1,8 @@
-package kpn.financecontroller.data.services;
+package kpn.financecontroller.security;
 
 import kpn.financecontroller.data.domains.user.Role;
 import kpn.financecontroller.data.entities.user.UserEntity;
 import kpn.financecontroller.data.repos.user.UserRepo;
-import kpn.financecontroller.data.services.UserService;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +21,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class UserServiceTest {
+class UserServiceContextTest {
 
     private static final String WRONG_USER_NAME = "wrong user name";
 
@@ -35,7 +34,7 @@ class UserServiceTest {
     private final StandardPBEStringEncryptor encryptor;
 
     @Autowired
-    public UserServiceTest(UserService userService, UserRepo userRepo, StandardPBEStringEncryptor encryptor) {
+    public UserServiceContextTest(UserService userService, UserRepo userRepo, StandardPBEStringEncryptor encryptor) {
         this.userService = userService;
         this.userRepo = userRepo;
         this.encryptor = encryptor;

@@ -1,5 +1,6 @@
 package kpn.financecontroller.config;
 
+import kpn.financecontroller.i18n.I18nService;
 import lombok.Setter;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.BeanCreationException;
@@ -15,12 +16,14 @@ import org.springframework.core.env.Environment;
 public class JasyptDecConfig {
 
     private final Environment environment;
+    private final I18nService i18nService;
 
     private String passwordName;
 
     @Autowired
-    public JasyptDecConfig(Environment environment) {
+    public JasyptDecConfig(Environment environment, I18nService i18nService) {
         this.environment = environment;
+        this.i18nService = i18nService;
     }
 
     @Bean
@@ -39,7 +42,8 @@ public class JasyptDecConfig {
 
     private void checkGottenPassword(String password) {
         if (password == null){
-            throw new BeanCreationException(String.format("Environment variable %s doesn't exist", passwordName));
+            String message = i18nService.getTranslation("exception.envVar.notExist", passwordName);
+            throw new BeanCreationException(message);
         }
     }
 }
