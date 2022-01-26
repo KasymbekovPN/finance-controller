@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.street;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.street.Street;
@@ -22,7 +21,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.streets")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "street", layout = MainLayout.class)
@@ -37,7 +35,7 @@ public class StreetView extends GridView<Street>{
                       NotificationFactory notificationFactory,
                       DTOService<Street, StreetEntity, Long> streetService,
                       DTOService<City, CityEntity, Long> cityService) {
-        super(new Grid<>(Street.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(Street.class), seedFactory, i18nService, notificationFactory, "gui.streets");
         this.streetService = streetService;
         this.cityService = cityService;
     }

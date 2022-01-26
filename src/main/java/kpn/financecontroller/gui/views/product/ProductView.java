@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.product;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.tag.Tag;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.products")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "product", layout = MainLayout.class)
@@ -39,7 +37,7 @@ public class ProductView extends GridView<Product> {
                        NotificationFactory notificationFactory,
                        DTOService<Product, ProductEntity, Long> service,
                        DTOService<Tag, TagEntity, Long> tagService) {
-        super(new Grid<>(Product.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(Product.class), seedFactory, i18nService, notificationFactory, "gui.products");
         this.service = service;
         this.tagService = tagService;
     }

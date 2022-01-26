@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.region;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.regions")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "region", layout = MainLayout.class)
@@ -39,7 +37,7 @@ public class RegionView extends GridView<Region>{
                       NotificationFactory notificationFactory,
                       DTOService<Region, RegionEntity, Long> regionService,
                       DTOService<Country, CountryEntity, Long> countryService) {
-        super(new Grid<>(Region.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(Region.class), seedFactory, i18nService, notificationFactory, "gui.regions");
         this.regionService = regionService;
         this.countryService = countryService;
     }

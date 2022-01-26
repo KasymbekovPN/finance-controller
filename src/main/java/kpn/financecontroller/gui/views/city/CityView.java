@@ -1,8 +1,6 @@
 package kpn.financecontroller.gui.views.city;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.region.Region;
@@ -24,12 +22,11 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.cities")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "city", layout = MainLayout.class)
 @PermitAll
-public class CityView extends GridView<City> implements HasDynamicTitle {
+public class CityView extends GridView<City> {
 
     private final DTOService<City, CityEntity, Long> cityService;
     private final DTOService<Region, RegionEntity, Long> regionService;
@@ -40,7 +37,7 @@ public class CityView extends GridView<City> implements HasDynamicTitle {
                     NotificationFactory notificationFactory,
                     DTOService<City, CityEntity, Long> cityService,
                     DTOService<Region, RegionEntity, Long> regionService) {
-        super(new Grid<>(City.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(City.class), seedFactory, i18nService, notificationFactory, "gui.cities");
         this.cityService = cityService;
         this.regionService = regionService;
     }
@@ -94,10 +91,5 @@ public class CityView extends GridView<City> implements HasDynamicTitle {
     @Override
     protected Result<City> handleSaveEvent(SaveFormEvent<EditForm<City>, City> event) {
         return cityService.saver().save(new CityEntity(event.getValue()));
-    }
-
-    @Override
-    public String getPageTitle() {
-        return "+++++";
     }
 }

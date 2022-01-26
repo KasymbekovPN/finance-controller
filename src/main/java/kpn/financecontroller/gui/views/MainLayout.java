@@ -28,6 +28,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainLayout extends AppLayout {
@@ -171,11 +172,7 @@ public class MainLayout extends AppLayout {
     }
 
     private String getCurrentPageTitle() {
-        Class<? extends Component> contentClass = getContent().getClass();
-        if (contentClass.isAnnotationPresent(PageTitle.class)){
-            String key = contentClass.getAnnotation(PageTitle.class).value();
-            return getTranslation(key);
-        }
-        return "";
+        HasDynamicTitle content = (HasDynamicTitle) getContent();
+        return content.getPageTitle();
     }
 }

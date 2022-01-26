@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.country;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.countries")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "country", layout = MainLayout.class)
@@ -35,7 +33,7 @@ public class CountryView extends GridView<Country>{
                        I18nService i18nService,
                        NotificationFactory notificationFactory,
                        DTOService<Country, CountryEntity, Long> countryService) {
-        super(new Grid<>(Country.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(Country.class), seedFactory, i18nService, notificationFactory, "gui.cities");
         this.countryService = countryService;
     }
 

@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.buildings")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "building", layout = MainLayout.class)
@@ -37,7 +36,7 @@ public class BuildingView extends GridView<Building> {
                         NotificationFactory notificationFactory,
                         DTOService<Building, BuildingEntity, Long> buildingService,
                         DTOService<Street, StreetEntity, Long> streetService) {
-        super(new Grid<>(Building.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(Building.class), seedFactory, i18nService, notificationFactory, "gui.buildings");
         this.buildingService = buildingService;
         this.streetService = streetService;
     }

@@ -7,6 +7,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.HasDynamicTitle;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
@@ -18,24 +19,31 @@ import kpn.financecontroller.result.Result;
 
 import javax.annotation.PostConstruct;
 
-abstract public class GridView<D> extends VerticalLayout {
+abstract public class GridView<D> extends VerticalLayout implements HasDynamicTitle {
 
     protected final Grid<D> grid;
 
     private final LocaledMessageSeedFactory seedFactory;
     protected final I18nService i18nService; // TODO: 24.01.2022 del
     private final NotificationFactory notificationFactory;
+    private final String titleCode;
 
     protected EditForm<D> form;
 
     public GridView(Grid<D> grid,
                     LocaledMessageSeedFactory seedFactory,
                     I18nService i18nService,
-                    NotificationFactory notificationFactory) {
+                    NotificationFactory notificationFactory, String titleCode) {
         this.grid = grid;
         this.seedFactory = seedFactory;
         this.i18nService = i18nService;
         this.notificationFactory = notificationFactory;
+        this.titleCode = titleCode;
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation(titleCode);
     }
 
     @PostConstruct

@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.payment;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.building.Building;
 import kpn.financecontroller.data.domains.payment.Payment;
@@ -24,7 +23,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.payments")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "", layout = MainLayout.class)
@@ -41,7 +39,7 @@ public class PaymentView extends GridView<Payment> {
                        DTOService<Payment, PaymentEntity, Long> paymentService,
                        DTOService<Building, BuildingEntity, Long> buildingService,
                        DTOService<Product, ProductEntity, Long> productService) {
-        super(new Grid<>(Payment.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(Payment.class), seedFactory, i18nService, notificationFactory, "gui.payments");
         this.paymentService = paymentService;
         this.buildingService = buildingService;
         this.productService = productService;

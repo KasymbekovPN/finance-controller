@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.tag;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@PageTitle("gui.tags")
 @org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "tag", layout = MainLayout.class)
@@ -35,7 +33,7 @@ public class TagView extends GridView<Tag> {
                    I18nService i18nService,
                    NotificationFactory notificationFactory,
                    DTOService<Tag, TagEntity, Long> tagService) {
-        super(new Grid<>(Tag.class), seedFactory, i18nService, notificationFactory);
+        super(new Grid<>(Tag.class), seedFactory, i18nService, notificationFactory, "gui.tags");
         this.tagService = tagService;
     }
 
