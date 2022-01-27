@@ -12,7 +12,8 @@ final public class LoaderAll<D, E, I> extends AbstractLoader<D, E, I>{
     private final Function<E, D> toDomain;
     private final Function<List<E>, List<D>> toDomains;
 
-    public LoaderAll(JpaRepository<E, I> repo, Function<E, D> toDomain, Function<List<E>, List<D>> toDomains) {
+    public LoaderAll(JpaRepository<E, I> repo, String name, Function<E, D> toDomain, Function<List<E>, List<D>> toDomains) {
+        super(name);
         this.repo = repo;
         this.toDomain = toDomain;
         this.toDomains = toDomains;

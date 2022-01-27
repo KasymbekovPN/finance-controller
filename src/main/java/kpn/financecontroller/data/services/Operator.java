@@ -7,7 +7,7 @@ import java.util.List;
 
 abstract public class Operator<D> {
 
-    protected void enrichBuilderByException(Result.Builder<D> builder, DTOServiceException ex) {
+    protected void enrichBuilderByException(Result.Builder<?> builder, DTOServiceException ex) {
         builder.code(ex.getMessage());
         Arrays.stream(ex.getArgs()).forEach(builder::arg);
     }

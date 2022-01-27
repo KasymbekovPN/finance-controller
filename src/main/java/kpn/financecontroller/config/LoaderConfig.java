@@ -34,7 +34,7 @@ public class LoaderConfig {
         Function<List<CountryEntity>, List<Country>> toDomains = (entities) -> {
             return entities.stream().map(Country::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, Country::new, toDomains);
+        return new LoaderAll<>(repo, "country", Country::new, toDomains);
     }
 
     @Bean
@@ -42,7 +42,7 @@ public class LoaderConfig {
         Function<List<RegionEntity>, List<Region>> toDomains = (entities) -> {
             return entities.stream().map(Region::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, Region::new, toDomains);
+        return new LoaderAll<>(repo, "region", Region::new, toDomains);
     }
 
     @Bean
@@ -50,7 +50,7 @@ public class LoaderConfig {
         Function<List<CityEntity>, List<City>> toDomains = (entities) -> {
             return entities.stream().map(City::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, City::new, toDomains);
+        return new LoaderAll<>(repo, "city", City::new, toDomains);
     }
 
     @Bean
@@ -58,7 +58,7 @@ public class LoaderConfig {
         Function<List<StreetEntity>, List<Street>> toDomains = (entities) -> {
             return entities.stream().map(Street::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, Street::new, toDomains);
+        return new LoaderAll<>(repo, "street", Street::new, toDomains);
     }
 
     @Bean
@@ -66,7 +66,7 @@ public class LoaderConfig {
         Function<List<BuildingEntity>, List<Building>> toDomains = (entities) -> {
             return entities.stream().map(Building::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, Building::new, toDomains);
+        return new LoaderAll<>(repo, "building", Building::new, toDomains);
     }
 
     @Bean
@@ -74,7 +74,7 @@ public class LoaderConfig {
         Function<List<ProductEntity>, List<Product>> toDomains = (entities) -> {
             return entities.stream().map(Product::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, Product::new, toDomains);
+        return new LoaderAll<>(repo, "product", Product::new, toDomains);
     }
 
     @Bean
@@ -82,7 +82,7 @@ public class LoaderConfig {
         Function<List<PaymentEntity>, List<Payment>> toDomains = (entities) -> {
             return entities.stream().map(Payment::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, Payment::new, toDomains);
+        return new LoaderAll<>(repo, "payment", Payment::new, toDomains);
     }
 
     @Bean
@@ -90,6 +90,6 @@ public class LoaderConfig {
         Function<List<TagEntity>, List<Tag>> toDomains = (entities) -> {
             return entities.stream().map(Tag::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, Tag::new, toDomains);
+        return new LoaderAll<>(repo, "tag", Tag::new, toDomains);
     }
 }

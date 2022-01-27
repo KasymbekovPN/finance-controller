@@ -18,6 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class LoaderAllTest {
 
+    private static final String LOADER_NAME = "loader";
+    private static final String WRONG_LOADER_NAME = "wrong.loader";
+
     private static LoaderAll<TestModel, TestEntity, Long> loader;
     private static LoaderAll<TestModel, TestEntity, Long> wrongLoader;
     private static List<TestModel> expectedDomains;
@@ -34,8 +37,8 @@ class LoaderAllTest {
         Function<List<TestEntity>, List<TestModel>> toDomains = (entities) -> {
             return entities.stream().map(TestModel::new).collect(Collectors.toList());
         };
-        loader = new LoaderAll<>(createRepo(), TestModel::new, toDomains);
-        wrongLoader = new LoaderAll<>(createWrongRepo(), TestModel::new, toDomains);
+        loader = new LoaderAll<>(createRepo(), LOADER_NAME, TestModel::new, toDomains);
+        wrongLoader = new LoaderAll<>(createWrongRepo(), WRONG_LOADER_NAME, TestModel::new, toDomains);
     }
 
     @Test
@@ -44,7 +47,7 @@ class LoaderAllTest {
         Result<TestModel> result = loader.byId(expectedId);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("loader.loadById.unsupported");
-        assertThat(result.getArgs()).isEqualTo(List.of("LoaderAll", expectedId).toArray());
+        assertThat(result.getArgs()).isEqualTo(List.of(LOADER_NAME, expectedId).toArray());
     }
 
     @Test
@@ -54,7 +57,7 @@ class LoaderAllTest {
         Result<List<TestModel>> result = loader.by(attribute, value);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("loader.by.disallowedAttribute");
-        assertThat(result.getArgs()).isEqualTo(List.of("LoaderAll", attribute, value).toArray());
+        assertThat(result.getArgs()).isEqualTo(List.of(LOADER_NAME, attribute, value).toArray());
     }
 
     @Test
@@ -69,7 +72,7 @@ class LoaderAllTest {
         Result<List<TestModel>> result = wrongLoader.all();
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("loader.loadAll.fail");
-        assertThat(result.getArgs()).isEqualTo(List.of("LoaderAll").toArray());
+        assertThat(result.getArgs()).isEqualTo(List.of(WRONG_LOADER_NAME).toArray());
     }
 
     private static JpaRepository<TestEntity, Long> createRepo() {

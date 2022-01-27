@@ -9,32 +9,40 @@ import java.util.Optional;
 
 public abstract class AbstractLoader<D, E, I> extends Operator<D> implements Loader<D, E, I> {
 
+    private final String name;
+
+    public AbstractLoader(String name) {
+        this.name = name;
+    }
+
     @Override
     public Result<D> byId(I id) {
-        Result.Builder<D> builder;
+        Result.Builder<D> builder = getResultBuilder()
+                .arg(name)
+                .arg(id);
         try{
             Optional<E> maybeEntity = loadById(id);
             if (maybeEntity.isPresent()){
-                builder = getResultBuilder()
+                builder
                         .success(true)
                         .value(convertEntityToDomain(maybeEntity.get()));
             } else {
-                builder = getResultBuilder()
+                builder
                         .success(false)
                         .code("loader.byId.noOne");
             }
         } catch (DTOServiceException exception){
-            builder = exceptionToResultBuilder(exception);
+            enrichBuilderByException(builder, exception);
         }
-        return builder
-                .arg(getId())
-                .arg(id)
-                .build();
+        return builder.build();
     }
 
     @Override
     public Result<List<D>> by(String attribute, Object value) {
-        Result.Builder<List<D>> builder = getListResultBuilder();
+        Result.Builder<List<D>> builder = getListResultBuilder()
+                .arg(name)
+                .arg(attribute)
+                .arg(value);
         if (checkAttribute(attribute)){
             if (checkValue(attribute, value)){
                 try{
@@ -43,7 +51,7 @@ public abstract class AbstractLoader<D, E, I> extends Operator<D> implements Loa
                             .success(true)
                             .value(convertEntitiesToDomains(entities));
                 } catch (DTOServiceException exception){
-                    builder = exceptionToListResultBuilder(exception);
+                    enrichBuilderByException(builder, exception);
                 }
             } else {
                 builder.code("loader.by.disallowedValue");
@@ -52,16 +60,13 @@ public abstract class AbstractLoader<D, E, I> extends Operator<D> implements Loa
             builder.code("loader.by.disallowedAttribute");
         }
 
-        return builder
-                .arg(getId())
-                .arg(attribute)
-                .arg(value)
-                .build();
+        return builder.build();
     }
 
     @Override
     public Result<List<D>> all() {
-        Result.Builder<List<D>> builder = getListResultBuilder();
+        Result.Builder<List<D>> builder = getListResultBuilder()
+                .arg(name);
         try {
             List<E> entities = loadAll();
             builder
@@ -69,12 +74,10 @@ public abstract class AbstractLoader<D, E, I> extends Operator<D> implements Loa
                     .value(convertEntitiesToDomains(entities))
                     .build();
         } catch (DTOServiceException ex){
-            builder = exceptionToListResultBuilder(ex);
+            enrichBuilderByException(builder, ex);
         }
 
-        return builder
-                .arg(getId())
-                .build();
+        return builder.build();
     }
 
     protected boolean checkAttribute(String attribute){
