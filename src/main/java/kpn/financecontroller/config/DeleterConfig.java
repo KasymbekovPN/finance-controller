@@ -26,41 +26,41 @@ public class DeleterConfig {
 
     @Bean
     public DeleterAllAndById<Country, CountryEntity, Long> countryDeleter(JpaRepository<CountryEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "country");
     }
 
     @Bean
     public DeleterAllAndById<Region, RegionEntity, Long> regionDeleter(JpaRepository<RegionEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "region");
     }
 
     @Bean
     public DeleterAllAndById<City, CityEntity, Long> cityDeleter(JpaRepository<CityEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "city");
     }
 
     @Bean
     public DeleterAllAndById<Street, StreetEntity, Long> streetDeleter(JpaRepository<StreetEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "street");
     }
 
     @Bean
     public DeleterAllAndById<Building, BuildingEntity, Long> buildingDeleter(JpaRepository<BuildingEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "builder");
     }
 
     @Bean
     public DeleterAllAndById<Product, ProductEntity, Long> productDeleter(JpaRepository<ProductEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "product");
     }
 
     @Bean
     public DeleterAllAndById<Payment, PaymentEntity, Long> paymentDeleter(JpaRepository<PaymentEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "payment");
     }
 
     @Bean
     public DeleterAllAndById<Tag, TagEntity, Long> tagDeleter(JpaRepository<TagEntity, Long> repo){
-        return new DeleterAllAndById<>(repo);
+        return new DeleterAllAndById<>(repo, "tag");
     }
 }

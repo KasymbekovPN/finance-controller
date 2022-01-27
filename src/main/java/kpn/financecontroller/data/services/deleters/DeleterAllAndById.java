@@ -7,7 +7,8 @@ final public class DeleterAllAndById<D, E, I> extends AbstractDeleter<D, E, I>{
 
     private final JpaRepository<E, I> repo;
 
-    public DeleterAllAndById(JpaRepository<E, I> repo) {
+    public DeleterAllAndById(JpaRepository<E, I> repo, String name) {
+        super(name);
         this.repo = repo;
     }
 

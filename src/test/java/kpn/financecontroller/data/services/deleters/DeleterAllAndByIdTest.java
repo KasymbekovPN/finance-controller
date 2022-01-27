@@ -16,11 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DeleterAllAndByIdTest {
 
+    private static final String DELETER_NAME = "some.deleter";
+
     private static DeleterAllAndById<TestModel, TestEntity, Long> deleter;
 
     @BeforeAll
     static void beforeAll() {
-        deleter = new DeleterAllAndById<>(createRepo());
+        deleter = new DeleterAllAndById<>(createRepo(), DELETER_NAME);
     }
 
     @Test
@@ -29,7 +31,7 @@ class DeleterAllAndByIdTest {
         Result<Void> result = deleter.byId(expectedId);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("deleter.deleteById.fail");
-        assertThat(result.getArgs()).isEqualTo(List.of("DeleterAllAndById", expectedId).toArray());
+        assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME, expectedId).toArray());
     }
 
     @Test
@@ -39,7 +41,7 @@ class DeleterAllAndByIdTest {
         Result<Void> result = deleter.by(attribute, value);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("deleter.by.attribute.disallowed");
-        assertThat(result.getArgs()).isEqualTo(List.of("DeleterAllAndById", attribute, value).toArray());
+        assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME, attribute, value).toArray());
     }
 
     @Test
@@ -47,6 +49,7 @@ class DeleterAllAndByIdTest {
         Result<Void> result = deleter.all();
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("deleter.deleteAll.fail");
+        assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME).toArray());
     }
 
     private static JpaRepository<TestEntity, Long> createRepo(){

@@ -7,6 +7,12 @@ import java.util.List;
 
 abstract public class Operator<D> {
 
+    protected void enrichBuilderByException(Result.Builder<D> builder, DTOServiceException ex) {
+        builder.code(ex.getMessage());
+        Arrays.stream(ex.getArgs()).forEach(builder::arg);
+    }
+
+    // TODO: 27.01.2022 dell ??
     protected Result.Builder<D> exceptionToResultBuilder(DTOServiceException exception){
         Result.Builder<D> builder = getResultBuilder()
                 .success(false)
@@ -15,6 +21,7 @@ abstract public class Operator<D> {
         return builder;
     }
 
+    // TODO: 27.01.2022 del???
     protected Result.Builder<List<D>> exceptionToListResultBuilder(DTOServiceException exception){
         Result.Builder<List<D>> builder = getListResultBuilder()
                 .success(false)
@@ -23,6 +30,7 @@ abstract public class Operator<D> {
         return builder;
     }
 
+    // TODO: 27.01.2022 del
     protected String getId() {
         return getClass().getSimpleName();
     }

@@ -33,7 +33,7 @@ public class CountryView extends GridView<Country>{
                        I18nService i18nService,
                        NotificationFactory notificationFactory,
                        DTOService<Country, CountryEntity, Long> countryService) {
-        super(new Grid<>(Country.class), seedFactory, i18nService, notificationFactory, "gui.cities");
+        super(new Grid<>(Country.class), seedFactory, i18nService, notificationFactory, "gui.countries");
         this.countryService = countryService;
     }
 
