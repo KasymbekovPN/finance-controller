@@ -24,7 +24,7 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     protected final Grid<D> grid;
 
     private final LocaledMessageSeedFactory seedFactory;
-    protected final I18nService i18nService; // TODO: 24.01.2022 del
+    protected final I18nService i18nService;
     private final NotificationFactory notificationFactory;
     private final String titleCode;
 

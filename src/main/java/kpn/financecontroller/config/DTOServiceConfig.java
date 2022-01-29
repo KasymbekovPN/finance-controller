@@ -23,7 +23,6 @@ import kpn.financecontroller.data.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// TODO: 17.01.2022 construct it through BPP
 @Configuration
 public class DTOServiceConfig {
 

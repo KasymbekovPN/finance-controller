@@ -40,8 +40,7 @@ public class PaymentForm extends EditForm<Payment> {
         price.setLabel(getTranslation("gui.price"));
         currency.setLabel(getTranslation("gui.currency"));
         createdAt.setLabel(getTranslation("gui.createdAt"));
-
-        // TODO: 19.01.2022 create string to float.2 converter 
+        
         binder.forField(amount)
                 .withConverter(new Converter<String, Float>() {
 

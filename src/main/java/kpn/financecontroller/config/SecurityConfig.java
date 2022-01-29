@@ -31,7 +31,6 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
         this.i18nService = i18nService;
     }
 
-    // TODO: 04.01.2022 use BCryptPasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
