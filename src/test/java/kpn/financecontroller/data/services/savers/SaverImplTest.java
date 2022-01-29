@@ -16,6 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class SaverImplTest {
 
+    private static final String SAVER_NAME = "saver";
+
     private static TestEntity throwEntity;
     private static TestEntity testEntity;
     private static TestModel testModel;
@@ -31,7 +33,7 @@ class SaverImplTest {
 
         testModel = new TestModel(testEntity);
 
-        saver = new SaverImpl<>(createRepo(), TestModel::new);
+        saver = new SaverImpl<>(createRepo(), TestModel::new, SAVER_NAME);
     }
 
     @Test
@@ -46,7 +48,7 @@ class SaverImplTest {
         Result<TestModel> result = saver.save(throwEntity);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("saver.saveImpl.fail");
-        assertThat(result.getArgs()).isEqualTo(List.of("SaverImpl").toArray());
+        assertThat(result.getArgs()).isEqualTo(List.of(SAVER_NAME).toArray());
     }
 
     private static JpaRepository<TestEntity, Long> createRepo(){

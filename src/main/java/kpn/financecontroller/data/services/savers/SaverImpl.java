@@ -10,7 +10,8 @@ public class SaverImpl<D, E, I> extends AbstractSaver<D, E, I>{
     private final JpaRepository<E, I> repo;
     private final Function<E, D> toDomain;
 
-    public SaverImpl(JpaRepository<E, I> repo, Function<E, D> toDomain) {
+    public SaverImpl(JpaRepository<E, I> repo, Function<E, D> toDomain, String name) {
+        super(name);
         this.repo = repo;
         this.toDomain = toDomain;
     }
