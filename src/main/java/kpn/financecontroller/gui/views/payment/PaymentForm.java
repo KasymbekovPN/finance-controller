@@ -20,26 +20,26 @@ import kpn.financecontroller.gui.views.EditForm;
 import java.util.List;
 
 public class PaymentForm extends EditForm<Payment> {
-    private final ComboBox<Product> product;
-    private final ComboBox<Building> building;
-    private final TextField amount;
-    private final ComboBox<Measure> measure;
-    private final TextField price;
-    private final ComboBox<Currency> currency;
-    private final DatePicker createdAt;
+    private final ComboBox<Product> product = new ComboBox<>();
+    private final ComboBox<Building> building = new ComboBox<>();
+    private final TextField amount = new TextField();
+    private final ComboBox<Measure> measure = new ComboBox<>();
+    private final TextField price = new TextField();
+    private final ComboBox<Currency> currency = new ComboBox<>();
+    private final DatePicker createdAt = new DatePicker();
 
     public PaymentForm(List<Product> products,
                        List<Building> buildings) {
         super(new Binder<>(Payment.class));
         addClassName("payment-form");
 
-        product = new ComboBox<>(getTranslation("gui.product"));
-        building = new ComboBox<>(getTranslation("gui.building"));
-        amount = new TextField(getTranslation("gui.amount"));
-        measure = new ComboBox<>(getTranslation("gui.measure"));
-        price = new TextField(getTranslation("gui.price"));
-        currency = new ComboBox<>(getTranslation("gui.currency"));
-        createdAt = new DatePicker(getTranslation("gui.createdAt"));
+        product.setLabel(getTranslation("gui.product"));
+        building.setLabel(getTranslation("gui.building"));
+        amount.setLabel(getTranslation("gui.amount"));
+        measure.setLabel(getTranslation("gui.measure"));
+        price.setLabel(getTranslation("gui.price"));
+        currency.setLabel(getTranslation("gui.currency"));
+        createdAt.setLabel(getTranslation("gui.createdAt"));
 
         // TODO: 19.01.2022 create string to float.2 converter 
         binder.forField(amount)

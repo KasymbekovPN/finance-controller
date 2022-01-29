@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ProductForm extends EditForm<Product> {
 
-    private final TextField name;
+    private final TextField name = new TextField();
     private final MultiSelectListBox<Tag> tags = new MultiSelectListBox<>();
 
     public ProductForm(List<Tag> tagList) {
@@ -22,7 +22,8 @@ public class ProductForm extends EditForm<Product> {
         addClassName("product-form");
         binder.bindInstanceFields(this);
 
-        name = new TextField(getTranslation("gui.name"), getTranslation("gui.placeholder.type-name"));
+        name.setLabel(getTranslation("gui.name"));
+        name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
 
         tags.setItems(tagList);
 

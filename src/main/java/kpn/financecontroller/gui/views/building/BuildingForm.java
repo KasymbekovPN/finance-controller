@@ -14,8 +14,8 @@ import java.util.List;
 
 public class BuildingForm extends EditForm<Building> {
 
-    private final TextField name;
-    private final ComboBox<Street> street;
+    private final TextField name = new TextField();
+    private final ComboBox<Street> street = new ComboBox<>();
 
     public BuildingForm(List<Street> streets) {
         super(new Binder<>(Building.class));
@@ -23,9 +23,10 @@ public class BuildingForm extends EditForm<Building> {
         addClassName("building-form");
         binder.bindInstanceFields(this);
 
-        name = new TextField(getTranslation("gui.name"), getTranslation("gui.placeholder.type-name"));
-        street = new ComboBox<>(getTranslation("gui.street"));
+        name.setLabel(getTranslation("gui.name"));
+        name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
 
+        street.setLabel(getTranslation("gui.street"));
         street.setItems(streets);
         street.setItemLabelGenerator(Street::getFullName);
 

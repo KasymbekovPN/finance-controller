@@ -14,17 +14,18 @@ import java.util.List;
 
 public class StreetForm extends EditForm<Street> {
 
-    private final TextField name;
-    private final ComboBox<City> city;
+    private final TextField name = new TextField();
+    private final ComboBox<City> city = new ComboBox<>();
 
     public StreetForm(List<City> cities) {
         super(new Binder<>(Street.class));
         addClassName("street-form");
         binder.bindInstanceFields(this);
 
-        name = new TextField(getTranslation("gui.name"), getTranslation("gui.placeholder.type-name"));
-        city = new ComboBox<>(getTranslation("gui.city"));
+        name.setLabel(getTranslation("gui.name"));
+        name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
 
+        city.setLabel(getTranslation("gui.city"));
         city.setItems(cities);
         city.setItemLabelGenerator(City::getFullName);
 
