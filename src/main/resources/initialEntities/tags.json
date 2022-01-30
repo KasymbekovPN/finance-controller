@@ -1,0 +1,20 @@
+{
+  "deleteBefore": false,
+  "entities": [
+    {
+      "id": 0,
+      "name": "Russia",
+      "possibility": "updating"
+    },
+    {
+      "id": 1,
+      "name": "USA",
+      "possibility": "updating"
+    },
+    {
+      "id": 2,
+      "name": "Germany",
+      "possibility": "onlyInsertion"
+    }
+  ]
+}

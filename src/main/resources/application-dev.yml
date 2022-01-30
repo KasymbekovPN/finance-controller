@@ -4,9 +4,6 @@ jasypt:
   passwordName: JASYPT_PASSWORD
   postgres:
     url: jdbc:postgresql://localhost/
-#    prod
-#    dbName: YLO21L6CWBODK/eL0+/AFg==
-#    dev
     dbName: 5f4iEGq1ktgq2pggAGV+/A==
     username: Dyyf9Ao7KkG4LAoRwZsNIYfd2outTYao
     password: TNKoHuelZHlW3wx91Kk9fg==
@@ -27,3 +24,6 @@ i18n:
   providedLocales:
     - en
     - ru
+
+#initialEntities.paths:
+initialEntities.paths: initialEntities/tags.json

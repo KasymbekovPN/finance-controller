@@ -1,12 +1,14 @@
 package kpn.financecontroller.result;
 
 import kpn.financecontroller.message.MessageSeed;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@EqualsAndHashCode
 public class Result<T> implements MessageSeed {
     private final Boolean success;
     private final T value;
