@@ -25,5 +25,4 @@ i18n:
     - en
     - ru
 
-#initialEntities.paths:
-initialEntities.paths: initialEntities/tags.json
+initialEntities.directory: initialEntities

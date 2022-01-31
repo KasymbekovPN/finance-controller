@@ -6,45 +6,38 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-// TODO: 30.01.2022 del
 @Component
 @Profile("dev")
-public class IEPathsPropertyExtractor implements PropertyExtractor<List<String>> {
-
-    private static final String PATHS = "initialEntities.paths";
+public class StringPropertyExtractor implements PropertyExtractor<String> {
 
     private final Environment environment;
 
     @Autowired
-    public IEPathsPropertyExtractor(Environment environment) {
+    public StringPropertyExtractor(Environment environment) {
         this.environment = environment;
     }
 
     @Override
-    public Result<List<String>> extract(String property) {
-        String property1 = environment.getProperty(PATHS);
+    public Result<String> extract(String property) {
+        String value = environment.getProperty(property);
         String code = "";
-        List<String> value = null;
         boolean success = false;
-        if (property1 != null){
-            String stripProperty = property1.replaceAll("\\s+", "");
-            if (stripProperty.isEmpty()){
+        if (value != null){
+            String stripValue = value.replaceAll("\\s+", "");
+            if (stripValue.isEmpty()){
                 code = "file.property.extraction.ItEmpty";
             } else {
                 code = "file.property.extraction.success";
-                value = List.of(stripProperty.split(","));
                 success = true;
             }
         } else {
             code = "file.property.extraction.ItNotExist";
         }
 
-        Result.Builder<List<String>> builder = Result.<List<String>>builder()
+        Result.Builder<String> builder = Result.<String>builder()
                 .success(success)
                 .code(code)
-                .arg(PATHS);
+                .arg(property);
         if (success){
             builder
                     .value(value)

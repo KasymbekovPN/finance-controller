@@ -24,9 +24,12 @@ ext {
 	set('assertjVersion', '3.21.0')
 	set('jasyptVersion', '1.9.3')
 	set('mockitoVersion', '1.10.19')
+	set('gsonVersion', '2.8.9')
 }
 
 dependencies {
+
+	implementation "com.google.code.gson:gson:$gsonVersion"
 
 	implementation "org.assertj:assertj-core:$assertjVersion"
 	implementation "org.jasypt:jasypt:$jasyptVersion"
