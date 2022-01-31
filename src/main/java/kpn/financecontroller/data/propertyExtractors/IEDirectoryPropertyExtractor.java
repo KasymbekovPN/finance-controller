@@ -6,21 +6,31 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-// TODO: 31.01.2022 del ???
 @Component
 @Profile("dev")
-public class StringPropertyExtractor implements PropertyExtractor<String> {
+public class IEDirectoryPropertyExtractor implements SpecificPropertyExtractor<String> {
+
+    private static final String PROPERTY = "initialEntities.directory";
 
     private final Environment environment;
 
+    private Result<String> result;
+
     @Autowired
-    public StringPropertyExtractor(Environment environment) {
+    public IEDirectoryPropertyExtractor(Environment environment) {
         this.environment = environment;
     }
 
     @Override
-    public Result<String> extract(String property) {
-        String value = environment.getProperty(property);
+    public Result<String> extract() {
+        if (result == null){
+            result = calculateResult();
+        }
+        return result;
+    }
+
+    private Result<String> calculateResult() {
+        String value = environment.getProperty(PROPERTY);
         String code = "";
         boolean success = false;
         if (value != null){
@@ -38,13 +48,10 @@ public class StringPropertyExtractor implements PropertyExtractor<String> {
         Result.Builder<String> builder = Result.<String>builder()
                 .success(success)
                 .code(code)
-                .arg(property);
+                .arg(PROPERTY);
         if (success){
-            builder
-                    .value(value)
-                    .arg(value);
+            builder.value(value).arg(value);
         }
-
         return builder.build();
     }
 }

@@ -1,19 +1,17 @@
 package kpn.financecontroller.data.propertyExtractors;
 
 import kpn.financecontroller.result.Result;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class IEDirectoryPropertyExtractorTest {
 
-// TODO: 31.01.2022 del
-class StringPropertyExtractorTest {
-
-    private static final String PROPERTY = "property";
-    private static final String VALUE = "value";
-    private static final String EMPTY_PROPERTY_VALUE = "    ";
+    private final static String PROPERTY = "initialEntities.directory";
+    private final static String VALUE = "value";
+    private final static String EMPTY_VALUE = "          ";
 
     private static Result<String> expectedResultIfPropertyNotExist;
     private static Result<String> expectedResultIfPropertyIsEmpty;
@@ -41,10 +39,9 @@ class StringPropertyExtractorTest {
     }
 
     @Test
-    void shouldCheckExtractionWhenEnvVarNotExist() {
-        StringPropertyExtractor extractor = new StringPropertyExtractor(createEnvironmentWithoutProperty());
-        Result<String> result = extractor.extract(PROPERTY);
-        assertThat(expectedResultIfPropertyNotExist).isEqualTo(result);
+    void shouldCheckIfPropertyNotExist() {
+        IEDirectoryPropertyExtractor extractor = new IEDirectoryPropertyExtractor(createEnvironmentWithoutProperty());
+        Assertions.assertThat(extractor.extract()).isEqualTo(expectedResultIfPropertyNotExist);
     }
 
     private Environment createEnvironmentWithoutProperty() {
@@ -56,25 +53,23 @@ class StringPropertyExtractorTest {
     }
 
     @Test
-    void shouldCheckExtractionWhenEnvVarIsEmptyOrContainsOnlySpaces() {
-        StringPropertyExtractor extractor = new StringPropertyExtractor(createEnvironmentWithEmptyProperty());
-        Result<String> result = extractor.extract(PROPERTY);
-        assertThat(expectedResultIfPropertyIsEmpty).isEqualTo(result);
+    void shouldCheckIfPropertyIsEmpty() {
+        IEDirectoryPropertyExtractor extractor = new IEDirectoryPropertyExtractor(createEnvironmentWithEmptyProperty());
+        Assertions.assertThat(extractor.extract()).isEqualTo(expectedResultIfPropertyIsEmpty);
     }
 
     private Environment createEnvironmentWithEmptyProperty() {
         Environment environment = Mockito.mock(Environment.class);
         Mockito
                 .when(environment.getProperty(PROPERTY))
-                .thenReturn(EMPTY_PROPERTY_VALUE);
+                .thenReturn(EMPTY_VALUE);
         return environment;
     }
 
     @Test
-    void shouldCheckPathsListExtraction() {
-        StringPropertyExtractor extractor = new StringPropertyExtractor(createEnvironmentWithProperty());
-        Result<String> result = extractor.extract(PROPERTY);
-        assertThat(expectedResult).isEqualTo(result);
+    void shouldCheckIfProperty() {
+        IEDirectoryPropertyExtractor extractor = new IEDirectoryPropertyExtractor(createEnvironmentWithProperty());
+        Assertions.assertThat(extractor.extract()).isEqualTo(expectedResult);
     }
 
     private Environment createEnvironmentWithProperty() {

@@ -21,20 +21,20 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     // TODO: 31.01.2022 del
 //    private final IEPathsPropertyExtractor iePathsPropertyExtractor;
 
-    private final PropertyExtractor<String> propertyExtractor;
-    private final I18nService i18nService;
-
-    @Autowired
-    public InitialEntitiesRefreshListener(PropertyExtractor<String> propertyExtractor,
-                                          I18nService i18nService) {
-        this.propertyExtractor = propertyExtractor;
-        this.i18nService = i18nService;
-    }
+//    private final PropertyExtractor<String> propertyExtractor;
+//    private final I18nService i18nService;
+//
+//    @Autowired
+//    public InitialEntitiesRefreshListener(PropertyExtractor<String> propertyExtractor,
+//                                          I18nService i18nService) {
+//        this.propertyExtractor = propertyExtractor;
+//        this.i18nService = i18nService;
+//    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        Result<String> result = propertyExtractor.extract(PROPERTY);
-        log.info("{}", i18nService.getTranslation(result.getCode(), result.getArgs()));
+//        Result<String> result = propertyExtractor.extract(PROPERTY);
+//        log.info("{}", i18nService.getTranslation(result.getCode(), result.getArgs()));
 
         // TODO: 30.01.2022 restore
 //        Result<List<String>> result = iePathsPropertyExtractor.extract();
