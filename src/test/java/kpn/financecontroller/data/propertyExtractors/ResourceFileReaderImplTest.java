@@ -15,10 +15,16 @@ class ResourceFileReaderImplTest {
     private static ResourceFileReaderImpl reader;
     private static Result<String> expectedOnWrongReading;
     private static Result<String> expectedOnReading;
+    private static Result<String> expectedOnNullPath;
 
     @BeforeAll
     static void beforeAll() {
         reader = new ResourceFileReaderImpl();
+        expectedOnNullPath = Result.<String>builder()
+                .success(false)
+                .code("resource.file.read.fail.nullPath")
+                .arg(null)
+                .build();
         expectedOnWrongReading = Result.<String>builder()
                 .success(false)
                 .code("resource.file.read.fail")
@@ -30,6 +36,12 @@ class ResourceFileReaderImplTest {
                 .code("resource.file.read.success")
                 .arg(PATH)
                 .build();
+    }
+
+    @Test
+    void shouldCheckNullPathReading() {
+        Result<String> result = reader.read(null);
+        assertThat(expectedOnNullPath).isEqualTo(result);
     }
 
     @Test
