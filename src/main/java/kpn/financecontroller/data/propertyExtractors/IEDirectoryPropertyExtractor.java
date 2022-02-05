@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+// TODO: 05.02.2022 create through @config-file
 @Component
 @Profile("dev")
 public class IEDirectoryPropertyExtractor implements SpecificPropertyExtractor<String> {
