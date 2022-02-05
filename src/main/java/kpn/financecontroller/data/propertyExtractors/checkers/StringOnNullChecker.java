@@ -2,7 +2,7 @@ package kpn.financecontroller.data.propertyExtractors.checkers;
 
 import kpn.financecontroller.result.Result;
 
-// TODO: 02.02.2022 replace
+// TODO: 02.02.2022 del
 public class StringOnNullChecker implements Checker<String> {
 
     private String value;
