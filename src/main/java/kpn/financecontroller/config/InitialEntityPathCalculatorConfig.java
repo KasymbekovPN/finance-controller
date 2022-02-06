@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Profile;
 
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "initialEntities")
+@ConfigurationProperties(prefix = "initial.entities")
 @Profile("dev")
-public class InitialEntityPathCalculator {
+public class InitialEntityPathCalculatorConfig {
 
     private String directory;
 

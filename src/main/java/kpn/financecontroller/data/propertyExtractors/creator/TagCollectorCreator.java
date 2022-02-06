@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import kpn.financecontroller.data.propertyExtractors.IECollector;
 import kpn.financecontroller.data.propertyExtractors.IECollectorImpl;
 import kpn.financecontroller.data.propertyExtractors.entities.TagIE;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TagCollectorCreator extends AbstractCollectorCreator<Long, TagIE> {
 
-    public TagCollectorCreator(String id) {
-        super(id);
+    public TagCollectorCreator() {
+        super("TAGS");
     }
 
     @Override

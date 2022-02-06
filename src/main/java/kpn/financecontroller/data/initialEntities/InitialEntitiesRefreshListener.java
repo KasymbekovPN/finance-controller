@@ -1,7 +1,12 @@
 package kpn.financecontroller.data.initialEntities;
 
+import kpn.financecontroller.data.propertyExtractors.IECollector;
 import kpn.financecontroller.data.propertyExtractors.IEPathsPropertyExtractor;
 import kpn.financecontroller.data.propertyExtractors.PropertyExtractor;
+import kpn.financecontroller.data.propertyExtractors.entities.TagIE;
+import kpn.financecontroller.data.propertyExtractors.factory.TaskFactory;
+import kpn.financecontroller.data.propertyExtractors.manager.TaskManager;
+import kpn.financecontroller.data.propertyExtractors.tasks.Task;
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +21,7 @@ import org.springframework.stereotype.Component;
 @Profile("dev")
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent > {
 
-    private static final String PROPERTY = "initialEntities.directory";
-
+//    private static final String PROPERTY = "initialEntities.directory";
     // TODO: 31.01.2022 del
 //    private final IEPathsPropertyExtractor iePathsPropertyExtractor;
 
@@ -31,8 +35,24 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
 //        this.i18nService = i18nService;
 //    }
 
+    @Autowired
+    private TaskFactory<Long, TagIE> tagTaskFactory;
+
+    @Autowired
+    private TaskManager taskManager;
+
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        log.info("start onApplicationEvent");
+
+        Task<Long, TagIE> tagTask = tagTaskFactory.create();
+        Result<Void> result = taskManager.execute(tagTask);
+        log.info("{}", result);
+        IECollector<Long, TagIE> collector = tagTask.getCollector();
+        log.info("{}", collector);
+
+
 //        Result<String> result = propertyExtractor.extract(PROPERTY);
 //        log.info("{}", i18nService.getTranslation(result.getCode(), result.getArgs()));
 
