@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.load.tasks;
 
-import kpn.financecontroller.initialization.load.collectors.LoadDataCollector;
+import kpn.financecontroller.initialization.collectors.LoadDataCollector;
 import kpn.financecontroller.initialization.load.calculators.PathCalculator;
 import kpn.financecontroller.initialization.load.creators.CollectorCreator;
 import kpn.financecontroller.result.Result;

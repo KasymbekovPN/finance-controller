@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.load.entities;
+package kpn.financecontroller.initialization.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TagLoadEntity extends AbstractLoadEntity<Long> {
+public class TagInitialEntity extends AbstractInitialEntity<Long> {
     private String name;
 }

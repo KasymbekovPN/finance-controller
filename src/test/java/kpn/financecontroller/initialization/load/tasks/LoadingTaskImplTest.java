@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.load.tasks;
 
-import kpn.financecontroller.initialization.load.collectors.LoadDataCollector;
+import kpn.financecontroller.initialization.collectors.LoadDataCollector;
 import kpn.financecontroller.initialization.load.calculators.PathCalculator;
 import kpn.financecontroller.initialization.load.creators.CollectorCreator;
 import kpn.financecontroller.result.Result;
@@ -102,6 +102,8 @@ class LoadingTaskImplTest {
         public Boolean getDeleteBefore() {return null;}
         @Override
         public void setEntities(Map<Long, String> entities) {}
+        @Override
+        public Map<Long, String> getEntities() {return null;}
         @Override
         public Optional<String> getEntity(Long key) {return Optional.empty();}
     }

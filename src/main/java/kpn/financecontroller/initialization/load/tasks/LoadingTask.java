@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.load.tasks;
 
-import kpn.financecontroller.initialization.load.collectors.LoadDataCollector;
+import kpn.financecontroller.initialization.collectors.LoadDataCollector;
 import kpn.financecontroller.result.Result;
 
 public interface LoadingTask<K, E> {

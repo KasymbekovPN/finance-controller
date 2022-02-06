@@ -1,7 +1,7 @@
 package kpn.financecontroller.initialization.load.creators;
 
 import com.google.gson.JsonSyntaxException;
-import kpn.financecontroller.initialization.load.collectors.LoadDataCollector;
+import kpn.financecontroller.initialization.collectors.LoadDataCollector;
 import kpn.financecontroller.result.Result;
 
 abstract public class AbstractCollectorCreator<K, E> implements CollectorCreator<K, E> {
