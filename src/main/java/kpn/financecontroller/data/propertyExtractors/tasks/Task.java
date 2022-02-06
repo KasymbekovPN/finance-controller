@@ -6,7 +6,5 @@ import kpn.financecontroller.result.Result;
 public interface Task<K, E> {
     Result<String> calculatePath();
     Result<Void> fillCollector(String jsonContent);
-    void setResult(Result<Void> result);
-    Result<Void> getResult();
-    Result<IECollector<K, E>> tryGetCollector();
+    IECollector<K, E> getCollector();
 }

@@ -33,7 +33,6 @@ public class TaskManagerImpl implements TaskManager {
             result = convertResult(sResult);
         }
 
-        task.setResult(result);
         return result;
     }
 
