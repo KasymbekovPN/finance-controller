@@ -1,11 +1,11 @@
 package kpn.financecontroller.data.entities.payment;
 
+import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.domains.payment.Currency;
 import kpn.financecontroller.data.domains.payment.Measure;
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.entities.AbstractEntity;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
-import kpn.financecontroller.data.entities.product.ProductEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Setter
 @Getter

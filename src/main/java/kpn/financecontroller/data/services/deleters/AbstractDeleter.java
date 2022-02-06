@@ -4,8 +4,6 @@ import kpn.financecontroller.data.services.DTOServiceException;
 import kpn.financecontroller.data.services.Operator;
 import kpn.financecontroller.result.Result;
 
-import java.util.Arrays;
-
 public abstract class AbstractDeleter<D, E, I> extends Operator<Void> implements Deleter<D, E, I> {
 
     private final String name;

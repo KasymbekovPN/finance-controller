@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.entities.tag;
 
+import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.AbstractEntity;
-import kpn.financecontroller.data.entities.product.ProductEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

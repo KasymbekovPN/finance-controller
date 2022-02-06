@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.building;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.building.Building;
 import kpn.financecontroller.data.domains.street.Street;

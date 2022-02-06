@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.domains.building;
 
-import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.domains.street.Street;
 import lombok.*;
 
 @Getter

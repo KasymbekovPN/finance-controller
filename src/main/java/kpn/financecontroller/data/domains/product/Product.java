@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.domains.product;
 
-import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.product.ProductEntity;
+import kpn.financecontroller.data.domains.tag.Tag;
 import lombok.*;
 
 import java.util.Set;

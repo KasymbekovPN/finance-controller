@@ -1,12 +1,11 @@
 package kpn.financecontroller.data.domains.payment;
 
 import kpn.financecontroller.data.domains.building.Building;
-import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
+import kpn.financecontroller.data.domains.product.Product;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Setter
 @Getter

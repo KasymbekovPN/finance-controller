@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.entities.city;
 
+import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.entities.AbstractEntity;
-import kpn.financecontroller.data.entities.region.RegionEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

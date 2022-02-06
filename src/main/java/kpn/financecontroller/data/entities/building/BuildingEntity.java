@@ -3,7 +3,6 @@ package kpn.financecontroller.data.entities.building;
 import kpn.financecontroller.data.domains.building.Building;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

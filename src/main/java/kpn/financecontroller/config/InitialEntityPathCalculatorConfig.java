@@ -1,7 +1,7 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.propertyExtractors.calculators.PathCalculator;
-import kpn.financecontroller.data.propertyExtractors.calculators.SimplePathCalculator;
+import kpn.financecontroller.initialization.load.calculators.PathCalculator;
+import kpn.financecontroller.initialization.load.calculators.SimplePathCalculator;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;

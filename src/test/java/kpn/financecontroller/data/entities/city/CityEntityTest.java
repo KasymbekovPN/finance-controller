@@ -1,7 +1,6 @@
 package kpn.financecontroller.data.entities.city;
 
 import kpn.financecontroller.data.entities.region.RegionEntity;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
