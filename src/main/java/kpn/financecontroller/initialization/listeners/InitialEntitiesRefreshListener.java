@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.collectors.listeners;
+package kpn.financecontroller.initialization.listeners;
 
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
@@ -6,6 +6,8 @@ import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import kpn.financecontroller.initialization.load.factories.LoadingTaskFactory;
 import kpn.financecontroller.initialization.load.manager.LoadingManager;
 import kpn.financecontroller.initialization.load.tasks.LoadingTask;
+import kpn.financecontroller.initialization.save.SaveManager;
+import kpn.financecontroller.initialization.save.TagSaveManager;
 import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     @Autowired
     private LoadingManager loadingManager;
 
+    @Autowired
+    private TagSaveManager tagSaveManager;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("start onApplicationEvent");
@@ -35,7 +40,16 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         LoadingTask<Long, TagInitialEntity> tagLoadingTask = tagLoadingTaskFactory.create();
         Result<Void> result = loadingManager.execute(tagLoadingTask);
         log.info("{}", result);
-        LoadDataCollector<Long, TagInitialEntity> collector = tagLoadingTask.getCollector();
-        log.info("{}", collector);
+        LoadDataCollector<Long, TagInitialEntity> tagCollector = tagLoadingTask.getCollector();
+        log.info("{}", tagCollector);
+
+        tagSaveManager.setCollector(tagCollector);
+
+        Result<Void> result1 = tagSaveManager.clearTarget();
+        System.out.println("result1: " + result1);
+
+        tagSaveManager.save();
+
+        tagSaveManager.clearCollector();
     }
 }
