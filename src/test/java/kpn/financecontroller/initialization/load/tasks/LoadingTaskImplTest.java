@@ -97,6 +97,10 @@ class LoadingTaskImplTest {
         private final String key;
 
         @Override
+        public void setId(String id) {}
+        @Override
+        public String getId() {return null;}
+        @Override
         public void setDeleteBefore(Boolean deleteBefore) {}
         @Override
         public Boolean getDeleteBefore() {return null;}
