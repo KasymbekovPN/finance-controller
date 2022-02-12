@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.save;
+package kpn.financecontroller.initialization.save.managers;
 
 import kpn.financecontroller.checkers.GroupChecker;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
@@ -91,7 +91,7 @@ class AbstractSaveManagerTest {
 
     abstract private static class TestCollectorChecker implements GroupChecker<LoadDataCollector<?, ?>> {}
 
-    private static class TestSaveManager extends AbstractSaveManager<Long, String>{
+    private static class TestSaveManager extends AbstractSaveManager<Long, String> {
 
         private final boolean needDeleteBefore;
 

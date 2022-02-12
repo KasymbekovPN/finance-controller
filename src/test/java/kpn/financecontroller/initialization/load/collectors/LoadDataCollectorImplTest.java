@@ -14,12 +14,13 @@ class LoadDataCollectorImplTest {
     private static final Long WRONG_ID = 2L;
     private static final String VALUE = "value";
 
-    @Test
-    void shouldCheckSettingGettingOfDeleteBefore() {
-        LoadDataCollectorImpl<Long, String> collector = new LoadDataCollectorImpl<>();
-        collector.setDeleteBefore(true);
-        assertThat(collector.getDeleteBefore()).isTrue();
-    }
+    // TODO: 12.02.2022 del
+//    @Test
+//    void shouldCheckSettingGettingOfDeleteBefore() {
+//        LoadDataCollectorImpl<Long, String> collector = new LoadDataCollectorImpl<>();
+//        collector.setDeleteBefore(true);
+//        assertThat(collector.getDeleteBefore()).isTrue();
+//    }
 
     @Test
     void shouldCheckAttemptNonExistEntityGettingWithoutSetting() {

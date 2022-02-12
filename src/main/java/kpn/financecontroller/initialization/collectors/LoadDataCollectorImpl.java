@@ -9,7 +9,6 @@ import java.util.Optional;
 @Setter
 @Getter
 public class LoadDataCollectorImpl<K, E> implements LoadDataCollector<K, E> {
-    private Boolean deleteBefore;
     private Map<K, E> entities;
 
     @Override

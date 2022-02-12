@@ -97,10 +97,6 @@ class LoadingTaskImplTest {
         private final String key;
 
         @Override
-        public void setDeleteBefore(Boolean deleteBefore) {}
-        @Override
-        public Boolean getDeleteBefore() {return null;}
-        @Override
         public void setEntities(Map<Long, String> entities) {}
         @Override
         public Map<Long, String> getEntities() {return null;}
