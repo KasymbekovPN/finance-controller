@@ -16,7 +16,6 @@ class AbstractSaveManagerTest {
     private static final String SAVE_CODE = "save.code";
 
     private static Result<Void> expectedResultWhenDeleteBeforeTrue;
-    private static Result<Void> expectedResultWhenDeleteBeforeFalse;
     private static Result<Void> expectedResultAfterSaving;
 
     @BeforeAll
@@ -24,11 +23,6 @@ class AbstractSaveManagerTest {
         expectedResultWhenDeleteBeforeTrue = Result.<Void>builder()
                 .success(true)
                 .code(DELETE_BEFORE_CODE)
-                .build();
-        expectedResultWhenDeleteBeforeFalse = Result.<Void>builder()
-                .success(true)
-                .code("saveManager.deleteBefore.disabled")
-                .arg(ID)
                 .build();
         expectedResultAfterSaving = Result.<Void>builder()
                 .success(true)
@@ -38,7 +32,7 @@ class AbstractSaveManagerTest {
 
     @Test
     void shouldCheckTargetClearing_whenCollectorCheckingFail() {
-        TestSaveManager manager = new TestSaveManager(ID, createFailTestCollectorChecker(), false);
+        TestSaveManager manager = new TestSaveManager(ID, createFailTestCollectorChecker());
         Result<Void> result = manager.clearTarget();
         assertThat(result).isNotNull();
         assertThat(result.getSuccess()).isFalse();
@@ -46,21 +40,14 @@ class AbstractSaveManagerTest {
 
     @Test
     void shouldCheckTargetClearing_whenNotNeedDeleteBefore() {
-        TestSaveManager manager = new TestSaveManager(ID, createTestCollectorChecker(), true);
+        TestSaveManager manager = new TestSaveManager(ID, createTestCollectorChecker());
         Result<Void> result = manager.clearTarget();
         assertThat(expectedResultWhenDeleteBeforeTrue).isEqualTo(result);
     }
 
     @Test
-    void shouldCheckTargetClearing_whenNeedDeleteBefore() {
-        TestSaveManager manager = new TestSaveManager(ID, createTestCollectorChecker(), false);
-        Result<Void> result = manager.clearTarget();
-        assertThat(expectedResultWhenDeleteBeforeFalse).isEqualTo(result);
-    }
-
-    @Test
     void shouldCheckSaving_whenCollectorCheckingFail() {
-        TestSaveManager manager = new TestSaveManager(ID, createFailTestCollectorChecker(), false);
+        TestSaveManager manager = new TestSaveManager(ID, createFailTestCollectorChecker());
         Result<Void> result = manager.save();
         assertThat(result).isNotNull();
         assertThat(result.getSuccess()).isFalse();
@@ -68,7 +55,7 @@ class AbstractSaveManagerTest {
 
     @Test
     void shouldCheckSaving() {
-        TestSaveManager manager = new TestSaveManager(ID, createTestCollectorChecker(), false);
+        TestSaveManager manager = new TestSaveManager(ID, createTestCollectorChecker());
         Result<Void> result = manager.save();
         assertThat(expectedResultAfterSaving).isEqualTo(result);
     }
@@ -93,21 +80,13 @@ class AbstractSaveManagerTest {
 
     private static class TestSaveManager extends AbstractSaveManager<Long, String> {
 
-        private final boolean needDeleteBefore;
-
-        public TestSaveManager(String ID, GroupChecker<LoadDataCollector<?, ?>> collectorChecker, boolean needDeleteBefore) {
+        public TestSaveManager(String ID, GroupChecker<LoadDataCollector<?, ?>> collectorChecker) {
             super(ID, collectorChecker);
-            this.needDeleteBefore = needDeleteBefore;
         }
 
         @Override
         protected Result<Void> checkCollectors() {
             return collectorChecker.check();
-        }
-
-        @Override
-        protected boolean checkNeedDeleteBefore() {
-            return needDeleteBefore;
         }
 
         @Override

@@ -47,8 +47,11 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         Result<Void> result1 = tagSaveManager.clearTarget();
         System.out.println("result1: " + result1);
 
-        tagSaveManager.save();
+        Result<Void> result2 = tagSaveManager.save();
+        System.out.println("result2: " + result2);
 
         tagSaveManager.clearCollector();
+
+        System.out.println("123");
     }
 }

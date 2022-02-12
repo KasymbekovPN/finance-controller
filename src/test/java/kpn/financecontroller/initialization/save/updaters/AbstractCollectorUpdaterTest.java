@@ -2,25 +2,22 @@ package kpn.financecontroller.initialization.save.updaters;
 
 import kpn.financecontroller.initialization.collectors.LoadDataCollectorImpl;
 import kpn.financecontroller.initialization.entities.AbstractInitialEntity;
+import lombok.EqualsAndHashCode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 class AbstractCollectorUpdaterTest {
 
-    private static HashMap<Long, Entity> originalCollectorData;
     private static HashMap<Long, Entity> expectedAfterEmptyUpdatingCollectorData;
     private static HashMap<Long, Entity> expectedAfterAddUpdatingCollectorData;
     private static HashMap<Object, Object> expectedAfterResetUpdatingCollectorData;
 
     @BeforeAll
     static void beforeAll() {
-        originalCollectorData = new HashMap<>() {{
-            put(1L, new Entity(1L));
-            put(2L, new Entity(2L));
-        }};
         expectedAfterEmptyUpdatingCollectorData = new HashMap<>() {{
             put(1L, new Entity(1L));
             put(2L, new Entity(2L));
@@ -39,7 +36,7 @@ class AbstractCollectorUpdaterTest {
     void shouldCheckUpdating_whenChangingQueueEmpty() {
         TestUpdater updater = new TestUpdater();
         TestCollector collector = new TestCollector();
-        collector.setEntities(new HashMap<>(originalCollectorData));
+        collector.setEntities(new HashMap<>(createOriginalData()));
         updater.update(collector);
         Assertions.assertThat(expectedAfterEmptyUpdatingCollectorData).isEqualTo(collector.getEntities());
     }
@@ -48,7 +45,7 @@ class AbstractCollectorUpdaterTest {
     void shouldCheckUpdating_whenChangingQueueNotEmpty() {
         TestUpdater updater = new TestUpdater();
         TestCollector collector = new TestCollector();
-        collector.setEntities(new HashMap<>(originalCollectorData));
+        collector.setEntities(new HashMap<>(createOriginalData()));
         updater
                 .add(1L, 11L)
                 .add(2L, 21L)
@@ -60,7 +57,7 @@ class AbstractCollectorUpdaterTest {
     void shouldCheckUpdating_afterReset() {
         TestUpdater updater = new TestUpdater();
         TestCollector collector = new TestCollector();
-        collector.setEntities(new HashMap<>(originalCollectorData));
+        collector.setEntities(new HashMap<>(createOriginalData()));
         updater
                 .add(1L, 11L)
                 .add(2L, 21L)
@@ -69,6 +66,14 @@ class AbstractCollectorUpdaterTest {
         Assertions.assertThat(expectedAfterResetUpdatingCollectorData).isEqualTo(collector.getEntities());
     }
 
+    private static Map<Long, Entity> createOriginalData(){
+        return new HashMap<>() {{
+            put(1L, new Entity(1L));
+            put(2L, new Entity(2L));
+        }};
+    }
+
+    @EqualsAndHashCode(callSuper = true)
     private static class Entity extends AbstractInitialEntity<Long>{
         public Entity(Long id) {
             setId(id);
