@@ -1,9 +1,6 @@
 package kpn.financecontroller.checkers;
 
-import kpn.financecontroller.result.Result;
-
-public interface GroupChecker<T> {
+public interface GroupChecker<T> extends Checker{
     GroupChecker<T> reset();
     GroupChecker<T> set(String key, T value);
-    Result<Void> check();
 }
