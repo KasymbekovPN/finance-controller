@@ -25,5 +25,4 @@ i18n:
     - en
     - ru
 
-#initialEntities.directory: initialEntities
 initial.entities.directory: initialEntities

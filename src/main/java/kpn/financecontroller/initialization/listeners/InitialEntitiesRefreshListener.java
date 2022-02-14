@@ -2,10 +2,13 @@ package kpn.financecontroller.initialization.listeners;
 
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
+import kpn.financecontroller.initialization.entities.CountryInitialEntity;
 import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import kpn.financecontroller.initialization.load.factories.LoadingTaskFactory;
 import kpn.financecontroller.initialization.load.manager.LoadingManager;
 import kpn.financecontroller.initialization.load.tasks.LoadingTask;
+import kpn.financecontroller.initialization.save.managers.CountrySaveManager;
+import kpn.financecontroller.initialization.save.managers.SaveManager;
 import kpn.financecontroller.initialization.save.managers.TagSaveManager;
 import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -22,36 +25,41 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
 
     @Autowired
     private I18nService i18nService;
-
-    @Autowired
-    private LoadingTaskFactory<Long, TagInitialEntity> tagLoadingTaskFactory;
-
     @Autowired
     private LoadingManager loadingManager;
 
     @Autowired
+    private LoadingTaskFactory<Long, TagInitialEntity> tagLoadingTaskFactory;
+    @Autowired
     private TagSaveManager tagSaveManager;
+
+    @Autowired
+    private LoadingTaskFactory<Long, CountryInitialEntity> countryLoadingTaskFactory;
+    @Autowired
+    private CountrySaveManager countrySaveManager;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("start onApplicationEvent");
 
         LoadingTask<Long, TagInitialEntity> tagLoadingTask = tagLoadingTaskFactory.create();
-        Result<Void> result = loadingManager.execute(tagLoadingTask);
-        log.info("{}", result);
+        loadingManager.execute(tagLoadingTask);
         LoadDataCollector<Long, TagInitialEntity> tagCollector = tagLoadingTask.getCollector();
-        log.info("{}", tagCollector);
+
+        LoadingTask<Long, CountryInitialEntity> countryLoadingTask = countryLoadingTaskFactory.create();
+        loadingManager.execute(countryLoadingTask);
+        LoadDataCollector<Long, CountryInitialEntity> countryCollector = countryLoadingTask.getCollector();
 
         tagSaveManager.setCollector(tagCollector);
+        countrySaveManager.setCollector(countryCollector);
 
-        Result<Void> result1 = tagSaveManager.clearTarget();
-        System.out.println("result1: " + result1);
+        tagSaveManager.clearTarget();
+        countrySaveManager.clearTarget();
 
-        Result<Void> result2 = tagSaveManager.save();
-        System.out.println("result2: " + result2);
+        tagSaveManager.save();
+        countrySaveManager.save();
 
         tagSaveManager.clearCollector();
-
-        System.out.println("123");
+        countrySaveManager.clearCollector();
     }
 }

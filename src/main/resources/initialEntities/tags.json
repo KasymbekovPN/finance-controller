@@ -2,15 +2,15 @@
   "entities": {
     "0" : {
       "id": 0,
-      "name": "Russia"
+      "name": "food"
     },
     "1" : {
       "id": 1,
-      "name": "USA"
+      "name": "milk"
     },
     "2": {
       "id": 2,
-      "name": "Germany"
+      "name": "bread"
     }
   }
 }
