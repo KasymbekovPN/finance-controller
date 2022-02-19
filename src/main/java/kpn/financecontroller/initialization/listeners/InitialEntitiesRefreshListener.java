@@ -40,11 +40,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     @Autowired
     private CountrySaveManager countrySaveManager;
 
-    // TODO: 19.02.2022 restore
-//    @Autowired
-//    private LoadingTaskFactory<Long, RegionInitialEntity> regionLoadingTaskFactory;
-//    @Autowired
-//    private RegionSaveManager regionSaveManager;
+    @Autowired
+    private LoadingTaskFactory<Long, RegionInitialEntity> regionLoadingTaskFactory;
+    @Autowired
+    private RegionSaveManager regionSaveManager;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -58,30 +57,25 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         loadingManager.execute(countryLoadingTask);
         LoadDataCollector<Long, CountryInitialEntity> countryCollector = countryLoadingTask.getCollector();
 
-        // TODO: 19.02.2022 restore
-//        LoadingTask<Long, RegionInitialEntity> regionLoadingTask = regionLoadingTaskFactory.create();
-//        loadingManager.execute(regionLoadingTask);
-//        LoadDataCollector<Long, RegionInitialEntity> regionCollector = regionLoadingTask.getCollector();
+        LoadingTask<Long, RegionInitialEntity> regionLoadingTask = regionLoadingTaskFactory.create();
+        loadingManager.execute(regionLoadingTask);
+        LoadDataCollector<Long, RegionInitialEntity> regionCollector = regionLoadingTask.getCollector();
 
         tagSaveManager.setCollector(tagCollector);
         countrySaveManager.setCollector(countryCollector);
-        // TODO: 19.02.2022 restore
-//        regionSaveManager.setRegionCollector(regionCollector);
-//        regionSaveManager.setCountryCollector(countryCollector);
+        regionSaveManager.setRegionCollector(regionCollector);
+        regionSaveManager.setCountryCollector(countryCollector);
 
-        // TODO: 19.02.2022 restore
-//        regionSaveManager.clearTarget();
+        regionSaveManager.clearTarget();
         countrySaveManager.clearTarget();
         tagSaveManager.clearTarget();
 
         tagSaveManager.save();
         countrySaveManager.save();
-        // TODO: 19.02.2022 restore
-//        regionSaveManager.save();
+        regionSaveManager.save();
 
         tagSaveManager.clearCollector();
         countrySaveManager.clearCollector();
-        // TODO: 19.02.2022 restore
-//        regionSaveManager.clearCollector();
+        regionSaveManager.clearCollector();
     }
 }

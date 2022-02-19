@@ -18,6 +18,7 @@ import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.loaders.Loader;
 import kpn.financecontroller.data.services.loaders.LoaderAll;
+import kpn.financecontroller.data.services.loaders.LoaderAllAndById;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,7 +35,7 @@ public class LoaderConfig {
         Function<List<CountryEntity>, List<Country>> toDomains = (entities) -> {
             return entities.stream().map(Country::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, "country", Country::new, toDomains);
+        return new LoaderAllAndById<>(repo, "country", Country::new, toDomains);
     }
 
     @Bean
