@@ -43,7 +43,7 @@ public class LoaderConfig {
         Function<List<RegionEntity>, List<Region>> toDomains = (entities) -> {
             return entities.stream().map(Region::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, "region", Region::new, toDomains);
+        return new LoaderAllAndById<>(repo, "region", Region::new, toDomains);
     }
 
     @Bean
