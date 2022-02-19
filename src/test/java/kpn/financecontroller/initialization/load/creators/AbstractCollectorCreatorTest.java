@@ -1,8 +1,7 @@
-package kpn.financecontroller.initialization.load.creator;
+package kpn.financecontroller.initialization.load.creators;
 
 import com.google.gson.JsonSyntaxException;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
-import kpn.financecontroller.initialization.load.creators.AbstractCollectorCreator;
 import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

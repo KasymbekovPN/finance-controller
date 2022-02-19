@@ -1,0 +1,19 @@
+{
+  "entities": {
+    "0": {
+      "id": "0",
+      "name": "region 0",
+      "countryId": 0
+    },
+    "1": {
+      "id": "1",
+      "name": "region 1",
+      "countryId": 0
+    },
+    "2": {
+      "id": "2",
+      "name": "region 2",
+      "countryId": 1
+    }
+  }
+}
