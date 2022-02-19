@@ -40,7 +40,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     @Autowired
     private CountrySaveManager countrySaveManager;
 
-    // TODO: 19.02.2022 restore 
+    // TODO: 19.02.2022 restore
 //    @Autowired
 //    private LoadingTaskFactory<Long, RegionInitialEntity> regionLoadingTaskFactory;
 //    @Autowired
