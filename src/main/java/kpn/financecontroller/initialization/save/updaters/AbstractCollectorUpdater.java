@@ -32,11 +32,7 @@ abstract public class AbstractCollectorUpdater<K, E extends AbstractInitialEntit
             Map<K, E> entities = collector.getEntities();
             K oldKey = item.getOldKey();
             if (entities.containsKey(oldKey)){
-                E entity = entities.get(oldKey);
-                K newKey = item.getNewKey();
-                entity.setId(newKey);
-                entities.put(newKey, entity);
-                entities.remove(oldKey);
+                entities.get(oldKey).setId(item.getNewKey());
             }
         }
     }
