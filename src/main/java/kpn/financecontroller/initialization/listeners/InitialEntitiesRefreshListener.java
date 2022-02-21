@@ -10,6 +10,7 @@ import kpn.financecontroller.initialization.load.factories.LoadingTaskFactory;
 import kpn.financecontroller.initialization.load.manager.LoadingManager;
 import kpn.financecontroller.initialization.load.tasks.LoadingTask;
 import kpn.financecontroller.initialization.save.managers.*;
+import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -52,7 +53,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         log.info("start onApplicationEvent");
 
         LoadingTask<Long, TagInitialEntity> tagLoadingTask = tagLoadingTaskFactory.create();
-        loadingManager.execute(tagLoadingTask);
+        Result<Void> result = loadingManager.execute(tagLoadingTask);
         LoadDataCollector<Long, TagInitialEntity> tagCollector = tagLoadingTask.getCollector();
 
         LoadingTask<Long, CountryInitialEntity> countryLoadingTask = countryLoadingTaskFactory.create();

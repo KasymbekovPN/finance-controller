@@ -1,17 +1,20 @@
 package kpn.financecontroller.initialization.load.creators;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
 import kpn.financecontroller.result.Result;
 
-abstract public class AbstractCollectorCreator<K, E> implements CollectorCreator<K, E> {
+public class CollectorCreatorImpl<K, E> implements CollectorCreator<K, E> {
 
-    protected final String id;
+    private final String id;
+    private final Class<? extends LoadDataCollector<K, E>> type;
 
     protected Result<LoadDataCollector<K, E>> lastResult;
 
-    public AbstractCollectorCreator(String id) {
+    public CollectorCreatorImpl(String id, Class<? extends LoadDataCollector<K, E>> type) {
         this.id = id;
+        this.type = type;
     }
 
     @Override
@@ -41,7 +44,9 @@ abstract public class AbstractCollectorCreator<K, E> implements CollectorCreator
         return lastResult;
     }
 
-    protected abstract LoadDataCollector<K,E> createCollector(String source);
+    private LoadDataCollector<K,E> createCollector(String source){
+        return new Gson().fromJson(source, type);
+    }
 
     private Result<LoadDataCollector<K, E>> createDefaultLastResult() {
         return Result.<LoadDataCollector<K, E>>builder()
