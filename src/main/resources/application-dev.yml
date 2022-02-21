@@ -25,4 +25,15 @@ i18n:
     - en
     - ru
 
-initial.entities.directory: initialEntities
+initial.entities:
+  directory: initialEntities
+  paths:
+    tags: tags.json
+    countries: countries.json
+    regions: regions.json
+    cities: cities.json
+  ids:
+    tags: TAGS
+    countries: COUNTRIES
+    regions: REGIONS
+    cities: CITIES
