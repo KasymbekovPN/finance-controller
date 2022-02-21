@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.save.managers;
+package kpn.financecontroller.initialization.save.managers.saving;
 
 import kpn.financecontroller.checkers.GroupChecker;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
@@ -23,6 +23,8 @@ abstract public class AbstractSaveManager<K, E> implements SaveManager<K, E>{
     }
 
     protected abstract Result<Void> checkCollectors();
+
+    // TODO: 19.02.2022 rename
     protected abstract Result<Void> deleteBefore();
     protected abstract Result<Void> saveImpl();
 }

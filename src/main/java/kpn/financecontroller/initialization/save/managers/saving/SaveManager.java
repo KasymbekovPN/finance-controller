@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.save.managers;
+package kpn.financecontroller.initialization.save.managers.saving;
 
 import kpn.financecontroller.result.Result;
 

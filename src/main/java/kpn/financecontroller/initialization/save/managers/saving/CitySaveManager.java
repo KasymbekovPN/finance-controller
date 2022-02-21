@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.save.managers;
+package kpn.financecontroller.initialization.save.managers.saving;
 
 import kpn.financecontroller.builders.Builder;
 import kpn.financecontroller.checkers.GroupChecker;
@@ -66,6 +66,8 @@ public class CitySaveManager extends AbstractSaveManager<Long, CityInitialEntity
         concatBuilder.reset();
         Map<Long, CityInitialEntity> entities = cityCollector.getEntities();
         for (Map.Entry<Long, CityInitialEntity> entry : entities.entrySet()) {
+
+            // TODO: 19.02.2022 each iteration must call method of some bean
             CityInitialEntity cityInitialEntity = entry.getValue();
             Optional<RegionInitialEntity> maybeRegion = regionCollector.getEntity(cityInitialEntity.getRegionId());
             maybeRegion.ifPresent(regionInitialEntity -> cityInitialEntity.setRegionId(regionInitialEntity.getId()));
