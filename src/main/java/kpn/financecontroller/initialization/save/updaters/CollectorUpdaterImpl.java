@@ -9,7 +9,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 
-abstract public class AbstractCollectorUpdater<K, E extends AbstractInitialEntity<K>> implements CollectorUpdater<K, E> {
+public class CollectorUpdaterImpl<K, E extends AbstractInitialEntity<K>> implements CollectorUpdater<K, E> {
 
     private final Deque<Item<K>> deque = new ArrayDeque<>();
 

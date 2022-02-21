@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-class AbstractCollectorUpdaterTest {
+class CollectorUpdaterImplTest {
 
     private static HashMap<Long, Entity> expectedAfterEmptyUpdatingCollectorData;
     private static HashMap<Long, Entity> expectedAfterAddUpdatingCollectorData;
@@ -34,7 +34,7 @@ class AbstractCollectorUpdaterTest {
 
     @Test
     void shouldCheckUpdating_whenChangingQueueEmpty() {
-        TestUpdater updater = new TestUpdater();
+        TestUpdaterImpl updater = new TestUpdaterImpl();
         TestCollector collector = new TestCollector();
         collector.setEntities(new HashMap<>(createOriginalData()));
         updater.update(collector);
@@ -43,7 +43,7 @@ class AbstractCollectorUpdaterTest {
 
     @Test
     void shouldCheckUpdating_whenChangingQueueNotEmpty() {
-        TestUpdater updater = new TestUpdater();
+        TestUpdaterImpl updater = new TestUpdaterImpl();
         TestCollector collector = new TestCollector();
         collector.setEntities(new HashMap<>(createOriginalData()));
         updater
@@ -55,7 +55,7 @@ class AbstractCollectorUpdaterTest {
 
     @Test
     void shouldCheckUpdating_afterReset() {
-        TestUpdater updater = new TestUpdater();
+        TestUpdaterImpl updater = new TestUpdaterImpl();
         TestCollector collector = new TestCollector();
         collector.setEntities(new HashMap<>(createOriginalData()));
         updater
@@ -80,7 +80,7 @@ class AbstractCollectorUpdaterTest {
         }
     }
 
-    private static class TestUpdater extends AbstractCollectorUpdater<Long, Entity> {}
+    private static class TestUpdaterImpl extends CollectorUpdaterImpl<Long, Entity> {}
 
     private static class TestCollector extends LoadDataCollectorImpl<Long, Entity>{}
 }
