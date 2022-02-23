@@ -2,10 +2,7 @@ package kpn.financecontroller.initialization.listeners;
 
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
-import kpn.financecontroller.initialization.entities.CityInitialEntity;
-import kpn.financecontroller.initialization.entities.CountryInitialEntity;
-import kpn.financecontroller.initialization.entities.RegionInitialEntity;
-import kpn.financecontroller.initialization.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.entities.*;
 import kpn.financecontroller.initialization.load.factories.LoadingTaskFactory;
 import kpn.financecontroller.initialization.load.manager.LoadingManager;
 import kpn.financecontroller.initialization.load.tasks.LoadingTask;
@@ -48,12 +45,17 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     @Autowired
     private CitySaveManager citySaveManager;
 
+    @Autowired
+    private LoadingTaskFactory<Long, StreetInitialEntity> streetLoadingTaskFactory;
+    @Autowired
+    private StreetSaveManager streetSaveManager;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("start onApplicationEvent");
 
         LoadingTask<Long, TagInitialEntity> tagLoadingTask = tagLoadingTaskFactory.create();
-        Result<Void> result = loadingManager.execute(tagLoadingTask);
+        loadingManager.execute(tagLoadingTask);
         LoadDataCollector<Long, TagInitialEntity> tagCollector = tagLoadingTask.getCollector();
 
         LoadingTask<Long, CountryInitialEntity> countryLoadingTask = countryLoadingTaskFactory.create();
@@ -68,13 +70,20 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         loadingManager.execute(cityLoadingTask);
         LoadDataCollector<Long, CityInitialEntity> cityCollector = cityLoadingTask.getCollector();
 
+        LoadingTask<Long, StreetInitialEntity> streetLoadingTask = streetLoadingTaskFactory.create();
+        loadingManager.execute(streetLoadingTask);
+        LoadDataCollector<Long, StreetInitialEntity> streetCollector = streetLoadingTask.getCollector();
+
         tagSaveManager.setCollector(tagCollector);
         countrySaveManager.setCollector(countryCollector);
         regionSaveManager.setRegionCollector(regionCollector);
         regionSaveManager.setCountryCollector(countryCollector);
         citySaveManager.setCityCollector(cityCollector);
         citySaveManager.setRegionCollector(regionCollector);
+        streetSaveManager.setStreetCollector(streetCollector);
+        streetSaveManager.setCityCollector(cityCollector);
 
+        streetSaveManager.clearTarget();
         citySaveManager.clearTarget();
         regionSaveManager.clearTarget();
         countrySaveManager.clearTarget();
@@ -84,10 +93,12 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         countrySaveManager.save();
         regionSaveManager.save();
         citySaveManager.save();
+        streetSaveManager.save();
 
         tagSaveManager.clearCollector();
         countrySaveManager.clearCollector();
         regionSaveManager.clearCollector();
         citySaveManager.clearCollector();
+        streetSaveManager.clearCollector();
     }
 }

@@ -1,9 +1,6 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.initialization.entities.CityInitialEntity;
-import kpn.financecontroller.initialization.entities.CountryInitialEntity;
-import kpn.financecontroller.initialization.entities.RegionInitialEntity;
-import kpn.financecontroller.initialization.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.entities.*;
 import kpn.financecontroller.initialization.load.calculators.PathCalculator;
 import kpn.financecontroller.initialization.load.creators.CollectorCreator;
 import kpn.financecontroller.initialization.load.factories.LoadingTaskFactoryImpl;
@@ -49,6 +46,13 @@ public class LoadingTaskFactoryConfig {
     public LoadingTaskFactoryImpl<Long, CityInitialEntity> cityLoadingTaskFactory(CollectorCreator<Long, CityInitialEntity> collectorCreator,
                                                                                   @Value("${initial.entities.paths.cities}") String path,
                                                                                   @Value("${initial.entities.ids.cities}") String id){
+        return new LoadingTaskFactoryImpl<>(pathCalculator, collectorCreator, id, path);
+    }
+
+    @Bean
+    public LoadingTaskFactoryImpl<Long, StreetInitialEntity> streetLoadingTaskFactory(CollectorCreator<Long, StreetInitialEntity> collectorCreator,
+                                                                                      @Value("${initial.entities.paths.streets}") String path,
+                                                                                      @Value("${initial.entities.ids.streets}") String id){
         return new LoadingTaskFactoryImpl<>(pathCalculator, collectorCreator, id, path);
     }
 }

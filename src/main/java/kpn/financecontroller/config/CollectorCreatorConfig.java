@@ -1,10 +1,7 @@
 package kpn.financecontroller.config;
 
 import kpn.financecontroller.initialization.collectors.LoadDataCollectorImpl;
-import kpn.financecontroller.initialization.entities.CityInitialEntity;
-import kpn.financecontroller.initialization.entities.CountryInitialEntity;
-import kpn.financecontroller.initialization.entities.RegionInitialEntity;
-import kpn.financecontroller.initialization.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.entities.*;
 import kpn.financecontroller.initialization.load.creators.CollectorCreatorImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -42,4 +39,11 @@ public class CollectorCreatorConfig {
     }
 
     private static class CityLoadDataCollector extends LoadDataCollectorImpl<Long, CityInitialEntity>{}
+
+    @Bean
+    public CollectorCreatorImpl<Long, StreetInitialEntity> streetCollectorCreator(@Value("${initial.entities.ids.streets}") String id){
+        return new CollectorCreatorImpl<>(id, StreetLoadDataCollector.class);
+    }
+
+    private static class StreetLoadDataCollector extends LoadDataCollectorImpl<Long, StreetInitialEntity>{}
 }

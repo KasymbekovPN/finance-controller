@@ -51,7 +51,7 @@ public class LoaderConfig {
         Function<List<CityEntity>, List<City>> toDomains = (entities) -> {
             return entities.stream().map(City::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, "city", City::new, toDomains);
+        return new LoaderAllAndById<>(repo, "city", City::new, toDomains);
     }
 
     @Bean
