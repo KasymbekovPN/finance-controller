@@ -46,4 +46,11 @@ public class CollectorCreatorConfig {
     }
 
     private static class StreetLoadDataCollector extends LoadDataCollectorImpl<Long, StreetInitialEntity>{}
+
+    @Bean
+    public CollectorCreatorImpl<Long, BuildingInitialEntity> buildingCollectorCreator(@Value("${initial.entities.ids.buildings}") String id){
+        return new CollectorCreatorImpl<>(id, BuildingLoadDataCollector.class);
+    }
+
+    private static class BuildingLoadDataCollector extends LoadDataCollectorImpl<Long, BuildingInitialEntity>{}
 }

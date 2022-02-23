@@ -33,9 +33,11 @@ initial.entities:
     regions: regions.json
     cities: cities.json
     streets: streets.json
+    buildings: buildings.json
   ids:
     tags: TAGS
     countries: COUNTRIES
     regions: REGIONS
     cities: CITIES
     streets: STREETS
+    buildings: BUILDINGS

@@ -50,6 +50,11 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     @Autowired
     private StreetSaveManager streetSaveManager;
 
+    @Autowired
+    private LoadingTaskFactory<Long, BuildingInitialEntity> buildingLoadingTaskFactory;
+    @Autowired
+    private BuildingSaveManager buildingSaveManager;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("start onApplicationEvent");
@@ -74,6 +79,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         loadingManager.execute(streetLoadingTask);
         LoadDataCollector<Long, StreetInitialEntity> streetCollector = streetLoadingTask.getCollector();
 
+        LoadingTask<Long, BuildingInitialEntity> buildingLoadingTask = buildingLoadingTaskFactory.create();
+        loadingManager.execute(buildingLoadingTask);
+        LoadDataCollector<Long, BuildingInitialEntity> buildingCollector = buildingLoadingTask.getCollector();
+
         tagSaveManager.setCollector(tagCollector);
         countrySaveManager.setCollector(countryCollector);
         regionSaveManager.setRegionCollector(regionCollector);
@@ -82,7 +91,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         citySaveManager.setRegionCollector(regionCollector);
         streetSaveManager.setStreetCollector(streetCollector);
         streetSaveManager.setCityCollector(cityCollector);
+        buildingSaveManager.setBuildingCollector(buildingCollector);
+        buildingSaveManager.setStreetCollector(streetCollector);
 
+        buildingSaveManager.clearTarget();
         streetSaveManager.clearTarget();
         citySaveManager.clearTarget();
         regionSaveManager.clearTarget();
@@ -94,11 +106,13 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         regionSaveManager.save();
         citySaveManager.save();
         streetSaveManager.save();
+        buildingSaveManager.save();
 
         tagSaveManager.clearCollector();
         countrySaveManager.clearCollector();
         regionSaveManager.clearCollector();
         citySaveManager.clearCollector();
         streetSaveManager.clearCollector();
+        buildingSaveManager.clearCollector();
     }
 }

@@ -34,4 +34,9 @@ public class CollectorUpdaterConfig {
     public CollectorUpdaterImpl<Long, StreetInitialEntity> streetCollectorUpdater(){
         return new CollectorUpdaterImpl<>();
     }
+
+    @Bean
+    public CollectorUpdaterImpl<Long, BuildingInitialEntity> buildingCollectorUpdater(){
+        return new CollectorUpdaterImpl<>();
+    }
 }
