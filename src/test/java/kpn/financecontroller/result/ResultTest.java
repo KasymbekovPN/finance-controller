@@ -1,5 +1,6 @@
 package kpn.financecontroller.result;
 
+import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

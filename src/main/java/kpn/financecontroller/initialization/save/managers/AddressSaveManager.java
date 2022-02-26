@@ -9,6 +9,7 @@ import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
 import kpn.financecontroller.initialization.entities.BuildingInitialEntity;
 import kpn.financecontroller.initialization.entities.StreetInitialEntity;
+import kpn.financecontroller.initialization.save.managers.saving.AbstractSaveManager;
 import kpn.financecontroller.initialization.save.updaters.CollectorUpdater;
 import kpn.financecontroller.result.Result;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import java.util.Optional;
 
 @Service
 @Profile("dev")
-public class BuildingSaveManager extends AbstractSaveManager<Long, BuildingInitialEntity> {
+public class AddressSaveManager extends AbstractSaveManager<Long, BuildingInitialEntity> {
 
     private static final String ID = "BUILDINGS";
 
@@ -36,11 +37,11 @@ public class BuildingSaveManager extends AbstractSaveManager<Long, BuildingIniti
     private LoadDataCollector<Long, StreetInitialEntity> streetCollector;
 
     @Autowired
-    public BuildingSaveManager(GroupChecker<LoadDataCollector<?, ?>> collectorChecker,
-                               DTOService<Address, AddressEntity, Long> dtoService,
-                               Converter<BuildingInitialEntity, AddressEntity> converter,
-                               Builder<Object, String> concatBuilder,
-                               CollectorUpdater<Long, BuildingInitialEntity> collectorUpdater) {
+    public AddressSaveManager(GroupChecker<LoadDataCollector<?, ?>> collectorChecker,
+                              DTOService<Address, AddressEntity, Long> dtoService,
+                              Converter<BuildingInitialEntity, AddressEntity> converter,
+                              Builder<Object, String> concatBuilder,
+                              CollectorUpdater<Long, BuildingInitialEntity> collectorUpdater) {
         super(ID, collectorChecker);
         this.dtoService = dtoService;
         this.converter = converter;
