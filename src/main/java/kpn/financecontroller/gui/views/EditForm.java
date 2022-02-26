@@ -54,7 +54,7 @@ abstract public class EditForm<D> extends FormLayout {
         return new HorizontalLayout(save, delete, close);
      }
 
-    private void validateAndSave() {
+    protected void validateAndSave() {
       try{
            binder.writeBean(value);
            fireEvent(createSaveEvent());

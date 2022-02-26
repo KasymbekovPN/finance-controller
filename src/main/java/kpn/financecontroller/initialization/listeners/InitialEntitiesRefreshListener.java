@@ -7,9 +7,9 @@ import kpn.financecontroller.initialization.load.factories.LoadingTaskFactory;
 import kpn.financecontroller.initialization.load.manager.LoadingManager;
 import kpn.financecontroller.initialization.load.tasks.LoadingTask;
 import kpn.financecontroller.initialization.save.managers.*;
-import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -19,6 +19,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("dev")
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent > {
+
+    @Value("${initial.entities.enable}")
+    private Boolean enable;
 
     @Autowired
     private I18nService i18nService;
@@ -57,62 +60,64 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        log.info("start onApplicationEvent");
+        if (enable){
+            log.info("start onApplicationEvent");
 
-        LoadingTask<Long, TagInitialEntity> tagLoadingTask = tagLoadingTaskFactory.create();
-        loadingManager.execute(tagLoadingTask);
-        LoadDataCollector<Long, TagInitialEntity> tagCollector = tagLoadingTask.getCollector();
+            LoadingTask<Long, TagInitialEntity> tagLoadingTask = tagLoadingTaskFactory.create();
+            loadingManager.execute(tagLoadingTask);
+            LoadDataCollector<Long, TagInitialEntity> tagCollector = tagLoadingTask.getCollector();
 
-        LoadingTask<Long, CountryInitialEntity> countryLoadingTask = countryLoadingTaskFactory.create();
-        loadingManager.execute(countryLoadingTask);
-        LoadDataCollector<Long, CountryInitialEntity> countryCollector = countryLoadingTask.getCollector();
+            LoadingTask<Long, CountryInitialEntity> countryLoadingTask = countryLoadingTaskFactory.create();
+            loadingManager.execute(countryLoadingTask);
+            LoadDataCollector<Long, CountryInitialEntity> countryCollector = countryLoadingTask.getCollector();
 
-        LoadingTask<Long, RegionInitialEntity> regionLoadingTask = regionLoadingTaskFactory.create();
-        loadingManager.execute(regionLoadingTask);
-        LoadDataCollector<Long, RegionInitialEntity> regionCollector = regionLoadingTask.getCollector();
+            LoadingTask<Long, RegionInitialEntity> regionLoadingTask = regionLoadingTaskFactory.create();
+            loadingManager.execute(regionLoadingTask);
+            LoadDataCollector<Long, RegionInitialEntity> regionCollector = regionLoadingTask.getCollector();
 
-        LoadingTask<Long, CityInitialEntity> cityLoadingTask = cityLoadingTaskFactory.create();
-        loadingManager.execute(cityLoadingTask);
-        LoadDataCollector<Long, CityInitialEntity> cityCollector = cityLoadingTask.getCollector();
+            LoadingTask<Long, CityInitialEntity> cityLoadingTask = cityLoadingTaskFactory.create();
+            loadingManager.execute(cityLoadingTask);
+            LoadDataCollector<Long, CityInitialEntity> cityCollector = cityLoadingTask.getCollector();
 
-        LoadingTask<Long, StreetInitialEntity> streetLoadingTask = streetLoadingTaskFactory.create();
-        loadingManager.execute(streetLoadingTask);
-        LoadDataCollector<Long, StreetInitialEntity> streetCollector = streetLoadingTask.getCollector();
+            LoadingTask<Long, StreetInitialEntity> streetLoadingTask = streetLoadingTaskFactory.create();
+            loadingManager.execute(streetLoadingTask);
+            LoadDataCollector<Long, StreetInitialEntity> streetCollector = streetLoadingTask.getCollector();
 
-        LoadingTask<Long, BuildingInitialEntity> buildingLoadingTask = buildingLoadingTaskFactory.create();
-        loadingManager.execute(buildingLoadingTask);
-        LoadDataCollector<Long, BuildingInitialEntity> buildingCollector = buildingLoadingTask.getCollector();
+            LoadingTask<Long, BuildingInitialEntity> buildingLoadingTask = buildingLoadingTaskFactory.create();
+            loadingManager.execute(buildingLoadingTask);
+            LoadDataCollector<Long, BuildingInitialEntity> buildingCollector = buildingLoadingTask.getCollector();
 
-        tagSaveManager.setCollector(tagCollector);
-        countrySaveManager.setCollector(countryCollector);
-        regionSaveManager.setRegionCollector(regionCollector);
-        regionSaveManager.setCountryCollector(countryCollector);
-        citySaveManager.setCityCollector(cityCollector);
-        citySaveManager.setRegionCollector(regionCollector);
-        streetSaveManager.setStreetCollector(streetCollector);
-        streetSaveManager.setCityCollector(cityCollector);
-        buildingSaveManager.setBuildingCollector(buildingCollector);
-        buildingSaveManager.setStreetCollector(streetCollector);
+            tagSaveManager.setCollector(tagCollector);
+            countrySaveManager.setCollector(countryCollector);
+            regionSaveManager.setRegionCollector(regionCollector);
+            regionSaveManager.setCountryCollector(countryCollector);
+            citySaveManager.setCityCollector(cityCollector);
+            citySaveManager.setRegionCollector(regionCollector);
+            streetSaveManager.setStreetCollector(streetCollector);
+            streetSaveManager.setCityCollector(cityCollector);
+            buildingSaveManager.setBuildingCollector(buildingCollector);
+            buildingSaveManager.setStreetCollector(streetCollector);
 
-        buildingSaveManager.clearTarget();
-        streetSaveManager.clearTarget();
-        citySaveManager.clearTarget();
-        regionSaveManager.clearTarget();
-        countrySaveManager.clearTarget();
-        tagSaveManager.clearTarget();
+            buildingSaveManager.clearTarget();
+            streetSaveManager.clearTarget();
+            citySaveManager.clearTarget();
+            regionSaveManager.clearTarget();
+            countrySaveManager.clearTarget();
+            tagSaveManager.clearTarget();
 
-        tagSaveManager.save();
-        countrySaveManager.save();
-        regionSaveManager.save();
-        citySaveManager.save();
-        streetSaveManager.save();
-        buildingSaveManager.save();
+            tagSaveManager.save();
+            countrySaveManager.save();
+            regionSaveManager.save();
+            citySaveManager.save();
+            streetSaveManager.save();
+            buildingSaveManager.save();
 
-        tagSaveManager.clearCollector();
-        countrySaveManager.clearCollector();
-        regionSaveManager.clearCollector();
-        citySaveManager.clearCollector();
-        streetSaveManager.clearCollector();
-        buildingSaveManager.clearCollector();
+            tagSaveManager.clearCollector();
+            countrySaveManager.clearCollector();
+            regionSaveManager.clearCollector();
+            citySaveManager.clearCollector();
+            streetSaveManager.clearCollector();
+            buildingSaveManager.clearCollector();
+        }
     }
 }

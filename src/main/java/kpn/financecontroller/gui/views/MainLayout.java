@@ -17,6 +17,7 @@ import kpn.financecontroller.gui.views.building.BuildingView;
 import kpn.financecontroller.gui.views.city.CityView;
 import kpn.financecontroller.gui.views.country.CountryView;
 import kpn.financecontroller.gui.views.payment.PaymentView;
+import kpn.financecontroller.gui.views.place.PlaceView;
 import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.region.RegionView;
 import kpn.financecontroller.gui.views.street.StreetView;
@@ -37,6 +38,7 @@ public class MainLayout extends AppLayout {
             new MenuItemInfo("gui.payments",  "la la-globe", PaymentView.class),
             new MenuItemInfo("gui.products",  "la la-globe", ProductView.class),
             new MenuItemInfo("gui.tags",  "la la-globe", TagView.class),
+            new MenuItemInfo("gui.places",  "la la-globe", PlaceView.class),
             new MenuItemInfo("gui.buildings",  "la la-globe", BuildingView.class),
             new MenuItemInfo("gui.streets",  "la la-globe", StreetView.class),
             new MenuItemInfo("gui.cities",  "la la-globe", CityView.class),

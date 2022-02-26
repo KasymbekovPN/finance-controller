@@ -26,6 +26,7 @@ i18n:
     - ru
 
 initial.entities:
+  enable: false
   directory: initialEntities
   paths:
     tags: tags.json
