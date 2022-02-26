@@ -2,9 +2,9 @@ package kpn.financecontroller.gui.views.place;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.place.Place;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.place.PlaceEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
@@ -28,13 +28,13 @@ import java.util.List;
 public class PlaceView extends GridView<Place> {
 
     private final DTOService<Place, PlaceEntity, Long> placeService;
-    private final DTOService<Building, BuildingEntity, Long> buildingService;
+    private final DTOService<Address, AddressEntity, Long> buildingService;
 
     public PlaceView(LocaledMessageSeedFactory seedFactory,
                      I18nService i18nService,
                      NotificationFactory notificationFactory,
                      DTOService<Place, PlaceEntity, Long> placeService,
-                     DTOService<Building, BuildingEntity, Long> buildingService) {
+                     DTOService<Address, AddressEntity, Long> buildingService) {
         super(new Grid<>(Place.class), seedFactory, i18nService, notificationFactory, "gui.places");
         this.placeService = placeService;
         this.buildingService = buildingService;
@@ -58,7 +58,7 @@ public class PlaceView extends GridView<Place> {
         grid.addColumn(Place::getId).setHeader(getTranslation("gui.id"));
         grid.addColumn(Place::getName).setHeader(getTranslation("gui.name"));
         grid.addColumn(Place::isOnline).setHeader(getTranslation("gui.online"));
-        grid.addColumn(p -> {return p.getBuilding() != null ? p.getBuilding().getFullName() : "-";}).setHeader(getTranslation("gui.address"));
+        grid.addColumn(p -> {return p.getAddress() != null ? p.getAddress().getFullName() : "-";}).setHeader(getTranslation("gui.address"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
@@ -93,7 +93,7 @@ public class PlaceView extends GridView<Place> {
 
     private void saveContactWithoutBuilding(SaveFormEvent<EditForm<Place>, Place> event) {
         Place place = event.getValue();
-        place.setBuilding(null);
+        place.setAddress(null);
         Result<Place> savingResult = placeService.saver().save(new PlaceEntity(place));
         createNotification(savingResult);
         updateList();

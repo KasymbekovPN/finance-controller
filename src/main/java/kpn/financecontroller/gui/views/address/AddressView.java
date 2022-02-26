@@ -1,10 +1,10 @@
-package kpn.financecontroller.gui.views.building;
+package kpn.financecontroller.gui.views.address;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.street.Street;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
@@ -23,26 +23,26 @@ import java.util.List;
 
 @org.springframework.stereotype.Component
 @Scope("prototype")
-@Route(value = "building", layout = MainLayout.class)
+@Route(value = "address", layout = MainLayout.class)
 @PermitAll
-public class BuildingView extends GridView<Building> {
+public class AddressView extends GridView<Address> {
 
-    private final DTOService<Building, BuildingEntity, Long> buildingService;
+    private final DTOService<Address, AddressEntity, Long> addressService;
     private final DTOService<Street, StreetEntity, Long> streetService;
 
-    public BuildingView(LocaledMessageSeedFactory seedFactory,
-                        I18nService i18nService,
-                        NotificationFactory notificationFactory,
-                        DTOService<Building, BuildingEntity, Long> buildingService,
-                        DTOService<Street, StreetEntity, Long> streetService) {
-        super(new Grid<>(Building.class), seedFactory, i18nService, notificationFactory, "gui.buildings");
-        this.buildingService = buildingService;
+    public AddressView(LocaledMessageSeedFactory seedFactory,
+                       I18nService i18nService,
+                       NotificationFactory notificationFactory,
+                       DTOService<Address, AddressEntity, Long> addressService,
+                       DTOService<Street, StreetEntity, Long> streetService) {
+        super(new Grid<>(Address.class), seedFactory, i18nService, notificationFactory, "gui.addresses");
+        this.addressService = addressService;
         this.streetService = streetService;
     }
 
     @Override
     protected Result<?> updateListImpl() {
-        Result<List<Building>> result = buildingService.loader().all();
+        Result<List<Address>> result = addressService.loader().all();
         if (result.getSuccess()){
             grid.setItems(result.getValue());
         }
@@ -51,12 +51,12 @@ public class BuildingView extends GridView<Building> {
 
     @Override
     protected void configureGrid() {
-        grid.addClassName("building-grid");
+        grid.addClassName("address-grid");
         grid.setSizeFull();
 
         grid.setColumns();
-        grid.addColumn(Building::getId).setHeader(getTranslation("gui.id"));
-        grid.addColumn(Building::getName).setHeader(getTranslation("gui.name"));
+        grid.addColumn(Address::getId).setHeader(getTranslation("gui.id"));
+        grid.addColumn(Address::getName).setHeader(getTranslation("gui.name"));
         grid.addColumn(b -> b.getStreet().getName()).setHeader(getTranslation("gui.street"));
         grid.addColumn(b -> b.getStreet().getCity().getName()).setHeader(getTranslation("gui.city"));
         grid.addColumn(b -> b.getStreet().getCity().getRegion().getName()).setHeader(getTranslation("gui.region"));
@@ -68,27 +68,27 @@ public class BuildingView extends GridView<Building> {
 
     @Override
     protected void configureForm() {
-        form = new BuildingForm(streetService.loader().all().getValue());
+        form = new AddressForm(streetService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(BuildingForm.BuildingSaveFormEvent.class, this::saveContact);
-        form.addListener(BuildingForm.BuildingDeleteFormEvent.class, this::deleteEvent);
-        form.addListener(BuildingForm.BuildingCloseFormEvent.class, e -> closeEditor());
+        form.addListener(AddressForm.AddressSaveFormEvent.class, this::saveContact);
+        form.addListener(AddressForm.AddressDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(AddressForm.AddressCloseFormEvent.class, e -> closeEditor());
     }
 
     @Override
     protected void add() {
         grid.asSingleSelect().clear();
-        editValue(new Building());
+        editValue(new Address());
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Building>, Building> event) {
-        return buildingService.deleter().byId(event.getValue().getId());
+    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Address>, Address> event) {
+        return addressService.deleter().byId(event.getValue().getId());
     }
 
     @Override
-    protected Result<Building> handleSaveEvent(SaveFormEvent<EditForm<Building>, Building> event) {
-        return buildingService.saver().save(new BuildingEntity(event.getValue()));
+    protected Result<Address> handleSaveEvent(SaveFormEvent<EditForm<Address>, Address> event) {
+        return addressService.saver().save(new AddressEntity(event.getValue()));
     }
 }

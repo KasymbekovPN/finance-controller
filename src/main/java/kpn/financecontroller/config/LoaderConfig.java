@@ -1,6 +1,6 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.payment.Payment;
@@ -9,7 +9,7 @@ import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
@@ -65,11 +65,11 @@ public class LoaderConfig {
     }
 
     @Bean
-    public Loader<Building, BuildingEntity, Long> buildingLoader(JpaRepository<BuildingEntity, Long> repo){
-        Function<List<BuildingEntity>, List<Building>> toDomains = (entities) -> {
-            return entities.stream().map(Building::new).collect(Collectors.toList());
+    public Loader<Address, AddressEntity, Long> addressLoader(JpaRepository<AddressEntity, Long> repo){
+        Function<List<AddressEntity>, List<Address>> toDomains = (entities) -> {
+            return entities.stream().map(Address::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, "building", Building::new, toDomains);
+        return new LoaderAll<>(repo, "address", Address::new, toDomains);
     }
 
     @Bean

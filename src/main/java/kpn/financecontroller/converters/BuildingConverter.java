@@ -1,8 +1,7 @@
 package kpn.financecontroller.converters;
 
-import kpn.financecontroller.data.domains.building.Building;
 import kpn.financecontroller.data.domains.street.Street;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.entities.BuildingInitialEntity;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Profile("dev")
-public class BuildingConverter implements Converter<BuildingInitialEntity, BuildingEntity> {
+public class BuildingConverter implements Converter<BuildingInitialEntity, AddressEntity> {
 
     private final DTOService<Street, StreetEntity, Long> streetDTOService;
 
@@ -25,8 +24,8 @@ public class BuildingConverter implements Converter<BuildingInitialEntity, Build
     }
 
     @Override
-    public BuildingEntity convert(BuildingInitialEntity value) {
-        BuildingEntity entity = new BuildingEntity();
+    public AddressEntity convert(BuildingInitialEntity value) {
+        AddressEntity entity = new AddressEntity();
         entity.setId(value.getId());
         entity.setName(value.getName());
 

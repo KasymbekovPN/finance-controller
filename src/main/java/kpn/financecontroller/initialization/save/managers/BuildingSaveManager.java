@@ -3,8 +3,8 @@ package kpn.financecontroller.initialization.save.managers;
 import kpn.financecontroller.builders.Builder;
 import kpn.financecontroller.checkers.GroupChecker;
 import kpn.financecontroller.converters.Converter;
-import kpn.financecontroller.data.domains.building.Building;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.domains.address.Address;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.collectors.LoadDataCollector;
 import kpn.financecontroller.initialization.entities.BuildingInitialEntity;
@@ -25,8 +25,8 @@ public class BuildingSaveManager extends AbstractSaveManager<Long, BuildingIniti
 
     private static final String ID = "BUILDINGS";
 
-    private final DTOService<Building, BuildingEntity, Long> dtoService;
-    private final Converter<BuildingInitialEntity, BuildingEntity> converter;
+    private final DTOService<Address, AddressEntity, Long> dtoService;
+    private final Converter<BuildingInitialEntity, AddressEntity> converter;
     private final Builder<Object, String> concatBuilder;
     private final CollectorUpdater<Long, BuildingInitialEntity> collectorUpdater;
 
@@ -37,8 +37,8 @@ public class BuildingSaveManager extends AbstractSaveManager<Long, BuildingIniti
 
     @Autowired
     public BuildingSaveManager(GroupChecker<LoadDataCollector<?, ?>> collectorChecker,
-                               DTOService<Building, BuildingEntity, Long> dtoService,
-                               Converter<BuildingInitialEntity, BuildingEntity> converter,
+                               DTOService<Address, AddressEntity, Long> dtoService,
+                               Converter<BuildingInitialEntity, AddressEntity> converter,
                                Builder<Object, String> concatBuilder,
                                CollectorUpdater<Long, BuildingInitialEntity> collectorUpdater) {
         super(ID, collectorChecker);
@@ -72,8 +72,8 @@ public class BuildingSaveManager extends AbstractSaveManager<Long, BuildingIniti
             Optional<StreetInitialEntity> maybeStreet = streetCollector.getEntity(buildingInitialEntity.getStreetId());
             maybeStreet.ifPresent(streetInitialEntity -> buildingInitialEntity.setStreetId(streetInitialEntity.getId()));
 
-            BuildingEntity buildingEntity = converter.convert(buildingInitialEntity);
-            Result<Building> result = dtoService.saver().save(buildingEntity);
+            AddressEntity addressEntity = converter.convert(buildingInitialEntity);
+            Result<Address> result = dtoService.saver().save(addressEntity);
             if (result.getSuccess()){
                 collectorUpdater.add(entry.getKey(), result.getValue().getId());
             } else {

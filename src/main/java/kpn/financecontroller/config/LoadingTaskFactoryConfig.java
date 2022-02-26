@@ -58,8 +58,8 @@ public class LoadingTaskFactoryConfig {
 
     @Bean
     public LoadingTaskFactoryImpl<Long, BuildingInitialEntity> buildingLoadingTaskFactory(CollectorCreator<Long, BuildingInitialEntity> collectorCreator,
-                                                                                         @Value("${initial.entities.paths.buildings}") String path,
-                                                                                         @Value("${initial.entities.ids.buildings}") String id){
+                                                                                         @Value("${initial.entities.paths.addresses}") String path,
+                                                                                         @Value("${initial.entities.ids.addresses}") String id){
         return new LoadingTaskFactoryImpl<>(pathCalculator, collectorCreator, id, path);
     }
 }

@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views.place;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -10,7 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
@@ -21,13 +20,13 @@ import java.util.List;
 
 public class PlaceForm extends EditForm<Place> {
 
-    private final Button saveWithoutBuilding = new Button();
+    private final Button saveWithoutAddress = new Button();
 
     private final TextField name = new TextField();
     private final Checkbox online = new Checkbox();
-    private final ComboBox<Building> building = new ComboBox<>();
+    private final ComboBox<Address> building = new ComboBox<>();
 
-    public PlaceForm(List<Building> buildings) {
+    public PlaceForm(List<Address> addresses) {
         super(new Binder<>(Place.class));
 
         addClassName("place-form");
@@ -39,8 +38,8 @@ public class PlaceForm extends EditForm<Place> {
         online.setLabel(getTranslation("gui.online"));
 
         building.setLabel(getTranslation("gui.building"));
-        building.setItems(buildings);
-        building.setItemLabelGenerator(Building::getFullName);
+        building.setItems(addresses);
+        building.setItemLabelGenerator(Address::getFullName);
 
         add(
                 name,
@@ -52,14 +51,14 @@ public class PlaceForm extends EditForm<Place> {
     }
 
     private Component createSecondButtonLayout() {
-        saveWithoutBuilding.setText(getTranslation("gui.button.saveWithoutBuilding"));
-        saveWithoutBuilding.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        saveWithoutAddress.setText(getTranslation("gui.button.saveWithoutAddress"));
+        saveWithoutAddress.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        saveWithoutBuilding.addClickListener(event -> validateAndSaveWithoutBuilding());
+        saveWithoutAddress.addClickListener(event -> validateAndSaveWithoutBuilding());
 
-        binder.addStatusChangeListener(event -> saveWithoutBuilding.setEnabled(binder.isValid()));
+        binder.addStatusChangeListener(event -> saveWithoutAddress.setEnabled(binder.isValid()));
 
-        return new HorizontalLayout(saveWithoutBuilding);
+        return new HorizontalLayout(saveWithoutAddress);
     }
 
     @Override

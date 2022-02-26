@@ -2,7 +2,7 @@ package kpn.financecontroller.data.entities.place;
 
 import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.data.entities.AbstractEntity;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,12 +27,12 @@ public class PlaceEntity extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "building_id")
-    private BuildingEntity buildingEntity;
+    private AddressEntity addressEntity;
 
     public PlaceEntity(Place place) {
         id = place.getId();
         name = place.getName();
         online = place.isOnline();
-        buildingEntity = place.getBuilding() != null ? new BuildingEntity(place.getBuilding()) : null;
+        addressEntity = place.getAddress() != null ? new AddressEntity(place.getAddress()) : null;
     }
 }

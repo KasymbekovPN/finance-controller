@@ -1,6 +1,6 @@
-package kpn.financecontroller.data.entities.building;
+package kpn.financecontroller.data.entities.address;
 
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import lombok.Getter;
@@ -16,8 +16,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "building")
-public class BuildingEntity extends AbstractEntity {
+@Entity(name = "addresses")
+public class AddressEntity extends AbstractEntity {
     @NotEmpty
     @Size(max = 64)
     private String name;
@@ -26,9 +26,9 @@ public class BuildingEntity extends AbstractEntity {
     @JoinColumn(name = "street_id")
     private StreetEntity streetEntity;
 
-    public BuildingEntity(Building building) {
-        id = building.getId();
-        name = building.getName();
-        streetEntity = new StreetEntity(building.getStreet());
+    public AddressEntity(Address address) {
+        id = address.getId();
+        name = address.getName();
+        streetEntity = new StreetEntity(address.getStreet());
     }
 }

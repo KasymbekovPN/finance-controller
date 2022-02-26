@@ -1,6 +1,6 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.payment.Payment;
@@ -9,7 +9,7 @@ import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
@@ -47,7 +47,7 @@ public class DeleterConfig {
     }
 
     @Bean
-    public DeleterAllAndById<Building, BuildingEntity, Long> buildingDeleter(JpaRepository<BuildingEntity, Long> repo){
+    public DeleterAllAndById<Address, AddressEntity, Long> addressDeleter(JpaRepository<AddressEntity, Long> repo){
         return new DeleterAllAndById<>(repo, "builder");
     }
 

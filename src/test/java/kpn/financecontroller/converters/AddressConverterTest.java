@@ -1,11 +1,10 @@
 package kpn.financecontroller.converters;
 
-import kpn.financecontroller.data.domains.building.Building;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.data.services.DTOServiceImpl;
@@ -18,7 +17,7 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BuildingConverterTest {
+class AddressConverterTest {
 
     private static final Long STREET_ID = 123L;
     private static final String STREET_NAME = "street.name";
@@ -58,11 +57,11 @@ class BuildingConverterTest {
         initialEntity.setStreetId(STREET_ID);
 
         BuildingConverter converter = new BuildingConverter(createRepo());
-        BuildingEntity buildingEntity = converter.convert(initialEntity);
+        AddressEntity addressEntity = converter.convert(initialEntity);
 
-        assertThat(initialEntity.getId()).isEqualTo(buildingEntity.getId());
-        assertThat(initialEntity.getName()).isEqualTo(buildingEntity.getName());
-        assertThat(initialEntity.getStreetId()).isEqualTo(buildingEntity.getStreetEntity().getId());
+        assertThat(initialEntity.getId()).isEqualTo(addressEntity.getId());
+        assertThat(initialEntity.getName()).isEqualTo(addressEntity.getName());
+        assertThat(initialEntity.getStreetId()).isEqualTo(addressEntity.getStreetEntity().getId());
     }
 
     private DTOService<Street, StreetEntity, Long> createRepo() {

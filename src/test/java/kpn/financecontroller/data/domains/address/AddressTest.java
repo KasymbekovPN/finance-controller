@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.domains.building;
+package kpn.financecontroller.data.domains.address;
 
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
@@ -7,11 +7,11 @@ import kpn.financecontroller.data.domains.street.Street;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class BuildingTest {
+class AddressTest {
 
     @Test
     void shouldCheckFullNameGetting() {
-        String buildingName = "4";
+        String addressName = "4";
         String streetName = "some street";
         String cityName = "some city";
         String regionName = "region name";
@@ -20,9 +20,9 @@ class BuildingTest {
         Region region = new Region(1L, regionName, country);
         City city = new City(1L, cityName, region);
         Street street = new Street(1L, streetName, city);
-        Building building = new Building(1L, buildingName, street);
+        Address address = new Address(1L, addressName, street);
 
-        String expectedFullName = buildingName + ", " + streetName + ", " + cityName + ", " + regionName + ", " + countryName;
-        Assertions.assertThat(expectedFullName).isEqualTo(building.getFullName());
+        String expectedFullName = addressName + ", " + streetName + ", " + cityName + ", " + regionName + ", " + countryName;
+        Assertions.assertThat(expectedFullName).isEqualTo(address.getFullName());
     }
 }
