@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "country")
+@Entity(name = "countries")
 public class CountryEntity extends AbstractEntity {
     @NotEmpty
     @Column(unique = true)

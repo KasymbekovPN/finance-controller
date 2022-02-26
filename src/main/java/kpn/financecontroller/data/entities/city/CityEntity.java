@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "city")
+@Entity(name = "cities")
 public class CityEntity extends AbstractEntity {
 
     @NotEmpty

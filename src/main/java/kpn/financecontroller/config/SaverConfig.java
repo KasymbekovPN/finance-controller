@@ -1,17 +1,19 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.payment.Payment;
+import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
+import kpn.financecontroller.data.entities.place.PlaceEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
@@ -46,8 +48,8 @@ public class SaverConfig {
     }
 
     @Bean
-    public Saver<Building, BuildingEntity, Long> buildingSaver(JpaRepository<BuildingEntity, Long> repo){
-        return new SaverImpl<>(repo, Building::new, "building");
+    public Saver<Address, AddressEntity, Long> addressSaver(JpaRepository<AddressEntity, Long> repo){
+        return new SaverImpl<>(repo, Address::new, "address");
     }
 
     @Bean
@@ -63,5 +65,10 @@ public class SaverConfig {
     @Bean
     public Saver<Tag, TagEntity, Long> tagSaver(JpaRepository<TagEntity, Long> repo){
         return new SaverImpl<>(repo, Tag::new, "tag");
+    }
+
+    @Bean
+    public Saver<Place, PlaceEntity, Long> placeSaver(JpaRepository<PlaceEntity, Long> repo){
+        return new SaverImpl<>(repo, Place::new, "place");
     }
 }

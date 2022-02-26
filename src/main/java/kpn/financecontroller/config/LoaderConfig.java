@@ -1,17 +1,19 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.payment.Payment;
+import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
+import kpn.financecontroller.data.entities.place.PlaceEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
@@ -51,7 +53,7 @@ public class LoaderConfig {
         Function<List<CityEntity>, List<City>> toDomains = (entities) -> {
             return entities.stream().map(City::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, "city", City::new, toDomains);
+        return new LoaderAllAndById<>(repo, "city", City::new, toDomains);
     }
 
     @Bean
@@ -59,15 +61,15 @@ public class LoaderConfig {
         Function<List<StreetEntity>, List<Street>> toDomains = (entities) -> {
             return entities.stream().map(Street::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, "street", Street::new, toDomains);
+        return new LoaderAllAndById<>(repo, "street", Street::new, toDomains);
     }
 
     @Bean
-    public Loader<Building, BuildingEntity, Long> buildingLoader(JpaRepository<BuildingEntity, Long> repo){
-        Function<List<BuildingEntity>, List<Building>> toDomains = (entities) -> {
-            return entities.stream().map(Building::new).collect(Collectors.toList());
+    public Loader<Address, AddressEntity, Long> addressLoader(JpaRepository<AddressEntity, Long> repo){
+        Function<List<AddressEntity>, List<Address>> toDomains = (entities) -> {
+            return entities.stream().map(Address::new).collect(Collectors.toList());
         };
-        return new LoaderAll<>(repo, "building", Building::new, toDomains);
+        return new LoaderAll<>(repo, "address", Address::new, toDomains);
     }
 
     @Bean
@@ -92,5 +94,13 @@ public class LoaderConfig {
             return entities.stream().map(Tag::new).collect(Collectors.toList());
         };
         return new LoaderAll<>(repo, "tag", Tag::new, toDomains);
+    }
+
+    @Bean
+    public Loader<Place, PlaceEntity, Long> placeLoader(JpaRepository<PlaceEntity, Long> repo){
+        Function<List<PlaceEntity>, List<Place>> toDomains = (entities) -> {
+            return entities.stream().map(Place::new).collect(Collectors.toList());
+        };
+        return new LoaderAll<>(repo, "place", Place::new, toDomains);
     }
 }

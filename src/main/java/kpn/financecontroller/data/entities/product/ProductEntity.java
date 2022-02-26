@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "product")
+@Entity(name = "products")
 public class ProductEntity extends AbstractEntity {
     @NotEmpty
     @Column(unique = true)

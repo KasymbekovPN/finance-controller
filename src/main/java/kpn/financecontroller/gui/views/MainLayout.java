@@ -1,7 +1,6 @@
 package kpn.financecontroller.gui.views;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -9,14 +8,13 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import kpn.financecontroller.gui.views.building.BuildingView;
+import kpn.financecontroller.gui.views.address.AddressView;
 import kpn.financecontroller.gui.views.city.CityView;
 import kpn.financecontroller.gui.views.country.CountryView;
 import kpn.financecontroller.gui.views.payment.PaymentView;
+import kpn.financecontroller.gui.views.place.PlaceView;
 import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.region.RegionView;
 import kpn.financecontroller.gui.views.street.StreetView;
@@ -28,7 +26,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainLayout extends AppLayout {
@@ -37,7 +34,8 @@ public class MainLayout extends AppLayout {
             new MenuItemInfo("gui.payments",  "la la-globe", PaymentView.class),
             new MenuItemInfo("gui.products",  "la la-globe", ProductView.class),
             new MenuItemInfo("gui.tags",  "la la-globe", TagView.class),
-            new MenuItemInfo("gui.buildings",  "la la-globe", BuildingView.class),
+            new MenuItemInfo("gui.places",  "la la-globe", PlaceView.class),
+            new MenuItemInfo("gui.address",  "la la-globe", AddressView.class),
             new MenuItemInfo("gui.streets",  "la la-globe", StreetView.class),
             new MenuItemInfo("gui.cities",  "la la-globe", CityView.class),
             new MenuItemInfo("gui.regions", "la la-globe", RegionView.class),

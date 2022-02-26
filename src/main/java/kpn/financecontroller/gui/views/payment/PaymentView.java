@@ -2,10 +2,10 @@ package kpn.financecontroller.gui.views.payment;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
-import kpn.financecontroller.data.domains.building.Building;
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.entities.building.BuildingEntity;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.services.DTOService;
@@ -30,18 +30,18 @@ import java.util.List;
 public class PaymentView extends GridView<Payment> {
 
     private final DTOService<Payment, PaymentEntity, Long> paymentService;
-    private final DTOService<Building, BuildingEntity, Long> buildingService;
+    private final DTOService<Address, AddressEntity, Long> addressService;
     private final DTOService<Product, ProductEntity, Long> productService;
 
     public PaymentView(LocaledMessageSeedFactory seedFactory,
                        I18nService i18nService,
                        NotificationFactory notificationFactory,
                        DTOService<Payment, PaymentEntity, Long> paymentService,
-                       DTOService<Building, BuildingEntity, Long> buildingService,
+                       DTOService<Address, AddressEntity, Long> addressService,
                        DTOService<Product, ProductEntity, Long> productService) {
         super(new Grid<>(Payment.class), seedFactory, i18nService, notificationFactory, "gui.payments");
         this.paymentService = paymentService;
-        this.buildingService = buildingService;
+        this.addressService = addressService;
         this.productService = productService;
     }
 
@@ -66,7 +66,7 @@ public class PaymentView extends GridView<Payment> {
         grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.currency"));
         grid.addColumn(Payment::getAmount).setHeader(getTranslation("gui.amount"));
         grid.addColumn(p -> p.getMeasure().name()).setHeader(getTranslation("gui.measure"));
-        grid.addColumn(p -> p.getBuilding().getFullName()).setHeader(getTranslation("gui.building"));
+        grid.addColumn(p -> p.getAddress().getFullName()).setHeader(getTranslation("gui.address"));
         grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.createdAt"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
@@ -78,7 +78,7 @@ public class PaymentView extends GridView<Payment> {
     protected void configureForm() {
         form = new PaymentForm(
                 productService.loader().all().getValue(),
-                buildingService.loader().all().getValue()
+                addressService.loader().all().getValue()
         );
         form.setWidth("25em");
 

@@ -1,0 +1,29 @@
+{
+  "entities":{
+    "0": {
+      "id": 0,
+      "name": "street 0",
+      "cityId": 0
+    },
+    "1": {
+      "id": 1,
+      "name": "street 1",
+      "cityId": 0
+    },
+    "2": {
+      "id": 2,
+      "name": "street 2",
+      "cityId": 1
+    },
+    "3": {
+      "id": 3,
+      "name": "street 3",
+      "cityId": 2
+    },
+    "4": {
+      "id": 4,
+      "name": "street 4",
+      "cityId": 3
+    }
+  }
+}

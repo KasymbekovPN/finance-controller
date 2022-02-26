@@ -17,7 +17,7 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@Entity(name = "tag")
+@Entity(name = "tags")
 public class TagEntity extends AbstractEntity {
     @NotEmpty
     @Size(max = 64)

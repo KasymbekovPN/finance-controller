@@ -110,7 +110,7 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
         closeEditor();
     }
 
-    private void createNotification(Result<?> result) {
+    protected void createNotification(Result<?> result) {
         if (!result.getSuccess()){
             LocaledMessageSeed seed = seedFactory.create(result);
             String text = i18nService.getTranslation(seed);

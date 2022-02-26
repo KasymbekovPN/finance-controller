@@ -10,6 +10,7 @@ import java.util.List;
 public interface CountryRepo extends JpaRepository<CountryEntity, Long> {
     List<CountryEntity> findByName(String name);
 
-    @Query("select c from country c where c.name like concat('%', :filter, '%')")
-    List<CountryEntity> search(@Param("filter") String filter);
+    // TODO: 26.02.2022 del ???
+//    @Query("select c from country c where c.name like concat('%', :filter, '%')")
+//    List<CountryEntity> search(@Param("filter") String filter);
 }

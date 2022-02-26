@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "street")
+@Entity(name = "streets")
 public class StreetEntity extends AbstractEntity {
 
     @NotEmpty
