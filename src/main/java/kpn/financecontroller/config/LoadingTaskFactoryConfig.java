@@ -1,6 +1,5 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.initialization.entities.*;
 import kpn.financecontroller.initialization.old.entities.*;
 import kpn.financecontroller.initialization.old.load.calculators.PathCalculator;
 import kpn.financecontroller.initialization.old.load.creators.CollectorCreator;

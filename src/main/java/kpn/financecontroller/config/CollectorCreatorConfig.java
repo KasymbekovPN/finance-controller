@@ -1,7 +1,6 @@
 package kpn.financecontroller.config;
 
 import kpn.financecontroller.initialization.old.collectors.LoadDataCollectorImpl;
-import kpn.financecontroller.initialization.entities.*;
 import kpn.financecontroller.initialization.old.entities.*;
 import kpn.financecontroller.initialization.old.load.creators.CollectorCreatorImpl;
 import org.springframework.beans.factory.annotation.Value;
