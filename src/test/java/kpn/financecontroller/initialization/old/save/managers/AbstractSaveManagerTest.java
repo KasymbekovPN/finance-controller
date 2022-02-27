@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.save.managers;
+package kpn.financecontroller.initialization.old.save.managers;
 
 import kpn.financecontroller.checkers.GroupChecker;
 import kpn.financecontroller.initialization.old.collectors.LoadDataCollector;

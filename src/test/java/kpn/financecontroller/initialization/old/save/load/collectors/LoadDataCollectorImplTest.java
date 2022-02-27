@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.load.collectors;
+package kpn.financecontroller.initialization.old.save.load.collectors;
 
 import kpn.financecontroller.initialization.old.collectors.LoadDataCollectorImpl;
 import org.junit.jupiter.api.Test;

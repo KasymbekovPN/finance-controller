@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.load.manager;
+package kpn.financecontroller.initialization.old.save.load.manager;
 
 import kpn.financecontroller.initialization.old.load.manager.LoadingManagerImpl;
 import kpn.financecontroller.initialization.old.load.reader.ResourceFileReader;

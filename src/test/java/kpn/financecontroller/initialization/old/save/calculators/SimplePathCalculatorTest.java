@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.calculators;
+package kpn.financecontroller.initialization.old.save.calculators;
 
 import kpn.financecontroller.initialization.old.load.calculators.SimplePathCalculator;
 import kpn.financecontroller.result.Result;

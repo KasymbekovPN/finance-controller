@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.load.reader;
+package kpn.financecontroller.initialization.old.save.load.reader;
 
 import kpn.financecontroller.initialization.old.load.reader.ResourceFileReaderImpl;
 import kpn.financecontroller.result.Result;

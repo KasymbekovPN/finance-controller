@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.load.tasks;
+package kpn.financecontroller.initialization.old.save.load.tasks;
 
 import kpn.financecontroller.initialization.old.collectors.LoadDataCollector;
 import kpn.financecontroller.initialization.old.load.calculators.PathCalculator;

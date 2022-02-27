@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.save.updaters;
+package kpn.financecontroller.initialization.old.save.updaters;
 
 import kpn.financecontroller.initialization.old.collectors.LoadDataCollectorImpl;
 import kpn.financecontroller.initialization.old.entities.AbstractInitialEntity;
