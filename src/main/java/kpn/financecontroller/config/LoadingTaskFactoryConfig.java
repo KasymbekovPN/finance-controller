@@ -1,9 +1,10 @@
 package kpn.financecontroller.config;
 
 import kpn.financecontroller.initialization.entities.*;
-import kpn.financecontroller.initialization.load.calculators.PathCalculator;
-import kpn.financecontroller.initialization.load.creators.CollectorCreator;
-import kpn.financecontroller.initialization.load.factories.LoadingTaskFactoryImpl;
+import kpn.financecontroller.initialization.old.entities.*;
+import kpn.financecontroller.initialization.old.load.calculators.PathCalculator;
+import kpn.financecontroller.initialization.old.load.creators.CollectorCreator;
+import kpn.financecontroller.initialization.old.load.factories.LoadingTaskFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -58,8 +59,8 @@ public class LoadingTaskFactoryConfig {
 
     @Bean
     public LoadingTaskFactoryImpl<Long, BuildingInitialEntity> buildingLoadingTaskFactory(CollectorCreator<Long, BuildingInitialEntity> collectorCreator,
-                                                                                         @Value("${initial.entities.paths.addresses}") String path,
-                                                                                         @Value("${initial.entities.ids.addresses}") String id){
+                                                                                          @Value("${initial.entities.paths.addresses}") String path,
+                                                                                          @Value("${initial.entities.ids.addresses}") String id){
         return new LoadingTaskFactoryImpl<>(pathCalculator, collectorCreator, id, path);
     }
 }

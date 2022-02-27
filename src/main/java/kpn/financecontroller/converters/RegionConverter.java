@@ -4,13 +4,14 @@ import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
-import kpn.financecontroller.initialization.entities.RegionInitialEntity;
+import kpn.financecontroller.initialization.old.entities.RegionInitialEntity;
 import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+// TODO: 27.02.2022 del ??
 @Slf4j
 @Component
 @Profile("dev")

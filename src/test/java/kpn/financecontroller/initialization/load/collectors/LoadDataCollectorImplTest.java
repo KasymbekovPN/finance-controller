@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.load.collectors;
 
-import kpn.financecontroller.initialization.collectors.LoadDataCollectorImpl;
+import kpn.financecontroller.initialization.old.collectors.LoadDataCollectorImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

@@ -1,7 +1,8 @@
 package kpn.financecontroller.initialization.load.manager;
 
-import kpn.financecontroller.initialization.load.reader.ResourceFileReader;
-import kpn.financecontroller.initialization.load.tasks.LoadingTask;
+import kpn.financecontroller.initialization.old.load.manager.LoadingManagerImpl;
+import kpn.financecontroller.initialization.old.load.reader.ResourceFileReader;
+import kpn.financecontroller.initialization.old.load.tasks.LoadingTask;
 import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

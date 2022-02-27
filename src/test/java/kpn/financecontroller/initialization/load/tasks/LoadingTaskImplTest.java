@@ -1,8 +1,9 @@
 package kpn.financecontroller.initialization.load.tasks;
 
-import kpn.financecontroller.initialization.collectors.LoadDataCollector;
-import kpn.financecontroller.initialization.load.calculators.PathCalculator;
-import kpn.financecontroller.initialization.load.creators.CollectorCreator;
+import kpn.financecontroller.initialization.old.collectors.LoadDataCollector;
+import kpn.financecontroller.initialization.old.load.calculators.PathCalculator;
+import kpn.financecontroller.initialization.old.load.creators.CollectorCreator;
+import kpn.financecontroller.initialization.old.load.tasks.LoadingTaskImpl;
 import kpn.financecontroller.result.Result;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

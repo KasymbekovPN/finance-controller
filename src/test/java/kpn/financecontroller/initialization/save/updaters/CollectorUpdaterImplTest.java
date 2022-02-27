@@ -1,7 +1,8 @@
 package kpn.financecontroller.initialization.save.updaters;
 
-import kpn.financecontroller.initialization.collectors.LoadDataCollectorImpl;
-import kpn.financecontroller.initialization.entities.AbstractInitialEntity;
+import kpn.financecontroller.initialization.old.collectors.LoadDataCollectorImpl;
+import kpn.financecontroller.initialization.old.entities.AbstractInitialEntity;
+import kpn.financecontroller.initialization.old.save.updaters.CollectorUpdaterImpl;
 import lombok.EqualsAndHashCode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

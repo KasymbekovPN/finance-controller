@@ -1,8 +1,8 @@
 package kpn.financecontroller.initialization.save.managers;
 
 import kpn.financecontroller.checkers.GroupChecker;
-import kpn.financecontroller.initialization.collectors.LoadDataCollector;
-import kpn.financecontroller.initialization.save.managers.saving.AbstractSaveManager;
+import kpn.financecontroller.initialization.old.collectors.LoadDataCollector;
+import kpn.financecontroller.initialization.old.save.managers.saving.AbstractSaveManager;
 import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

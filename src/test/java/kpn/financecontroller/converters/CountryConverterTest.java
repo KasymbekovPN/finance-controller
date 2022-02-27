@@ -1,7 +1,7 @@
 package kpn.financecontroller.converters;
 
 import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.initialization.entities.CountryInitialEntity;
+import kpn.financecontroller.initialization.old.entities.CountryInitialEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

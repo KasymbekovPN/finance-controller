@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: 27.02.2022 del ???
 @RequiredArgsConstructor
 public class OnNullGroupChecker<T> implements GroupChecker<T> {
     private final String id;

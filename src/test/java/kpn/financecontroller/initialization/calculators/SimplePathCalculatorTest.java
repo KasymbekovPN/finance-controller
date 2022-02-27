@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.calculators;
 
-import kpn.financecontroller.initialization.load.calculators.SimplePathCalculator;
+import kpn.financecontroller.initialization.old.load.calculators.SimplePathCalculator;
 import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

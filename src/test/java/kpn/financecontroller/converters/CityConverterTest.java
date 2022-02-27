@@ -7,7 +7,7 @@ import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.data.services.DTOServiceImpl;
 import kpn.financecontroller.data.services.loaders.Loader;
-import kpn.financecontroller.initialization.entities.CityInitialEntity;
+import kpn.financecontroller.initialization.old.entities.CityInitialEntity;
 import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,11 @@
 package kpn.financecontroller.converters;
 
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.initialization.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.old.entities.TagInitialEntity;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+// TODO: 27.02.2022 del ???
 @Component
 @Profile("dev")
 public class TagConverter implements Converter<TagInitialEntity, TagEntity> {

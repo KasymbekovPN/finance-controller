@@ -1,7 +1,7 @@
 package kpn.financecontroller.converters;
 
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.initialization.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.old.entities.TagInitialEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

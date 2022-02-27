@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+// TODO: 27.02.2022 del ???
 @Component
 public class ConcatBuilder implements Builder<Object, String> {
 
