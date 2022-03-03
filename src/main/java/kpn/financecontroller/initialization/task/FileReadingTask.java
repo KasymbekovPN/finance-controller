@@ -3,6 +3,7 @@ package kpn.financecontroller.initialization.task;
 import kpn.financecontroller.initialization.context.Context;
 import kpn.financecontroller.result.Result;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class FileReadingTask implements Task {
     private static final String PATH_PROPERTY = "file.path";
     private static final String RESULT_PROPERTY = "file.reading.result";
@@ -22,10 +24,6 @@ public class FileReadingTask implements Task {
     private final String key;
     @Getter
     private boolean continuationPossible;
-
-    public FileReadingTask(String key) {
-        this.key = key;
-    }
 
     @Override
     public void execute(Context context){
