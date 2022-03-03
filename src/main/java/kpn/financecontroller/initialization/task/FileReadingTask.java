@@ -13,12 +13,6 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public class FileReadingTask implements Task {
-    private static final String PATH_PROPERTY = "file.path";
-    private static final String RESULT_PROPERTY = "file.reading.result";
-    private static final String NO_PATH_CODE = "context.no.path";
-    private static final String EXCEPTION_CODE = "file.reading.exception";
-    private static final String STREAM_NULL_CODE = "stream.null.code";
-    private static final String SUCCESS_CODE = "file.reading.success";
 
     @Getter
     private final String key;
@@ -30,7 +24,7 @@ public class FileReadingTask implements Task {
         continuationPossible = false;
         Result.Builder<String> builder = Result.<String>builder().arg(key);
 
-        Optional<Object> maybePath = context.get(key, PATH_PROPERTY);
+        Optional<Object> maybePath = context.get(key, Properties.PATH.getValue());
         if (maybePath.isPresent()){
             String path = String.valueOf(maybePath.get());
             try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path)){
@@ -38,23 +32,43 @@ public class FileReadingTask implements Task {
                     try(BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
                         StringBuilder stringBuilder = new StringBuilder();
                         reader.lines().forEach(stringBuilder::append);
-                        builder.value(stringBuilder.toString()).code(SUCCESS_CODE);
+                        builder.value(stringBuilder.toString()).code(Codes.SUCCESS.getValue());
                         continuationPossible = true;
                     } catch (IOException ex){
-                        builder.code(EXCEPTION_CODE);
+                        builder.code(Codes.READING_EXCEPTION.getValue());
                         ex.printStackTrace();
                     }
                 } else {
-                    builder.code(STREAM_NULL_CODE);
+                    builder.code(Codes.NULL_STREAM.getValue());
                 }
             } catch (IOException ex){
-                builder.code(EXCEPTION_CODE);
+                builder.code(Codes.READING_EXCEPTION.getValue());
                 ex.printStackTrace();
             }
         } else {
-            builder.code(NO_PATH_CODE);
+            builder.code(Codes.NO_PATH.getValue());
         }
 
-        context.put(key, RESULT_PROPERTY, builder.success(continuationPossible).build());
+        context.put(key, Properties.RESULT.getValue(), builder.success(continuationPossible).build());
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    public enum Properties{
+        PATH("task.fileReading.property.path"),
+        RESULT("task.fileReading.property.result");
+
+        private final String value;
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    public enum Codes {
+        NO_PATH("task.fileReading.code.noPath"),
+        READING_EXCEPTION("task.fileReading.readingException"),
+        NULL_STREAM("task.fileReading.nullStream"),
+        SUCCESS("task.fileReading.success");
+
+        private final String value;
     }
 }
