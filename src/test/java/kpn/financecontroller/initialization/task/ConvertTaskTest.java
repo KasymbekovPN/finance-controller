@@ -16,14 +16,6 @@ public class ConvertTaskTest {
 
     private static final String KEY = "some.key";
 
-    private static final String CODE__CONTEXT_NO_COLLECTOR_TYPE = "task.code.noCollectorType";
-    private static final String CODE__CONTEXT_NO_SOURCE = "task.code.noFileContent";
-    private static final String CODE__CONVERSION_FAIL = "task.code.conversionFail";
-
-    private static final String PROPERTY__FILE_CONTENT = "file.reading.result";
-    private static final String PROPERTY__CONVERSION_RESULT = "task.property.conversionResult";
-    private static final String PROPERTY__CLASS_TYPE = "task.property.classType";
-
     private static final String INVALID_SOURCE = "{\"hello\"";
     private static final String SOURCE = "{\"entities\" : {\"1\":{\"x\":1}}}";
 
@@ -36,17 +28,17 @@ public class ConvertTaskTest {
     static void beforeAll() {
         expectedResultWhenCollectorTypeNotExists = Result.<TestCollector>builder()
                 .success(false)
-                .code(CODE__CONTEXT_NO_COLLECTOR_TYPE)
+                .code(ConvertTask.Codes.NO_COLLECTOR_TYPE.getValue())
                 .arg(KEY)
                 .build();
         expectedResultWhenFileContentNotExists = Result.<TestCollector>builder()
                 .success(false)
-                .code(CODE__CONTEXT_NO_SOURCE)
+                .code(ConvertTask.Codes.NO_SOURCE.getValue())
                 .arg(KEY)
                 .build();
         expectedResultWhenConversionFail = Result.<TestCollector>builder()
                 .success(false)
-                .code(CODE__CONVERSION_FAIL)
+                .code(ConvertTask.Codes.FAIL_CONVERSION.getValue())
                 .arg(KEY)
                 .build();
 
@@ -62,9 +54,9 @@ public class ConvertTaskTest {
     @Test
     void shouldCheckExecution_withoutClassTypeInContext() {
         ContextImpl context = new ContextImpl();
-        ConvertTask task = new ConvertTask(KEY);
+        ConvertTask task = new ConvertTask(KEY, FileReadingTask.Properties.PATH.getValue());
         task.execute(context);
-        Optional<Object> maybeResult = context.get(KEY, PROPERTY__CONVERSION_RESULT);
+        Optional<Object> maybeResult = context.get(KEY, ConvertTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();
         Result<TestCollector> result = (Result<TestCollector>) maybeResult.get();
         assertThat(expectedResultWhenCollectorTypeNotExists).isEqualTo(result);
@@ -74,11 +66,11 @@ public class ConvertTaskTest {
     @Test
     void shouldCheckExecution_withoutFileContentInContext() {
         ContextImpl context = new ContextImpl();
-        context.put(KEY, PROPERTY__CLASS_TYPE, TestCollector.class);
+        context.put(KEY, ConvertTask.Properties.COLLECTOR_TYPE.getValue(), TestCollector.class);
 
-        ConvertTask task = new ConvertTask(KEY);
+        ConvertTask task = new ConvertTask(KEY, FileReadingTask.Properties.PATH.getValue());
         task.execute(context);
-        Optional<Object> maybeResult = context.get(KEY, PROPERTY__CONVERSION_RESULT);
+        Optional<Object> maybeResult = context.get(KEY, ConvertTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();
         Result<TestCollector> result = (Result<TestCollector>) maybeResult.get();
         assertThat(expectedResultWhenFileContentNotExists).isEqualTo(result);
@@ -88,12 +80,12 @@ public class ConvertTaskTest {
     @Test
     void shouldCheckExecution_withFailConversion() {
         ContextImpl context = new ContextImpl();
-        context.put(KEY, PROPERTY__CLASS_TYPE, TestCollector.class);
-        context.put(KEY, PROPERTY__FILE_CONTENT, INVALID_SOURCE);
+        context.put(KEY, ConvertTask.Properties.COLLECTOR_TYPE.getValue(), TestCollector.class);
+        context.put(KEY, FileReadingTask.Properties.RESULT.getValue(), INVALID_SOURCE);
 
-        ConvertTask task = new ConvertTask(KEY);
+        ConvertTask task = new ConvertTask(KEY, FileReadingTask.Properties.RESULT.getValue());
         task.execute(context);
-        Optional<Object> maybeResult = context.get(KEY, PROPERTY__CONVERSION_RESULT);
+        Optional<Object> maybeResult = context.get(KEY, ConvertTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();
         Result<TestCollector> result = (Result<TestCollector>) maybeResult.get();
         assertThat(expectedResultWhenConversionFail).isEqualTo(result);
@@ -103,12 +95,12 @@ public class ConvertTaskTest {
     @Test
     void shouldCheckExecution() {
         ContextImpl context = new ContextImpl();
-        context.put(KEY, PROPERTY__CLASS_TYPE, TestCollector.class);
-        context.put(KEY, PROPERTY__FILE_CONTENT, SOURCE);
+        context.put(KEY, ConvertTask.Properties.COLLECTOR_TYPE.getValue(), TestCollector.class);
+        context.put(KEY, FileReadingTask.Properties.RESULT.getValue(), SOURCE);
 
-        ConvertTask task = new ConvertTask(KEY);
+        ConvertTask task = new ConvertTask(KEY, FileReadingTask.Properties.RESULT.getValue());
         task.execute(context);
-        Optional<Object> maybeResult = context.get(KEY, PROPERTY__CONVERSION_RESULT);
+        Optional<Object> maybeResult = context.get(KEY, ConvertTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();
         Result<TestCollector> result = (Result<TestCollector>) maybeResult.get();
         assertThat(expectedResult).isEqualTo(result);

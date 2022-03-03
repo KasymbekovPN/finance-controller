@@ -13,16 +13,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ConvertTask implements Task{
 
-    private static final String CODE__CONTEXT_NO_COLLECTOR_TYPE = "task.code.noCollectorType";
-    private static final String CODE__CONTEXT_NO_SOURCE = "task.code.noSource";
-    private static final String CODE__CONVERSION_FAIL = "task.code.conversionFail";
-
-    private static final String PROPERTY__CLASS_TYPE = "task.property.classType";
-    private static final String PROPERTY__CONVERSION_RESULT = "task.property.conversionResult";
-    private static final String PROPERTY__FILE_CONTENT = "file.reading.result";
-
     @Getter
     private final String key;
+    private final String sourceProperty;
     @Getter
     private boolean continuationPossible;
 
@@ -39,19 +32,19 @@ public class ConvertTask implements Task{
                         .value((LongKeyInitialEntityCollector<?>) new Gson().fromJson(source, classType))
                         .arg(key)
                         .build();
-                context.put(key, PROPERTY__CONVERSION_RESULT, result);
+                context.put(key, Properties.RESULT.getValue(), result);
                 continuationPossible = true;
             } catch (JsonSyntaxException ex){
                 ex.printStackTrace();
-                putResultIntoContext(context, createResult(CODE__CONVERSION_FAIL));
+                putResultIntoContext(context, createResult(Codes.FAIL_CONVERSION.getValue()));
             }
         }
     }
 
     private boolean checkClassTypeOrSetResult(Context context) {
-        Optional<Object> maybeCollectorType = context.get(key, PROPERTY__CLASS_TYPE);
+        Optional<Object> maybeCollectorType = context.get(key, Properties.COLLECTOR_TYPE.getValue());
         if (maybeCollectorType.isEmpty()){
-            putResultIntoContext(context, createResult(CODE__CONTEXT_NO_COLLECTOR_TYPE));
+            putResultIntoContext(context, createResult(Codes.NO_COLLECTOR_TYPE.getValue()));
             return false;
         }
         classType = (Class<?>) maybeCollectorType.get();
@@ -59,9 +52,9 @@ public class ConvertTask implements Task{
     }
 
     private boolean checkFileContentOrSetResult(Context context) {
-        Optional<Object> maybeFileContent = context.get(key, PROPERTY__FILE_CONTENT);
+        Optional<Object> maybeFileContent = context.get(key, sourceProperty);
         if (maybeFileContent.isEmpty()){
-            putResultIntoContext(context, createResult(CODE__CONTEXT_NO_SOURCE));
+            putResultIntoContext(context, createResult(Codes.NO_SOURCE.getValue()));
             return false;
         }
         source = String.valueOf(maybeFileContent.get());
@@ -69,7 +62,7 @@ public class ConvertTask implements Task{
     }
 
     private void putResultIntoContext(Context context, Result<LongKeyInitialEntityCollector<?>> result) {
-        context.put(key, PROPERTY__CONVERSION_RESULT, result);
+        context.put(key, Properties.RESULT.getValue(), result);
     }
 
     private Result<LongKeyInitialEntityCollector<?>> createResult(String code) {
@@ -78,5 +71,24 @@ public class ConvertTask implements Task{
                 .code(code)
                 .arg(key)
                 .build();
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    public enum Properties{
+        COLLECTOR_TYPE("task.conversion.property.collectorType"),
+        RESULT("task.conversion.property.result");
+
+        private final String value;
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    public enum Codes{
+        NO_COLLECTOR_TYPE("task.conversion.code.noCollectorType"),
+        NO_SOURCE("task.conversion.code.noSource"),
+        FAIL_CONVERSION("task.conversion.code.failConversion");
+
+        private final String value;
     }
 }
