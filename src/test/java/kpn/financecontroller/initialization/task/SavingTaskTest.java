@@ -6,8 +6,10 @@ import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.data.services.savers.Saver;
 import kpn.financecontroller.initialization.collector.LongKeyInitialEntityCollector;
+import kpn.financecontroller.initialization.context.Context;
 import kpn.financecontroller.initialization.context.ContextImpl;
 import kpn.financecontroller.initialization.entities.AbstractInitialEntity;
+import kpn.financecontroller.initialization.entityUpdater.EntityUpdater;
 import kpn.financecontroller.result.Result;
 import lombok.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -64,7 +66,7 @@ public class SavingTaskTest {
         ContextImpl context = new ContextImpl();
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
 
@@ -82,7 +84,7 @@ public class SavingTaskTest {
         context.put(KEY, ConversionTask.Properties.RESULT.getValue(), collector);
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
 
@@ -101,7 +103,7 @@ public class SavingTaskTest {
         context.put(KEY, ConversionTask.Properties.RESULT.getValue(), collector);
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createFailSaver()), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createFailSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();
@@ -119,7 +121,7 @@ public class SavingTaskTest {
         context.put(KEY, ConversionTask.Properties.RESULT.getValue(), collector);
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();
@@ -192,6 +194,14 @@ public class SavingTaskTest {
         @Override
         public TestEntity convert(TestInitialEntity value) {
             return new TestEntity(value.getId());
+        }
+    }
+
+    private static class TestEntityUpdater implements EntityUpdater<TestInitialEntity>{
+
+        @Override
+        public TestInitialEntity update(Context context, TestInitialEntity entity) {
+            return entity;
         }
     }
 }

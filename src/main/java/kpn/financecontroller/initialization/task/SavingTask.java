@@ -7,6 +7,7 @@ import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.collector.InitialEntityCollector;
 import kpn.financecontroller.initialization.context.Context;
 import kpn.financecontroller.initialization.entities.AbstractInitialEntity;
+import kpn.financecontroller.initialization.entityUpdater.EntityUpdater;
 import kpn.financecontroller.result.Result;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class SavingTask<IE extends AbstractInitialEntity, E extends AbstractEnti
     private final Long entityId;
     private final Converter<IE, E> converter;
     private final DTOService<D, E, Long> dtoService;
+    private final EntityUpdater<IE> entityUpdater;
     private final String collectorProperty;
     @Getter
     private boolean continuationPossible;
@@ -33,7 +35,7 @@ public class SavingTask<IE extends AbstractInitialEntity, E extends AbstractEnti
     @Override
     public void execute(Context context) {
         if (checkCollectorOrSetResult(context) && checkEntityAvailabilityOrSetResult(context)){
-            E entity = converter.convert(initialEntity);
+            E entity = converter.convert(entityUpdater.update(context, initialEntity));
             Result<D> savingResult = dtoService.saver().save(entity);
             if (savingResult.getSuccess()){
                 updateMatching(context, entity, savingResult.getValue());
