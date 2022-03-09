@@ -5,6 +5,8 @@ import kpn.financecontroller.initialization.context.Context;
 import kpn.financecontroller.initialization.task.ConversionTask;
 import kpn.financecontroller.initialization.task.SavingTask;
 import kpn.financecontroller.initialization.task.Task;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
@@ -12,37 +14,34 @@ import java.util.function.Function;
 
 public class SavingTaskFactory implements TaskFactory{
 
-    // TODO: 09.03.2022 it must be deque of InitItem
-    private final Deque<String> keys;
-    private final Map<String, Function<Long, SavingTask<?, ?, ?>>> creators;
+    private final Deque<InitItem> items;
 
     @Setter
     private Context context;
 
     private Iterator<? extends Map.Entry<Long, ?>> iterator;
-    private String currentKey;
+    private InitItem currentInitItem;
 
-    public SavingTaskFactory(List<String> keys, Map<String, Function<Long, SavingTask<?, ?, ?>>> creators) {
-        this.keys = new ArrayDeque<>(keys);
-        this.creators = creators;
+    public SavingTaskFactory(List<InitItem> items) {
+        this.items =  new ArrayDeque<>(items);
     }
 
     @Override
     public Optional<Task> getNextIfExist() {
         if (iterator == null){
-            currentKey = keys.pollFirst();
-            if (currentKey == null){
+            currentInitItem = items.pollFirst();
+            if (currentInitItem == null){
                 return Optional.empty();
             }
 
             LongKeyInitialEntityCollector<?> collector
-                    = (LongKeyInitialEntityCollector<?>) context.get(currentKey, ConversionTask.Properties.RESULT.getValue()).get();
+                    = (LongKeyInitialEntityCollector<?>) context.get(currentInitItem.getKey(), ConversionTask.Properties.RESULT.getValue()).get();
             iterator = collector.getEntities().entrySet().iterator();
         }
 
         if (iterator.hasNext()){
             Map.Entry<Long, ?> next = iterator.next();
-            return Optional.of(creators.get(currentKey).apply(next.getKey()));
+            return Optional.of(currentInitItem.getCreator().apply(next.getKey()));
         }
 
         iterator = null;
@@ -52,5 +51,12 @@ public class SavingTaskFactory implements TaskFactory{
     @Override
     public String getId() {
         return getClass().getSimpleName();
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    public static class InitItem{
+        private final String key;
+        private final Function<Long, SavingTask<?, ?, ?>> creator;
     }
 }

@@ -55,20 +55,20 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         if (enable){
             log.info("Starting of initial entity saving process");
 
-            List<String> keys = createKeys();
-            Context context = createContext();
-            ExecutorImpl executor = new ExecutorImpl(context);
-
-            FileReadingTaskFactory fileReadingTaskFactory = new FileReadingTaskFactory(keys);
-            executor.execute(fileReadingTaskFactory);
-
-            ConversionTaskFactory conversionTaskFactory = new ConversionTaskFactory(keys);
-            executor.execute(conversionTaskFactory);
-
-            SavingTaskFactory savingTaskFactory = new SavingTaskFactory(keys, createCreators());
-            executor.execute(savingTaskFactory);
-
-            log.info("{}", context);
+//            List<String> keys = createKeys();
+//            Context context = createContext();
+//            ExecutorImpl executor = new ExecutorImpl(context);
+//
+//            FileReadingTaskFactory fileReadingTaskFactory = new FileReadingTaskFactory(keys);
+//            executor.execute(fileReadingTaskFactory);
+//
+//            ConversionTaskFactory conversionTaskFactory = new ConversionTaskFactory(keys);
+//            executor.execute(conversionTaskFactory);
+//
+//            SavingTaskFactory savingTaskFactory = new SavingTaskFactory(keys, createCreators());
+//            executor.execute(savingTaskFactory);
+//
+//            log.info("{}", context);
         }
     }
 

@@ -22,7 +22,7 @@ class SavingTaskFactoryTest {
 
     @Test
     void shouldCheckEmptyUsing() {
-        SavingTaskFactory factory = new SavingTaskFactory(List.of(), Map.of());
+        SavingTaskFactory factory = new SavingTaskFactory(List.of());
         Optional<Task> maybeTask = factory.getNextIfExist();
         assertThat(maybeTask).isEmpty();
     }
@@ -39,11 +39,8 @@ class SavingTaskFactoryTest {
         ContextImpl context = new ContextImpl();
         context.put(key0, ConversionTask.Properties.RESULT.getValue(), collector);
 
-        List<String> keys = List.of(key0);
-        Map<String, Function<Long, SavingTask<?, ?, ?>>> creators = Map.of(
-                key0, new TestCreator(key0)
-        );
-        SavingTaskFactory factory = new SavingTaskFactory(keys, creators);
+        List<SavingTaskFactory.InitItem> initItems = List.of(new SavingTaskFactory.InitItem(key0, new TestCreator(key0)));
+        SavingTaskFactory factory = new SavingTaskFactory(initItems);
         factory.setContext(context);
 
         for (int i = 0; i < 3; i++) {
