@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 public class SavingTaskFactory implements TaskFactory{
 
+    // TODO: 09.03.2022 it must be deque of InitItem
     private final Deque<String> keys;
     private final Map<String, Function<Long, SavingTask<?, ?, ?>>> creators;
 
