@@ -7,7 +7,7 @@ import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.old.collectors.LoadDataCollector;
-import kpn.financecontroller.initialization.old.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import kpn.financecontroller.initialization.old.save.updaters.CollectorUpdater;
 import kpn.financecontroller.result.Result;
 import lombok.Setter;

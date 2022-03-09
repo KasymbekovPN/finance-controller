@@ -1,5 +1,6 @@
 package kpn.financecontroller.config;
 
+import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import kpn.financecontroller.initialization.old.entities.*;
 import kpn.financecontroller.initialization.old.load.calculators.PathCalculator;
 import kpn.financecontroller.initialization.old.load.creators.CollectorCreator;
@@ -7,11 +8,10 @@ import kpn.financecontroller.initialization.old.load.factories.LoadingTaskFactor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
-@Configuration
-@Profile("dev")
+// TODO: 07.03.2022 del
+//@Configuration
+//@Profile("dev")
 public class LoadingTaskFactoryConfig {
 
     private final PathCalculator<String, String> pathCalculator;

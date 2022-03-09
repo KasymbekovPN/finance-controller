@@ -1,7 +1,7 @@
 package kpn.financecontroller.converters;
 
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.initialization.old.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 

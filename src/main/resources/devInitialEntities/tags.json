@@ -2,15 +2,15 @@
   "entities": {
     "0" : {
       "id": 0,
-      "name": "food"
+      "name": "tag 0"
     },
     "1" : {
       "id": 1,
-      "name": "milk"
+      "name": "tag 1"
     },
     "2": {
       "id": 2,
-      "name": "bread"
+      "name": "tag 2"
     }
   }
 }

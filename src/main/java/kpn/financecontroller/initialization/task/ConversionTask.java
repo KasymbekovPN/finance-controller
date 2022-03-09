@@ -4,12 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import kpn.financecontroller.initialization.collector.LongKeyInitialEntityCollector;
 import kpn.financecontroller.initialization.context.Context;
+import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import kpn.financecontroller.result.Result;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ConversionTask implements Task{
 
@@ -57,7 +60,10 @@ public class ConversionTask implements Task{
             putResultIntoContext(context, createResult(Codes.NO_SOURCE.getValue()));
             return false;
         }
-        source = String.valueOf(maybeFileContent.get());
+
+        Result<String> result = (Result<String>) maybeFileContent.get();
+        source = result.getValue();
+
         return true;
     }
 

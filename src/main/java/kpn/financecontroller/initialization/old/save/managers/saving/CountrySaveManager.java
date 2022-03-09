@@ -8,7 +8,7 @@ import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.old.collectors.LoadDataCollector;
 import kpn.financecontroller.initialization.old.entities.CountryInitialEntity;
-import kpn.financecontroller.initialization.old.entities.TagInitialEntity;
+import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import kpn.financecontroller.initialization.old.save.updaters.CollectorUpdater;
 import kpn.financecontroller.result.Result;
 import lombok.Setter;
