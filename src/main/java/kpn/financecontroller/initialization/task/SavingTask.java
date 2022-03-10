@@ -35,7 +35,7 @@ public class SavingTask<IE extends AbstractInitialEntity, E extends AbstractEnti
     @Override
     public void execute(Context context) {
         if (checkCollectorOrSetResult(context) && checkEntityAvailabilityOrSetResult(context)){
-            E entity = converter.convert(entityUpdater.update(context, initialEntity));
+            E entity = converter.convert(entityUpdater.update(key, initialEntity, context));
             Result<D> savingResult = dtoService.saver().save(entity);
             if (savingResult.getSuccess()){
                 updateMatching(context, entity, savingResult.getValue());

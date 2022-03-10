@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 
 // TODO: 27.02.2022 del ???
-@Service
-@Profile("dev")
+//@Service
+//@Profile("dev")
 public class RegionSaveManager extends AbstractSaveManager<Long, RegionInitialEntity> {
 
     private static final String ID = "REGIONS";

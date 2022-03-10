@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 // TODO: 27.02.2022 del ???
-@Service
-@Profile("dev")
+//@Service
+//@Profile("dev")
 public class CountrySaveManager extends AbstractSaveManager<Long, TagInitialEntity> {
 
     private static final String ID = "COUNTRIES";

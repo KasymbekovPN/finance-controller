@@ -5,7 +5,7 @@ import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.initialization.collector.LongKeyInitialEntityCollector;
 import kpn.financecontroller.initialization.context.ContextImpl;
 import kpn.financecontroller.initialization.entities.AbstractInitialEntity;
-import kpn.financecontroller.initialization.task.ConversionTask;
+import kpn.financecontroller.initialization.task.InitialEntityCollectorCreationTask;
 import kpn.financecontroller.initialization.task.SavingTask;
 import kpn.financecontroller.initialization.task.Task;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ class SavingTaskFactoryTest {
         );
 
         ContextImpl context = new ContextImpl();
-        context.put(key0, ConversionTask.Properties.RESULT.getValue(), collector);
+        context.put(key0, InitialEntityCollectorCreationTask.Properties.RESULT.getValue(), collector);
 
         List<SavingTaskFactory.InitItem> initItems = List.of(new SavingTaskFactory.InitItem(key0, new TestCreator(key0)));
         SavingTaskFactory factory = new SavingTaskFactory(initItems);

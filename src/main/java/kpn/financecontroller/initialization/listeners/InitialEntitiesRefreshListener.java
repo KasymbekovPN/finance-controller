@@ -1,6 +1,5 @@
 package kpn.financecontroller.initialization.listeners;
 
-import kpn.financecontroller.converters.Converter;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
@@ -8,18 +7,18 @@ import kpn.financecontroller.initialization.collector.LongKeyInitialEntityCollec
 import kpn.financecontroller.initialization.context.Context;
 import kpn.financecontroller.initialization.context.ContextImpl;
 import kpn.financecontroller.initialization.entities.TagInitialEntity;
-import kpn.financecontroller.initialization.entityUpdater.EntityUpdater;
 import kpn.financecontroller.initialization.executor.ExecutorImpl;
-import kpn.financecontroller.initialization.factory.ConversionTaskFactory;
+import kpn.financecontroller.initialization.factory.ClearingFactory;
+import kpn.financecontroller.initialization.factory.InitialEntityCollectorCreationTaskFactory;
 import kpn.financecontroller.initialization.factory.FileReadingTaskFactory;
-import kpn.financecontroller.initialization.factory.SavingTaskFactory;
-import kpn.financecontroller.initialization.task.ConversionTask;
+import kpn.financecontroller.initialization.task.InitialEntityCollectorCreationTask;
 import kpn.financecontroller.initialization.task.FileReadingTask;
 import kpn.financecontroller.initialization.task.SavingTask;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -36,6 +35,9 @@ import java.util.stream.Collectors;
 @Profile("dev")
 @ConfigurationProperties(prefix = "initial.entities")
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent > {
+
+    @Autowired
+    private DTOService<Tag, TagEntity, Long> tagService;
 
     @Setter
     private boolean enable;
@@ -55,21 +57,30 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         if (enable){
             log.info("Starting of initial entity saving process");
 
-//            List<String> keys = createKeys();
-//            Context context = createContext();
-//            ExecutorImpl executor = new ExecutorImpl(context);
-//
-//            FileReadingTaskFactory fileReadingTaskFactory = new FileReadingTaskFactory(keys);
-//            executor.execute(fileReadingTaskFactory);
-//
-//            ConversionTaskFactory conversionTaskFactory = new ConversionTaskFactory(keys);
-//            executor.execute(conversionTaskFactory);
-//
+            List<String> keys = createKeys();
+            Context context = createContext();
+            ExecutorImpl executor = new ExecutorImpl(context);
+
+            FileReadingTaskFactory fileReadingTaskFactory = new FileReadingTaskFactory(keys);
+            executor.execute(fileReadingTaskFactory);
+
+            InitialEntityCollectorCreationTaskFactory initialEntityCollectorCreationTaskFactory = new InitialEntityCollectorCreationTaskFactory(keys);
+            executor.execute(initialEntityCollectorCreationTaskFactory);
+
+            ClearingFactory clearingFactory = new ClearingFactory(createClearingInitItems());
+            executor.execute(clearingFactory);
+
 //            SavingTaskFactory savingTaskFactory = new SavingTaskFactory(keys, createCreators());
 //            executor.execute(savingTaskFactory);
-//
-//            log.info("{}", context);
+
+            log.info("{}", context);
         }
+    }
+
+    private List<ClearingFactory.InitItem> createClearingInitItems() {
+        return List.of(
+                new ClearingFactory.InitItem("TAGS", tagService)
+        );
     }
 
     private Map<String, Function<Long, SavingTask<?, ?, ?>>> createCreators() {
@@ -87,7 +98,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             context.put(item.getKey(), FileReadingTask.Properties.PATH.getValue(), createPath(item.getPath()));
         }
 
-        context.put("TAGS", ConversionTask.Properties.COLLECTOR_TYPE.getValue(), TagCollector.class);
+        context.put("TAGS", InitialEntityCollectorCreationTask.Properties.COLLECTOR_TYPE.getValue(), TagCollector.class);
 
         return context;
     }
@@ -105,18 +116,23 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     }
 
     public static class TagCollector extends LongKeyInitialEntityCollector<TagInitialEntity>{}
-    public static class TagCreator implements Function<String, SavingTask<TagInitialEntity, TagEntity, Tag>>{
-
-//        private final String key;
-//        private final Long entityId;
-//        private final Converter<IE, E> converter;
-//        private final DTOService<D, E, Long> dtoService;
-//        private final EntityUpdater<IE> entityUpdater;
-//        private final String collectorProperty;
-
-        @Override
-        public SavingTask<TagInitialEntity, TagEntity, Tag> apply(String s) {
-            return null;
-        }
-    }
+    // TODO: 10.03.2022 restore
+//    public class TagCreator implements Function<String, SavingTask<TagInitialEntity, TagEntity, Tag>>{
+//        private static final String KEY = "TAGS";
+//
+//        @Override
+//        public SavingTask<TagInitialEntity, TagEntity, Tag> apply(String entityId) {
+//            return new SavingTask<>(KEY, entityId, new TagConverter(), tagService, );
+//        }
+//
+//        private class TagConverter implements Converter<TagInitialEntity, TagEntity> {
+//            @Override
+//            public TagEntity convert(TagInitialEntity value) {
+//                TagEntity tagEntity = new TagEntity();
+//                tagEntity.setId(value.getId());
+//                tagEntity.setName(value.getName());
+//                return tagEntity;
+//            }
+//        }
+//    }
 }

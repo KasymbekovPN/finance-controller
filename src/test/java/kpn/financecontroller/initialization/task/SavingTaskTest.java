@@ -66,7 +66,7 @@ public class SavingTaskTest {
         ContextImpl context = new ContextImpl();
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), InitialEntityCollectorCreationTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
 
@@ -81,10 +81,10 @@ public class SavingTaskTest {
         ContextImpl context = new ContextImpl();
         TestCollector collector = new TestCollector();
         collector.setEntities(Map.of());
-        context.put(KEY, ConversionTask.Properties.RESULT.getValue(), collector);
+        context.put(KEY, InitialEntityCollectorCreationTask.Properties.RESULT.getValue(), collector);
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), InitialEntityCollectorCreationTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
 
@@ -100,10 +100,10 @@ public class SavingTaskTest {
         collector.setEntities(Map.of(ENTITY_ID, new TestInitialEntity(ENTITY_ID)));
 
         ContextImpl context = new ContextImpl();
-        context.put(KEY, ConversionTask.Properties.RESULT.getValue(), collector);
+        context.put(KEY, InitialEntityCollectorCreationTask.Properties.RESULT.getValue(), collector);
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createFailSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createFailSaver()), new TestEntityUpdater(), InitialEntityCollectorCreationTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();
@@ -118,10 +118,10 @@ public class SavingTaskTest {
         collector.setEntities(Map.of(ENTITY_ID, new TestInitialEntity(ENTITY_ID)));
 
         ContextImpl context = new ContextImpl();
-        context.put(KEY, ConversionTask.Properties.RESULT.getValue(), collector);
+        context.put(KEY, InitialEntityCollectorCreationTask.Properties.RESULT.getValue(), collector);
 
         SavingTask<TestInitialEntity, TestEntity, TestDomain> task
-                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), ConversionTask.Properties.RESULT.getValue());
+                = new SavingTask<>(KEY, ENTITY_ID, new TestConverter(), createDTOService(createSaver()), new TestEntityUpdater(), InitialEntityCollectorCreationTask.Properties.RESULT.getValue());
         task.execute(context);
         Optional<Object> maybeResult = context.get(KEY, SavingTask.Properties.RESULT.getValue());
         assertThat(maybeResult).isPresent();

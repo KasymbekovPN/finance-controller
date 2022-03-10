@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 
 // TODO: 27.02.2022 del ???
-@Service
-@Profile("dev")
+//@Service
+//@Profile("dev")
 public class StreetSaveManager extends AbstractSaveManager<Long, StreetInitialEntity> {
 
     private static final String ID = "STREETS";

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import kpn.financecontroller.initialization.collector.LongKeyInitialEntityCollector;
 import kpn.financecontroller.initialization.context.Context;
-import kpn.financecontroller.initialization.entities.TagInitialEntity;
 import kpn.financecontroller.result.Result;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ConversionTask implements Task{
+public class InitialEntityCollectorCreationTask implements Task{
 
     @Getter
     private final String key;
