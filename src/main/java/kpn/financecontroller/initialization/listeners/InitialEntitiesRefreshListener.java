@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.old.listeners;
+package kpn.financecontroller.initialization.listeners;
 
 import lombok.Getter;
 import lombok.Setter;

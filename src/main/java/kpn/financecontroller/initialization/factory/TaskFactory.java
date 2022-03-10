@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface TaskFactory {
     default void setContext(Context context){}
     Optional<Task> getNextIfExist();
-    String getId();
+    default String getId(){return this.getClass().getSimpleName();}
 }

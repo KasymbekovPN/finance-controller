@@ -8,11 +8,11 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConversionTaskFactoryTest {
+public class InitialEntityCollectorCreationTaskFactoryTest {
     @Test
     void shouldCheckCreation() {
         List<String> keys = List.of("key0", "key1", "key2");
-        ConversionTaskFactory factory = new ConversionTaskFactory(keys);
+        InitialEntityCollectorCreationTaskFactory factory = new InitialEntityCollectorCreationTaskFactory(keys);
 
         for (String key : keys) {
             Optional<Task> maybeTask = factory.getNextIfExist();

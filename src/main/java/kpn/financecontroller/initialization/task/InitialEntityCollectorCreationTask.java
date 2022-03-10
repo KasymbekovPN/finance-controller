@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class ConversionTask implements Task{
+public class InitialEntityCollectorCreationTask implements Task{
 
     @Getter
     private final String key;

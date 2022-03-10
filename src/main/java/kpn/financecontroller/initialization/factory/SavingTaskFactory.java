@@ -2,7 +2,7 @@ package kpn.financecontroller.initialization.factory;
 
 import kpn.financecontroller.initialization.collector.LongKeyInitialEntityCollector;
 import kpn.financecontroller.initialization.context.Context;
-import kpn.financecontroller.initialization.task.ConversionTask;
+import kpn.financecontroller.initialization.task.InitialEntityCollectorCreationTask;
 import kpn.financecontroller.initialization.task.SavingTask;
 import kpn.financecontroller.initialization.task.Task;
 import lombok.Setter;
@@ -36,7 +36,7 @@ public class SavingTaskFactory implements TaskFactory{
             }
 
             LongKeyInitialEntityCollector<?> collector
-                    = (LongKeyInitialEntityCollector<?>) context.get(currentKey, ConversionTask.Properties.RESULT.getValue()).get();
+                    = (LongKeyInitialEntityCollector<?>) context.get(currentKey, InitialEntityCollectorCreationTask.Properties.RESULT.getValue()).get();
             iterator = collector.getEntities().entrySet().iterator();
         }
 
@@ -47,10 +47,5 @@ public class SavingTaskFactory implements TaskFactory{
 
         iterator = null;
         return getNextIfExist();
-    }
-
-    @Override
-    public String getId() {
-        return getClass().getSimpleName();
     }
 }

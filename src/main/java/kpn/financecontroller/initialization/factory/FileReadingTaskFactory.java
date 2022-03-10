@@ -25,10 +25,4 @@ public class FileReadingTaskFactory implements TaskFactory{
         String key = keys.pollFirst();
         return key != null ? Optional.of(new FileReadingTask(key)) : Optional.empty();
     }
-
-    // TODO: 27.02.2022 move to base class
-    @Override
-    public String getId() {
-        return getClass().getSimpleName();
-    }
 }

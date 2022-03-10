@@ -25,11 +25,6 @@ public class ClearingFactory implements TaskFactory{
         return item != null ? Optional.of(new ClearingTask(item.getKey(), item.getDtoService())) : Optional.empty();
     }
 
-    @Override
-    public String getId() {
-        return getClass().getSimpleName();
-    }
-
     @RequiredArgsConstructor
     @Getter
     public static class InitItem{
