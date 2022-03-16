@@ -9,7 +9,7 @@ import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.data.services.DTOServiceImpl;
 import kpn.financecontroller.data.services.loaders.Loader;
-import kpn.financecontroller.initialization.old.entities.BuildingInitialEntity;
+import kpn.financecontroller.initialization._old.old.entities.BuildingInitialEntity;
 import kpn.financecontroller.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

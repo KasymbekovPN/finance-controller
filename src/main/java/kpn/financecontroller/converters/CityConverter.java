@@ -4,7 +4,7 @@ import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
-import kpn.financecontroller.initialization.old.entities.CityInitialEntity;
+import kpn.financecontroller.initialization._old.old.entities.CityInitialEntity;
 import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;

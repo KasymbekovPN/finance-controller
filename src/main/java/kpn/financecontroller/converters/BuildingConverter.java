@@ -4,7 +4,7 @@ import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.services.DTOService;
-import kpn.financecontroller.initialization.old.entities.BuildingInitialEntity;
+import kpn.financecontroller.initialization._old.old.entities.BuildingInitialEntity;
 import kpn.financecontroller.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

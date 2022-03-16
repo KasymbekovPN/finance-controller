@@ -1,7 +1,7 @@
 package kpn.financecontroller.converters;
 
 import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.initialization.old.entities.CountryInitialEntity;
+import kpn.financecontroller.initialization._old.old.entities.CountryInitialEntity;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
