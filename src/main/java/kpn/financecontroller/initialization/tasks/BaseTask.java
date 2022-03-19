@@ -31,20 +31,24 @@ public abstract class BaseTask implements Task {
         args = List.of(key);
     }
 
-    final protected void calculateCode(Valued<String> k, Valued<String> p){
-        code = valuedGenerator.generate(k, p);
+    final protected void calculateAndSetCode(Valued<String> k, Valued<String> p){
+        code = calculateCode(k, p);
+    }
+
+    final protected String calculateCode(Valued<String> k, Valued<String> p){
+        return valuedGenerator.generate(k, p);
     }
 
     final protected ContextManager createContextManager(Context context){
         return managerCreator.apply(context);
     }
 
-    final <T> void putResultIntoContext(Context context, T value){
+    final <T> void putResultIntoContext(Context context, Valued<String> p, T value){
         Result.Builder<T> builder = Result.<T>builder()
                 .success(continuationPossible)
                 .value(value)
                 .code(code);
         args.forEach(builder::arg);
-        managerCreator.apply(context).put(key, Properties.RESULT, builder.build());
+        managerCreator.apply(context).put(key, p, builder.build());
     }
 }

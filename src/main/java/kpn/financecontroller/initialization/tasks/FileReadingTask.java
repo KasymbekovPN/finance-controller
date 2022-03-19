@@ -1,6 +1,7 @@
 package kpn.financecontroller.initialization.tasks;
 
 import kpn.financecontroller.initialization.generators.valued.Codes;
+import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ContextManager;
@@ -35,17 +36,17 @@ final public class FileReadingTask extends BaseTask {
                     value = stringBuilder.toString();
                     continuationPossible = true;
                 } catch (IOException ex){
-                    calculateCode(key, Codes.FAIL_FILE_READING);
+                    calculateAndSetCode(key, Codes.FAIL_FILE_READING);
                     ex.printStackTrace();
                 }
             } else {
-                calculateCode(key, Codes.FAIL_FILE_READING);
+                calculateAndSetCode(key, Codes.FAIL_FILE_READING);
             }
         } catch (IOException ex){
-            calculateCode(key, Codes.FAIL_FILE_READING);
+            calculateAndSetCode(key, Codes.FAIL_FILE_READING);
             ex.printStackTrace();
         }
 
-        putResultIntoContext(context, value);
+        putResultIntoContext(context, Properties.FILE_READING_RESULT, value);
     }
 }
