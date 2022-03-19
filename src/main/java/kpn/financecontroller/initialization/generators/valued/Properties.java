@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Properties implements Valued<String> {
-    FILE_CONTENT("file.content");
+    RESULT("result");
 
     @Getter
     private final String value;
