@@ -44,7 +44,7 @@ public class FileReadingTaskTest {
     @Test
     void shouldCheckExecution_whenFileNotExist() {
         SimpleContext context = new SimpleContext();
-        FileReadingTask task = new FileReadingTask(Keys.KEY, NOT_EXIST_PATH, new TestManagerCreator(), VALUED_GENERATOR);
+        FileReadingTask task = new FileReadingTask(Keys.KEY, VALUED_GENERATOR, new TestManagerCreator(), NOT_EXIST_PATH);
         task.execute(context);
 
         Result<String> result = (Result<String>) context.get(VALUED_GENERATOR.generate(Keys.KEY, Properties.RESULT));
@@ -56,7 +56,7 @@ public class FileReadingTaskTest {
     @Test
     void shouldCheckExecution() {
         SimpleContext context = new SimpleContext();
-        FileReadingTask task = new FileReadingTask(Keys.KEY, EXIST_PATH, new TestManagerCreator(), VALUED_GENERATOR);
+        FileReadingTask task = new FileReadingTask(Keys.KEY, VALUED_GENERATOR, new TestManagerCreator(), EXIST_PATH);
         task.execute(context);
 
         Result<String> result = (Result<String>) context.get(VALUED_GENERATOR.generate(Keys.KEY, Properties.RESULT));
