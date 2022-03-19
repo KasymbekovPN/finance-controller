@@ -29,7 +29,7 @@ public class FileReadingTaskTest {
 
     @Test
     void shouldCheckExecution_whenFileNotExist() {
-//        SimpleContext context = new SimpleContext();
+        SimpleContext context = new SimpleContext();
 //        FileReadingTask task = new FileReadingTask(NOT_EXIST_PATH);
 //        task.execute(context);
 
