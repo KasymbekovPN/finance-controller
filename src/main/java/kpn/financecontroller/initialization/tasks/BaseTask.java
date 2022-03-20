@@ -1,9 +1,8 @@
 package kpn.financecontroller.initialization.tasks;
 
-import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.managers.context.ContextManager;
+import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.tasks.Task;
@@ -17,7 +16,7 @@ import java.util.function.Function;
 public abstract class BaseTask implements Task {
     protected final Valued<String> key;
     private final ValuedGenerator<String> valuedGenerator;
-    private final Function<Context, ContextManager> managerCreator;
+    private final Function<Context, ResultContextManager> managerCreator;
 
     @Getter
     protected boolean continuationPossible;
@@ -32,14 +31,10 @@ public abstract class BaseTask implements Task {
     }
 
     final protected void calculateAndSetCode(Valued<String> k, Valued<String> p){
-        code = calculateCode(k, p);
+        code = valuedGenerator.generate(k, p);
     }
 
-    final protected String calculateCode(Valued<String> k, Valued<String> p){
-        return valuedGenerator.generate(k, p);
-    }
-
-    final protected ContextManager createContextManager(Context context){
+    final protected ResultContextManager createContextManager(Context context){
         return managerCreator.apply(context);
     }
 

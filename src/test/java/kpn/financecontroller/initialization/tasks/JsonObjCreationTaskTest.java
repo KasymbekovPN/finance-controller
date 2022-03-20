@@ -4,6 +4,7 @@ import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
+import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
 import kpn.financecontroller.initialization.tasks.testUtils.TestEntity;
 import kpn.financecontroller.initialization.tasks.testUtils.TestJsonObj;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -63,33 +64,60 @@ public class JsonObjCreationTaskTest {
         SimpleContext context = new SimpleContext();
         task.execute(context);
 
-        Result<TestJsonObj> result = (Result<TestJsonObj>) context.get(VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT));
-        assertThat(expectedResultWhenNoContent).isEqualTo(result);
+        String success = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.SUCCESS);
+        assertThat(context.get(success, Boolean.class)).isEqualTo(expectedResultWhenNoContent.getSuccess());
+        String value = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.VALUE);
+        assertThat(context.get(value)).isEqualTo(expectedResultWhenNoContent.getValue());
+        String code = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.CODE);
+        assertThat(context.get(code, String.class)).isEqualTo(expectedResultWhenNoContent.getCode());
+        String args = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.ARGS);
+        assertThat(context.get(args)).isEqualTo(expectedResultWhenNoContent.getArgs());
+        assertThat(task.isContinuationPossible()).isFalse();
     }
 
     @SneakyThrows
     @Test
     void shouldCheckExecutionWhenJsonSyntaxException() {
+        TestManagerCreator managerCreator = new TestManagerCreator();
         JsonObjCreationTask task
-                = new JsonObjCreationTask(TestKeys.KEY, new ValuedStringGenerator(), new TestManagerCreator(), TestJsonObj.class);
+                = new JsonObjCreationTask(TestKeys.KEY, new ValuedStringGenerator(), managerCreator, TestJsonObj.class);
+
         SimpleContext context = new SimpleContext();
-        context.put(VALUED_GENERATOR.generate(TestKeys.KEY, Properties.FILE_READING_RESULT), Result.<String>builder().value(INVALID_SOURCE).build());
+        managerCreator.apply(context).put(TestKeys.KEY, Properties.FILE_READING_RESULT, Result.<String>builder().success(true).value(INVALID_SOURCE).build());
+
         task.execute(context);
 
-        Result<TestJsonObj> result = (Result<TestJsonObj>) context.get(VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT));
-        assertThat(expectedResultWhenJsonSyntaxException).isEqualTo(result);
+        String success = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.SUCCESS);
+        assertThat(context.get(success, Boolean.class)).isEqualTo(expectedResultWhenJsonSyntaxException.getSuccess());
+        String value = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.VALUE);
+        assertThat(context.get(value)).isEqualTo(expectedResultWhenJsonSyntaxException.getValue());
+        String code = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.CODE);
+        assertThat(context.get(code, String.class)).isEqualTo(expectedResultWhenJsonSyntaxException.getCode());
+        String args = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.ARGS);
+        assertThat(context.get(args)).isEqualTo(expectedResultWhenJsonSyntaxException.getArgs());
+        assertThat(task.isContinuationPossible()).isFalse();
     }
 
     @SneakyThrows
     @Test
     void shouldCheckExecution() {
+        TestManagerCreator managerCreator = new TestManagerCreator();
         JsonObjCreationTask task
-                = new JsonObjCreationTask(TestKeys.KEY, new ValuedStringGenerator(), new TestManagerCreator(), TestJsonObj.class);
+                = new JsonObjCreationTask(TestKeys.KEY, new ValuedStringGenerator(), managerCreator, TestJsonObj.class);
+
         SimpleContext context = new SimpleContext();
-        context.put(VALUED_GENERATOR.generate(TestKeys.KEY, Properties.FILE_READING_RESULT), Result.<String>builder().value(SOURCE).build());
+        managerCreator.apply(context).put(TestKeys.KEY, Properties.FILE_READING_RESULT, Result.<String>builder().success(true).value(SOURCE).build());
+
         task.execute(context);
 
-        Result<TestJsonObj> result = (Result<TestJsonObj>) context.get(VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT));
-        assertThat(expectedResult).isEqualTo(result);
+        String success = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.SUCCESS);
+        assertThat(context.get(success, Boolean.class)).isEqualTo(expectedResult.getSuccess());
+        String value = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.VALUE);
+        assertThat(context.get(value)).isEqualTo(expectedResult.getValue());
+        String code = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.CODE);
+        assertThat(context.get(code, String.class)).isEqualTo(expectedResult.getCode());
+        String args = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.ARGS);
+        assertThat(context.get(args)).isEqualTo(expectedResult.getArgs());
+        assertThat(task.isContinuationPossible()).isTrue();
     }
 }

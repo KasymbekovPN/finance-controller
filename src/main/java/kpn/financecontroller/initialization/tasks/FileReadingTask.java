@@ -4,7 +4,7 @@ import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.managers.context.ContextManager;
+import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.taskexecutor.lib.contexts.Context;
 
 import java.io.BufferedReader;
@@ -18,7 +18,7 @@ final public class FileReadingTask extends BaseTask {
 
     public FileReadingTask(Valued<String> key,
                            ValuedGenerator<String> valuedGenerator,
-                           Function<Context, ContextManager> managerCreator,
+                           Function<Context, ResultContextManager> managerCreator,
                            String path) {
         super(key, valuedGenerator, managerCreator);
         this.path = path;

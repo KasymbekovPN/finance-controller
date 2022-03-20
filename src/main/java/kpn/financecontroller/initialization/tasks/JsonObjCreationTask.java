@@ -6,7 +6,7 @@ import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.managers.context.ContextManager;
+import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 
@@ -18,7 +18,7 @@ final public class JsonObjCreationTask extends BaseTask{
 
     public JsonObjCreationTask(Valued<String> key,
                                ValuedGenerator<String> valuedGenerator,
-                               Function<Context, ContextManager> managerCreator,
+                               Function<Context, ResultContextManager> managerCreator,
                                Class<?> classType) {
         super(key, valuedGenerator, managerCreator);
         this.classType = classType;
@@ -28,12 +28,11 @@ final public class JsonObjCreationTask extends BaseTask{
     public void execute(Context context) {
         super.execute(context);
         Object value = null;
-        ContextManager contextManager = createContextManager(context);
-        Result<Object> result = contextManager.get(key, Properties.FILE_READING_RESULT);
-        if (result.getSuccess()){
-            Result<String> sourceResult = (Result<String>) result.getValue();
+        ResultContextManager contextManager = createContextManager(context);
+        Result<String> fileReadingResult = contextManager.get(key, Properties.FILE_READING_RESULT, String.class);
+        if (fileReadingResult.getSuccess()){
             try{
-                value = new Gson().fromJson(sourceResult.getValue(), classType);
+                value = new Gson().fromJson(fileReadingResult.getValue(), classType);
                 continuationPossible = true;
             } catch (JsonSyntaxException ex){
                 calculateAndSetCode(key, Codes.JSON_SYNTAX_EXCEPTION);
