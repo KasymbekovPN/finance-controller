@@ -8,6 +8,7 @@ import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+// TODO: 20.03.2022 del
 @RequiredArgsConstructor
 public class ContextManagerImpl implements ContextManager {
     private final Context context;

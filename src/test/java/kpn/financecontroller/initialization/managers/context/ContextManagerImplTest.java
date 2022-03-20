@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 20.03.2022 del
 public class ContextManagerImplTest {
 
     private static final String EXIST_VALUE = "value";
