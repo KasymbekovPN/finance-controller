@@ -5,7 +5,7 @@ import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
-import kpn.financecontroller.initialization.tasks.testUtils.TestEntity;
+import kpn.financecontroller.initialization.tasks.testUtils.TestJsonEntity;
 import kpn.financecontroller.initialization.tasks.testUtils.TestJsonObj;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
@@ -43,7 +43,7 @@ public class JsonObjCreationTaskTest {
                 .arg(TestKeys.KEY)
                 .build();
 
-        TestEntity testEntity = new TestEntity();
+        TestJsonEntity testEntity = new TestJsonEntity();
         testEntity.setId(1L);
 
         TestJsonObj value = new TestJsonObj();
