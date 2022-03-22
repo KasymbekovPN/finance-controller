@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonToDbConversionTaskTest {
+public class JsonToDbConversionTagTaskTest {
 
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
@@ -55,7 +55,7 @@ public class JsonToDbConversionTaskTest {
 
     @Test
     void shouldCheckExecution_ifJsonObjNotExist() {
-        JsonToDbConversionTask task = new JsonToDbConversionTask(KEY, VALUED_GENERATOR, CREATOR);
+        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR);
         SimpleContext context = new SimpleContext();
         task.execute(context);
 
@@ -79,7 +79,7 @@ public class JsonToDbConversionTaskTest {
         SimpleContext context = new SimpleContext();
         CREATOR.apply(context).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, objResult);
 
-        JsonToDbConversionTask task = new JsonToDbConversionTask(KEY, VALUED_GENERATOR, CREATOR);
+        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR);
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);

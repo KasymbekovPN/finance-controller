@@ -15,11 +15,11 @@ import kpn.taskexecutor.lib.contexts.Context;
 import java.util.Map;
 import java.util.function.Function;
 
-final public class JsonToDbConversionTask extends BaseTask{
+final public class JsonToDbConversionTagTask extends BaseTask{
 
-    public JsonToDbConversionTask(Valued<String> key,
-                                  ValuedGenerator<String> valuedGenerator,
-                                  Function<Context, ResultContextManager> managerCreator) {
+    public JsonToDbConversionTagTask(Valued<String> key,
+                                     ValuedGenerator<String> valuedGenerator,
+                                     Function<Context, ResultContextManager> managerCreator) {
         super(key, valuedGenerator, managerCreator);
     }
 
