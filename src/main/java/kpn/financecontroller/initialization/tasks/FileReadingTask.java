@@ -2,27 +2,17 @@ package kpn.financecontroller.initialization.tasks;
 
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.taskexecutor.lib.contexts.Context;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.function.Function;
 
 final public class FileReadingTask extends BaseTask {
-    private final String path;
-
-    public FileReadingTask(Valued<String> key,
-                           ValuedGenerator<String> valuedGenerator,
-                           Function<Context, ResultContextManager> managerCreator,
-                           String path) {
-        super(key, valuedGenerator, managerCreator);
-        this.path = path;
-    }
+    @Setter
+    private String path;
 
     @Override
     public void execute(Context context) {

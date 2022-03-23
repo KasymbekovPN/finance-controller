@@ -26,7 +26,7 @@ i18n:
     - ru
 
 initial.entities:
-  enable: false
+  enable: true
   directory: devInitialEntities
   sequence:
     - {key: TAGS, path: tags.json}

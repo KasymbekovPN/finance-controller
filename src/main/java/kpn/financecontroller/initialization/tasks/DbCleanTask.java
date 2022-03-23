@@ -11,7 +11,7 @@ import kpn.taskexecutor.lib.contexts.Context;
 
 import java.util.function.Function;
 
-final public class DbCleanTask extends BaseTask {
+final public class DbCleanTask extends BaseTaskOld {
     private final DTOService<?, ?, Long> dtoService;
     public DbCleanTask(Valued<String> key,
                        ValuedGenerator<String> valuedGenerator,

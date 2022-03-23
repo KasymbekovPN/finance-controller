@@ -7,18 +7,18 @@ import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.tasks.Task;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class BaseTask implements Task {
-    @Setter
-    protected Valued<String> key;
-    @Setter
-    private ValuedGenerator<String> valuedGenerator;
-    @Setter
-    private Function<Context, ResultContextManager> managerCreator;
+// TODO: 23.03.2022 del
+@RequiredArgsConstructor
+public abstract class BaseTaskOld implements Task {
+    protected final Valued<String> key;
+    private final ValuedGenerator<String> valuedGenerator;
+    private final Function<Context, ResultContextManager> managerCreator;
+
     @Getter
     protected boolean continuationPossible;
     protected String code;

@@ -12,7 +12,7 @@ import kpn.taskexecutor.lib.contexts.Context;
 
 import java.util.function.Function;
 
-final public class JsonObjCreationTask extends BaseTask{
+final public class JsonObjCreationTask extends BaseTaskOld {
 
     private final Class<?> classType;
 

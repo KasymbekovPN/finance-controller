@@ -15,7 +15,7 @@ import kpn.taskexecutor.lib.contexts.Context;
 import java.util.Optional;
 import java.util.function.Function;
 
-final public class JsonToDbConversionTagTask extends BaseTask{
+final public class JsonToDbConversionTagTask extends BaseTaskOld {
 
     private final Long entityId;
 
