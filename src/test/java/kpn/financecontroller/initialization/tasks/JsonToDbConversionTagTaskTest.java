@@ -14,7 +14,7 @@ import kpn.taskexecutor.lib.contexts.SimpleContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
+import java.util.HashMap;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,14 +28,21 @@ public class JsonToDbConversionTagTaskTest {
     private static final String ENTITY_NAME = "name";
 
     private static Result<TagStorage> expectedResult_ifNoJsonObj;
+    private static Result<TagStorage> expectedResult_ifEntityNotExist;
     private static Result<TagStorage> expectedResult;
-
 
     @BeforeAll
     static void beforeAll() {
         expectedResult_ifNoJsonObj = Result.<TagStorage>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
+                .value(new TagStorage())
+                .arg(KEY)
+                .build();
+        expectedResult_ifEntityNotExist = Result.<TagStorage>builder()
+                .success(false)
+                .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
+                .value(new TagStorage())
                 .arg(KEY)
                 .build();
 
@@ -55,8 +62,9 @@ public class JsonToDbConversionTagTaskTest {
 
     @Test
     void shouldCheckExecution_ifJsonObjNotExist() {
-        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR);
-        SimpleContext context = new SimpleContext();
+        Context context = new ContextBuilder().build();
+
+        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR, ENTITY_ID);
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
@@ -64,25 +72,65 @@ public class JsonToDbConversionTagTaskTest {
     }
 
     @Test
-    void shouldCheckExecution() {
-        TagJsonEntity tagJsonEntity = new TagJsonEntity();
-        tagJsonEntity.setId(ENTITY_ID);
-        tagJsonEntity.setName(ENTITY_NAME);
-
-        TagLongKeyJsonObj jsonObj = new TagLongKeyJsonObj();
-        jsonObj.setEntities(Map.of(ENTITY_ID, tagJsonEntity));
-
-        Result<TagLongKeyJsonObj> objResult = Result.<TagLongKeyJsonObj>builder()
-                .success(true)
-                .value(jsonObj)
+    void shouldCheckExecution_ifEntityNotExist() {
+        Context context = new ContextBuilder()
+                .addJsonObject()
                 .build();
-        SimpleContext context = new SimpleContext();
-        CREATOR.apply(context).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, objResult);
 
-        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR);
+        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR, ENTITY_ID);
+        task.execute(context);
+
+        Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
+        assertThat(expectedResult_ifEntityNotExist).isEqualTo(result);
+    }
+
+    @Test
+    void shouldCheckExecution() {
+        Context context = new ContextBuilder()
+                .addJsonObject()
+                .addEntity(ENTITY_ID, ENTITY_NAME)
+                .build();
+
+        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR, ENTITY_ID);
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
         assertThat(expectedResult).isEqualTo(result);
+    }
+
+    private static class ContextBuilder{
+        private final Context context;
+        private TagLongKeyJsonObj jsonObject;
+
+        public ContextBuilder() {
+            this.context = new SimpleContext();
+        }
+
+        public ContextBuilder addJsonObject() {
+            jsonObject = new TagLongKeyJsonObj();
+            jsonObject.setEntities(new HashMap<>());
+            return this;
+        }
+
+        public ContextBuilder addEntity(Long id, String name){
+            if (jsonObject != null){
+                TagJsonEntity entity = new TagJsonEntity();
+                entity.setId(id);
+                entity.setName(name);
+                jsonObject.getEntities().put(id, entity);
+            }
+            return this;
+        }
+
+        public Context build(){
+            if (jsonObject != null){
+                Result<TagLongKeyJsonObj> result = Result.<TagLongKeyJsonObj>builder()
+                        .success(true)
+                        .value(jsonObject)
+                        .build();
+                CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
+            }
+            return context;
+        }
     }
 }

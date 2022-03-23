@@ -14,7 +14,7 @@ import kpn.taskexecutor.lib.contexts.Context;
 
 import java.util.function.Function;
 
-public class SavingTagTask extends BaseTask{
+final public class SavingTagTask extends BaseTask{
 
     private final DTOService<Tag, TagEntity, Long> dtoService;
     private final Long entityId;
