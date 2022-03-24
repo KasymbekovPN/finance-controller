@@ -4,28 +4,18 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storages.TagStorage;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
+import lombok.Setter;
 
 import java.util.Optional;
-import java.util.function.Function;
 
-final public class JsonToDbConversionTagTask extends BaseTaskOld {
-
-    private final Long entityId;
-
-    public JsonToDbConversionTagTask(Valued<String> key,
-                                     ValuedGenerator<String> valuedGenerator,
-                                     Function<Context, ResultContextManager> managerCreator,
-                                     Long entityId) {
-        super(key, valuedGenerator, managerCreator);
-        this.entityId = entityId;
-    }
+final public class JsonToDbConversionTagTask extends BaseTask {
+    @Setter
+    private Long entityId;
 
     @Override
     public void execute(Context context) {

@@ -62,9 +62,9 @@ public class JsonToDbConversionTagTaskTest {
 
     @Test
     void shouldCheckExecution_ifJsonObjNotExist() {
-        Context context = new ContextBuilder().build();
+        JsonToDbConversionTagTask task = createTask();
 
-        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR, ENTITY_ID);
+        Context context = new ContextBuilder().build();
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
@@ -76,8 +76,7 @@ public class JsonToDbConversionTagTaskTest {
         Context context = new ContextBuilder()
                 .addJsonObject()
                 .build();
-
-        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR, ENTITY_ID);
+        JsonToDbConversionTagTask task = createTask();
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
@@ -91,11 +90,21 @@ public class JsonToDbConversionTagTaskTest {
                 .addEntity(ENTITY_ID, ENTITY_NAME)
                 .build();
 
-        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask(KEY, VALUED_GENERATOR, CREATOR, ENTITY_ID);
+        JsonToDbConversionTagTask task = createTask();
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
         assertThat(expectedResult).isEqualTo(result);
+    }
+
+    private JsonToDbConversionTagTask createTask() {
+        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask();
+        task.setKey(KEY);
+        task.setValuedGenerator(VALUED_GENERATOR);
+        task.setManagerCreator(CREATOR);
+        task.setEntityId(ENTITY_ID);
+
+        return task;
     }
 
     private static class ContextBuilder{
