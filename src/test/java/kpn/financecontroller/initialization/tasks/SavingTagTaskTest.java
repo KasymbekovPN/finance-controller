@@ -26,7 +26,6 @@ public class SavingTagTaskTest {
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
 
-    private static final Long NOT_EXIST_ENTITY_ID = -1L;
     private static final Long ENTITY_ID = 1L;
 
     private static Result<Void> expectedResultIfConversionResultNotExist;
@@ -61,7 +60,7 @@ public class SavingTagTaskTest {
     void shouldCheckExecution_ifConversionResultNotExist() {
         Context context = new ContextBuilder().build();
 
-        SavingTagTask task = new SavingTagTask(KEY, VALUED_GENERATOR, CREATOR, createDTOService(createFailSaver()), NOT_EXIST_ENTITY_ID);
+        SavingTagTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -75,7 +74,7 @@ public class SavingTagTaskTest {
                 .addStorage()
                 .build();
 
-        SavingTagTask task = new SavingTagTask(KEY, VALUED_GENERATOR, CREATOR, createDTOService(createFailSaver()), NOT_EXIST_ENTITY_ID);
+        SavingTagTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -90,7 +89,7 @@ public class SavingTagTaskTest {
                 .addEntity(ENTITY_ID, "")
                 .build();
 
-        SavingTagTask task = new SavingTagTask(KEY, VALUED_GENERATOR, CREATOR, createDTOService(createFailSaver()), ENTITY_ID);
+        SavingTagTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -105,12 +104,23 @@ public class SavingTagTaskTest {
                 .addEntity(ENTITY_ID, "")
                 .build();
 
-        SavingTagTask task = new SavingTagTask(KEY, VALUED_GENERATOR, CREATOR, createDTOService(createSaver()), ENTITY_ID);
+        SavingTagTask task = createTask(createDTOService(createSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
         assertThat(expectedResult).isEqualTo(result);
         assertThat(task.isContinuationPossible()).isTrue();
+    }
+
+    private SavingTagTask createTask(TestDTOService service){
+        SavingTagTask task = new SavingTagTask();
+        task.setKey(KEY);
+        task.setValuedGenerator(VALUED_GENERATOR);
+        task.setManagerCreator(CREATOR);
+        task.setDtoService(service);
+        task.setEntityId(ENTITY_ID);
+
+        return task;
     }
 
     private TestSaver createSaver() {

@@ -5,29 +5,17 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storages.TagStorage;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
+import lombok.Setter;
 
-import java.util.function.Function;
-
-final public class SavingTagTask extends BaseTaskOld {
-
-    private final DTOService<Tag, TagEntity, Long> dtoService;
-    private final Long entityId;
-
-    public SavingTagTask(Valued<String> key,
-                         ValuedGenerator<String> valuedGenerator,
-                         Function<Context, ResultContextManager> managerCreator,
-                         DTOService<Tag, TagEntity, Long> dtoService,
-                         Long entityId) {
-        super(key, valuedGenerator, managerCreator);
-        this.dtoService = dtoService;
-        this.entityId = entityId;
-    }
+final public class SavingTagTask extends BaseTask {
+    @Setter
+    private DTOService<Tag, TagEntity, Long> dtoService;
+    @Setter
+    private Long entityId;
 
     @Override
     public void execute(Context context) {
