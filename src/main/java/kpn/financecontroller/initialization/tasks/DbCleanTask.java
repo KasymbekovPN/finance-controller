@@ -3,23 +3,13 @@ package kpn.financecontroller.initialization.tasks;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
+import lombok.Setter;
 
-import java.util.function.Function;
-
-final public class DbCleanTask extends BaseTaskOld {
-    private final DTOService<?, ?, Long> dtoService;
-    public DbCleanTask(Valued<String> key,
-                       ValuedGenerator<String> valuedGenerator,
-                       Function<Context, ResultContextManager> managerCreator,
-                       DTOService<?, ?, Long> dtoService) {
-        super(key, valuedGenerator, managerCreator);
-        this.dtoService = dtoService;
-    }
+final public class DbCleanTask extends BaseTask {
+    @Setter
+    private DTOService<?, ?, Long> dtoService;
 
     @Override
     public void execute(Context context) {

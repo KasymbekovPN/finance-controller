@@ -44,7 +44,12 @@ public class DbCleanTaskTest {
     @Test
     void shouldCheckExecution_ifCleaningFail() {
         SimpleContext context = new SimpleContext();
-        DbCleanTask task = new DbCleanTask(KEY, VALUED_GENERATOR, CREATOR, createDtoService(createFailDeleter()));
+        DbCleanTask task = new DbCleanTask();
+        task.setKey(KEY);
+        task.setValuedGenerator(VALUED_GENERATOR);
+        task.setManagerCreator(CREATOR);
+        task.setDtoService(createDtoService(createFailDeleter()));
+
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(KEY, Properties.DB_CLEANING_RESULT, Void.class);
@@ -54,7 +59,12 @@ public class DbCleanTaskTest {
     @Test
     void shouldCheckExecution() {
         SimpleContext context = new SimpleContext();
-        DbCleanTask task = new DbCleanTask(KEY, VALUED_GENERATOR, CREATOR, createDtoService(createDeleter()));
+        DbCleanTask task = new DbCleanTask();
+        task.setKey(KEY);
+        task.setValuedGenerator(VALUED_GENERATOR);
+        task.setManagerCreator(CREATOR);
+        task.setDtoService(createDtoService(createDeleter()));
+
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(KEY, Properties.DB_CLEANING_RESULT, Void.class);
