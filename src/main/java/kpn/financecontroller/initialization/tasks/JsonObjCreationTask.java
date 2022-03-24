@@ -4,25 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
+import lombok.Setter;
 
-import java.util.function.Function;
-
-final public class JsonObjCreationTask extends BaseTaskOld {
-
-    private final Class<?> classType;
-
-    public JsonObjCreationTask(Valued<String> key,
-                               ValuedGenerator<String> valuedGenerator,
-                               Function<Context, ResultContextManager> managerCreator,
-                               Class<?> classType) {
-        super(key, valuedGenerator, managerCreator);
-        this.classType = classType;
-    }
+final public class JsonObjCreationTask extends BaseTask {
+    @Setter
+    private Class<?> classType;
 
     @Override
     public void execute(Context context) {

@@ -4,24 +4,27 @@ import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
-import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
+import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestJsonEntity;
 import kpn.financecontroller.initialization.tasks.testUtils.TestJsonObj;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
+import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonObjCreationTaskTest {
 
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
+    private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
+    private static final TestKeys KEY = TestKeys.KEY;
     private static final String INVALID_SOURCE = "{\"hello\"";
     private static final String SOURCE = "{\"entities\" : {\"1\":{\"id\":1}}}";
 
@@ -56,68 +59,74 @@ public class JsonObjCreationTaskTest {
                 .build();
     }
 
-    @SneakyThrows
     @Test
     void shouldCheckExecutionWithoutStringContent() {
-        JsonObjCreationTask task
-                = new JsonObjCreationTask(TestKeys.KEY, new ValuedStringGenerator(), new TestManagerCreator(), TestJsonObj.class);
-        SimpleContext context = new SimpleContext();
+        JsonObjCreationTask task = createTask();
+
+        Context context = new ContextBuilder().build();
         task.execute(context);
 
-        String success = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.SUCCESS);
-        assertThat(context.get(success, Boolean.class)).isEqualTo(expectedResultWhenNoContent.getSuccess());
-        String value = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.VALUE);
-        assertThat(context.get(value)).isEqualTo(expectedResultWhenNoContent.getValue());
-        String code = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.CODE);
-        assertThat(context.get(code, String.class)).isEqualTo(expectedResultWhenNoContent.getCode());
-        String args = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.ARGS);
-        assertThat(context.get(args)).isEqualTo(expectedResultWhenNoContent.getArgs());
+        Result<TestJsonObj> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, TestJsonObj.class);
+        assertThat(expectedResultWhenNoContent).isEqualTo(result);
         assertThat(task.isContinuationPossible()).isFalse();
     }
 
-    @SneakyThrows
     @Test
     void shouldCheckExecutionWhenJsonSyntaxException() {
-        TestManagerCreator managerCreator = new TestManagerCreator();
-        JsonObjCreationTask task
-                = new JsonObjCreationTask(TestKeys.KEY, new ValuedStringGenerator(), managerCreator, TestJsonObj.class);
+        JsonObjCreationTask task = createTask();
 
-        SimpleContext context = new SimpleContext();
-        managerCreator.apply(context).put(TestKeys.KEY, Properties.FILE_READING_RESULT, Result.<String>builder().success(true).value(INVALID_SOURCE).build());
-
+        Context context = new ContextBuilder()
+                .addSource(INVALID_SOURCE)
+                .build();
         task.execute(context);
 
-        String success = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.SUCCESS);
-        assertThat(context.get(success, Boolean.class)).isEqualTo(expectedResultWhenJsonSyntaxException.getSuccess());
-        String value = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.VALUE);
-        assertThat(context.get(value)).isEqualTo(expectedResultWhenJsonSyntaxException.getValue());
-        String code = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.CODE);
-        assertThat(context.get(code, String.class)).isEqualTo(expectedResultWhenJsonSyntaxException.getCode());
-        String args = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.ARGS);
-        assertThat(context.get(args)).isEqualTo(expectedResultWhenJsonSyntaxException.getArgs());
+        Result<TestJsonObj> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, TestJsonObj.class);
+        assertThat(expectedResultWhenJsonSyntaxException).isEqualTo(result);
         assertThat(task.isContinuationPossible()).isFalse();
     }
 
-    @SneakyThrows
     @Test
     void shouldCheckExecution() {
-        TestManagerCreator managerCreator = new TestManagerCreator();
-        JsonObjCreationTask task
-                = new JsonObjCreationTask(TestKeys.KEY, new ValuedStringGenerator(), managerCreator, TestJsonObj.class);
+        JsonObjCreationTask task = createTask();
 
-        SimpleContext context = new SimpleContext();
-        managerCreator.apply(context).put(TestKeys.KEY, Properties.FILE_READING_RESULT, Result.<String>builder().success(true).value(SOURCE).build());
-
+        Context context = new ContextBuilder()
+                .addSource(SOURCE)
+                .build();
         task.execute(context);
 
-        String success = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.SUCCESS);
-        assertThat(context.get(success, Boolean.class)).isEqualTo(expectedResult.getSuccess());
-        String value = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.VALUE);
-        assertThat(context.get(value)).isEqualTo(expectedResult.getValue());
-        String code = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.CODE);
-        assertThat(context.get(code, String.class)).isEqualTo(expectedResult.getCode());
-        String args = VALUED_GENERATOR.generate(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, ResultContextManagerImpl.ResultParts.ARGS);
-        assertThat(context.get(args)).isEqualTo(expectedResult.getArgs());
+        Result<TestJsonObj> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, TestJsonObj.class);
+        assertThat(expectedResult).isEqualTo(result);
         assertThat(task.isContinuationPossible()).isTrue();
+    }
+
+    private JsonObjCreationTask createTask(){
+        JsonObjCreationTask task = new JsonObjCreationTask();
+        task.setKey(KEY);
+        task.setValuedGenerator(VALUED_GENERATOR);
+        task.setManagerCreator(CREATOR);
+        task.setClassType(TestJsonObj.class);
+
+        return task;
+    }
+
+    private static class ContextBuilder{
+        private final SimpleContext context;
+
+        public ContextBuilder() {
+            this.context = new SimpleContext();
+        }
+
+        public ContextBuilder addSource(String source){
+            Result<String> result = Result.<String>builder()
+                    .success(true)
+                    .value(source)
+                    .build();
+            CREATOR.apply(context).put(KEY, Properties.FILE_READING_RESULT, result);
+            return this;
+        }
+
+        public Context build(){
+            return context;
+        }
     }
 }
