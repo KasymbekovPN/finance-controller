@@ -1,16 +1,16 @@
 package kpn.financecontroller.initialization.generators.seed;
 
-import kpn.financecontroller.initialization.generators.valued.Valued;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.ReadingTask;
-import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
+import kpn.financecontroller.initialization.tasks.CleanupTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
 import kpn.taskexecutor.lib.seeds.Seed;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,24 +18,21 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReadingGeneratorTest {
-
+public class CleanupGeneratorTest {
     private static final Context CONTEXT = new SimpleContext();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
-    private static final Valued<String> KEY = TestKeys.KEY;
-    private static final String PATH = "path";
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        ReadingGenerator seedGenerator = ReadingGenerator.builder().build();
+        CleanupGenerator seedGenerator = CleanupGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        ReadingGenerator seedGenerator = ReadingGenerator.builder()
+        CleanupGenerator seedGenerator = CleanupGenerator.builder()
                 .managerCreator(CREATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
@@ -44,26 +41,32 @@ public class ReadingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting() {
+        DTOService<?, ?, Long> dtoService = createDTOService();
         Map<String, Object> expectedFields = Map.of(
                 "valuedGenerator", VALUED_GENERATOR,
                 "managerCreator", CREATOR,
-                "path", PATH,
-                "key", KEY
+                "dtoService", dtoService
         );
 
-        ReadingGenerator seedGenerator = ReadingGenerator.builder()
+        CleanupGenerator seedGenerator = CleanupGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
-                .pathItem(KEY, PATH)
+                .dtoService(dtoService)
                 .build();
 
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isPresent();
         Seed seed = maybeSeed.get();
-        assertThat(seed.getType()).isEqualTo(ReadingTask.class);
+        assertThat(seed.getType()).isEqualTo(CleanupTask.class);
         assertThat(seed.getFields()).isEqualTo(expectedFields);
 
         maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
+
+    private DTOService<?, ?, Long> createDTOService() {
+        return Mockito.mock(TestDTOService.class);
+    }
+
+    public abstract static class TestDTOService implements DTOService<String, String, Long> {}
 }

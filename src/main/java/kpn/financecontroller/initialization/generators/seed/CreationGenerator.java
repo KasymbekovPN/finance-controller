@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.function.Function;
 
 @Slf4j
-public class CreationGenerator implements Generator {
+final public class CreationGenerator implements Generator {
     private final ValuedGenerator<String> valuedGenerator;
     private final Function<Context, ResultContextManager> managerCreator;
     private final Deque<Class<? extends LongKeyJsonObj<?>>> types;

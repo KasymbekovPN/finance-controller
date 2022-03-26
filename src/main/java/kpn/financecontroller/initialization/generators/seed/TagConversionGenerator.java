@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 @Slf4j
-public class TagConversionGenerator implements Generator {
+final public class TagConversionGenerator implements Generator {
     private final ValuedGenerator<String> valuedGenerator;
     private final Function<Context, ResultContextManager> managerCreator;
     private final Valued<String> key;
