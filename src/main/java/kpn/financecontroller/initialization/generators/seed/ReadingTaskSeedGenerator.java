@@ -56,6 +56,7 @@ public class ReadingTaskSeedGenerator implements Generator {
         return Optional.empty();
     }
 
+    // TODO: 26.03.2022 to remake it
     private boolean checkFields() {
         if (fieldValid == null){
             if (managerCreator == null){
