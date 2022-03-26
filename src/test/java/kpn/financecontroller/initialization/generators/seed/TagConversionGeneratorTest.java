@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TagConversionTaskSeedGeneratorTest {
+public class TagConversionGeneratorTest {
 
     private static final Context CONTEXT = new SimpleContext();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
@@ -32,14 +32,14 @@ public class TagConversionTaskSeedGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        TagConversionTaskSeedGenerator seedGenerator = TagConversionTaskSeedGenerator.builder().build();
+        TagConversionGenerator seedGenerator = TagConversionGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        TagConversionTaskSeedGenerator seedGenerator = TagConversionTaskSeedGenerator.builder()
+        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
@@ -48,7 +48,7 @@ public class TagConversionTaskSeedGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifKeyNull() {
-        TagConversionTaskSeedGenerator seedGenerator = TagConversionTaskSeedGenerator.builder()
+        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .build();
@@ -58,7 +58,7 @@ public class TagConversionTaskSeedGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifJsonObjectAbsent() {
-        TagConversionTaskSeedGenerator seedGenerator = TagConversionTaskSeedGenerator.builder()
+        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
@@ -89,7 +89,7 @@ public class TagConversionTaskSeedGeneratorTest {
 
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
 
-        TagConversionTaskSeedGenerator seedGenerator = TagConversionTaskSeedGenerator.builder()
+        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)

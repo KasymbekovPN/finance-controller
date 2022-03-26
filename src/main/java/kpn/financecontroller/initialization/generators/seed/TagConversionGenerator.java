@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 @Slf4j
-public class TagConversionTaskSeedGenerator implements Generator {
+public class TagConversionGenerator implements Generator {
     private final ValuedGenerator<String> valuedGenerator;
     private final Function<Context, ResultContextManager> managerCreator;
     private final Valued<String> key;
@@ -32,9 +32,9 @@ public class TagConversionTaskSeedGenerator implements Generator {
         return new Builder();
     }
 
-    private TagConversionTaskSeedGenerator(ValuedGenerator<String> valuedGenerator,
-                                           Function<Context, ResultContextManager> managerCreator,
-                                           Valued<String> key) {
+    private TagConversionGenerator(ValuedGenerator<String> valuedGenerator,
+                                   Function<Context, ResultContextManager> managerCreator,
+                                   Valued<String> key) {
         this.valuedGenerator = valuedGenerator;
         this.managerCreator = managerCreator;
         this.key = key;
@@ -110,8 +110,8 @@ public class TagConversionTaskSeedGenerator implements Generator {
             return this;
         }
 
-        public TagConversionTaskSeedGenerator build(){
-            return new TagConversionTaskSeedGenerator(valuedGenerator, managerCreator, key);
+        public TagConversionGenerator build(){
+            return new TagConversionGenerator(valuedGenerator, managerCreator, key);
         }
     }
 }

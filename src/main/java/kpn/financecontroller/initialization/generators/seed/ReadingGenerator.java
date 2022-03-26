@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Slf4j
-public class ReadingTaskSeedGenerator implements Generator {
+public class ReadingGenerator implements Generator {
 
     private final Deque<PathItem> pathItems;
     private final ValuedGenerator<String> valuedGenerator;
@@ -30,9 +30,9 @@ public class ReadingTaskSeedGenerator implements Generator {
         return new Builder();
     }
 
-    private ReadingTaskSeedGenerator(Deque<PathItem> pathItems,
-                                     ValuedGenerator<String> valuedGenerator,
-                                     Function<Context, ResultContextManager> managerCreator) {
+    private ReadingGenerator(Deque<PathItem> pathItems,
+                             ValuedGenerator<String> valuedGenerator,
+                             Function<Context, ResultContextManager> managerCreator) {
         this.pathItems = pathItems;
         this.valuedGenerator = valuedGenerator;
         this.managerCreator = managerCreator;
@@ -56,20 +56,17 @@ public class ReadingTaskSeedGenerator implements Generator {
         return Optional.empty();
     }
 
-    // TODO: 26.03.2022 to remake it
     private boolean checkFields() {
         if (fieldValid == null){
             if (managerCreator == null){
                 log.warn("ManagerCreator is null");
                 fieldValid = false;
-                return false;
-            }
-            if (valuedGenerator == null){
+            } else if (valuedGenerator == null){
                 log.warn("ValuedGenerator is null");
                 fieldValid = false;
-                return false;
+            } else {
+                fieldValid = true;
             }
-            fieldValid = true;
         }
         return fieldValid;
     }
@@ -94,8 +91,8 @@ public class ReadingTaskSeedGenerator implements Generator {
             return this;
         }
 
-        public ReadingTaskSeedGenerator build(){
-            return new ReadingTaskSeedGenerator(pathItems, valuedGenerator, managerCreator);
+        public ReadingGenerator build(){
+            return new ReadingGenerator(pathItems, valuedGenerator, managerCreator);
         }
     }
 

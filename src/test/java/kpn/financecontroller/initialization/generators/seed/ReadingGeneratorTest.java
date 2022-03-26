@@ -18,7 +18,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReadingTaskSeedGeneratorTest {
+public class ReadingGeneratorTest {
 
     private static final Context CONTEXT = new SimpleContext();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
@@ -28,14 +28,14 @@ public class ReadingTaskSeedGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        ReadingTaskSeedGenerator seedGenerator = ReadingTaskSeedGenerator.builder().build();
+        ReadingGenerator seedGenerator = ReadingGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        ReadingTaskSeedGenerator seedGenerator = ReadingTaskSeedGenerator.builder()
+        ReadingGenerator seedGenerator = ReadingGenerator.builder()
                 .setManagerCreator(CREATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
@@ -51,7 +51,7 @@ public class ReadingTaskSeedGeneratorTest {
                 "key", KEY
         );
 
-        ReadingTaskSeedGenerator seedGenerator = ReadingTaskSeedGenerator.builder()
+        ReadingGenerator seedGenerator = ReadingGenerator.builder()
                 .setManagerCreator(CREATOR)
                 .setValuedGenerator(VALUED_GENERATOR)
                 .addPathItem(KEY, PATH)
