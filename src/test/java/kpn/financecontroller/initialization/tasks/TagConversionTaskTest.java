@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonToDbConversionTagTaskTest {
+public class TagConversionTaskTest {
 
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
@@ -62,7 +62,7 @@ public class JsonToDbConversionTagTaskTest {
 
     @Test
     void shouldCheckExecution_ifJsonObjNotExist() {
-        JsonToDbConversionTagTask task = createTask();
+        TagConversionTask task = createTask();
 
         Context context = new ContextBuilder().build();
         task.execute(context);
@@ -76,7 +76,7 @@ public class JsonToDbConversionTagTaskTest {
         Context context = new ContextBuilder()
                 .addJsonObject()
                 .build();
-        JsonToDbConversionTagTask task = createTask();
+        TagConversionTask task = createTask();
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
@@ -90,15 +90,15 @@ public class JsonToDbConversionTagTaskTest {
                 .addEntity(ENTITY_ID, ENTITY_NAME)
                 .build();
 
-        JsonToDbConversionTagTask task = createTask();
+        TagConversionTask task = createTask();
         task.execute(context);
 
         Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
         assertThat(expectedResult).isEqualTo(result);
     }
 
-    private JsonToDbConversionTagTask createTask() {
-        JsonToDbConversionTagTask task = new JsonToDbConversionTagTask();
+    private TagConversionTask createTask() {
+        TagConversionTask task = new TagConversionTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);

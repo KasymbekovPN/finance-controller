@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-// TODO: 26.03.2022 rename to reading ???
-final public class FileReadingTask extends BaseTask {
+final public class ReadingTask extends BaseTask {
     @Setter
     private String path;
 

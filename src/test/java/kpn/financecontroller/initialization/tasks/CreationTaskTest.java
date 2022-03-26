@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonObjCreationTaskTest {
+public class CreationTaskTest {
 
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
@@ -61,7 +61,7 @@ public class JsonObjCreationTaskTest {
 
     @Test
     void shouldCheckExecutionWithoutStringContent() {
-        JsonObjCreationTask task = createTask();
+        CreationTask task = createTask();
 
         Context context = new ContextBuilder().build();
         task.execute(context);
@@ -73,7 +73,7 @@ public class JsonObjCreationTaskTest {
 
     @Test
     void shouldCheckExecutionWhenJsonSyntaxException() {
-        JsonObjCreationTask task = createTask();
+        CreationTask task = createTask();
 
         Context context = new ContextBuilder()
                 .addSource(INVALID_SOURCE)
@@ -87,7 +87,7 @@ public class JsonObjCreationTaskTest {
 
     @Test
     void shouldCheckExecution() {
-        JsonObjCreationTask task = createTask();
+        CreationTask task = createTask();
 
         Context context = new ContextBuilder()
                 .addSource(SOURCE)
@@ -99,8 +99,8 @@ public class JsonObjCreationTaskTest {
         assertThat(task.isContinuationPossible()).isTrue();
     }
 
-    private JsonObjCreationTask createTask(){
-        JsonObjCreationTask task = new JsonObjCreationTask();
+    private CreationTask createTask(){
+        CreationTask task = new CreationTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);

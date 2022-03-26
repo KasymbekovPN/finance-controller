@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FileReadingTaskTest {
+public class ReadingTaskTest {
 
     private static final String FILE_CONTENT = "{}";
     private static final String NOT_EXIST_PATH = "kpn/financecontroller/initialization/task/notExist.json";
@@ -43,7 +43,7 @@ public class FileReadingTaskTest {
     @SneakyThrows
     @Test
     void shouldCheckExecution_whenFileNotExist() {
-        FileReadingTask task = new FileReadingTask();
+        ReadingTask task = new ReadingTask();
         task.setKey(TestKeys.KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(new TestManagerCreator());
@@ -60,7 +60,7 @@ public class FileReadingTaskTest {
     @SneakyThrows
     @Test
     void shouldCheckExecution() {
-        FileReadingTask task = new FileReadingTask();
+        ReadingTask task = new ReadingTask();
         task.setKey(TestKeys.KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(new TestManagerCreator());

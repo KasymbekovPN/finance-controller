@@ -7,7 +7,7 @@ import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.JsonToDbConversionTagTask;
+import kpn.financecontroller.initialization.tasks.TagConversionTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
@@ -98,7 +98,7 @@ public class TagConversionGeneratorTest {
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isPresent();
         Seed seed = maybeSeed.get();
-        assertThat(seed.getType()).isEqualTo(JsonToDbConversionTagTask.class);
+        assertThat(seed.getType()).isEqualTo(TagConversionTask.class);
         assertThat(seed.getFields()).isEqualTo(expectedFields);
 
         maybeSeed = seedGenerator.getNextIfExist(CONTEXT);

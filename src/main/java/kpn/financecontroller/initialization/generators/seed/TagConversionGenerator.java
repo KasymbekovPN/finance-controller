@@ -5,7 +5,7 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.JsonToDbConversionTagTask;
+import kpn.financecontroller.initialization.tasks.TagConversionTask;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.generators.Generator;
@@ -46,7 +46,7 @@ public class TagConversionGenerator implements Generator {
             Optional<Long> maybeId = getNextEntityId(context);
             if (maybeId.isPresent()){
                 Seed seed = SeedImpl.builder()
-                        .type(JsonToDbConversionTagTask.class)
+                        .type(TagConversionTask.class)
                         .field("managerCreator", managerCreator)
                         .field("valuedGenerator", valuedGenerator)
                         .field("entityId", maybeId.get())

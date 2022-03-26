@@ -3,7 +3,7 @@ package kpn.financecontroller.initialization.generators.seed;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.JsonObjCreationTask;
+import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.function.Function;
 
 @Slf4j
-public class TagCreationGenerator implements Generator {
+public class CreationGenerator implements Generator {
     private final ValuedGenerator<String> valuedGenerator;
     private final Function<Context, ResultContextManager> managerCreator;
     private final Deque<Class<? extends LongKeyJsonObj<?>>> types;
@@ -25,9 +25,9 @@ public class TagCreationGenerator implements Generator {
         return new Builder();
     }
 
-    private TagCreationGenerator(ValuedGenerator<String> valuedGenerator,
-                                 Function<Context, ResultContextManager> managerCreator,
-                                 List<Class<? extends LongKeyJsonObj<?>>> types) {
+    private CreationGenerator(ValuedGenerator<String> valuedGenerator,
+                              Function<Context, ResultContextManager> managerCreator,
+                              List<Class<? extends LongKeyJsonObj<?>>> types) {
         this.valuedGenerator = valuedGenerator;
         this.managerCreator = managerCreator;
         this.types = new ArrayDeque<>(types);
@@ -39,7 +39,7 @@ public class TagCreationGenerator implements Generator {
             Class<? extends LongKeyJsonObj<?>> type = types.pollFirst();
             if (type != null){
                 Seed seed = SeedImpl.builder()
-                        .type(JsonObjCreationTask.class)
+                        .type(CreationTask.class)
                         .field("managerCreator", managerCreator)
                         .field("valuedGenerator", valuedGenerator)
                         .field("type", type)
@@ -81,8 +81,8 @@ public class TagCreationGenerator implements Generator {
             return this;
         }
 
-        public TagCreationGenerator build(){
-            return new TagCreationGenerator(valuedGenerator, managerCreator, types);
+        public CreationGenerator build(){
+            return new CreationGenerator(valuedGenerator, managerCreator, types);
         }
 
         public Builder type(Class<? extends LongKeyJsonObj<?>> type) {

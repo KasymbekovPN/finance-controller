@@ -10,7 +10,7 @@ import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
 // TODO: 26.03.2022 rename to reading ???
-final public class JsonObjCreationTask extends BaseTask {
+final public class CreationTask extends BaseTask {
     @Setter
     private Class<?> type;
 

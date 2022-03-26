@@ -4,7 +4,7 @@ import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.JsonObjCreationTask;
+import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
@@ -17,21 +17,21 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TagCreationGeneratorTest {
+public class CreationGeneratorTest {
     private static final Context CONTEXT = new SimpleContext();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        TagCreationGenerator seedGenerator = TagCreationGenerator.builder().build();
+        CreationGenerator seedGenerator = CreationGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        TagCreationGenerator seedGenerator = TagCreationGenerator.builder()
+        CreationGenerator seedGenerator = CreationGenerator.builder()
                 .managerCreator(CREATOR)
                 .build();
 
@@ -47,7 +47,7 @@ public class TagCreationGeneratorTest {
                 "type", TestJsonObj.class
         );
 
-        TagCreationGenerator seedGenerator = TagCreationGenerator.builder()
+        CreationGenerator seedGenerator = CreationGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .type(TestJsonObj.class)
@@ -56,7 +56,7 @@ public class TagCreationGeneratorTest {
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isPresent();
         Seed seed = maybeSeed.get();
-        assertThat(seed.getType()).isEqualTo(JsonObjCreationTask.class);
+        assertThat(seed.getType()).isEqualTo(CreationTask.class);
         assertThat(seed.getFields()).isEqualTo(expectedFields);
 
         maybeSeed = seedGenerator.getNextIfExist(CONTEXT);

@@ -4,7 +4,7 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.FileReadingTask;
+import kpn.financecontroller.initialization.tasks.ReadingTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.taskexecutor.lib.contexts.Context;
@@ -60,7 +60,7 @@ public class ReadingGeneratorTest {
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isPresent();
         Seed seed = maybeSeed.get();
-        assertThat(seed.getType()).isEqualTo(FileReadingTask.class);
+        assertThat(seed.getType()).isEqualTo(ReadingTask.class);
         assertThat(seed.getFields()).isEqualTo(expectedFields);
 
         maybeSeed = seedGenerator.getNextIfExist(CONTEXT);

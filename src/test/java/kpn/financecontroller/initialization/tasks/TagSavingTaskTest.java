@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SavingTagTaskTest {
+public class TagSavingTaskTest {
 
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
@@ -60,7 +60,7 @@ public class SavingTagTaskTest {
     void shouldCheckExecution_ifConversionResultNotExist() {
         Context context = new ContextBuilder().build();
 
-        SavingTagTask task = createTask(createDTOService(createFailSaver()));
+        TagSavingTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -74,7 +74,7 @@ public class SavingTagTaskTest {
                 .addStorage()
                 .build();
 
-        SavingTagTask task = createTask(createDTOService(createFailSaver()));
+        TagSavingTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -89,7 +89,7 @@ public class SavingTagTaskTest {
                 .addEntity(ENTITY_ID, "")
                 .build();
 
-        SavingTagTask task = createTask(createDTOService(createFailSaver()));
+        TagSavingTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -104,7 +104,7 @@ public class SavingTagTaskTest {
                 .addEntity(ENTITY_ID, "")
                 .build();
 
-        SavingTagTask task = createTask(createDTOService(createSaver()));
+        TagSavingTask task = createTask(createDTOService(createSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -112,8 +112,8 @@ public class SavingTagTaskTest {
         assertThat(task.isContinuationPossible()).isTrue();
     }
 
-    private SavingTagTask createTask(TestDTOService service){
-        SavingTagTask task = new SavingTagTask();
+    private TagSavingTask createTask(TestDTOService service){
+        TagSavingTask task = new TagSavingTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);

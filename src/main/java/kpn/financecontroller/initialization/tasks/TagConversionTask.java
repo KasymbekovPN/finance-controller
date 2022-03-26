@@ -14,7 +14,7 @@ import lombok.Setter;
 import java.util.Optional;
 
 // TODO: 26.03.2022 rename to conversion
-final public class JsonToDbConversionTagTask extends BaseTask {
+final public class TagConversionTask extends BaseTask {
     @Setter
     private Long entityId;
 

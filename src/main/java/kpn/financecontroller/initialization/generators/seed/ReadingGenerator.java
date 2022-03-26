@@ -3,7 +3,7 @@ package kpn.financecontroller.initialization.generators.seed;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.FileReadingTask;
+import kpn.financecontroller.initialization.tasks.ReadingTask;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
@@ -44,7 +44,7 @@ public class ReadingGenerator implements Generator {
             PathItem pathItem = pathItems.pollFirst();
             if (pathItem != null){
                 Seed seed = new SeedImpl.Builder()
-                        .type(FileReadingTask.class)
+                        .type(ReadingTask.class)
                         .field("valuedGenerator", valuedGenerator)
                         .field("managerCreator", managerCreator)
                         .field("path", pathItem.getPath())

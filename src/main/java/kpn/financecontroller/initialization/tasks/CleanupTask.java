@@ -7,7 +7,7 @@ import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
-final public class DbCleanTask extends BaseTask {
+final public class CleanupTask extends BaseTask {
     @Setter
     private DTOService<?, ?, Long> dtoService;
 

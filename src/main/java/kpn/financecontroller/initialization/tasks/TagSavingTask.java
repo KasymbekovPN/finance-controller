@@ -11,7 +11,7 @@ import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
-final public class SavingTagTask extends BaseTask {
+final public class TagSavingTask extends BaseTask {
     @Setter
     private DTOService<Tag, TagEntity, Long> dtoService;
     @Setter

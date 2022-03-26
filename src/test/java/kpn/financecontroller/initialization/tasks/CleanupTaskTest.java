@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DbCleanTaskTest {
+public class CleanupTaskTest {
 
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
@@ -44,7 +44,7 @@ public class DbCleanTaskTest {
     @Test
     void shouldCheckExecution_ifCleaningFail() {
         SimpleContext context = new SimpleContext();
-        DbCleanTask task = new DbCleanTask();
+        CleanupTask task = new CleanupTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
@@ -59,7 +59,7 @@ public class DbCleanTaskTest {
     @Test
     void shouldCheckExecution() {
         SimpleContext context = new SimpleContext();
-        DbCleanTask task = new DbCleanTask();
+        CleanupTask task = new CleanupTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
