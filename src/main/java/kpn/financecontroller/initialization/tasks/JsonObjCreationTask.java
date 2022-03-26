@@ -12,7 +12,7 @@ import lombok.Setter;
 // TODO: 26.03.2022 rename to reading ???
 final public class JsonObjCreationTask extends BaseTask {
     @Setter
-    private Class<?> classType;
+    private Class<?> type;
 
     @Override
     public void execute(Context context) {
@@ -22,7 +22,7 @@ final public class JsonObjCreationTask extends BaseTask {
         Result<String> fileReadingResult = contextManager.get(key, Properties.FILE_READING_RESULT, String.class);
         if (fileReadingResult.getSuccess()){
             try{
-                value = new Gson().fromJson(fileReadingResult.getValue(), classType);
+                value = new Gson().fromJson(fileReadingResult.getValue(), type);
                 continuationPossible = true;
             } catch (JsonSyntaxException ex){
                 calculateAndSetCode(key, Codes.JSON_SYNTAX_EXCEPTION);

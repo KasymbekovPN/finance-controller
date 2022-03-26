@@ -104,7 +104,7 @@ public class JsonObjCreationTaskTest {
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
-        task.setClassType(TestJsonObj.class);
+        task.setType(TestJsonObj.class);
 
         return task;
     }

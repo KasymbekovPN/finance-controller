@@ -24,7 +24,7 @@ public class ReadingGenerator implements Generator {
     private final ValuedGenerator<String> valuedGenerator;
     private final Function<Context, ResultContextManager> managerCreator;
 
-    private Boolean fieldValid = null;
+    private Boolean fieldValidity = null;
 
     public static Builder builder(){
         return new Builder();
@@ -57,18 +57,18 @@ public class ReadingGenerator implements Generator {
     }
 
     private boolean checkFields() {
-        if (fieldValid == null){
+        if (fieldValidity == null){
             if (managerCreator == null){
                 log.warn("ManagerCreator is null");
-                fieldValid = false;
+                fieldValidity = false;
             } else if (valuedGenerator == null){
                 log.warn("ValuedGenerator is null");
-                fieldValid = false;
+                fieldValidity = false;
             } else {
-                fieldValid = true;
+                fieldValidity = true;
             }
         }
-        return fieldValid;
+        return fieldValidity;
     }
 
     public static class Builder{
