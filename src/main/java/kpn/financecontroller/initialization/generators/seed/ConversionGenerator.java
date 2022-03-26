@@ -5,12 +5,12 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.TagConversionTask;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
 import kpn.taskexecutor.lib.seeds.SeedImpl;
+import kpn.taskexecutor.lib.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayDeque;
@@ -20,10 +20,11 @@ import java.util.Set;
 import java.util.function.Function;
 
 @Slf4j
-final public class TagConversionGenerator implements Generator {
+final public class ConversionGenerator implements Generator {
     private final ValuedGenerator<String> valuedGenerator;
     private final Function<Context, ResultContextManager> managerCreator;
     private final Valued<String> key;
+    private final Class<? extends Task> type;
 
     private Boolean fieldValidity;
     private Deque<Long> entityIds;
@@ -32,12 +33,14 @@ final public class TagConversionGenerator implements Generator {
         return new Builder();
     }
 
-    private TagConversionGenerator(ValuedGenerator<String> valuedGenerator,
-                                   Function<Context, ResultContextManager> managerCreator,
-                                   Valued<String> key) {
+    private ConversionGenerator(ValuedGenerator<String> valuedGenerator,
+                                Function<Context, ResultContextManager> managerCreator,
+                                Valued<String> key,
+                                Class<? extends Task> type) {
         this.valuedGenerator = valuedGenerator;
         this.managerCreator = managerCreator;
         this.key = key;
+        this.type = type;
     }
 
     @Override
@@ -46,7 +49,7 @@ final public class TagConversionGenerator implements Generator {
             Optional<Long> maybeId = getNextEntityId(context);
             if (maybeId.isPresent()){
                 Seed seed = SeedImpl.builder()
-                        .type(TagConversionTask.class)
+                        .type(type)
                         .field("managerCreator", managerCreator)
                         .field("valuedGenerator", valuedGenerator)
                         .field("entityId", maybeId.get())
@@ -67,6 +70,9 @@ final public class TagConversionGenerator implements Generator {
                 fieldValidity = false;
             } else if (key == null){
                 log.warn("Key is null");
+                fieldValidity = false;
+            } else if (type == null){
+                log.warn("Type is null");
                 fieldValidity = false;
             } else {
                 fieldValidity = true;
@@ -94,6 +100,7 @@ final public class TagConversionGenerator implements Generator {
         private ValuedGenerator<String> valuedGenerator;
         private Function<Context, ResultContextManager> managerCreator;
         private Valued<String> key;
+        private Class<? extends Task> type;
 
         public Builder valuedGenerator(ValuedGenerator<String> valuedGenerator){
             this.valuedGenerator = valuedGenerator;
@@ -110,8 +117,13 @@ final public class TagConversionGenerator implements Generator {
             return this;
         }
 
-        public TagConversionGenerator build(){
-            return new TagConversionGenerator(valuedGenerator, managerCreator, key);
+        public Builder type(Class<? extends Task> type){
+            this.type = type;
+            return this;
+        }
+
+        public ConversionGenerator build(){
+            return new ConversionGenerator(valuedGenerator, managerCreator, key, type);
         }
     }
 }

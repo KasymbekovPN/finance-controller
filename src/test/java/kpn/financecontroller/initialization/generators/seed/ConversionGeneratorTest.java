@@ -7,13 +7,13 @@ import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.tasks.TagConversionTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
 import kpn.taskexecutor.lib.seeds.Seed;
+import kpn.taskexecutor.lib.tasks.Task;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -22,24 +22,25 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TagConversionGeneratorTest {
+public class ConversionGeneratorTest {
 
     private static final Context CONTEXT = new SimpleContext();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Valued<String> KEY = TestKeys.KEY;
+    private static final Class<? extends Task> TYPE = Task.class;
     private static final Long ENTITY_ID = 1L;
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        TagConversionGenerator seedGenerator = TagConversionGenerator.builder().build();
+        ConversionGenerator seedGenerator = ConversionGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
+        ConversionGenerator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
@@ -48,7 +49,7 @@ public class TagConversionGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifKeyNull() {
-        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
+        ConversionGenerator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .build();
@@ -57,11 +58,23 @@ public class TagConversionGeneratorTest {
     }
 
     @Test
-    void shouldCheckNextGetting_ifJsonObjectAbsent() {
-        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
+    void shouldCheckNextGetting_ifTypeNull() {
+        ConversionGenerator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
+                .build();
+        Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
+        assertThat(maybeSeed).isEmpty();
+    }
+
+    @Test
+    void shouldCheckNextGetting_ifJsonObjectAbsent() {
+        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+                .managerCreator(CREATOR)
+                .valuedGenerator(VALUED_GENERATOR)
+                .key(KEY)
+                .type(TYPE)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -89,16 +102,17 @@ public class TagConversionGeneratorTest {
 
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
 
-        TagConversionGenerator seedGenerator = TagConversionGenerator.builder()
+        ConversionGenerator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
+                .type(TYPE)
                 .build();
 
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isPresent();
         Seed seed = maybeSeed.get();
-        assertThat(seed.getType()).isEqualTo(TagConversionTask.class);
+        assertThat(seed.getType()).isEqualTo(TYPE);
         assertThat(seed.getFields()).isEqualTo(expectedFields);
 
         maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
