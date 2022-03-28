@@ -5,6 +5,7 @@ import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
+import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -30,6 +31,7 @@ public class ConversionGeneratorTest {
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final Class<? extends Task> TYPE = Task.class;
     private static final Long ENTITY_ID = 1L;
+    private static final Class<? extends LongKeyJsonObj<?>> JSON_OBJ_TYPE = TagLongKeyJsonObj.class;
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
@@ -69,12 +71,25 @@ public class ConversionGeneratorTest {
     }
 
     @Test
+    void shouldCheckNextGetting_ifJsonObjTypeNull() {
+        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+                .managerCreator(CREATOR)
+                .valuedGenerator(VALUED_GENERATOR)
+                .key(KEY)
+                .type(TYPE)
+                .build();
+        Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
+        assertThat(maybeSeed).isEmpty();
+    }
+
+    @Test
     void shouldCheckNextGetting_ifJsonObjectAbsent() {
         ConversionGenerator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
                 .type(TYPE)
+                .jsonObj(JSON_OBJ_TYPE)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -107,6 +122,7 @@ public class ConversionGeneratorTest {
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
                 .type(TYPE)
+                .jsonObj(JSON_OBJ_TYPE)
                 .build();
 
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);

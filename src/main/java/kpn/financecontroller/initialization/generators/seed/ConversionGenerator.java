@@ -3,7 +3,7 @@ package kpn.financecontroller.initialization.generators.seed;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
+import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
@@ -25,6 +25,7 @@ final public class ConversionGenerator implements Generator {
     private final Function<Context, ResultContextManager> managerCreator;
     private final Valued<String> key;
     private final Class<? extends Task> type;
+    private final Class<? extends LongKeyJsonObj<?>> jsonObjType;
 
     private Boolean fieldValidity;
     private Deque<Long> entityIds;
@@ -36,11 +37,13 @@ final public class ConversionGenerator implements Generator {
     private ConversionGenerator(ValuedGenerator<String> valuedGenerator,
                                 Function<Context, ResultContextManager> managerCreator,
                                 Valued<String> key,
-                                Class<? extends Task> type) {
+                                Class<? extends Task> type,
+                                Class<? extends LongKeyJsonObj<?>> jsonObjType) {
         this.valuedGenerator = valuedGenerator;
         this.managerCreator = managerCreator;
         this.key = key;
         this.type = type;
+        this.jsonObjType = jsonObjType;
     }
 
     @Override
@@ -74,6 +77,9 @@ final public class ConversionGenerator implements Generator {
             } else if (type == null){
                 log.warn("Type is null");
                 fieldValidity = false;
+            } else if (jsonObjType == null){
+                log.warn("Json object is null");
+                fieldValidity = false;
             } else {
                 fieldValidity = true;
             }
@@ -83,10 +89,10 @@ final public class ConversionGenerator implements Generator {
 
     private Optional<Long> getNextEntityId(Context context) {
         if (entityIds == null){
-            // TODO: 28.03.2022 ??? TagLongKeyJsonObj.class
-            Result<TagLongKeyJsonObj> result = managerCreator.apply(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, TagLongKeyJsonObj.class);
+            Result<Object> result = managerCreator.apply(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT);
             if (result.getSuccess()){
-                Set<Long> ids = result.getValue().getEntities().keySet();
+                LongKeyJsonObj<?> jsonObj = jsonObjType.cast(result.getValue());
+                Set<Long> ids = jsonObj.getEntities().keySet();
                 entityIds = new ArrayDeque<>(ids);
                 Long id = entityIds.pollFirst();
                 if (id != null){
@@ -102,6 +108,7 @@ final public class ConversionGenerator implements Generator {
         private Function<Context, ResultContextManager> managerCreator;
         private Valued<String> key;
         private Class<? extends Task> type;
+        private Class<? extends LongKeyJsonObj<?>> jsonObjType;
 
         public Builder valuedGenerator(ValuedGenerator<String> valuedGenerator){
             this.valuedGenerator = valuedGenerator;
@@ -123,8 +130,13 @@ final public class ConversionGenerator implements Generator {
             return this;
         }
 
+        public Builder jsonObj(Class<? extends LongKeyJsonObj<?>> jsonObjType){
+            this.jsonObjType = jsonObjType;
+            return this;
+        }
+
         public ConversionGenerator build(){
-            return new ConversionGenerator(valuedGenerator, managerCreator, key, type);
+            return new ConversionGenerator(valuedGenerator, managerCreator, key, type, jsonObjType);
         }
     }
 }
