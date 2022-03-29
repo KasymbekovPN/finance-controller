@@ -1,13 +1,16 @@
 package kpn.financecontroller.initialization.generators.seed;
 
 import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.CleanupTask;
+import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,18 +25,29 @@ public class CleanupGeneratorTest {
     private static final Context CONTEXT = new SimpleContext();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
+    private static final Valued<String> KEY = TestKeys.KEY;
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        CleanupGenerator seedGenerator = CleanupGenerator.builder().build();
+        Generator seedGenerator = CleanupGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        CleanupGenerator seedGenerator = CleanupGenerator.builder()
+        Generator seedGenerator = CleanupGenerator.builder()
                 .managerCreator(CREATOR)
+                .build();
+        Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
+        assertThat(maybeSeed).isEmpty();
+    }
+
+    @Test
+    void shouldCheckNextGetting_ifKeyNull() {
+        Generator seedGenerator = CleanupGenerator.builder()
+                .managerCreator(CREATOR)
+                .valuedGenerator(VALUED_GENERATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -45,13 +59,15 @@ public class CleanupGeneratorTest {
         Map<String, Object> expectedFields = Map.of(
                 "valuedGenerator", VALUED_GENERATOR,
                 "managerCreator", CREATOR,
-                "dtoService", dtoService
+                "dtoService", dtoService,
+                "key", KEY
         );
 
-        CleanupGenerator seedGenerator = CleanupGenerator.builder()
+        Generator seedGenerator = CleanupGenerator.builder()
+                .dtoService(dtoService)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
-                .dtoService(dtoService)
+                .key(KEY)
                 .build();
 
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
