@@ -9,6 +9,7 @@ import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
 import org.junit.jupiter.api.Test;
 
@@ -28,14 +29,14 @@ public class ReadingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        ReadingGenerator seedGenerator = ReadingGenerator.builder().build();
+        Generator seedGenerator = ReadingGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        ReadingGenerator seedGenerator = ReadingGenerator.builder()
+        Generator seedGenerator = ReadingGenerator.builder()
                 .managerCreator(CREATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
@@ -51,10 +52,10 @@ public class ReadingGeneratorTest {
                 "key", KEY
         );
 
-        ReadingGenerator seedGenerator = ReadingGenerator.builder()
+        Generator seedGenerator = ReadingGenerator.builder()
+                .pathItem(KEY, PATH)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
-                .pathItem(KEY, PATH)
                 .build();
 
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);

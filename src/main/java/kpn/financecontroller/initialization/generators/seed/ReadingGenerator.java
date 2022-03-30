@@ -5,86 +5,56 @@ import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.ReadingTask;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
 import kpn.taskexecutor.lib.seeds.SeedImpl;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Slf4j
-final public class ReadingGenerator implements Generator {
+final public class ReadingGenerator extends BaseGenerator {
 
     private final Deque<PathItem> pathItems;
-    private final ValuedGenerator<String> valuedGenerator;
-    private final Function<Context, ResultContextManager> managerCreator;
-
-    private Boolean fieldValidity = null;
 
     public static Builder builder(){
         return new Builder();
     }
 
-    private ReadingGenerator(Deque<PathItem> pathItems,
-                             ValuedGenerator<String> valuedGenerator,
-                             Function<Context, ResultContextManager> managerCreator) {
+    public ReadingGenerator(Valued<String> key,
+                            ValuedGenerator<String> valuedGenerator,
+                            Function<Context, ResultContextManager> managerCreator,
+                            Deque<PathItem> pathItems) {
+        super(key, valuedGenerator, managerCreator);
         this.pathItems = pathItems;
-        this.valuedGenerator = valuedGenerator;
-        this.managerCreator = managerCreator;
+
+        this.fieldValidator
+                .reset()
+                .toChecking(managerCreator, "Manager creator")
+                .toChecking(valuedGenerator, "Valued generator")
+                .caller(getClass().getSimpleName());
     }
 
     @Override
-    public Optional<Seed> getNextIfExist(Context context) {
-        if (checkFields()){
-            PathItem pathItem = pathItems.pollFirst();
-            if (pathItem != null){
-                Seed seed = new SeedImpl.Builder()
-                        .type(ReadingTask.class)
-                        .field("valuedGenerator", valuedGenerator)
-                        .field("managerCreator", managerCreator)
-                        .field("path", pathItem.getPath())
-                        .field("key", pathItem.getKey())
-                        .build();
-                return Optional.of(seed);
-            }
+    protected Optional<Seed> getNext(Context context) {
+        PathItem pathItem = pathItems.pollFirst();
+        if (pathItem != null){
+            Seed seed = new SeedImpl.Builder()
+                    .type(ReadingTask.class)
+                    .field("valuedGenerator", valuedGenerator)
+                    .field("managerCreator", managerCreator)
+                    .field("path", pathItem.getPath())
+                    .field("key", pathItem.getKey())
+                    .build();
+            return Optional.of(seed);
         }
         return Optional.empty();
     }
 
-    private boolean checkFields() {
-        if (fieldValidity == null){
-            if (managerCreator == null){
-                log.warn("ManagerCreator is null");
-                fieldValidity = false;
-            } else if (valuedGenerator == null){
-                log.warn("ValuedGenerator is null");
-                fieldValidity = false;
-            } else {
-                fieldValidity = true;
-            }
-        }
-        return fieldValidity;
-    }
-
-    public static class Builder{
+    public static class Builder extends BaseBuilder{
         private final Deque<PathItem> pathItems = new ArrayDeque<>();
-        private ValuedGenerator<String> valuedGenerator;
-        private Function<Context, ResultContextManager> managerCreator;
-
-        public Builder valuedGenerator(ValuedGenerator<String> valuedGenerator){
-            this.valuedGenerator = valuedGenerator;
-            return this;
-        }
-
-        public Builder managerCreator(Function<Context, ResultContextManager> managerCreator){
-            this.managerCreator = managerCreator;
-            return this;
-        }
 
         public Builder pathItem(Valued<String> key, String path){
             pathItems.addLast(new PathItem(key, path));
@@ -92,7 +62,7 @@ final public class ReadingGenerator implements Generator {
         }
 
         public ReadingGenerator build(){
-            return new ReadingGenerator(pathItems, valuedGenerator, managerCreator);
+            return new ReadingGenerator(key, valuedGenerator, managerCreator, pathItems);
         }
     }
 

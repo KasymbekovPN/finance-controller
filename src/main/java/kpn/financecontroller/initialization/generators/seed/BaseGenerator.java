@@ -81,6 +81,14 @@ public abstract class BaseGenerator implements Generator {
         private boolean valid;
         private String caller = "";
 
+        public FieldValidator reset(){
+            notDone = true;
+            valid = false;
+            caller = "";
+            items.clear();
+            return this;
+        }
+
         public FieldValidator caller(String caller){
             this.caller = caller;
             return this;
