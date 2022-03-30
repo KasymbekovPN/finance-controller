@@ -13,6 +13,7 @@ import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
 import kpn.taskexecutor.lib.tasks.Task;
 import org.junit.jupiter.api.Test;
@@ -35,14 +36,14 @@ public class ConversionGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        ConversionGenerator seedGenerator = ConversionGenerator.builder().build();
+        Generator seedGenerator = ConversionGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+        Generator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
@@ -51,7 +52,7 @@ public class ConversionGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifKeyNull() {
-        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+        Generator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .build();
@@ -61,7 +62,7 @@ public class ConversionGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifTypeNull() {
-        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+        Generator seedGenerator = ConversionGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
@@ -72,11 +73,11 @@ public class ConversionGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifJsonObjTypeNull() {
-        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+        Generator seedGenerator = ConversionGenerator.builder()
+                .type(TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
-                .type(TYPE)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -84,12 +85,12 @@ public class ConversionGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifJsonObjectAbsent() {
-        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+        Generator seedGenerator = ConversionGenerator.builder()
+                .type(TYPE)
+                .jsonObj(JSON_OBJ_TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
-                .type(TYPE)
-                .jsonObj(JSON_OBJ_TYPE)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -117,12 +118,12 @@ public class ConversionGeneratorTest {
 
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
 
-        ConversionGenerator seedGenerator = ConversionGenerator.builder()
+        Generator seedGenerator = ConversionGenerator.builder()
+                .type(TYPE)
+                .jsonObj(JSON_OBJ_TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
-                .type(TYPE)
-                .jsonObj(JSON_OBJ_TYPE)
                 .build();
 
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
