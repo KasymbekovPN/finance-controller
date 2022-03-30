@@ -13,6 +13,7 @@ import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,14 +37,14 @@ public class SavingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
-        SavingGenerator seedGenerator = SavingGenerator.builder().build();
+        Generator seedGenerator = SavingGenerator.builder().build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
 
     @Test
     void shouldCheckNextGetting_ifValuedGeneratorNull() {
-        SavingGenerator seedGenerator = SavingGenerator.builder()
+        Generator seedGenerator = SavingGenerator.builder()
                 .managerCreator(CREATOR)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
@@ -52,7 +53,7 @@ public class SavingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifKeyNull() {
-        SavingGenerator seedGenerator = SavingGenerator.builder()
+        Generator seedGenerator = SavingGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .build();
@@ -62,7 +63,7 @@ public class SavingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifTypeNull() {
-        SavingGenerator seedGenerator = SavingGenerator.builder()
+        Generator seedGenerator = SavingGenerator.builder()
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
@@ -73,11 +74,11 @@ public class SavingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifDTOServiceNull() {
-        SavingGenerator seedGenerator = SavingGenerator.builder()
+        Generator seedGenerator = SavingGenerator.builder()
+                .type(TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
-                .type(TYPE)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -85,12 +86,12 @@ public class SavingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifStorageTypeNull() {
-        SavingGenerator seedGenerator = SavingGenerator.builder()
+        Generator seedGenerator = SavingGenerator.builder()
+                .type(TYPE)
+                .dtoService(createDTOService())
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
-                .type(TYPE)
-                .dtoService(createDTOService())
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -98,13 +99,13 @@ public class SavingGeneratorTest {
 
     @Test
     void shouldCheckNextGetting_ifConversionResultAbsent() {
-        SavingGenerator seedGenerator = SavingGenerator.builder()
-                .managerCreator(CREATOR)
-                .valuedGenerator(VALUED_GENERATOR)
-                .key(KEY)
+        Generator seedGenerator = SavingGenerator.builder()
                 .type(TYPE)
                 .dtoService(createDTOService())
                 .storageType(STORAGE_TYPE)
+                .managerCreator(CREATOR)
+                .valuedGenerator(VALUED_GENERATOR)
+                .key(KEY)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
@@ -134,13 +135,13 @@ public class SavingGeneratorTest {
                 .build();
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
-        SavingGenerator seedGenerator = SavingGenerator.builder()
-                .managerCreator(CREATOR)
-                .valuedGenerator(VALUED_GENERATOR)
-                .key(KEY)
+        Generator seedGenerator = SavingGenerator.builder()
                 .type(TYPE)
                 .dtoService(dtoService)
                 .storageType(STORAGE_TYPE)
+                .managerCreator(CREATOR)
+                .valuedGenerator(VALUED_GENERATOR)
+                .key(KEY)
                 .build();
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isPresent();
