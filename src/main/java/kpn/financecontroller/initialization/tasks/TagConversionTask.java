@@ -4,6 +4,8 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
+import kpn.financecontroller.initialization.generators.valued.Valued;
+import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storages.TagStorage;
@@ -12,10 +14,24 @@ import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
 import java.util.Optional;
+import java.util.function.Function;
 
+// TODO: 31.03.2022 generate it
 final public class TagConversionTask extends BaseTask {
     @Setter
     private Long entityId;
+
+    public void setKey(Valued<String> key){
+        this.key = key;
+    }
+
+    public void setValuedGenerator(ValuedGenerator<String> valuedGenerator){
+        this.valuedGenerator = valuedGenerator;
+    }
+
+    public void setManagerCreator(Function<Context, ResultContextManager> managerCreator){
+        this.managerCreator = managerCreator;
+    }
 
     @Override
     public void execute(Context context) {

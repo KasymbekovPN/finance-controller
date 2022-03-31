@@ -23,7 +23,7 @@ final public class ReadingGenerator extends BaseGenerator {
         return new Builder();
     }
 
-    public ReadingGenerator(Valued<String> key,
+    private ReadingGenerator(Valued<String> key,
                             ValuedGenerator<String> valuedGenerator,
                             Function<Context, ResultContextManager> managerCreator,
                             Deque<PathItem> pathItems) {

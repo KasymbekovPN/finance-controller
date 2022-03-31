@@ -50,6 +50,7 @@ final public class ConversionGenerator extends BaseGenerator {
                     .type(type)
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
+                    .field("key", key)
                     .field("entityId", maybeId.get())
                     .build();
             return Optional.of(seed);
@@ -64,13 +65,11 @@ final public class ConversionGenerator extends BaseGenerator {
                 LongKeyJsonObj<?> jsonObj = jsonObjType.cast(result.getValue());
                 Set<Long> ids = jsonObj.getEntities().keySet();
                 entityIds = new ArrayDeque<>(ids);
-                Long id = entityIds.pollFirst();
-                if (id != null){
-                    return Optional.of(id);
-                }
             }
         }
-        return Optional.empty();
+
+        Long id = entityIds.pollFirst();
+        return id != null ? Optional.of(id) : Optional.empty();
     }
 
     public static class Builder extends BaseBuilder {

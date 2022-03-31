@@ -15,9 +15,9 @@ import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.SimpleContext;
 import kpn.taskexecutor.lib.generators.Generator;
 import kpn.taskexecutor.lib.seeds.Seed;
+import kpn.taskexecutor.lib.tasks.Task;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.scheduling.config.Task;
 
 import java.util.Map;
 import java.util.Optional;

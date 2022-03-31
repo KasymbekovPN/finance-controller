@@ -9,7 +9,7 @@ import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seeds.Seed;
 import kpn.taskexecutor.lib.seeds.SeedImpl;
-import org.springframework.scheduling.config.Task;
+import kpn.taskexecutor.lib.tasks.Task;
 
 import java.util.*;
 import java.util.function.Function;
@@ -26,7 +26,7 @@ final public class SavingGenerator extends BaseGenerator {
         return new Builder();
     }
 
-    public SavingGenerator(Valued<String> key,
+    private SavingGenerator(Valued<String> key,
                            ValuedGenerator<String> valuedGenerator,
                            Function<Context, ResultContextManager> managerCreator,
                            Class<? extends Task> type,
@@ -67,13 +67,11 @@ final public class SavingGenerator extends BaseGenerator {
             if (result.getSuccess()){
                 Set<Long> ids = storageType.cast(result.getValue()).keySet();
                 entityIds = new ArrayDeque<>(ids);
-                Long id = entityIds.pollFirst();
-                if (id != null){
-                    return Optional.of(id);
-                }
             }
         }
-        return Optional.empty();
+
+        Long id = entityIds.pollFirst();
+        return id != null ? Optional.of(id) : Optional.empty();
     }
 
     public static class Builder extends BaseBuilder{
