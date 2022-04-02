@@ -9,6 +9,7 @@ import kpn.financecontroller.initialization.generators.valued.ValuedStringGenera
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
+import kpn.financecontroller.initialization.setting.Setting;
 import kpn.financecontroller.initialization.storages.TagStorage;
 import kpn.financecontroller.initialization.tasks.TagConversionTask;
 import kpn.financecontroller.initialization.tasks.TagSavingTask;
@@ -17,42 +18,31 @@ import kpn.taskexecutor.lib.contexts.SimpleContext;
 import kpn.taskexecutor.lib.creators.CreatorImpl;
 import kpn.taskexecutor.lib.executors.SimpleExecutor;
 import kpn.taskexecutor.lib.generators.Generator;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.function.Function;
 
 @Slf4j
 @Component
 @Profile("dev")
-@ConfigurationProperties(prefix = "initial.entities")
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent> {
-
-    private static final Map<Entities, String> FILE_NAMES = Map.of(
-            Entities.TAGS, "tags.json"
-    );
 
     @Autowired
     private DTOService<Tag, TagEntity, Long> tagDtoService;
 
-    @Setter
-    private Boolean enable;
-    @Setter
-    private String directory;
+    @Autowired
+    private Setting setting;
 
     @SneakyThrows
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (enable){
+        if (setting.isEnable()){
             log.info("DB init. data saving starting");
 
             CreatorImpl creator = new CreatorImpl();
@@ -60,7 +50,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             SimpleExecutor executor = new SimpleExecutor(creator, context);
 
             Generator readingGenerator = ReadingGenerator.builder()
-                    .pathItem(Entities.TAGS, createPath(Entities.TAGS))
+                    .pathItem(Entities.TAGS, setting.getPath(Entities.TAGS))
                     .managerCreator(new ManagerCreatorImpl())
                     .valuedGenerator(new ValuedStringGenerator())
                     .build();
@@ -105,10 +95,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
         }
-    }
-
-    private String createPath(Entities entity) {
-        return directory + "/" + FILE_NAMES.getOrDefault(entity, "");
     }
 
     public static class ManagerCreatorImpl implements Function<Context, ResultContextManager> {
