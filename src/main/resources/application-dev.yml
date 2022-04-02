@@ -28,13 +28,14 @@ i18n:
 initial.entities:
   enable: true
   directory: devInitialEntities
-  sequence:
-    - {key: TAGS, path: tags.json}
-    - {key: COUNTRIES, path: countries.json}
-    - {key: REGIONS, path: regions.json}
-    - {key: CITIES, path: cities.json}
-    - {key: STREETS, path: streets.json}
-    - {key: ADDRESSES, path: addresses.json}
+
+#  sequence:
+#    - {key: TAGS, path: tags.json}
+#    - {key: COUNTRIES, path: countries.json}
+#    - {key: REGIONS, path: regions.json}
+#    - {key: CITIES, path: cities.json}
+#    - {key: STREETS, path: streets.json}
+#    - {key: ADDRESSES, path: addresses.json}
 
 #    - key: TAGS
 #      path: tags.json

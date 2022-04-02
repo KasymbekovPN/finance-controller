@@ -70,7 +70,7 @@ final public class SavingGenerator extends BaseGenerator {
             }
         }
 
-        Long id = entityIds.pollFirst();
+        Long id = entityIds != null ? entityIds.pollFirst() : null;
         return id != null ? Optional.of(id) : Optional.empty();
     }
 

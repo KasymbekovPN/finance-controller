@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @Slf4j
@@ -37,6 +37,10 @@ import java.util.function.Function;
 @ConfigurationProperties(prefix = "initial.entities")
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent> {
 
+    private static final Map<Entities, String> FILE_NAMES = Map.of(
+            Entities.TAGS, "tags.json"
+    );
+
     @Autowired
     private DTOService<Tag, TagEntity, Long> tagDtoService;
 
@@ -44,8 +48,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private Boolean enable;
     @Setter
     private String directory;
-    @Setter
-    private List<ListItem> sequence;
 
     @SneakyThrows
     @Override
@@ -58,7 +60,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             SimpleExecutor executor = new SimpleExecutor(creator, context);
 
             Generator readingGenerator = ReadingGenerator.builder()
-                    .pathItem(Entities.TAGS, directory + "/" + "tags.json") // TODO: 30.03.2022 take path out of sequence
+                    .pathItem(Entities.TAGS, createPath(Entities.TAGS))
                     .managerCreator(new ManagerCreatorImpl())
                     .valuedGenerator(new ValuedStringGenerator())
                     .build();
@@ -94,8 +96,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .key(Entities.TAGS)
                     .build();
 
-
-            // TODO: 31.03.2022 addGenerator must return this
             executor.addGenerator(readingGenerator);
             executor.addGenerator(tagCreationGenerator);
             executor.addGenerator(tagConversationGenerator);
@@ -107,14 +107,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         }
     }
 
-    @Setter
-    @Getter
-    public static class ListItem {
-        private String key;
-        private String path;
+    private String createPath(Entities entity) {
+        return directory + "/" + FILE_NAMES.getOrDefault(entity, "");
     }
 
-    // TODO: 30.03.2022 ??? where is it must be ???
     public static class ManagerCreatorImpl implements Function<Context, ResultContextManager> {
         @Override
         public ResultContextManager apply(Context context) {

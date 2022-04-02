@@ -12,14 +12,13 @@ import lombok.Setter;
 import java.util.List;
 import java.util.function.Function;
 
-// TODO: 30.03.2022 executor should work with base class' methods too
 public abstract class BaseTask implements Task {
     @Setter
     protected Valued<String> key;
     @Setter
-    protected ValuedGenerator<String> valuedGenerator; // TODO: 30.03.2022 must be private
+    protected ValuedGenerator<String> valuedGenerator;
     @Setter
-    protected Function<Context, ResultContextManager> managerCreator; // TODO: 30.03.2022 must be private
+    protected Function<Context, ResultContextManager> managerCreator;
     @Getter
     protected boolean continuationPossible;
     protected String code;
