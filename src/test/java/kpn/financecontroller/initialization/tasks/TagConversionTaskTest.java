@@ -10,7 +10,7 @@ import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -112,7 +112,7 @@ public class TagConversionTaskTest {
         private TagLongKeyJsonObj jsonObject;
 
         public ContextBuilder() {
-            this.context = new SimpleContext();
+            this.context = new DefaultContext();
         }
 
         public ContextBuilder addJsonObject() {

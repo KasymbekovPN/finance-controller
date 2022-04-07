@@ -6,7 +6,7 @@ import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.contexts.DefaultContext;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ public class ReadingTaskTest {
         task.setManagerCreator(new TestManagerCreator());
         task.setPath(NOT_EXIST_PATH);
 
-        SimpleContext context = new SimpleContext();
+        DefaultContext context = new DefaultContext();
         task.execute(context);
 
         Result<String> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.FILE_READING_RESULT, String.class);
@@ -66,7 +66,7 @@ public class ReadingTaskTest {
         task.setManagerCreator(new TestManagerCreator());
         task.setPath(EXIST_PATH);
 
-        SimpleContext context = new SimpleContext();
+        DefaultContext context = new DefaultContext();
         task.execute(context);
 
         Result<String> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.FILE_READING_RESULT, String.class);

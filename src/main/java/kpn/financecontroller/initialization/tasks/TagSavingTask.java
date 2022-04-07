@@ -10,30 +10,16 @@ import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
-import java.util.function.Function;
-
+// TODO: 07.04.2022 generate it
 final public class TagSavingTask extends BaseTask {
     @Setter
     private DTOService<Tag, TagEntity, Long> dtoService;
     @Setter
     private Long entityId;
 
-    public void setKey(Valued<String> key){
-        this.key = key;
-    }
-
-    public void setValuedGenerator(ValuedGenerator<String> valuedGenerator){
-        this.valuedGenerator = valuedGenerator;
-    }
-
-    public void setManagerCreator(Function<Context, ResultContextManager> managerCreator){
-        this.managerCreator = managerCreator;
-    }
-
     @Override
     public void execute(Context context) {
-        super.execute(context);
-
+        reset();
         ResultContextManager contextManager = createContextManager(context);
         Result<TagStorage> tagStorageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
         if (tagStorageResult.getSuccess()){

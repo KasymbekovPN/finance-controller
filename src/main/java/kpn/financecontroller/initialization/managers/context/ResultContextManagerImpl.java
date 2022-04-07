@@ -3,7 +3,7 @@ package kpn.financecontroller.initialization.managers.context;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.result.Result;
-import kpn.taskexecutor.exceptions.contexts.ContextPropertyNonExist;
+import kpn.taskexecutor.exceptions.PropertyNotFoundException;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,25 +30,25 @@ public class ResultContextManagerImpl implements ResultContextManager {
         Result.Builder<Object> builder = Result.<Object>builder();
         try{
             builder.success(context.get(propertyNames.getSuccessName(), Boolean.class));
-        } catch (ContextPropertyNonExist e){
+        } catch (PropertyNotFoundException e){
             return createFailResult(Codes.PROPERTY_NOT_EXIST);
         }
 
         try{
             builder.value(context.get(propertyNames.getValueName()));
-        } catch (ContextPropertyNonExist ignored){}
+        } catch (PropertyNotFoundException ignored){}
 
         try{
             String code = context.get(propertyNames.getCodeName(), String.class);
             builder.code(code);
-        } catch (ContextPropertyNonExist ex){
+        } catch (PropertyNotFoundException ex){
             ex.printStackTrace();
         }
 
         try{
             Object[] args = (Object[]) context.get(propertyNames.getArgsName());
             Arrays.stream(args).forEach(builder::arg);
-        } catch (ContextPropertyNonExist ignored){}
+        } catch (PropertyNotFoundException ignored){}
 
         return builder.build();
     }
@@ -59,13 +59,13 @@ public class ResultContextManagerImpl implements ResultContextManager {
         Result.Builder<T> builder = Result.<T>builder();
         try{
             builder.success(context.get(propertyNames.getSuccessName(), Boolean.class));
-        } catch (ContextPropertyNonExist e){
+        } catch (PropertyNotFoundException e){
             return createFailResult(Codes.PROPERTY_NOT_EXIST);
         }
 
         try{
             builder.value(context.get(propertyNames.getValueName(), type));
-        } catch (ContextPropertyNonExist ignored){}
+        } catch (PropertyNotFoundException ignored){}
         catch (ClassCastException e){
             return createFailResult(Codes.CAST_FAIL);
         }
@@ -73,14 +73,14 @@ public class ResultContextManagerImpl implements ResultContextManager {
         try{
             String code = context.get(propertyNames.getCodeName(), String.class);
             builder.code(code);
-        } catch (ContextPropertyNonExist ex){
+        } catch (PropertyNotFoundException ex){
             ex.printStackTrace();
         }
 
         try{
             Object[] args = (Object[]) context.get(propertyNames.getArgsName());
             Arrays.stream(args).forEach(builder::arg);
-        } catch (ContextPropertyNonExist ignored){}
+        } catch (PropertyNotFoundException ignored){}
 
         return builder.build();
     }

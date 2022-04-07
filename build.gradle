@@ -57,7 +57,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	implementation 'com.github.KasymbekovPN:task-executor-lib:1.0.3'
+	implementation 'com.github.KasymbekovPN:task-executor-lib:1.0.4'
 }
 
 dependencyManagement {

@@ -5,8 +5,8 @@ import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.ReadingTask;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.seeds.Seed;
-import kpn.taskexecutor.lib.seeds.SeedImpl;
+import kpn.taskexecutor.lib.seed.DefaultSeed;
+import kpn.taskexecutor.lib.seed.Seed;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +41,7 @@ final public class ReadingGenerator extends BaseGenerator {
     protected Optional<Seed> getNext(Context context) {
         PathItem pathItem = pathItems.pollFirst();
         if (pathItem != null){
-            Seed seed = new SeedImpl.Builder()
+            Seed seed = DefaultSeed.builder()
                     .type(ReadingTask.class)
                     .field("valuedGenerator", valuedGenerator)
                     .field("managerCreator", managerCreator)

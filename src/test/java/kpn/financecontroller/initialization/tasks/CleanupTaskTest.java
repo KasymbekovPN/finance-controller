@@ -10,7 +10,7 @@ import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,7 +43,7 @@ public class CleanupTaskTest {
 
     @Test
     void shouldCheckExecution_ifCleaningFail() {
-        SimpleContext context = new SimpleContext();
+        DefaultContext context = new DefaultContext();
         CleanupTask task = new CleanupTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
@@ -58,7 +58,7 @@ public class CleanupTaskTest {
 
     @Test
     void shouldCheckExecution() {
-        SimpleContext context = new SimpleContext();
+        DefaultContext context = new DefaultContext();
         CleanupTask task = new CleanupTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);

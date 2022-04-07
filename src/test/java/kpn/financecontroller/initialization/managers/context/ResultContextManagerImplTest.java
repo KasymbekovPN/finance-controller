@@ -4,9 +4,9 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.result.Result;
-import kpn.taskexecutor.exceptions.contexts.ContextPropertyNonExist;
+import kpn.taskexecutor.exceptions.PropertyNotFoundException;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.contexts.SimpleContext;
+import kpn.taskexecutor.lib.contexts.DefaultContext;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +72,7 @@ class ResultContextManagerImplTest {
         Context context = Mockito.mock(Context.class);
         Mockito
                 .when(context.get(generator.generate(Keys.KEY0, Properties.NOT_EXIST_PROPERTY, ResultContextManagerImpl.ResultParts.SUCCESS), Boolean.class))
-                .thenThrow(new ContextPropertyNonExist(""));
+                .thenThrow(new PropertyNotFoundException(""));
         return context;
     }
 
@@ -159,7 +159,7 @@ class ResultContextManagerImplTest {
     @SneakyThrows
     @Test
     void shouldCheckPutting() {
-        SimpleContext context = new SimpleContext();
+        DefaultContext context = new DefaultContext();
         ResultContextManagerImpl contextManager = new ResultContextManagerImpl(context, valuedStringGenerator);
 
         Result<String> result = Result.<String>builder()

@@ -5,7 +5,7 @@ import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.tasks.Task;
+import kpn.taskexecutor.lib.task.Task;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,8 +24,7 @@ public abstract class BaseTask implements Task {
     protected String code;
     protected List<Object> args;
 
-    @Override
-    public void execute(Context context) {
+    protected final void reset(){
         continuationPossible = false;
         code = null;
         args = List.of(key);

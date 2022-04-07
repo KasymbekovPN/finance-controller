@@ -9,9 +9,9 @@ import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.contexts.SimpleContext;
-import kpn.taskexecutor.lib.generators.Generator;
-import kpn.taskexecutor.lib.seeds.Seed;
+import kpn.taskexecutor.lib.contexts.DefaultContext;
+import kpn.taskexecutor.lib.seed.Seed;
+import kpn.taskexecutor.lib.seed.generator.Generator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreationGeneratorTest {
-    private static final Context CONTEXT = new SimpleContext();
+    private static final Context CONTEXT = new DefaultContext();
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Valued<String> KEY = TestKeys.KEY;

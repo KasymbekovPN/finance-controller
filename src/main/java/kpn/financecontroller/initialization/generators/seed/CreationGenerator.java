@@ -6,8 +6,8 @@ import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.seeds.Seed;
-import kpn.taskexecutor.lib.seeds.SeedImpl;
+import kpn.taskexecutor.lib.seed.DefaultSeed;
+import kpn.taskexecutor.lib.seed.Seed;
 
 import java.util.*;
 import java.util.function.Function;
@@ -34,7 +34,7 @@ final public class CreationGenerator extends BaseGenerator {
     protected Optional<Seed> getNext(Context context) {
         Class<? extends LongKeyJsonObj<?>> type = types.pollFirst();
         if (type != null){
-            Seed seed = SeedImpl.builder()
+            Seed seed = DefaultSeed.builder()
                     .type(CreationTask.class)
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)

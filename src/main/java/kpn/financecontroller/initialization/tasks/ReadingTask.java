@@ -2,9 +2,6 @@ package kpn.financecontroller.initialization.tasks;
 
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
@@ -12,28 +9,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.function.Function;
 
 final public class ReadingTask extends BaseTask {
 
     @Setter
     private String path;
 
-    public void setKey(Valued<String> key){
-        this.key = key;
-    }
-
-    public void setValuedGenerator(ValuedGenerator<String> valuedGenerator){
-        this.valuedGenerator = valuedGenerator;
-    }
-
-    public void setManagerCreator(Function<Context, ResultContextManager> managerCreator){
-        this.managerCreator = managerCreator;
-    }
-
     @Override
     public void execute(Context context) {
-        super.execute(context);
+        reset();
         String value = null;
         try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path)){
             if (inputStream != null){

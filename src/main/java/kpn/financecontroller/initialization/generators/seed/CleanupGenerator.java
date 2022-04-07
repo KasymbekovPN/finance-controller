@@ -6,9 +6,9 @@ import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.CleanupTask;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.generators.Generator;
-import kpn.taskexecutor.lib.seeds.Seed;
-import kpn.taskexecutor.lib.seeds.SeedImpl;
+import kpn.taskexecutor.lib.seed.DefaultSeed;
+import kpn.taskexecutor.lib.seed.Seed;
+import kpn.taskexecutor.lib.seed.generator.Generator;
 
 import java.util.*;
 import java.util.function.Function;
@@ -35,7 +35,7 @@ final public class CleanupGenerator extends BaseGenerator {
     protected Optional<Seed> getNext(Context context) {
         DTOService<?, ?, Long> dtoService = dtoServices.pollFirst();
         if (dtoService != null){
-            Seed seed = SeedImpl.builder()
+            Seed seed = DefaultSeed.builder()
                     .type(CleanupTask.class)
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)

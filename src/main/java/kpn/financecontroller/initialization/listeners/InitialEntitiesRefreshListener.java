@@ -14,10 +14,10 @@ import kpn.financecontroller.initialization.storages.TagStorage;
 import kpn.financecontroller.initialization.tasks.TagConversionTask;
 import kpn.financecontroller.initialization.tasks.TagSavingTask;
 import kpn.taskexecutor.lib.contexts.Context;
-import kpn.taskexecutor.lib.contexts.SimpleContext;
-import kpn.taskexecutor.lib.creators.CreatorImpl;
-import kpn.taskexecutor.lib.executors.SimpleExecutor;
-import kpn.taskexecutor.lib.generators.Generator;
+import kpn.taskexecutor.lib.contexts.DefaultContext;
+import kpn.taskexecutor.lib.executors.DefaultExecutor;
+import kpn.taskexecutor.lib.seed.generator.Generator;
+import kpn.taskexecutor.lib.task.configurer.DefaultTaskConfigurer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +45,9 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         if (setting.isEnable()){
             log.info("DB init. data saving starting");
 
-            CreatorImpl creator = new CreatorImpl();
-            SimpleContext context = new SimpleContext();
-            SimpleExecutor executor = new SimpleExecutor(creator, context);
+            DefaultTaskConfigurer taskConfigurer = DefaultTaskConfigurer.builder().build();
+            DefaultContext context = new DefaultContext();
+            DefaultExecutor executor = new DefaultExecutor(taskConfigurer, context);
 
             Generator readingGenerator = ReadingGenerator.builder()
                     .pathItem(Entities.TAGS, setting.getPath(Entities.TAGS))
@@ -86,11 +86,12 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .key(Entities.TAGS)
                     .build();
 
-            executor.addGenerator(readingGenerator);
-            executor.addGenerator(tagCreationGenerator);
-            executor.addGenerator(tagConversationGenerator);
-            executor.addGenerator(cleanupGenerator);
-            executor.addGenerator(savingGenerator);
+            executor
+                    .addGenerator(readingGenerator)
+                    .addGenerator(tagCreationGenerator)
+                    .addGenerator(tagConversationGenerator)
+                    .addGenerator(cleanupGenerator)
+                    .addGenerator(savingGenerator);
 
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
