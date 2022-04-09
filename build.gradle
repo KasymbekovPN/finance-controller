@@ -58,6 +58,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	implementation 'com.github.KasymbekovPN:task-executor-lib:1.0.4'
+	implementation 'com.github.KasymbekovPN:result-lib:1.0.5'
 }
 
 dependencyManagement {

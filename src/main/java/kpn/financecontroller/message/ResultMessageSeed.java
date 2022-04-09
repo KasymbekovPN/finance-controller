@@ -1,6 +1,6 @@
 package kpn.financecontroller.message;
 
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import lombok.Getter;
 
 import java.util.Locale;

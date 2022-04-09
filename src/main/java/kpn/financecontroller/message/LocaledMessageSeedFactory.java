@@ -1,6 +1,7 @@
 package kpn.financecontroller.message;
 
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class LocaledMessageSeedFactory {
 
     private Result<Object> adjustResult(Result<?> result) {
         boolean codeIsNull = result.getCode() == null;
-        Result.Builder<Object> builder = Result.<Object>builder()
+        ImmutableResult.Builder<Object> builder = ImmutableResult.<Object>builder()
                 .code(codeIsNull ? nonExistCode : result.getCode());
         Arrays.stream(codeIsNull ? nonExistArgs : result.getArgs()).forEach(builder::arg);
 

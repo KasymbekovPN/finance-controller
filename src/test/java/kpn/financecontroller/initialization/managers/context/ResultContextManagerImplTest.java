@@ -3,7 +3,8 @@ package kpn.financecontroller.initialization.managers.context;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.exceptions.PropertyNotFoundException;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
@@ -38,23 +39,15 @@ class ResultContextManagerImplTest {
     static void beforeAll() {
         valuedStringGenerator = new ValuedStringGenerator();
 
-        expectedResultWhenPropertyNotExist = Result.<Object>builder()
-                .success(false)
-                .code(ResultContextManagerImpl.Codes.PROPERTY_NOT_EXIST.getValue())
-                .build();
-        expectedResultWhenExist = Result.<Object>builder()
-                .success(RESULT_SUCCESS)
-                .value(VALUE_RESULT_VALUE)
+        expectedResultWhenPropertyNotExist
+                = ImmutableResult.<Object>fail(ResultContextManagerImpl.Codes.PROPERTY_NOT_EXIST.getValue()).build();
+        expectedResultWhenExist = ImmutableResult.<Object>ok(VALUE_RESULT_VALUE)
                 .code(RESULT_CODE)
                 .arg(RESULT_ARG)
                 .build();
-        expectedResultWhenFailCast = Result.<TestObject>builder()
-                .success(false)
-                .code(ResultContextManagerImpl.Codes.CAST_FAIL.getValue())
-                .build();
-        expectedResultWhenTestObjectExist = Result.<TestObject>builder()
-                .success(true)
-                .value(TEST_OBJECT)
+        expectedResultWhenFailCast
+                = ImmutableResult.<TestObject>fail(ResultContextManagerImpl.Codes.CAST_FAIL.getValue()).build();
+        expectedResultWhenTestObjectExist = ImmutableResult.<TestObject>ok(TEST_OBJECT)
                 .code(RESULT_CODE)
                 .arg(RESULT_ARG)
                 .build();
@@ -162,7 +155,7 @@ class ResultContextManagerImplTest {
         DefaultContext context = new DefaultContext();
         ResultContextManagerImpl contextManager = new ResultContextManagerImpl(context, valuedStringGenerator);
 
-        Result<String> result = Result.<String>builder()
+        Result<String> result = ImmutableResult.<String>builder()
                 .success(RESULT_SUCCESS)
                 .value(VALUE_RESULT_VALUE)
                 .code(RESULT_CODE)

@@ -1,10 +1,12 @@
 package kpn.financecontroller.data.services.savers;
 
 import kpn.financecontroller.data.services.DTOServiceException;
-import kpn.financecontroller.data.services.Operator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 
-public abstract class AbstractSaver<D, E, I> extends Operator<D> implements Saver<D, E, I> {
+import java.util.Arrays;
+
+public abstract class AbstractSaver<D, E, I> implements Saver<D, E, I> {
 
     private final String name;
 
@@ -14,16 +16,18 @@ public abstract class AbstractSaver<D, E, I> extends Operator<D> implements Save
 
     @Override
     public Result<D> save(E entity) {
-        Result.Builder<D> builder = getResultBuilder()
-                .arg(name);
+        ImmutableResult.Builder<D> builder;
         try{
             E savedEntity = saveImpl(entity);
-            builder.success(true).value(convertEntityToDomain(savedEntity));
+            builder = ImmutableResult.<D>ok(convertEntityToDomain(savedEntity));
         } catch (DTOServiceException ex){
-            enrichBuilderByException(builder, ex);
+            builder = ImmutableResult.<D>fail(ex.getMessage());
+            Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 
-        return builder.build();
+        return builder
+                .beginArg(name)
+                .build();
     }
 
     protected E saveImpl(E entity) throws DTOServiceException{

@@ -3,7 +3,7 @@ package kpn.financecontroller.initialization.tasks;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
@@ -15,7 +15,7 @@ final public class CleanupTask extends BaseTask {
     public void execute(Context context) {
         reset();
         Result<Void> cleaningResult = dtoService.deleter().all();
-        if (cleaningResult.getSuccess()){
+        if (cleaningResult.isSuccess()){
             continuationPossible = true;
         } else {
             calculateAndSetCode(key, Codes.DB_FAIL_CLEANING);

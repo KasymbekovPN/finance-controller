@@ -3,7 +3,7 @@ package kpn.financecontroller.data.services.savers;
 import kpn.financecontroller.data.services.utils.TestEntity;
 import kpn.financecontroller.data.services.utils.TestModel;
 import kpn.financecontroller.data.services.utils.TestRepo;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,14 +39,14 @@ class SaverImplTest {
     @Test
     void shouldCheckSaving() {
         Result<TestModel> result = saver.save(testEntity);
-        assertThat(result.getSuccess()).isTrue();
+        assertThat(result.isSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo(testModel);
     }
 
     @Test
     void shouldCheckWrongWaySaving() {
         Result<TestModel> result = saver.save(throwEntity);
-        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.isSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("saver.saveImpl.fail");
         assertThat(result.getArgs()).isEqualTo(List.of(SAVER_NAME).toArray());
     }

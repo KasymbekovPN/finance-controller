@@ -1,13 +1,14 @@
 package kpn.financecontroller.data.services.loaders;
 
 import kpn.financecontroller.data.services.DTOServiceException;
-import kpn.financecontroller.data.services.Operator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractLoader<D, E, I> extends Operator<D> implements Loader<D, E, I> {
+public abstract class AbstractLoader<D, E, I> implements Loader<D, E, I> {
 
     private final String name;
 
@@ -17,67 +18,65 @@ public abstract class AbstractLoader<D, E, I> extends Operator<D> implements Loa
 
     @Override
     public Result<D> byId(I id) {
-        Result.Builder<D> builder = getResultBuilder()
-                .arg(name)
-                .arg(id);
+        ImmutableResult.Builder<D> builder;
         try{
             Optional<E> maybeEntity = loadById(id);
             if (maybeEntity.isPresent()){
-                builder
-                        .success(true)
-                        .value(convertEntityToDomain(maybeEntity.get()));
+                builder = ImmutableResult.<D>ok(convertEntityToDomain(maybeEntity.get()));
             } else {
-                builder
-                        .success(false)
-                        .code("loader.byId.noOne");
+                builder = ImmutableResult.<D>fail("loader.byId.noOne");
             }
-        } catch (DTOServiceException exception){
-            enrichBuilderByException(builder, exception);
+        } catch (DTOServiceException ex){
+            builder = ImmutableResult.<D>fail(ex.getMessage());
+            Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
-        return builder.build();
+
+        return builder
+                .beginArg(id)
+                .beginArg(name)
+                .build();
     }
 
     @Override
     public Result<List<D>> by(String attribute, Object value) {
-        Result.Builder<List<D>> builder = getListResultBuilder()
-                .arg(name)
-                .arg(attribute)
-                .arg(value);
+        ImmutableResult.Builder<List<D>> builder;
         if (checkAttribute(attribute)){
             if (checkValue(attribute, value)){
                 try{
                     List<E> entities = loadBy(attribute, value);
-                    builder
-                            .success(true)
-                            .value(convertEntitiesToDomains(entities));
-                } catch (DTOServiceException exception){
-                    enrichBuilderByException(builder, exception);
+                    builder = ImmutableResult.<List<D>>ok(convertEntitiesToDomains(entities));
+                } catch (DTOServiceException ex){
+                    builder = ImmutableResult.<List<D>>fail(ex.getMessage());
+                    Arrays.stream(ex.getArgs()).forEach(builder::arg);
                 }
             } else {
-                builder.code("loader.by.disallowedValue");
+                builder = ImmutableResult.<List<D>>fail("loader.by.disallowedValue");
             }
         } else {
-            builder.code("loader.by.disallowedAttribute");
+            builder = ImmutableResult.<List<D>>fail("loader.by.disallowedAttribute");
         }
 
-        return builder.build();
+        return builder
+                .beginArg(value)
+                .beginArg(attribute)
+                .beginArg(name)
+                .build();
     }
 
     @Override
     public Result<List<D>> all() {
-        Result.Builder<List<D>> builder = getListResultBuilder()
-                .arg(name);
+        ImmutableResult.Builder<List<D>> builder;
         try {
             List<E> entities = loadAll();
-            builder
-                    .success(true)
-                    .value(convertEntitiesToDomains(entities))
-                    .build();
+            builder = ImmutableResult.<List<D>>ok(convertEntitiesToDomains(entities));
         } catch (DTOServiceException ex){
-            enrichBuilderByException(builder, ex);
+            builder = ImmutableResult.<List<D>>fail(ex.getMessage());
+            Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 
-        return builder.build();
+        return builder
+                .beginArg(name)
+                .build();
     }
 
     protected boolean checkAttribute(String attribute){

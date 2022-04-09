@@ -3,7 +3,7 @@ package kpn.financecontroller.data.services.loaders;
 import kpn.financecontroller.data.services.utils.TestEntity;
 import kpn.financecontroller.data.services.utils.TestModel;
 import kpn.financecontroller.data.services.utils.TestRepo;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -48,7 +48,7 @@ class LoaderAllAndByIdTest {
     void shouldCheckById() {
         long expectedId = 1L;
         Result<TestModel> result = loader.byId(expectedId);
-        assertThat(result.getSuccess()).isTrue();
+        assertThat(result.isSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo(expectedDomain);
     }
 
@@ -56,7 +56,7 @@ class LoaderAllAndByIdTest {
     void shouldCheckWrongById() {
         long expectedId = 1L;
         Result<TestModel> result = wrongLoader.byId(expectedId);
-        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.isSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("loader.loadById.fail");
         assertThat(result.getArgs()).isEqualTo(List.of(WRONG_LOADER_NAME, expectedId).toArray());
     }
@@ -66,7 +66,7 @@ class LoaderAllAndByIdTest {
         String attribute = "attribute";
         String value = "value";
         Result<List<TestModel>> result = loader.by(attribute, value);
-        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.isSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("loader.by.disallowedAttribute");
         assertThat(result.getArgs()).isEqualTo(List.of(LOADER_NAME, attribute, value).toArray());
     }
@@ -74,14 +74,14 @@ class LoaderAllAndByIdTest {
     @Test
     void shouldCheckAll() {
         Result<List<TestModel>> result = loader.all();
-        assertThat(result.getSuccess()).isTrue();
+        assertThat(result.isSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo(expectedDomains);
     }
 
     @Test
     void shouldCheckWrongAll() {
         Result<List<TestModel>> result = wrongLoader.all();
-        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.isSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("loader.loadAll.fail");
         assertThat(result.getArgs()).isEqualTo(List.of(WRONG_LOADER_NAME).toArray());
     }

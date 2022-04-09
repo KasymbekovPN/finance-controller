@@ -10,7 +10,7 @@ import kpn.financecontroller.initialization.managers.context.ResultContextManage
 import kpn.financecontroller.initialization.storages.TagStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import kpn.taskexecutor.lib.seed.Seed;
@@ -129,10 +129,7 @@ public class SavingGeneratorTest {
         TagStorage tagStorage = new TagStorage();
         tagStorage.put(ENTITY_ID, tagEntity);
 
-        Result<TagStorage> result = Result.<TagStorage>builder()
-                .success(true)
-                .value(tagStorage)
-                .build();
+        ImmutableResult<TagStorage> result = ImmutableResult.<TagStorage>ok(tagStorage).build();
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
         Generator seedGenerator = SavingGenerator.builder()

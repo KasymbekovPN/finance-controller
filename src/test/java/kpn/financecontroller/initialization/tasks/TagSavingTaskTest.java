@@ -9,7 +9,8 @@ import kpn.financecontroller.initialization.managers.context.ResultContextManage
 import kpn.financecontroller.initialization.storages.TagStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,22 +36,22 @@ public class TagSavingTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultIfConversionResultNotExist = Result.<Void>builder()
+        expectedResultIfConversionResultNotExist = ImmutableResult.<Void>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.CONVERSION_RESULT_NOT_EXIST_ON_SAVING))
                 .arg(KEY)
                 .build();
-        expectedResultIfEntityNotExist = Result.<Void>builder()
+        expectedResultIfEntityNotExist = ImmutableResult.<Void>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_SAVING))
                 .arg(KEY)
                 .build();
-        expectedResultIfFailSaving = Result.<Void>builder()
+        expectedResultIfFailSaving = ImmutableResult.<Void>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.FAIL_SAVING_ATTEMPT))
                 .arg(KEY)
                 .build();
-        expectedResult = Result.<Void>builder()
+        expectedResult = ImmutableResult.<Void>builder()
                 .success(true)
                 .arg(KEY)
                 .build();
@@ -127,7 +128,7 @@ public class TagSavingTaskTest {
         TestSaver saver = Mockito.mock(TestSaver.class);
         Mockito
                 .when(saver.save(Mockito.any(TagEntity.class)))
-                .thenReturn(Result.<Tag>builder().success(true).build());
+                .thenReturn(ImmutableResult.<Tag>builder().success(true).build());
         return saver;
     }
 
@@ -135,7 +136,7 @@ public class TagSavingTaskTest {
         TestSaver saver = Mockito.mock(TestSaver.class);
         Mockito
                 .when(saver.save(Mockito.any(TagEntity.class)))
-                .thenReturn(Result.<Tag>builder().success(false).build());
+                .thenReturn(ImmutableResult.<Tag>builder().success(false).build());
         return saver;
     }
 
@@ -176,7 +177,7 @@ public class TagSavingTaskTest {
 
         public Context build(){
             if (storage != null){
-                Result<TagStorage> tagStorageResult = Result.<TagStorage>builder()
+                Result<TagStorage> tagStorageResult = ImmutableResult.<TagStorage>builder()
                         .success(true)
                         .value(storage)
                         .build();

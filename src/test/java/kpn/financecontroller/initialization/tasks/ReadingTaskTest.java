@@ -4,7 +4,8 @@ import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import lombok.SneakyThrows;
@@ -28,14 +29,10 @@ public class ReadingTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultIfFileNotExist = Result.<String>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.FAIL_FILE_READING))
+        expectedResultIfFileNotExist = ImmutableResult.<String>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.FAIL_FILE_READING))
                 .arg(TestKeys.KEY)
                 .build();
-        expectedResult = Result.<String>builder()
-                .success(true)
-                .value(FILE_CONTENT)
+        expectedResult = ImmutableResult.<String>ok(FILE_CONTENT)
                 .arg(TestKeys.KEY)
                 .build();
     }

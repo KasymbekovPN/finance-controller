@@ -6,7 +6,7 @@ import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storages.TagStorage;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
@@ -22,12 +22,12 @@ final public class TagSavingTask extends BaseTask {
         reset();
         ResultContextManager contextManager = createContextManager(context);
         Result<TagStorage> tagStorageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
-        if (tagStorageResult.getSuccess()){
+        if (tagStorageResult.isSuccess()){
             TagStorage tagStorage = tagStorageResult.getValue();
             TagEntity tagEntity = tagStorage.get(entityId);
             if (tagEntity != null){
                 Result<Tag> savingResult = dtoService.saver().save(tagEntity);
-                if (savingResult.getSuccess()){
+                if (savingResult.isSuccess()){
                     continuationPossible = true;
                 } else {
                     calculateAndSetCode(key, Codes.FAIL_SAVING_ATTEMPT);

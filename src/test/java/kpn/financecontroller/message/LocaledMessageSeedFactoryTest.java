@@ -1,6 +1,7 @@
 package kpn.financecontroller.message;
 
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,9 @@ class LocaledMessageSeedFactoryTest {
 
     @BeforeEach
     void setUp() {
-        emptyResult = Result.<Object>builder().build();
+        emptyResult = ImmutableResult.<Object>builder().build();
 
-        Result.Builder<Object> builder = Result.<Object>builder()
+        ImmutableResult.Builder<Object> builder = ImmutableResult.<Object>builder()
                 .code(CODE);
         Arrays.stream(ARGS).forEach(builder::arg);
         result = builder.build();

@@ -13,7 +13,7 @@ import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.message.LocaledMessageSeedFactory;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
@@ -40,7 +40,7 @@ public class TagView extends GridView<Tag> {
     @Override
     protected Result<?> updateListImpl() {
         Result<List<Tag>> result = tagService.loader().all();
-        if (result.getSuccess()){
+        if (result.isSuccess()){
             grid.setItems(result.getValue());
         }
         return result;

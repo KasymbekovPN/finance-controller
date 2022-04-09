@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
@@ -19,7 +19,7 @@ final public class CreationTask extends BaseTask {
         Object value = null;
         ResultContextManager contextManager = createContextManager(context);
         Result<String> fileReadingResult = contextManager.get(key, Properties.FILE_READING_RESULT, String.class);
-        if (fileReadingResult.getSuccess()){
+        if (fileReadingResult.isSuccess()){
             try{
                 value = new Gson().fromJson(fileReadingResult.getValue(), type);
                 continuationPossible = true;

@@ -10,7 +10,7 @@ import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import kpn.taskexecutor.lib.seed.Seed;
@@ -112,11 +112,7 @@ public class ConversionGeneratorTest {
         TagLongKeyJsonObj jsonObj = new TagLongKeyJsonObj();
         jsonObj.setEntities(Map.of(ENTITY_ID, entity));
 
-        Result<TagLongKeyJsonObj> result = Result.<TagLongKeyJsonObj>builder()
-                .success(true)
-                .value(jsonObj)
-                .build();
-
+        ImmutableResult<TagLongKeyJsonObj> result = ImmutableResult.<TagLongKeyJsonObj>ok(jsonObj).build();
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
 
         Generator seedGenerator = ConversionGenerator.builder()

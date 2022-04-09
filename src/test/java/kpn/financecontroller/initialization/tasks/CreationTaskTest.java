@@ -9,7 +9,8 @@ import kpn.financecontroller.initialization.tasks.testUtils.TestJsonEntity;
 import kpn.financecontroller.initialization.tasks.testUtils.TestJsonObj;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,15 +35,11 @@ public class CreationTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultWhenNoContent = Result.<TestJsonObj>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.NO_STRING_CONTENT))
+        expectedResultWhenNoContent = ImmutableResult.<TestJsonObj>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.NO_STRING_CONTENT))
                 .arg(TestKeys.KEY)
                 .build();
 
-        expectedResultWhenJsonSyntaxException = Result.<TestJsonObj>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.JSON_SYNTAX_EXCEPTION))
+        expectedResultWhenJsonSyntaxException = ImmutableResult.<TestJsonObj>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.JSON_SYNTAX_EXCEPTION))
                 .arg(TestKeys.KEY)
                 .build();
 
@@ -52,9 +49,7 @@ public class CreationTaskTest {
         TestJsonObj value = new TestJsonObj();
         value.setEntities(Map.of(1L, testEntity));
 
-        expectedResult = Result.<TestJsonObj>builder()
-                .success(true)
-                .value(value)
+        expectedResult = ImmutableResult.<TestJsonObj>ok(value)
                 .arg(TestKeys.KEY)
                 .build();
     }
@@ -117,10 +112,7 @@ public class CreationTaskTest {
         }
 
         public ContextBuilder addSource(String source){
-            Result<String> result = Result.<String>builder()
-                    .success(true)
-                    .value(source)
-                    .build();
+            Result<String> result = ImmutableResult.<String>ok(source).build();
             CREATOR.apply(context).put(KEY, Properties.FILE_READING_RESULT, result);
             return this;
         }

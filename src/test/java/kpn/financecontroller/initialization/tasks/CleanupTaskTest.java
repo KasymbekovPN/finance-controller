@@ -8,7 +8,8 @@ import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,12 +31,10 @@ public class CleanupTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResult_ifCleaningFail = Result.<Void>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.DB_FAIL_CLEANING))
+        expectedResult_ifCleaningFail = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.DB_FAIL_CLEANING))
                 .arg(KEY)
                 .build();
-        expectedResult = Result.<Void>builder()
+        expectedResult = ImmutableResult.<Void>builder()
                 .success(true)
                 .arg(KEY)
                 .build();
@@ -75,7 +74,7 @@ public class CleanupTaskTest {
         TestDeleter deleter = Mockito.mock(TestDeleter.class);
         Mockito
                 .when(deleter.all())
-                .thenReturn(Result.<Void>builder().success(true).build());
+                .thenReturn(ImmutableResult.<Void>builder().success(true).build());
         return deleter;
     }
 
@@ -83,7 +82,7 @@ public class CleanupTaskTest {
         TestDeleter deleter = Mockito.mock(TestDeleter.class);
         Mockito
                 .when(deleter.all())
-                .thenReturn(Result.<Void>builder().success(false).build());
+                .thenReturn(ImmutableResult.<Void>builder().success(false).build());
         return deleter;
     }
 

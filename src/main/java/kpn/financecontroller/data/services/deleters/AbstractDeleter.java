@@ -1,10 +1,12 @@
 package kpn.financecontroller.data.services.deleters;
 
 import kpn.financecontroller.data.services.DTOServiceException;
-import kpn.financecontroller.data.services.Operator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 
-public abstract class AbstractDeleter<D, E, I> extends Operator<Void> implements Deleter<D, E, I> {
+import java.util.Arrays;
+
+public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
 
     private final String name;
 
@@ -14,55 +16,61 @@ public abstract class AbstractDeleter<D, E, I> extends Operator<Void> implements
 
     @Override
     public Result<Void> byId(I id) {
-        Result.Builder<Void> builder = getResultBuilder()
-                .arg(name)
-                .arg(id);
+        ImmutableResult.Builder<Void> builder;
         try{
             deleteById(id);
-            builder.success(true);
+            builder = ImmutableResult.<Void>ok(null);
         } catch (DTOServiceException ex){
-            enrichBuilderByException(builder, ex);
+            builder = ImmutableResult.<Void>fail(ex.getMessage());
+            Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 
-        return builder.build();
+        return builder
+                .beginArg(id)
+                .beginArg(name)
+                .build();
     }
 
     @Override
     public Result<Void> by(String attribute, Object value) {
-        Result.Builder<Void> builder = getResultBuilder()
-                .arg(name)
-                .arg(attribute)
-                .arg(value);
+        ImmutableResult.Builder<Void> builder;
         if (checkAttribute(attribute)){
             if (checkValue(attribute, value)){
                 try{
                     deleteBy(attribute, value);
-                    builder.success(true);
+                    builder = ImmutableResult.<Void>ok(null);
                 } catch (DTOServiceException ex){
-                    enrichBuilderByException(builder, ex);
+                    builder = ImmutableResult.<Void>fail(ex.getMessage());
+                    Arrays.stream(ex.getArgs()).forEach(builder::arg);
                 }
             } else {
-                builder.success(false).code("deleter.by.value.disallowed");
+                builder = ImmutableResult.<Void>fail("deleter.by.value.disallowed");
             }
         } else {
-            builder.success(false).code("deleter.by.attribute.disallowed");
+            builder = ImmutableResult.<Void>fail("deleter.by.attribute.disallowed");
         }
 
-        return builder.build();
+        return builder
+                .beginArg(value)
+                .beginArg(attribute)
+                .beginArg(name)
+                .build();
     }
 
     @Override
     public Result<Void> all() {
-        Result.Builder<Void> builder = getResultBuilder()
-                .arg(name);
+        ImmutableResult.Builder<Void> builder;
         try{
             deleteAll();
-            builder.success(true);
+            builder = ImmutableResult.<Void>ok(null);
         } catch (DTOServiceException ex){
-            enrichBuilderByException(builder, ex);
+            builder = ImmutableResult.<Void>fail(ex.getMessage());
+            Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 
-        return builder.build();
+        return builder
+                .beginArg(name)
+                .build();
     }
 
     protected boolean checkAttribute(String attribute) {

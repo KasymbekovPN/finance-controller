@@ -8,7 +8,8 @@ import kpn.financecontroller.initialization.managers.context.ResultContextManage
 import kpn.financecontroller.initialization.storages.TagStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,13 +34,13 @@ public class TagConversionTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResult_ifNoJsonObj = Result.<TagStorage>builder()
+        expectedResult_ifNoJsonObj = ImmutableResult.<TagStorage>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
                 .value(new TagStorage())
                 .arg(KEY)
                 .build();
-        expectedResult_ifEntityNotExist = Result.<TagStorage>builder()
+        expectedResult_ifEntityNotExist = ImmutableResult.<TagStorage>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
                 .value(new TagStorage())
@@ -53,7 +54,7 @@ public class TagConversionTaskTest {
         TagStorage tagStorage = new TagStorage();
         tagStorage.put(ENTITY_ID, tagEntity);
 
-        expectedResult = Result.<TagStorage>builder()
+        expectedResult = ImmutableResult.<TagStorage>builder()
                 .success(true)
                 .value(tagStorage)
                 .arg(KEY)
@@ -133,7 +134,7 @@ public class TagConversionTaskTest {
 
         public Context build(){
             if (jsonObject != null){
-                Result<TagLongKeyJsonObj> result = Result.<TagLongKeyJsonObj>builder()
+                Result<TagLongKeyJsonObj> result = ImmutableResult.<TagLongKeyJsonObj>builder()
                         .success(true)
                         .value(jsonObject)
                         .build();

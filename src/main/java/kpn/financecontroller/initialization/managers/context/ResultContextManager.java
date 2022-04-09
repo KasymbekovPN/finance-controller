@@ -1,7 +1,7 @@
 package kpn.financecontroller.initialization.managers.context;
 
 import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 
 public interface ResultContextManager {
     <T> void put(Valued<String> k, Valued<String> p, Result<T> result);

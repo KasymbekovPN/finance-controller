@@ -15,7 +15,7 @@ import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.message.LocaledMessageSeed;
 import kpn.financecontroller.message.LocaledMessageSeedFactory;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 
 import javax.annotation.PostConstruct;
 
@@ -111,7 +111,7 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     }
 
     protected void createNotification(Result<?> result) {
-        if (!result.getSuccess()){
+        if (!result.isSuccess()){
             LocaledMessageSeed seed = seedFactory.create(result);
             String text = i18nService.getTranslation(seed);
             notificationFactory.getBuilder(Notifications.ERROR)

@@ -5,7 +5,7 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seed.DefaultSeed;
 import kpn.taskexecutor.lib.seed.Seed;
@@ -61,7 +61,7 @@ final public class ConversionGenerator extends BaseGenerator {
     private Optional<Long> getNextEntityId(Context context) {
         if (entityIds == null){
             Result<Object> result = managerCreator.apply(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT);
-            if (result.getSuccess()){
+            if (result.isSuccess()){
                 LongKeyJsonObj<?> jsonObj = jsonObjType.cast(result.getValue());
                 Set<Long> ids = jsonObj.getEntities().keySet();
                 entityIds = new ArrayDeque<>(ids);

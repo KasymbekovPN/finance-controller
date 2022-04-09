@@ -1,6 +1,7 @@
 package kpn.financecontroller.message;
 
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ class ResultMessageSeedTest {
 
     @BeforeEach
     void setUp() {
-        Result.Builder<Object> builder = Result.<Object>builder().code(CODE);
+        ImmutableResult.Builder<Object> builder = ImmutableResult.<Object>builder().code(CODE);
         Arrays.stream(ARGS).forEach(builder::arg);
         result = builder.build();
     }

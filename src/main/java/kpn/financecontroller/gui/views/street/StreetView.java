@@ -15,7 +15,7 @@ import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.message.LocaledMessageSeedFactory;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -43,7 +43,7 @@ public class StreetView extends GridView<Street>{
     @Override
     protected Result<?> updateListImpl() {
         Result<List<Street>> result = streetService.loader().all();
-        if (result.getSuccess()){
+        if (result.isSuccess()){
             grid.setItems(result.getValue());
         }
         return result;

@@ -3,7 +3,7 @@ package kpn.financecontroller.initialization.tasks;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.task.Task;
 import lombok.Getter;
@@ -39,7 +39,7 @@ public abstract class BaseTask implements Task {
     }
 
     final <T> void putResultIntoContext(Context context, Valued<String> p, T value){
-        Result.Builder<T> builder = Result.<T>builder()
+        ImmutableResult.Builder<T> builder = ImmutableResult.<T>builder()
                 .success(continuationPossible)
                 .value(value)
                 .code(code);

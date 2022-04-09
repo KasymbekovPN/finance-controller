@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.services.loaders;
 
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 
 import java.util.List;
 

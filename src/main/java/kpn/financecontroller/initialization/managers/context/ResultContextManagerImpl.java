@@ -2,7 +2,8 @@ package kpn.financecontroller.initialization.managers.context;
 
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.exceptions.PropertyNotFoundException;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class ResultContextManagerImpl implements ResultContextManager {
     @Override
     public <T> void put(Valued<String> k, Valued<String> p, Result<T> result) {
         PropertyNames propertyNames = calculatePropertyNames(k, p);
-        context.put(propertyNames.getSuccessName(), result.getSuccess());
+        context.put(propertyNames.getSuccessName(), result.isSuccess());
         context.put(propertyNames.getValueName(), result.getValue());
         context.put(propertyNames.getCodeName(), result.getCode());
         context.put(propertyNames.getArgsName(), result.getArgs());
@@ -27,7 +28,7 @@ public class ResultContextManagerImpl implements ResultContextManager {
     @Override
     public Result<Object> get(Valued<String> k, Valued<String> p) {
         PropertyNames propertyNames = calculatePropertyNames(k, p);
-        Result.Builder<Object> builder = Result.<Object>builder();
+        ImmutableResult.Builder<Object> builder = ImmutableResult.<Object>builder();
         try{
             builder.success(context.get(propertyNames.getSuccessName(), Boolean.class));
         } catch (PropertyNotFoundException e){
@@ -56,7 +57,7 @@ public class ResultContextManagerImpl implements ResultContextManager {
     @Override
     public <T> Result<T> get(Valued<String> k, Valued<String> p, Class<T> type) {
         PropertyNames propertyNames = calculatePropertyNames(k, p);
-        Result.Builder<T> builder = Result.<T>builder();
+        ImmutableResult.Builder<T> builder = ImmutableResult.<T>builder();
         try{
             builder.success(context.get(propertyNames.getSuccessName(), Boolean.class));
         } catch (PropertyNotFoundException e){
@@ -95,7 +96,7 @@ public class ResultContextManagerImpl implements ResultContextManager {
     }
 
     private <T> Result<T> createFailResult(Codes code) {
-        return Result.<T>builder()
+        return ImmutableResult.<T>builder()
                 .success(false)
                 .code(code.getValue())
                 .build();

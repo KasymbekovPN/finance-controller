@@ -5,7 +5,7 @@ import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seed.DefaultSeed;
 import kpn.taskexecutor.lib.seed.Seed;
@@ -64,7 +64,7 @@ final public class SavingGenerator extends BaseGenerator {
     private Optional<Long> getNextEntityId(Context context) {
         if (entityIds == null){
             Result<Object> result = managerCreator.apply(context).get(key, Properties.JSON_TO_DB_CONVERSION_RESULT);
-            if (result.getSuccess()){
+            if (result.isSuccess()){
                 Set<Long> ids = storageType.cast(result.getValue()).keySet();
                 entityIds = new ArrayDeque<>(ids);
             }

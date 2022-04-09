@@ -2,7 +2,8 @@ package kpn.financecontroller.i18n;
 
 import kpn.financecontroller.message.LocaledMessageSeed;
 import kpn.financecontroller.message.LocaledMessageSeedFactory;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -44,7 +45,7 @@ class I18nServiceImplTest {
                                        Object arg,
                                        String localeCode,
                                        String expectedResult) {
-        Result<Object> result = Result.<Object>builder().code(code).arg(arg).build();
+        Result<Object> result = ImmutableResult.<Object>builder().code(code).arg(arg).build();
         LocaledMessageSeed seed = seedFactory.create(result, new Locale(localeCode));
         String translation = service.getTranslation(seed);
         assertThat(expectedResult).isEqualTo(translation);

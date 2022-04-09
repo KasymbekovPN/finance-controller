@@ -3,7 +3,7 @@ package kpn.financecontroller.data.services.deleters;
 import kpn.financecontroller.data.services.utils.TestEntity;
 import kpn.financecontroller.data.services.utils.TestModel;
 import kpn.financecontroller.data.services.utils.TestRepo;
-import kpn.financecontroller.result.Result;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -29,7 +29,7 @@ class DeleterAllAndByIdTest {
     void shouldCheckById() {
         long expectedId = 1L;
         Result<Void> result = deleter.byId(expectedId);
-        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.isSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("deleter.deleteById.fail");
         assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME, expectedId).toArray());
     }
@@ -39,7 +39,7 @@ class DeleterAllAndByIdTest {
         String attribute = "attribute";
         String value = "value";
         Result<Void> result = deleter.by(attribute, value);
-        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.isSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("deleter.by.attribute.disallowed");
         assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME, attribute, value).toArray());
     }
@@ -47,7 +47,7 @@ class DeleterAllAndByIdTest {
     @Test
     void shouldCheckAll() {
         Result<Void> result = deleter.all();
-        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.isSuccess()).isFalse();
         assertThat(result.getCode()).isEqualTo("deleter.deleteAll.fail");
         assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME).toArray());
     }
