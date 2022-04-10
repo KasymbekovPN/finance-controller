@@ -44,16 +44,6 @@ public class CleanupGeneratorTest {
     }
 
     @Test
-    void shouldCheckNextGetting_ifKeyNull() {
-        Generator seedGenerator = CleanupGenerator.builder()
-                .managerCreator(CREATOR)
-                .valuedGenerator(VALUED_GENERATOR)
-                .build();
-        Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
-        assertThat(maybeSeed).isEmpty();
-    }
-
-    @Test
     void shouldCheckNextGetting() {
         DTOService<?, ?, Long> dtoService = createDTOService();
         Map<String, Object> expectedFields = Map.of(
@@ -64,10 +54,9 @@ public class CleanupGeneratorTest {
         );
 
         Generator seedGenerator = CleanupGenerator.builder()
-                .dtoService(dtoService)
+                .item(KEY, dtoService)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
-                .key(KEY)
                 .build();
 
         Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);

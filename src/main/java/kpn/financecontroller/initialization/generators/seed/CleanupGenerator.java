@@ -9,13 +9,15 @@ import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seed.DefaultSeed;
 import kpn.taskexecutor.lib.seed.Seed;
 import kpn.taskexecutor.lib.seed.generator.Generator;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 import java.util.function.Function;
 
 final public class CleanupGenerator extends BaseGenerator {
 
-    private final Deque<DTOService<?, ?, Long>> dtoServices;
+    private final Deque<Item> items;
 
     public static Builder builder(){
         return new Builder();
@@ -24,23 +26,27 @@ final public class CleanupGenerator extends BaseGenerator {
     private CleanupGenerator(Valued<String> key,
                              ValuedGenerator<String> valuedGenerator,
                              Function<Context, ResultContextManager> managerCreator,
-                             List<DTOService<?, ?, Long>> dtoServices) {
+                             List<Item> items) {
         super(key, valuedGenerator, managerCreator);
-        this.dtoServices = new ArrayDeque<>(dtoServices);
+        this.items = new ArrayDeque<>(items);
 
-        this.fieldValidator.caller(getClass().getSimpleName());
+        this.fieldValidator
+                .reset()
+                .toChecking(managerCreator, "Manager creator")
+                .toChecking(valuedGenerator, "Valued generator")
+                .caller(getClass().getSimpleName());
     }
 
     @Override
     protected Optional<Seed> getNext(Context context) {
-        DTOService<?, ?, Long> dtoService = dtoServices.pollFirst();
-        if (dtoService != null){
+        Item item = items.pollFirst();
+        if (item != null){
             Seed seed = DefaultSeed.builder()
                     .type(CleanupTask.class)
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
-                    .field("key", key)
-                    .field("dtoService", dtoService)
+                    .field("key", item.getKey())
+                    .field("dtoService", item.getDtoService())
                     .build();
             return Optional.of(seed);
         }
@@ -48,16 +54,23 @@ final public class CleanupGenerator extends BaseGenerator {
     }
 
     public static class Builder extends BaseBuilder{
-        private final List<DTOService<?, ?, Long>> dtoServices = new ArrayList<>();
+        private final List<Item> items = new ArrayList<>();
 
-        public Builder dtoService(DTOService<?, ?, Long> type){
-            dtoServices.add(type);
+        public Builder item(Valued<String> key, DTOService<?, ?, Long> dtoService){
+            items.add(new Item(key, dtoService));
             return this;
         }
 
         @Override
         public Generator build() {
-            return new CleanupGenerator(key, valuedGenerator, managerCreator, dtoServices);
+            return new CleanupGenerator(key, valuedGenerator, managerCreator, items);
         }
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    private static class Item{
+        private final Valued<String> key;
+        private final DTOService<?, ?, Long> dtoService;
     }
 }
