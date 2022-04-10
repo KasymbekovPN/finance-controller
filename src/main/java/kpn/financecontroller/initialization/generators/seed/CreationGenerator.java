@@ -8,12 +8,14 @@ import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seed.DefaultSeed;
 import kpn.taskexecutor.lib.seed.Seed;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 import java.util.function.Function;
 
 final public class CreationGenerator extends BaseGenerator {
-    private final Deque<Class<? extends LongKeyJsonObj<?>>> types;
+    private final Deque<Item> items;
 
     public static Builder builder(){
         return new Builder();
@@ -22,24 +24,27 @@ final public class CreationGenerator extends BaseGenerator {
     private CreationGenerator(Valued<String> key,
                               ValuedGenerator<String> valuedGenerator,
                               Function<Context, ResultContextManager> managerCreator,
-                              List<Class<? extends LongKeyJsonObj<?>>> types) {
+                              List<Item> items) {
         super(key, valuedGenerator, managerCreator);
-        this.types = new ArrayDeque<>(types);
+        this.items = new ArrayDeque<>(items);
 
         this.fieldValidator
+                .reset()
+                .toChecking(managerCreator, "Manager creator")
+                .toChecking(valuedGenerator, "Valued generator")
                 .caller(getClass().getSimpleName());
     }
 
     @Override
     protected Optional<Seed> getNext(Context context) {
-        Class<? extends LongKeyJsonObj<?>> type = types.pollFirst();
-        if (type != null){
+        Item item = items.pollFirst();
+        if (item != null){
             Seed seed = DefaultSeed.builder()
                     .type(CreationTask.class)
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
-                    .field("key", key)
-                    .field("type", type)
+                    .field("key", item.getKey())
+                    .field("type", item.getType())
                     .build();
             return Optional.of(seed);
         }
@@ -47,15 +52,22 @@ final public class CreationGenerator extends BaseGenerator {
     }
 
     public static class Builder extends BaseBuilder{
-        private final List<Class<? extends LongKeyJsonObj<?>>> types = new ArrayList<>();
+        private final List<Item> items = new ArrayList<>();
 
-        public Builder type(Class<? extends LongKeyJsonObj<?>> type) {
-            types.add(type);
+        public Builder item(Valued<String> key, Class<? extends LongKeyJsonObj<?>> type) {
+            items.add(new Item(key, type));
             return this;
         }
 
         public CreationGenerator build(){
-            return new CreationGenerator(key, valuedGenerator, managerCreator, types);
+            return new CreationGenerator(key, valuedGenerator, managerCreator, items);
         }
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    private static class Item{
+        private final Valued<String> key;
+        private final Class<? extends LongKeyJsonObj<?>> type;
     }
 }

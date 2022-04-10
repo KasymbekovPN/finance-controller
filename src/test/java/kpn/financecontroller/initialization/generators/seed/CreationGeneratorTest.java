@@ -44,17 +44,6 @@ public class CreationGeneratorTest {
     }
 
     @Test
-    void shouldCheckNextGetting_ifKeyNull() {
-        Generator seedGenerator = CreationGenerator.builder()
-                .managerCreator(CREATOR)
-                .valuedGenerator(VALUED_GENERATOR)
-                .build();
-
-        Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
-        assertThat(maybeSeed).isEmpty();
-    }
-
-    @Test
     void shouldCheckNextGetting() {
         Map<String, Object> expectedFields = Map.of(
                 "valuedGenerator", VALUED_GENERATOR,
@@ -64,7 +53,7 @@ public class CreationGeneratorTest {
         );
 
         Generator seedGenerator = CreationGenerator.builder()
-                .type(TestJsonObj.class)
+                .item(KEY, TestJsonObj.class)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
