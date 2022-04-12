@@ -8,10 +8,12 @@ import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.task.Task;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.function.Function;
 
+@Slf4j
 public abstract class BaseTask implements Task {
     @Setter
     protected Valued<String> key;
@@ -39,6 +41,9 @@ public abstract class BaseTask implements Task {
     }
 
     final <T> void putResultIntoContext(Context context, Valued<String> p, T value){
+        if (!continuationPossible){
+            log.error("{} : {}", code, args);
+        }
         ImmutableResult.Builder<T> builder = ImmutableResult.<T>builder()
                 .success(continuationPossible)
                 .value(value)

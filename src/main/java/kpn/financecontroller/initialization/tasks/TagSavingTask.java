@@ -28,6 +28,7 @@ final public class TagSavingTask extends BaseTask {
             if (tagEntity != null){
                 Result<Tag> savingResult = dtoService.saver().save(tagEntity);
                 if (savingResult.isSuccess()){
+                    tagEntity.setId(savingResult.getValue().getId());
                     continuationPossible = true;
                 } else {
                     calculateAndSetCode(key, Codes.FAIL_SAVING_ATTEMPT);

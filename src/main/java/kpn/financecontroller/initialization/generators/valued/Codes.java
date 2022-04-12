@@ -10,6 +10,7 @@ public enum Codes implements Valued<String> {
     JSON_SYNTAX_EXCEPTION("json.syntax.exception"),
     NO_JSON_OBJECT("no.json.object"),
     ENTITY_NOT_EXIST_ON_CONVERSION("entity.not.exist.on.conversion"),
+    ENTITY_CONVERSION_FAIL("entity.conversion.fail"),
     DB_FAIL_CLEANING("fail.cleaning"),
     CONVERSION_RESULT_NOT_EXIST_ON_SAVING("conversion.result.not.exist.on.saving"),
     ENTITY_NOT_EXIST_ON_SAVING("entity.not.exist.on.saving"),

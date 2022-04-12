@@ -1,12 +1,12 @@
 package kpn.financecontroller.initialization.tasks;
 
-import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.data.entities.country.CountryEntity;
+import kpn.financecontroller.data.domains.region.Region;
+import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.data.services.savers.Saver;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storages.CountryStorage;
+import kpn.financecontroller.initialization.storages.RegionStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;
@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CountrySavingTaskTest {
+class RegionSavingTaskTest {
 
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
@@ -61,7 +61,7 @@ class CountrySavingTaskTest {
     void shouldCheckExecution_ifConversionResultNotExist() {
         Context context = new ContextBuilder().build();
 
-        CountrySavingTask task = createTask(createDTOService(createFailSaver()));
+        RegionSavingTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -75,7 +75,7 @@ class CountrySavingTaskTest {
                 .addStorage()
                 .build();
 
-        CountrySavingTask task = createTask(createDTOService(createFailSaver()));
+        RegionSavingTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -90,7 +90,7 @@ class CountrySavingTaskTest {
                 .addEntity(ENTITY_ID, "")
                 .build();
 
-        CountrySavingTask task = createTask(createDTOService(createFailSaver()));
+        RegionSavingTask task = createTask(createDTOService(createFailSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -105,7 +105,7 @@ class CountrySavingTaskTest {
                 .addEntity(ENTITY_ID, "")
                 .build();
 
-        CountrySavingTask task = createTask(createDTOService(createSaver()));
+        RegionSavingTask task = createTask(createDTOService(createSaver()));
         task.execute(context);
 
         Result<Void> result = CREATOR.apply(context).get(TestKeys.KEY, Properties.SAVING_RESULT, Void.class);
@@ -113,8 +113,8 @@ class CountrySavingTaskTest {
         assertThat(task.isContinuationPossible()).isTrue();
     }
 
-    private CountrySavingTask createTask(TestDTOService service){
-        CountrySavingTask task = new CountrySavingTask();
+    private RegionSavingTask createTask(TestDTOService service){
+        RegionSavingTask task = new RegionSavingTask();
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
@@ -126,17 +126,22 @@ class CountrySavingTaskTest {
 
     private TestSaver createSaver() {
         TestSaver saver = Mockito.mock(TestSaver.class);
+
+        Region region = new Region();
+        region.setId(ENTITY_ID);
+        ImmutableResult<Region> result = ImmutableResult.<Region>ok(region).build();
+
         Mockito
-                .when(saver.save(Mockito.any(CountryEntity.class)))
-                .thenReturn(ImmutableResult.<Country>builder().success(true).build());
+                .when(saver.save(Mockito.any(RegionEntity.class)))
+                .thenReturn(result);
         return saver;
     }
 
     private TestSaver createFailSaver() {
         TestSaver saver = Mockito.mock(TestSaver.class);
         Mockito
-                .when(saver.save(Mockito.any(CountryEntity.class)))
-                .thenReturn(ImmutableResult.<Country>builder().success(false).build());
+                .when(saver.save(Mockito.any(RegionEntity.class)))
+                .thenReturn(ImmutableResult.<Region>builder().success(false).build());
         return saver;
     }
 
@@ -148,26 +153,26 @@ class CountrySavingTaskTest {
         return service;
     }
 
-    public abstract static class TestSaver implements Saver<Country, CountryEntity, Long> {}
-    public abstract static class TestDTOService implements DTOService<Country, CountryEntity, Long> {}
+    public abstract static class TestSaver implements Saver<Region, RegionEntity, Long> {}
+    public abstract static class TestDTOService implements DTOService<Region, RegionEntity, Long> {}
 
     private static class ContextBuilder{
         private final DefaultContext context;
 
-        private CountryStorage storage;
+        private RegionStorage storage;
 
         public ContextBuilder() {
             this.context = new DefaultContext();
         }
 
         public ContextBuilder addStorage(){
-            this.storage = new CountryStorage();
+            this.storage = new RegionStorage();
             return this;
         }
 
         public ContextBuilder addEntity(Long id, String name){
             if (storage != null){
-                CountryEntity entity = new CountryEntity();
+                RegionEntity entity = new RegionEntity();
                 entity.setId(id);
                 entity.setName(name);
                 storage.put(id, entity);
@@ -177,7 +182,7 @@ class CountrySavingTaskTest {
 
         public Context build(){
             if (storage != null){
-                Result<CountryStorage> tagStorageResult = ImmutableResult.<CountryStorage>ok(storage).build();
+                Result<RegionStorage> tagStorageResult = ImmutableResult.<RegionStorage>ok(storage).build();
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, tagStorageResult);
             }
             return context;

@@ -1,8 +1,10 @@
 package kpn.financecontroller.initialization.listeners;
 
 import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.country.CountryEntity;
+import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.seed.*;
@@ -11,16 +13,15 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.jsonObjs.CountryLongKeyJsonObj;
 import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
+import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
 import kpn.financecontroller.initialization.setting.Setting;
 import kpn.financecontroller.initialization.storages.CountryStorage;
+import kpn.financecontroller.initialization.storages.RegionStorage;
 import kpn.financecontroller.initialization.storages.TagStorage;
-import kpn.financecontroller.initialization.tasks.CountryConversionTask;
-import kpn.financecontroller.initialization.tasks.CountrySavingTask;
-import kpn.financecontroller.initialization.tasks.TagConversionTask;
-import kpn.financecontroller.initialization.tasks.TagSavingTask;
+import kpn.financecontroller.initialization.tasks.*;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import kpn.taskexecutor.lib.executors.DefaultExecutor;
@@ -49,6 +50,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private DTOService<Tag, TagEntity, Long> tagDtoService;
     @Autowired
     private DTOService<Country, CountryEntity, Long> countryDtoService;
+    @Autowired
+    private DTOService<Region, RegionEntity, Long> regionDtoService;
 
     @Autowired
     private Setting setting;
@@ -63,21 +66,28 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             DefaultContext context = new DefaultContext();
             DefaultExecutor executor = new DefaultExecutor(taskConfigurer, context);
 
-            List<Entities> entities = List.of(Entities.TAGS, Entities.COUNTRIES);
+            List<Entities> entities = List.of(
+                    Entities.TAGS,
+                    Entities.COUNTRIES,
+                    Entities.REGIONS
+            );
             Generator readingGenerator = createReadingGenerators(entities);
 
             List<Pair<Entities, Class<? extends LongKeyJsonObj<?>>>> pairs = List.of(
                     new Pair<>(Entities.TAGS, TagLongKeyJsonObj.class),
-                    new Pair<>(Entities.COUNTRIES, CountryLongKeyJsonObj.class)
+                    new Pair<>(Entities.COUNTRIES, CountryLongKeyJsonObj.class),
+                    new Pair<>(Entities.REGIONS, RegionLongKeyJsonObj.class)
             );
             Generator creationGenerator = createCreationGenerator(pairs);
 
             Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, TagConversionTask.class, TagLongKeyJsonObj.class);
             Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, CountryConversionTask.class, CountryLongKeyJsonObj.class);
+            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, RegionConversionTask.class, RegionLongKeyJsonObj.class);
 
             List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
-                    new Pair<>(Entities.TAGS, tagDtoService),
-                    new Pair<>(Entities.COUNTRIES, countryDtoService)
+                    new Pair<>(Entities.REGIONS, regionDtoService),
+                    new Pair<>(Entities.COUNTRIES, countryDtoService),
+                    new Pair<>(Entities.TAGS, tagDtoService)
             );
             Generator cleanupGenerator = createCleanupGenerator(cleanupInit);
 
@@ -97,15 +107,34 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .valuedGenerator(createValuedStringGenerator())
                     .key(Entities.COUNTRIES)
                     .build();
+            Generator regionSavingGenerator = SavingGenerator.builder()
+                    .dtoService(regionDtoService)
+                    .storageType(RegionStorage.class)
+                    .type(RegionSavingTask.class)
+                    .managerCreator(createManagerCreator())
+                    .valuedGenerator(createValuedStringGenerator())
+                    .key(Entities.REGIONS)
+                    .build();
 
             executor
                     .addGenerator(readingGenerator)
                     .addGenerator(creationGenerator)
-                    .addGenerator(tagConversationGenerator)
-                    .addGenerator(countryConversionGenerator)
+
                     .addGenerator(cleanupGenerator)
+
+                    .addGenerator(tagConversationGenerator)
                     .addGenerator(tagSavingGenerator)
-                    .addGenerator(countrySavingGenerator);
+
+                    .addGenerator(countryConversionGenerator)
+                    .addGenerator(countrySavingGenerator)
+
+                    .addGenerator(regionConversionGenerator)
+                    .addGenerator(regionSavingGenerator);
+
+
+
+
+
 
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
