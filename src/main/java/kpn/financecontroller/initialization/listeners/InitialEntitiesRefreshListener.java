@@ -1,8 +1,10 @@
 package kpn.financecontroller.initialization.listeners;
 
+import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
@@ -11,10 +13,7 @@ import kpn.financecontroller.initialization.generators.seed.*;
 import kpn.financecontroller.initialization.generators.valued.Entities;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
-import kpn.financecontroller.initialization.jsonObjs.CountryLongKeyJsonObj;
-import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
-import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
-import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
+import kpn.financecontroller.initialization.jsonObjs.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
 import kpn.financecontroller.initialization.setting.Setting;
@@ -57,6 +56,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private DTOService<Country, CountryEntity, Long> countryDtoService;
     @Autowired
     private DTOService<Region, RegionEntity, Long> regionDtoService;
+    @Autowired
+    private DTOService<City, CityEntity, Long> cityDtoService;
 
     @Autowired
     private Setting setting;
@@ -74,21 +75,25 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             List<Entities> entities = List.of(
                     Entities.TAGS,
                     Entities.COUNTRIES,
-                    Entities.REGIONS
+                    Entities.REGIONS,
+                    Entities.CITIES
             );
             Generator readingGenerator = createReadingGenerators(entities);
 
             List<Pair<Entities, Class<? extends LongKeyJsonObj<?>>>> pairs = List.of(
                     new Pair<>(Entities.TAGS, TagLongKeyJsonObj.class),
                     new Pair<>(Entities.COUNTRIES, CountryLongKeyJsonObj.class),
-                    new Pair<>(Entities.REGIONS, RegionLongKeyJsonObj.class)
+                    new Pair<>(Entities.REGIONS, RegionLongKeyJsonObj.class),
+                    new Pair<>(Entities.CITIES, CityLongKeyObj.class)
             );
             Generator creationGenerator = createCreationGenerator(pairs);
 
+            //<
             Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, TagConversionTask.class, TagLongKeyJsonObj.class);
             Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, CountryConversionTask.class, CountryLongKeyJsonObj.class);
             Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, RegionConversionTask.class, RegionLongKeyJsonObj.class);
 
+            //<
             List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
                     new Pair<>(Entities.REGIONS, regionDtoService),
                     new Pair<>(Entities.COUNTRIES, countryDtoService),
@@ -96,6 +101,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             );
             Generator cleanupGenerator = createCleanupGenerator(cleanupInit);
 
+            //<
             Generator tagSavingGenerator = SavingGenerator.builder()
                     .dtoService(tagDtoService)
                     .storageType(TagStorage.class)
@@ -135,10 +141,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
 
                     .addGenerator(regionConversionGenerator)
                     .addGenerator(regionSavingGenerator);
-
-
-
-
 
 
             Boolean executionResult = executor.execute();

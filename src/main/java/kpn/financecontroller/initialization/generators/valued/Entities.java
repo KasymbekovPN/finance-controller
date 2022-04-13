@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 public enum Entities implements Valued<String> {
     TAGS("tags"),
     COUNTRIES("countries"),
-    REGIONS("regions");
+    REGIONS("regions"),
+    CITIES("cities");
 
     @Getter
     private final String value;
