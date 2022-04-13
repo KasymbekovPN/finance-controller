@@ -1,20 +1,21 @@
-package kpn.financecontroller.initialization.tasks;
+package kpn.financecontroller.initialization.tasks.saving;
 
-import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.data.entities.country.CountryEntity;
+import kpn.financecontroller.data.domains.region.Region;
+import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storages.CountryStorage;
+import kpn.financecontroller.initialization.storages.RegionStorage;
+import kpn.financecontroller.initialization.tasks.BaseTask;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
 
-final public class CountrySavingTask extends BaseTask{
+final public class RegionSavingTask extends BaseTask {
 
     @Setter
-    private DTOService<Country, CountryEntity, Long> dtoService;
+    private DTOService<Region, RegionEntity, Long> dtoService;
     @Setter
     private Long entityId;
 
@@ -22,12 +23,12 @@ final public class CountrySavingTask extends BaseTask{
     public void execute(Context context) {
         reset();
         ResultContextManager contextManager = createContextManager(context);
-        Result<CountryStorage> tagStorageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, CountryStorage.class);
-        if (tagStorageResult.isSuccess()){
-            CountryStorage storage = tagStorageResult.getValue();
-            CountryEntity entity = storage.get(entityId);
+        Result<RegionStorage> storageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, RegionStorage.class);
+        if (storageResult.isSuccess()){
+            RegionStorage storage = storageResult.getValue();
+            RegionEntity entity = storage.get(entityId);
             if (entity != null){
-                Result<Country> savingResult = dtoService.saver().save(entity);
+                Result<Region> savingResult = dtoService.saver().save(entity);
                 if (savingResult.isSuccess()){
                     entity.setId(savingResult.getValue().getId()); // TODO: 11.04.2022 ???
                     continuationPossible = true;
@@ -43,4 +44,5 @@ final public class CountrySavingTask extends BaseTask{
 
         putResultIntoContext(context, Properties.SAVING_RESULT, null);
     }
+
 }

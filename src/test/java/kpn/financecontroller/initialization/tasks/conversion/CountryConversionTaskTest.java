@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.tasks;
+package kpn.financecontroller.initialization.tasks.conversion;
 
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.initialization.entities.CountryJsonEntity;
@@ -6,6 +6,7 @@ import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.jsonObjs.CountryLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storages.CountryStorage;
+import kpn.financecontroller.initialization.tasks.conversion.CountryConversionTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;

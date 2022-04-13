@@ -40,7 +40,7 @@ public abstract class BaseTask implements Task {
         return managerCreator.apply(context);
     }
 
-    final <T> void putResultIntoContext(Context context, Valued<String> p, T value){
+    final protected <T> void putResultIntoContext(Context context, Valued<String> p, T value){
         if (!continuationPossible){
             log.error("{} : {}", code, args);
         }

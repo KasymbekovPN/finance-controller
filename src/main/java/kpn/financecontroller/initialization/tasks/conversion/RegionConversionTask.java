@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.tasks;
+package kpn.financecontroller.initialization.tasks.conversion;
 
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.initialization.entities.RegionJsonEntity;
@@ -9,6 +9,7 @@ import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storages.CountryStorage;
 import kpn.financecontroller.initialization.storages.RegionStorage;
+import kpn.financecontroller.initialization.tasks.BaseTask;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
@@ -16,7 +17,7 @@ import lombok.Setter;
 
 import java.util.Optional;
 
-final public class RegionConversionTask extends BaseTask{
+final public class RegionConversionTask extends BaseTask {
 
     @Setter
     private Long entityId;
