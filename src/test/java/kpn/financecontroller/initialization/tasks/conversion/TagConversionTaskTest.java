@@ -5,8 +5,7 @@ import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storages.TagStorage;
-import kpn.financecontroller.initialization.tasks.conversion.TagConversionTask;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;
@@ -29,22 +28,22 @@ public class TagConversionTaskTest {
     private static final Long ENTITY_ID = 1L;
     private static final String ENTITY_NAME = "name";
 
-    private static Result<TagStorage> expectedResult_ifNoJsonObj;
-    private static Result<TagStorage> expectedResult_ifEntityNotExist;
-    private static Result<TagStorage> expectedResult;
+    private static Result<ObjectStorage> expectedResult_ifNoJsonObj;
+    private static Result<ObjectStorage> expectedResult_ifEntityNotExist;
+    private static Result<ObjectStorage> expectedResult;
 
     @BeforeAll
     static void beforeAll() {
-        expectedResult_ifNoJsonObj = ImmutableResult.<TagStorage>builder()
+        expectedResult_ifNoJsonObj = ImmutableResult.<ObjectStorage>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
-                .value(new TagStorage())
+                .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
-        expectedResult_ifEntityNotExist = ImmutableResult.<TagStorage>builder()
+        expectedResult_ifEntityNotExist = ImmutableResult.<ObjectStorage>builder()
                 .success(false)
                 .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
-                .value(new TagStorage())
+                .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
 
@@ -52,12 +51,12 @@ public class TagConversionTaskTest {
         tagEntity.setId(ENTITY_ID);
         tagEntity.setName(ENTITY_NAME);
 
-        TagStorage tagStorage = new TagStorage();
-        tagStorage.put(ENTITY_ID, tagEntity);
+        ObjectStorage storage = new ObjectStorage();
+        storage.put(ENTITY_ID, tagEntity);
 
-        expectedResult = ImmutableResult.<TagStorage>builder()
+        expectedResult = ImmutableResult.<ObjectStorage>builder()
                 .success(true)
-                .value(tagStorage)
+                .value(storage)
                 .arg(KEY)
                 .build();
     }
@@ -69,7 +68,7 @@ public class TagConversionTaskTest {
         Context context = new ContextBuilder().build();
         task.execute(context);
 
-        Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         assertThat(expectedResult_ifNoJsonObj).isEqualTo(result);
     }
 
@@ -81,7 +80,7 @@ public class TagConversionTaskTest {
         TagConversionTask task = createTask();
         task.execute(context);
 
-        Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         assertThat(expectedResult_ifEntityNotExist).isEqualTo(result);
     }
 
@@ -95,7 +94,7 @@ public class TagConversionTaskTest {
         TagConversionTask task = createTask();
         task.execute(context);
 
-        Result<TagStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, TagStorage.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         assertThat(expectedResult).isEqualTo(result);
     }
 

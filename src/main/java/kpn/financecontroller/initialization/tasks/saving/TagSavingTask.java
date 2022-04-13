@@ -5,7 +5,7 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storages.TagStorage;
+import kpn.financecontroller.initialization.storage.TagStorage;
 import kpn.financecontroller.initialization.tasks.BaseTask;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
