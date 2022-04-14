@@ -6,8 +6,7 @@ import kpn.financecontroller.initialization.entities.RegionJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storage.CountryStorage;
-import kpn.financecontroller.initialization.storage.RegionStorage;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;
@@ -32,29 +31,23 @@ class RegionConversionTaskTest {
     private static final Long COUNTRY_ID = 123L;
     private static final String COUNTRY_NAME = "country.name";
 
-    private static Result<RegionStorage> expectedResult_ifNoJsonObj;
-    private static Result<RegionStorage> expectedResult_ifEntityNotExist;
-    private static Result<RegionStorage> expectedResult_ifEntityConversionFail;
-    private static Result<RegionStorage> expectedResult;
+    private static Result<ObjectStorage> expectedResult_ifNoJsonObj;
+    private static Result<ObjectStorage> expectedResult_ifEntityNotExist;
+    private static Result<ObjectStorage> expectedResult_ifEntityConversionFail;
+    private static Result<ObjectStorage> expectedResult;
 
     @BeforeAll
     static void beforeAll() {
-        expectedResult_ifNoJsonObj = ImmutableResult.<RegionStorage>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
-                .value(new RegionStorage())
+        expectedResult_ifNoJsonObj = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
+                .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
-        expectedResult_ifEntityNotExist = ImmutableResult.<RegionStorage>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
-                .value(new RegionStorage())
+        expectedResult_ifEntityNotExist = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
+                .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
-        expectedResult_ifEntityConversionFail = ImmutableResult.<RegionStorage>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_CONVERSION_FAIL))
-                .value(new RegionStorage())
+        expectedResult_ifEntityConversionFail = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_CONVERSION_FAIL))
+                .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
 
@@ -67,12 +60,10 @@ class RegionConversionTaskTest {
         regionEntity.setName(REGION_NAME);
         regionEntity.setCountryEntity(countryEntity);
 
-        RegionStorage storage = new RegionStorage();
+        ObjectStorage storage = new ObjectStorage();
         storage.put(REGION_ID, regionEntity);
 
-        expectedResult = ImmutableResult.<RegionStorage>builder()
-                .success(true)
-                .value(storage)
+        expectedResult = ImmutableResult.<ObjectStorage>ok(storage)
                 .arg(KEY)
                 .build();
     }
@@ -84,7 +75,7 @@ class RegionConversionTaskTest {
         Context context = new ContextBuilder().build();
         task.execute(context);
 
-        Result<RegionStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, RegionStorage.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         assertThat(expectedResult_ifNoJsonObj).isEqualTo(result);
     }
 
@@ -96,7 +87,7 @@ class RegionConversionTaskTest {
         RegionConversionTask task = createTask();
         task.execute(context);
 
-        Result<RegionStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, RegionStorage.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         assertThat(expectedResult_ifEntityNotExist).isEqualTo(result);
     }
 
@@ -109,7 +100,7 @@ class RegionConversionTaskTest {
         RegionConversionTask task = createTask();
         task.execute(context);
 
-        Result<RegionStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, RegionStorage.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         assertThat(expectedResult_ifEntityConversionFail).isEqualTo(result);
     }
 
@@ -124,7 +115,7 @@ class RegionConversionTaskTest {
         RegionConversionTask task = createTask();
         task.execute(context);
 
-        Result<RegionStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, RegionStorage.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         assertThat(expectedResult).isEqualTo(result);
     }
 
@@ -141,7 +132,7 @@ class RegionConversionTaskTest {
     private static class ContextBuilder{
         private final Context context;
         private RegionLongKeyJsonObj jsonObject;
-        private CountryStorage countryStorage;
+        private ObjectStorage countryStorage;
 
         public ContextBuilder() {
             this.context = new DefaultContext();
@@ -165,7 +156,7 @@ class RegionConversionTaskTest {
         }
 
         public ContextBuilder addCountryStorage() {
-            countryStorage = new CountryStorage();
+            countryStorage = new ObjectStorage();
             CountryEntity countryEntity = new CountryEntity();
             countryEntity.setId(COUNTRY_ID);
             countryEntity.setName(COUNTRY_NAME);
@@ -179,7 +170,7 @@ class RegionConversionTaskTest {
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
             }
             if (countryStorage != null){
-                ImmutableResult<CountryStorage> result = ImmutableResult.<CountryStorage>ok(countryStorage).build();
+                ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(countryStorage).build();
                 CREATOR.apply(context).put(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
             }
             return context;

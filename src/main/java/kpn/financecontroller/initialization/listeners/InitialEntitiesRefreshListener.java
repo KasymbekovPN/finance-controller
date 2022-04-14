@@ -18,9 +18,7 @@ import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
 import kpn.financecontroller.initialization.setting.Setting;
-import kpn.financecontroller.initialization.storage.CountryStorage;
-import kpn.financecontroller.initialization.storage.RegionStorage;
-import kpn.financecontroller.initialization.storage.TagStorage;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.conversion.CountryConversionTask;
 import kpn.financecontroller.initialization.tasks.conversion.RegionConversionTask;
 import kpn.financecontroller.initialization.tasks.conversion.TagConversionTask;
@@ -98,7 +96,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
 
             Generator tagSavingGenerator = SavingGenerator.builder()
                     .dtoService(tagDtoService)
-                    .storageType(TagStorage.class)
+                    .storageType(ObjectStorage.class)
                     .type(TagSavingTask.class)
                     .managerCreator(createManagerCreator())
                     .valuedGenerator(createValuedStringGenerator())
@@ -106,7 +104,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .build();
             Generator countrySavingGenerator = SavingGenerator.builder()
                     .dtoService(countryDtoService)
-                    .storageType(CountryStorage.class)
+                    .storageType(ObjectStorage.class)
                     .type(CountrySavingTask.class)
                     .managerCreator(createManagerCreator())
                     .valuedGenerator(createValuedStringGenerator())
@@ -114,7 +112,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .build();
             Generator regionSavingGenerator = SavingGenerator.builder()
                     .dtoService(regionDtoService)
-                    .storageType(RegionStorage.class)
+                    .storageType(ObjectStorage.class)
                     .type(RegionSavingTask.class)
                     .managerCreator(createManagerCreator())
                     .valuedGenerator(createValuedStringGenerator())

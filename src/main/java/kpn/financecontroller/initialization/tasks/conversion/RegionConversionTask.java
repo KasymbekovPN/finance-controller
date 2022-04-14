@@ -1,5 +1,6 @@
 package kpn.financecontroller.initialization.tasks.conversion;
 
+import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.initialization.entities.RegionJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.Codes;
@@ -7,8 +8,7 @@ import kpn.financecontroller.initialization.generators.valued.Entities;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storage.CountryStorage;
-import kpn.financecontroller.initialization.storage.RegionStorage;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.BaseTask;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
@@ -25,7 +25,7 @@ final public class RegionConversionTask extends BaseTask {
     @Override
     public void execute(Context context) {
         reset();
-        RegionStorage storage = getStorage(context);
+        ObjectStorage storage = getStorage(context);
         Result<RegionLongKeyJsonObj> result = createContextManager(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, RegionLongKeyJsonObj.class);
         if (result.isSuccess()){
             RegionLongKeyJsonObj jsonObj = result.getValue();
@@ -48,15 +48,15 @@ final public class RegionConversionTask extends BaseTask {
         putResultIntoContext(context, Properties.JSON_TO_DB_CONVERSION_RESULT, storage);
     }
 
-    private RegionStorage getStorage(Context context) {
+    private ObjectStorage getStorage(Context context) {
         ResultContextManager contextManager = createContextManager(context);
-        Result<RegionStorage> storageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, RegionStorage.class);
+        Result<ObjectStorage> storageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         if (storageResult.isSuccess()){
             return storageResult.getValue();
         }
 
-        RegionStorage storage = new RegionStorage();
-        ImmutableResult<RegionStorage> result = ImmutableResult.<RegionStorage>ok(storage).build();
+        ObjectStorage storage = new ObjectStorage();
+        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
         contextManager.put(key, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
         return storage;
@@ -65,12 +65,12 @@ final public class RegionConversionTask extends BaseTask {
     // TODO: 11.04.2022 must return result
     private Optional<RegionEntity> convert(RegionJsonEntity value, Context context) {
         ResultContextManager manager = createContextManager(context);
-        Result<CountryStorage> result = manager.get(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, CountryStorage.class);
+        Result<ObjectStorage> result = manager.get(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         if (result.isSuccess() && result.getValue().containsKey(value.getCountryId())){
             RegionEntity entity = new RegionEntity();
             entity.setId(value.getId());
             entity.setName(value.getName());
-            entity.setCountryEntity(result.getValue().get(value.getCountryId()));
+            entity.setCountryEntity((CountryEntity) result.getValue().get(value.getCountryId()));
 
             return Optional.of(entity);
         }

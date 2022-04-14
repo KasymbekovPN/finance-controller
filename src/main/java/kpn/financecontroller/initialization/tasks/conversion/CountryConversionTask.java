@@ -6,7 +6,7 @@ import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.jsonObjs.CountryLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storage.CountryStorage;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.BaseTask;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
@@ -22,7 +22,7 @@ final public class CountryConversionTask extends BaseTask {
     @Override
     public void execute(Context context) {
         reset();
-        CountryStorage storage = getStorage(context);
+        ObjectStorage storage = getStorage(context);
         Result<CountryLongKeyJsonObj> result = createContextManager(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, CountryLongKeyJsonObj.class);
         if (result.isSuccess()){
             CountryLongKeyJsonObj tagLongKeyJsonObj = result.getValue();
@@ -40,15 +40,15 @@ final public class CountryConversionTask extends BaseTask {
         putResultIntoContext(context, Properties.JSON_TO_DB_CONVERSION_RESULT, storage);
     }
 
-    private CountryStorage getStorage(Context context) {
+    private ObjectStorage getStorage(Context context) {
         ResultContextManager contextManager = createContextManager(context);
-        Result<CountryStorage> storageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, CountryStorage.class);
+        Result<ObjectStorage> storageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         if (storageResult.isSuccess()){
             return storageResult.getValue();
         }
 
-        CountryStorage storage = new CountryStorage();
-        ImmutableResult<CountryStorage> result = ImmutableResult.<CountryStorage>ok(storage).build();
+        ObjectStorage storage = new ObjectStorage();
+        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
         contextManager.put(key, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
         return storage;

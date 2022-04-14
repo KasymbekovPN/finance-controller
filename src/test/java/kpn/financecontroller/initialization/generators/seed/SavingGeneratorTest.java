@@ -7,7 +7,7 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storage.TagStorage;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;
@@ -33,7 +33,7 @@ public class SavingGeneratorTest {
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final Class<? extends Task> TYPE = Task.class;
     private static final Long ENTITY_ID = 1L;
-    private static final Class<? extends Map<Long, ?>> STORAGE_TYPE = TagStorage.class;
+    private static final Class<? extends Map<Long, ?>> STORAGE_TYPE = ObjectStorage.class;
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
@@ -126,10 +126,10 @@ public class SavingGeneratorTest {
         tagEntity.setId(ENTITY_ID);
         tagEntity.setName("name");
 
-        TagStorage tagStorage = new TagStorage();
-        tagStorage.put(ENTITY_ID, tagEntity);
+        ObjectStorage storage = new ObjectStorage();
+        storage.put(ENTITY_ID, tagEntity);
 
-        ImmutableResult<TagStorage> result = ImmutableResult.<TagStorage>ok(tagStorage).build();
+        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
         Generator seedGenerator = SavingGenerator.builder()

@@ -6,7 +6,7 @@ import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storage.RegionStorage;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.BaseTask;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
@@ -23,10 +23,10 @@ final public class RegionSavingTask extends BaseTask {
     public void execute(Context context) {
         reset();
         ResultContextManager contextManager = createContextManager(context);
-        Result<RegionStorage> storageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, RegionStorage.class);
+        Result<ObjectStorage> storageResult = contextManager.get(key, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
         if (storageResult.isSuccess()){
-            RegionStorage storage = storageResult.getValue();
-            RegionEntity entity = storage.get(entityId);
+            ObjectStorage storage = storageResult.getValue();
+            RegionEntity entity = (RegionEntity) storage.get(entityId);
             if (entity != null){
                 Result<Region> savingResult = dtoService.saver().save(entity);
                 if (savingResult.isSuccess()){
@@ -44,5 +44,4 @@ final public class RegionSavingTask extends BaseTask {
 
         putResultIntoContext(context, Properties.SAVING_RESULT, null);
     }
-
 }

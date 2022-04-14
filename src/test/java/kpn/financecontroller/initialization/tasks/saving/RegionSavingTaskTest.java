@@ -6,7 +6,7 @@ import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.data.services.savers.Saver;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storage.RegionStorage;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;
@@ -36,19 +36,13 @@ class RegionSavingTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultIfConversionResultNotExist = ImmutableResult.<Void>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.CONVERSION_RESULT_NOT_EXIST_ON_SAVING))
+        expectedResultIfConversionResultNotExist = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.CONVERSION_RESULT_NOT_EXIST_ON_SAVING))
                 .arg(KEY)
                 .build();
-        expectedResultIfEntityNotExist = ImmutableResult.<Void>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_SAVING))
+        expectedResultIfEntityNotExist = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_SAVING))
                 .arg(KEY)
                 .build();
-        expectedResultIfFailSaving = ImmutableResult.<Void>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.FAIL_SAVING_ATTEMPT))
+        expectedResultIfFailSaving = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.FAIL_SAVING_ATTEMPT))
                 .arg(KEY)
                 .build();
         expectedResult = ImmutableResult.<Void>builder()
@@ -159,14 +153,14 @@ class RegionSavingTaskTest {
     private static class ContextBuilder{
         private final DefaultContext context;
 
-        private RegionStorage storage;
+        private ObjectStorage storage;
 
         public ContextBuilder() {
             this.context = new DefaultContext();
         }
 
         public ContextBuilder addStorage(){
-            this.storage = new RegionStorage();
+            this.storage = new ObjectStorage();
             return this;
         }
 
@@ -182,7 +176,7 @@ class RegionSavingTaskTest {
 
         public Context build(){
             if (storage != null){
-                Result<RegionStorage> tagStorageResult = ImmutableResult.<RegionStorage>ok(storage).build();
+                Result<ObjectStorage> tagStorageResult = ImmutableResult.<ObjectStorage>ok(storage).build();
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, tagStorageResult);
             }
             return context;
