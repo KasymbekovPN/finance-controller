@@ -3,7 +3,6 @@ package kpn.financecontroller.initialization.tasks.conversion;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.initialization.entities.CountryJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.*;
-import kpn.financecontroller.initialization.jsonObjs.CountryLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -15,7 +14,6 @@ import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,31 +102,30 @@ class CountryConversionTaskTest {
 
     private static class ContextBuilder{
         private final Context context;
-        private CountryLongKeyJsonObj jsonObject;
+        private ObjectStorage jsonStorage;
 
         public ContextBuilder() {
             this.context = new DefaultContext();
         }
 
         public ContextBuilder addJsonObject() {
-            jsonObject = new CountryLongKeyJsonObj();
-            jsonObject.setEntities(new HashMap<>());
+            jsonStorage = new ObjectStorage();
             return this;
         }
 
         public ContextBuilder addEntity(Long id, String name){
-            if (jsonObject != null){
+            if (jsonStorage != null){
                 CountryJsonEntity entity = new CountryJsonEntity();
                 entity.setId(id);
                 entity.setName(name);
-                jsonObject.getEntities().put(id, entity);
+                jsonStorage.put(id, entity);
             }
             return this;
         }
 
         public Context build(){
-            if (jsonObject != null){
-                Result<CountryLongKeyJsonObj> result = ImmutableResult.<CountryLongKeyJsonObj>ok(jsonObject).build();
+            if (jsonStorage != null){
+                Result<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(jsonStorage).build();
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
             }
             return context;
