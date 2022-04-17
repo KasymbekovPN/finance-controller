@@ -1,5 +1,6 @@
 package kpn.financecontroller.initialization.listeners;
 
+import com.google.gson.Gson;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.tag.Tag;
@@ -11,14 +12,14 @@ import kpn.financecontroller.initialization.generators.seed.*;
 import kpn.financecontroller.initialization.generators.valued.Entities;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
-import kpn.financecontroller.initialization.jsonObjs.CountryLongKeyJsonObj;
-import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
-import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
-import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
+import kpn.financecontroller.initialization.listeners.jobjects.CountryLongKeyJsonObj;
+import kpn.financecontroller.initialization.listeners.jobjects.RegionLongKeyJsonObj;
+import kpn.financecontroller.initialization.listeners.jobjects.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
 import kpn.financecontroller.initialization.setting.Setting;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
+import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.financecontroller.initialization.tasks.conversion.CountryConversionTask;
 import kpn.financecontroller.initialization.tasks.conversion.RegionConversionTask;
 import kpn.financecontroller.initialization.tasks.conversion.TagConversionTask;
@@ -76,16 +77,34 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             );
             Generator readingGenerator = createReadingGenerators(entities);
 
-            List<Pair<Entities, Class<? extends LongKeyJsonObj<?>>>> pairs = List.of(
-                    new Pair<>(Entities.TAGS, TagLongKeyJsonObj.class),
-                    new Pair<>(Entities.COUNTRIES, CountryLongKeyJsonObj.class),
-                    new Pair<>(Entities.REGIONS, RegionLongKeyJsonObj.class)
+            CreationTask.ObjectStorageCreator tagOSC = (str) -> {
+                TagLongKeyJsonObj jsonObj = new Gson().fromJson(str, TagLongKeyJsonObj.class);
+                ObjectStorage storage = new ObjectStorage();
+                storage.putAll(jsonObj.getEntities());
+                return storage;
+            };
+            CreationTask.ObjectStorageCreator countryOSC = (str) -> {
+                CountryLongKeyJsonObj jsonObj = new Gson().fromJson(str, CountryLongKeyJsonObj.class);
+                ObjectStorage storage = new ObjectStorage();
+                storage.putAll(jsonObj.getEntities());
+                return storage;
+            };
+            CreationTask.ObjectStorageCreator regionOSC = (str) -> {
+                RegionLongKeyJsonObj jsonObj = new Gson().fromJson(str, RegionLongKeyJsonObj.class);
+                ObjectStorage storage = new ObjectStorage();
+                storage.putAll(jsonObj.getEntities());
+                return storage;
+            };
+            List<Pair<Entities, CreationTask.ObjectStorageCreator>> pairs = List.of(
+                    new Pair<>(Entities.TAGS, tagOSC),
+                    new Pair<>(Entities.COUNTRIES, countryOSC),
+                    new Pair<>(Entities.REGIONS, regionOSC)
             );
             Generator creationGenerator = createCreationGenerator(pairs);
 
-            Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, TagConversionTask.class, TagLongKeyJsonObj.class);
-            Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, CountryConversionTask.class, CountryLongKeyJsonObj.class);
-            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, RegionConversionTask.class, RegionLongKeyJsonObj.class);
+            Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, TagConversionTask.class);
+            Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, CountryConversionTask.class);
+            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, RegionConversionTask.class);
 
             List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
                     new Pair<>(Entities.REGIONS, regionDtoService),
@@ -134,11 +153,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .addGenerator(regionConversionGenerator)
                     .addGenerator(regionSavingGenerator);
 
-
-
-
-
-
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
         }
@@ -156,20 +170,19 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     }
 
     private Generator createConversionGenerator(Valued<String> key,
-                                                Class<? extends Task> taskType,
-                                                Class<? extends LongKeyJsonObj<?>> jsonObjType) {
+                                                Class<? extends Task> taskType) {
+
         return ConversionGenerator.builder()
                 .type(taskType)
-                .jsonObj(jsonObjType)
                 .managerCreator(createManagerCreator())
                 .valuedGenerator(createValuedStringGenerator())
                 .key(key)
                 .build();
     }
 
-    private Generator createCreationGenerator(List<Pair<Entities, Class<? extends LongKeyJsonObj<?>>>> pairs) {
+    private Generator createCreationGenerator(List<Pair<Entities, CreationTask.ObjectStorageCreator>> pairs) {
         CreationGenerator.Builder builder = CreationGenerator.builder();
-        for (Pair<Entities, Class<? extends LongKeyJsonObj<?>>> pair : pairs) {
+        for (Pair<Entities, CreationTask.ObjectStorageCreator> pair : pairs) {
             builder.item(pair.getKey(), pair.getValue());
         }
 
