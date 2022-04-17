@@ -5,6 +5,7 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
+import kpn.financecontroller.initialization.tasks.ConversionTask;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seed.DefaultSeed;
@@ -19,6 +20,7 @@ import java.util.function.Function;
 
 final public class ConversionGenerator extends BaseGenerator {
     private final Class<? extends Task> type;
+    private final ConversionTask.ObjectStorageFiller objectStorageFiller;
 
     private Deque<Long> entityIds;
 
@@ -27,14 +29,17 @@ final public class ConversionGenerator extends BaseGenerator {
     }
 
     private ConversionGenerator(Valued<String> key,
-                               ValuedGenerator<String> valuedGenerator,
-                               Function<Context, ResultContextManager> managerCreator,
-                               Class<? extends Task> type) {
+                                ValuedGenerator<String> valuedGenerator,
+                                Function<Context, ResultContextManager> managerCreator,
+                                Class<? extends Task> type,
+                                ConversionTask.ObjectStorageFiller objectStorageFiller) {
         super(key, valuedGenerator, managerCreator);
         this.type = type;
+        this.objectStorageFiller = objectStorageFiller;
 
         this.fieldValidator
                 .toChecking(type, "Type")
+                .toChecking(objectStorageFiller, "ObjectStorageFiller")
                 .caller(getClass().getSimpleName());
     }
 
@@ -47,6 +52,7 @@ final public class ConversionGenerator extends BaseGenerator {
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
                     .field("key", key)
+                    .field("objectStorageFiller", objectStorageFiller)
                     .field("entityId", maybeId.get())
                     .build();
             return Optional.of(seed);
@@ -69,14 +75,20 @@ final public class ConversionGenerator extends BaseGenerator {
 
     public static class Builder extends BaseBuilder {
         private Class<? extends Task> type;
+        private ConversionTask.ObjectStorageFiller objectStorageFiller;
 
         public Builder type(Class<? extends Task> type){
             this.type = type;
             return this;
         }
 
+        public Builder objectStorageFiller(ConversionTask.ObjectStorageFiller objectStorageFiller){
+            this.objectStorageFiller = objectStorageFiller;
+            return this;
+        }
+
         public ConversionGenerator build(){
-            return new ConversionGenerator(key, valuedGenerator, managerCreator, type);
+            return new ConversionGenerator(key, valuedGenerator, managerCreator, type, objectStorageFiller);
         }
     }
 }

@@ -1,12 +1,13 @@
 package kpn.financecontroller.initialization.generators.seed;
 
-import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
+import kpn.financecontroller.initialization.tasks.ConversionTask;
+import kpn.financecontroller.initialization.tasks.testUtils.TestJsonEntity;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;
@@ -30,6 +31,7 @@ public class ConversionGeneratorTest {
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final Class<? extends Task> TYPE = Task.class;
+    private static final ConversionTask.ObjectStorageFiller OSF = (context, jsonEntity) -> {return Optional.empty();};
     private static final Long ENTITY_ID = 1L;
 
     @Test
@@ -70,9 +72,22 @@ public class ConversionGeneratorTest {
     }
 
     @Test
+    void shouldCheckNextGetting_ifObjectStorageFillerNull() {
+        Generator seedGenerator = ConversionGenerator.builder()
+                .type(TYPE)
+                .managerCreator(CREATOR)
+                .valuedGenerator(VALUED_GENERATOR)
+                .key(KEY)
+                .build();
+        Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
+        assertThat(maybeSeed).isEmpty();
+    }
+
+    @Test
     void shouldCheckNextGetting_ifJsonObjectAbsent() {
         Generator seedGenerator = ConversionGenerator.builder()
                 .type(TYPE)
+                .objectStorageFiller(OSF)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
@@ -87,12 +102,12 @@ public class ConversionGeneratorTest {
                 "valuedGenerator", VALUED_GENERATOR,
                 "managerCreator", CREATOR,
                 "entityId", ENTITY_ID,
-                "key", KEY
+                "key", KEY,
+                "objectStorageFiller", OSF
         );
 
-        TagJsonEntity entity = new TagJsonEntity();
+        TestJsonEntity entity = new TestJsonEntity();
         entity.setId(ENTITY_ID);
-        entity.setName("name");
 
         ObjectStorage storage = new ObjectStorage();
         storage.put(ENTITY_ID, entity);
@@ -101,6 +116,7 @@ public class ConversionGeneratorTest {
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
 
         Generator seedGenerator = ConversionGenerator.builder()
+                .objectStorageFiller(OSF)
                 .type(TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
