@@ -3,8 +3,8 @@ package kpn.financecontroller.initialization.generators.seed;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seed.DefaultSeed;
@@ -19,7 +19,6 @@ import java.util.function.Function;
 
 final public class ConversionGenerator extends BaseGenerator {
     private final Class<? extends Task> type;
-    private final Class<? extends LongKeyJsonObj<?>> jsonObjType;
 
     private Deque<Long> entityIds;
 
@@ -30,15 +29,12 @@ final public class ConversionGenerator extends BaseGenerator {
     private ConversionGenerator(Valued<String> key,
                                ValuedGenerator<String> valuedGenerator,
                                Function<Context, ResultContextManager> managerCreator,
-                               Class<? extends Task> type,
-                               Class<? extends LongKeyJsonObj<?>> jsonObjType) {
+                               Class<? extends Task> type) {
         super(key, valuedGenerator, managerCreator);
         this.type = type;
-        this.jsonObjType = jsonObjType;
 
         this.fieldValidator
                 .toChecking(type, "Type")
-                .toChecking(jsonObjType, "Json object type")
                 .caller(getClass().getSimpleName());
     }
 
@@ -60,10 +56,9 @@ final public class ConversionGenerator extends BaseGenerator {
 
     private Optional<Long> getNextEntityId(Context context) {
         if (entityIds == null){
-            Result<Object> result = managerCreator.apply(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT);
+            Result<ObjectStorage> result = managerCreator.apply(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, ObjectStorage.class);
             if (result.isSuccess()){
-                LongKeyJsonObj<?> jsonObj = jsonObjType.cast(result.getValue());
-                Set<Long> ids = jsonObj.getEntities().keySet();
+                Set<Long> ids = result.getValue().keySet();
                 entityIds = new ArrayDeque<>(ids);
             }
         }
@@ -74,20 +69,14 @@ final public class ConversionGenerator extends BaseGenerator {
 
     public static class Builder extends BaseBuilder {
         private Class<? extends Task> type;
-        private Class<? extends LongKeyJsonObj<?>> jsonObjType;
 
         public Builder type(Class<? extends Task> type){
             this.type = type;
             return this;
         }
 
-        public Builder jsonObj(Class<? extends LongKeyJsonObj<?>> jsonObjType){
-            this.jsonObjType = jsonObjType;
-            return this;
-        }
-
         public ConversionGenerator build(){
-            return new ConversionGenerator(key, valuedGenerator, managerCreator, type, jsonObjType);
+            return new ConversionGenerator(key, valuedGenerator, managerCreator, type);
         }
     }
 }

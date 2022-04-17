@@ -5,9 +5,8 @@ import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
-import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
-import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.lib.result.ImmutableResult;
@@ -32,7 +31,6 @@ public class ConversionGeneratorTest {
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final Class<? extends Task> TYPE = Task.class;
     private static final Long ENTITY_ID = 1L;
-    private static final Class<? extends LongKeyJsonObj<?>> JSON_OBJ_TYPE = TagLongKeyJsonObj.class;
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
@@ -72,22 +70,9 @@ public class ConversionGeneratorTest {
     }
 
     @Test
-    void shouldCheckNextGetting_ifJsonObjTypeNull() {
-        Generator seedGenerator = ConversionGenerator.builder()
-                .type(TYPE)
-                .managerCreator(CREATOR)
-                .valuedGenerator(VALUED_GENERATOR)
-                .key(KEY)
-                .build();
-        Optional<Seed> maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
-        assertThat(maybeSeed).isEmpty();
-    }
-
-    @Test
     void shouldCheckNextGetting_ifJsonObjectAbsent() {
         Generator seedGenerator = ConversionGenerator.builder()
                 .type(TYPE)
-                .jsonObj(JSON_OBJ_TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
@@ -109,15 +94,14 @@ public class ConversionGeneratorTest {
         entity.setId(ENTITY_ID);
         entity.setName("name");
 
-        TagLongKeyJsonObj jsonObj = new TagLongKeyJsonObj();
-        jsonObj.setEntities(Map.of(ENTITY_ID, entity));
+        ObjectStorage storage = new ObjectStorage();
+        storage.put(ENTITY_ID, entity);
 
-        ImmutableResult<TagLongKeyJsonObj> result = ImmutableResult.<TagLongKeyJsonObj>ok(jsonObj).build();
+        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
 
         Generator seedGenerator = ConversionGenerator.builder()
                 .type(TYPE)
-                .jsonObj(JSON_OBJ_TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)

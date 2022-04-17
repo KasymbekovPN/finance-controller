@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.tasks.testUtils;
 
-import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
+import kpn.financecontroller.initialization.listeners.jobjects.LongKeyJsonObj;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)

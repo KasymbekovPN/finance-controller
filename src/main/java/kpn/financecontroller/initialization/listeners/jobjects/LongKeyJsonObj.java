@@ -1,4 +1,4 @@
-package kpn.financecontroller.initialization.jsonObjs;
+package kpn.financecontroller.initialization.listeners.jobjects;
 
 import lombok.Getter;
 import lombok.Setter;
