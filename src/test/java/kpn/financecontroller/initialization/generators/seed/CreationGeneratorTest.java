@@ -3,8 +3,8 @@ package kpn.financecontroller.initialization.generators.seed;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
-import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
@@ -25,6 +25,9 @@ public class CreationGeneratorTest {
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Valued<String> KEY = TestKeys.KEY;
+    private static final CreationTask.ObjectStorageCreator OSC = (str) -> {
+        return new ObjectStorage();
+    };
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {
@@ -49,11 +52,11 @@ public class CreationGeneratorTest {
                 "valuedGenerator", VALUED_GENERATOR,
                 "managerCreator", CREATOR,
                 "key", KEY,
-                "type", TestJsonObj.class
+                "objectStorageCreator", OSC
         );
 
         Generator seedGenerator = CreationGenerator.builder()
-                .item(KEY, TestJsonObj.class)
+                .item(KEY, OSC)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
@@ -69,5 +72,6 @@ public class CreationGeneratorTest {
         assertThat(maybeSeed).isEmpty();
     }
 
-    public static class TestJsonObj extends LongKeyJsonObj<String>{}
+    // TODO: 17.04.2022 del
+//    public static class TestJsonObj extends LongKeyJsonObj<String>{}
 }

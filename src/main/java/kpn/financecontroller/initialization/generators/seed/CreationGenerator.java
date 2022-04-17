@@ -2,7 +2,6 @@ package kpn.financecontroller.initialization.generators.seed;
 
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
-import kpn.financecontroller.initialization.jsonObjs.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.taskexecutor.lib.contexts.Context;
@@ -44,7 +43,7 @@ final public class CreationGenerator extends BaseGenerator {
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
                     .field("key", item.getKey())
-                    .field("type", item.getType())
+                    .field("objectStorageCreator", item.getObjectStorageCreator())
                     .build();
             return Optional.of(seed);
         }
@@ -54,8 +53,8 @@ final public class CreationGenerator extends BaseGenerator {
     public static class Builder extends BaseBuilder{
         private final List<Item> items = new ArrayList<>();
 
-        public Builder item(Valued<String> key, Class<? extends LongKeyJsonObj<?>> type) {
-            items.add(new Item(key, type));
+        public Builder item(Valued<String> key, CreationTask.ObjectStorageCreator objectStorageCreator) {
+            items.add(new Item(key, objectStorageCreator));
             return this;
         }
 
@@ -68,6 +67,6 @@ final public class CreationGenerator extends BaseGenerator {
     @Getter
     private static class Item{
         private final Valued<String> key;
-        private final Class<? extends LongKeyJsonObj<?>> type;
+        private final CreationTask.ObjectStorageCreator objectStorageCreator;
     }
 }
