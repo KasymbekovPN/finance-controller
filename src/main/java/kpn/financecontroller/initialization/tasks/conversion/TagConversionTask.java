@@ -4,7 +4,6 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.BaseTask;
@@ -12,8 +11,6 @@ import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import lombok.Setter;
-
-import java.util.Optional;
 
 // TODO: 31.03.2022 generalize it
 final public class TagConversionTask extends BaseTask {
@@ -24,12 +21,11 @@ final public class TagConversionTask extends BaseTask {
     public void execute(Context context) {
         reset();
         ObjectStorage storage = createStorage(context);
-        Result<TagLongKeyJsonObj> result = createContextManager(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, TagLongKeyJsonObj.class);
+        Result<ObjectStorage> result = createContextManager(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, ObjectStorage.class);
         if (result.isSuccess()){
-            TagLongKeyJsonObj tagLongKeyJsonObj = result.getValue();
-            Optional<TagJsonEntity> maybeEntity = tagLongKeyJsonObj.getEntity(entityId);
-            if (maybeEntity.isPresent()){
-                TagJsonEntity jsonEntity = maybeEntity.get();
+            ObjectStorage jsonEntityStorage = result.getValue();
+            if (jsonEntityStorage.containsKey(entityId)){
+                TagJsonEntity jsonEntity = (TagJsonEntity) jsonEntityStorage.get(entityId);
                 storage.put(jsonEntity.getId(), convert(jsonEntity));
                 continuationPossible = true;
             } else {

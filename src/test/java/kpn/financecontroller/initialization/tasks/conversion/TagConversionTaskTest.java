@@ -3,7 +3,6 @@ package kpn.financecontroller.initialization.tasks.conversion;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.*;
-import kpn.financecontroller.initialization.jsonObjs.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -15,7 +14,6 @@ import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,15 +32,11 @@ public class TagConversionTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResult_ifNoJsonObj = ImmutableResult.<ObjectStorage>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
+        expectedResult_ifNoJsonObj = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
                 .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
-        expectedResult_ifEntityNotExist = ImmutableResult.<ObjectStorage>builder()
-                .success(false)
-                .code(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
+        expectedResult_ifEntityNotExist = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
                 .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
@@ -54,9 +48,7 @@ public class TagConversionTaskTest {
         ObjectStorage storage = new ObjectStorage();
         storage.put(ENTITY_ID, tagEntity);
 
-        expectedResult = ImmutableResult.<ObjectStorage>builder()
-                .success(true)
-                .value(storage)
+        expectedResult = ImmutableResult.<ObjectStorage>ok(storage)
                 .arg(KEY)
                 .build();
     }
@@ -110,33 +102,32 @@ public class TagConversionTaskTest {
 
     private static class ContextBuilder{
         private final Context context;
-        private TagLongKeyJsonObj jsonObject;
+        private ObjectStorage jsonObjectStorage;
 
         public ContextBuilder() {
             this.context = new DefaultContext();
         }
 
         public ContextBuilder addJsonObject() {
-            jsonObject = new TagLongKeyJsonObj();
-            jsonObject.setEntities(new HashMap<>());
+            jsonObjectStorage = new ObjectStorage();
             return this;
         }
 
         public ContextBuilder addEntity(Long id, String name){
-            if (jsonObject != null){
+            if (jsonObjectStorage != null){
                 TagJsonEntity entity = new TagJsonEntity();
                 entity.setId(id);
                 entity.setName(name);
-                jsonObject.getEntities().put(id, entity);
+                jsonObjectStorage.put(id, entity);
             }
             return this;
         }
 
         public Context build(){
-            if (jsonObject != null){
-                Result<TagLongKeyJsonObj> result = ImmutableResult.<TagLongKeyJsonObj>builder()
+            if (jsonObjectStorage != null){
+                Result<ObjectStorage> result = ImmutableResult.<ObjectStorage>builder()
                         .success(true)
-                        .value(jsonObject)
+                        .value(jsonObjectStorage)
                         .build();
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
             }
