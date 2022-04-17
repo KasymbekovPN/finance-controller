@@ -1,10 +1,12 @@
 package kpn.financecontroller.initialization.tasks;
 
+import com.google.gson.Gson;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestJsonEntity;
 import kpn.financecontroller.initialization.tasks.testUtils.TestJsonObj;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -16,7 +18,6 @@ import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,27 +30,27 @@ public class CreationTaskTest {
     private static final String INVALID_SOURCE = "{\"hello\"";
     private static final String SOURCE = "{\"entities\" : {\"1\":{\"id\":1}}}";
 
-    private static Result<TestJsonObj> expectedResultWhenNoContent;
-    private static Result<TestJsonObj> expectedResultWhenJsonSyntaxException;
-    private static Result<TestJsonObj> expectedResult;
+    private static Result<ObjectStorage> expectedResultWhenNoContent;
+    private static Result<ObjectStorage> expectedResultWhenJsonSyntaxException;
+    private static Result<ObjectStorage> expectedResult;
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultWhenNoContent = ImmutableResult.<TestJsonObj>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.NO_STRING_CONTENT))
+        expectedResultWhenNoContent = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.NO_STRING_CONTENT))
                 .arg(TestKeys.KEY)
                 .build();
 
-        expectedResultWhenJsonSyntaxException = ImmutableResult.<TestJsonObj>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.JSON_SYNTAX_EXCEPTION))
+        expectedResultWhenJsonSyntaxException = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.JSON_SYNTAX_EXCEPTION))
                 .arg(TestKeys.KEY)
                 .build();
 
         TestJsonEntity testEntity = new TestJsonEntity();
         testEntity.setId(1L);
 
-        TestJsonObj value = new TestJsonObj();
-        value.setEntities(Map.of(1L, testEntity));
+        ObjectStorage storage = new ObjectStorage();
+        storage.put(1L, testEntity);
 
-        expectedResult = ImmutableResult.<TestJsonObj>ok(value)
+        expectedResult = ImmutableResult.<ObjectStorage>ok(storage)
                 .arg(TestKeys.KEY)
                 .build();
     }
@@ -61,7 +62,7 @@ public class CreationTaskTest {
         Context context = new ContextBuilder().build();
         task.execute(context);
 
-        Result<TestJsonObj> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, TestJsonObj.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, ObjectStorage.class);
         assertThat(expectedResultWhenNoContent).isEqualTo(result);
         assertThat(task.isContinuationPossible()).isFalse();
     }
@@ -75,7 +76,7 @@ public class CreationTaskTest {
                 .build();
         task.execute(context);
 
-        Result<TestJsonObj> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, TestJsonObj.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, ObjectStorage.class);
         assertThat(expectedResultWhenJsonSyntaxException).isEqualTo(result);
         assertThat(task.isContinuationPossible()).isFalse();
     }
@@ -89,7 +90,7 @@ public class CreationTaskTest {
                 .build();
         task.execute(context);
 
-        Result<TestJsonObj> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, TestJsonObj.class);
+        Result<ObjectStorage> result = CREATOR.apply(context).get(KEY, Properties.JSON_OBJECT_CREATION_RESULT, ObjectStorage.class);
         assertThat(expectedResult).isEqualTo(result);
         assertThat(task.isContinuationPossible()).isTrue();
     }
@@ -99,7 +100,15 @@ public class CreationTaskTest {
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
-        task.setType(TestJsonObj.class);
+
+        CreationTask.ObjectStorageCreator osc = (str) -> {
+            TestJsonObj testJsonObj = new Gson().fromJson(str, TestJsonObj.class);
+            ObjectStorage storage = new ObjectStorage();
+            storage.putAll(testJsonObj.getEntities());
+
+            return storage;
+        };
+        task.setObjectStorageCreator(osc);
 
         return task;
     }
