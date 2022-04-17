@@ -4,7 +4,6 @@ import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.initialization.entities.RegionJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.*;
-import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -16,7 +15,6 @@ import kpn.taskexecutor.lib.contexts.DefaultContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -131,7 +129,7 @@ class RegionConversionTaskTest {
 
     private static class ContextBuilder{
         private final Context context;
-        private RegionLongKeyJsonObj jsonObject;
+        private ObjectStorage jsonStorage;
         private ObjectStorage countryStorage;
 
         public ContextBuilder() {
@@ -139,18 +137,17 @@ class RegionConversionTaskTest {
         }
 
         public ContextBuilder addJsonObject() {
-            jsonObject = new RegionLongKeyJsonObj();
-            jsonObject.setEntities(new HashMap<>());
+            jsonStorage = new ObjectStorage();
             return this;
         }
 
         public ContextBuilder addEntity(Long regionId, String regionName, Long countryId) {
-            if (jsonObject != null){
+            if (jsonStorage != null){
                 RegionJsonEntity entity = new RegionJsonEntity();
                 entity.setId(regionId);
                 entity.setName(regionName);
                 entity.setCountryId(countryId);
-                jsonObject.getEntities().put(regionId, entity);
+                jsonStorage.put(regionId, entity);
             }
             return this;
         }
@@ -165,8 +162,8 @@ class RegionConversionTaskTest {
         }
 
         public Context build(){
-            if (jsonObject != null){
-                Result<RegionLongKeyJsonObj> result = ImmutableResult.<RegionLongKeyJsonObj>ok(jsonObject).build();
+            if (jsonStorage != null){
+                Result<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(jsonStorage).build();
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
             }
             if (countryStorage != null){

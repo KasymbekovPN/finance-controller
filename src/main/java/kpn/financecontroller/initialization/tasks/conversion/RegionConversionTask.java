@@ -6,7 +6,6 @@ import kpn.financecontroller.initialization.entities.RegionJsonEntity;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Entities;
 import kpn.financecontroller.initialization.generators.valued.Properties;
-import kpn.financecontroller.initialization.jsonObjs.RegionLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.BaseTask;
@@ -26,12 +25,11 @@ final public class RegionConversionTask extends BaseTask {
     public void execute(Context context) {
         reset();
         ObjectStorage storage = getStorage(context);
-        Result<RegionLongKeyJsonObj> result = createContextManager(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, RegionLongKeyJsonObj.class);
+        Result<ObjectStorage> result = createContextManager(context).get(key, Properties.JSON_OBJECT_CREATION_RESULT, ObjectStorage.class);
         if (result.isSuccess()){
-            RegionLongKeyJsonObj jsonObj = result.getValue();
-            Optional<RegionJsonEntity> maybeJsonEntity = jsonObj.getEntity(entityId);
-            if (maybeJsonEntity.isPresent()){
-                RegionJsonEntity jsonEntity = maybeJsonEntity.get();
+            ObjectStorage jsonStorage = result.getValue();
+            if (jsonStorage.containsKey(entityId)){
+                RegionJsonEntity jsonEntity = (RegionJsonEntity) jsonStorage.get(entityId);
                 Optional<RegionEntity> maybeEntity = convert(jsonEntity, context);
                 if (maybeEntity.isPresent()){
                     storage.put(jsonEntity.getId(), maybeEntity.get());
