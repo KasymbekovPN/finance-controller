@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 final public class ConversionGenerator extends BaseGenerator {
     private final Class<? extends Task> type;
-    private final ConversionTask.ObjectStorageFiller objectStorageFiller;
+    private final ConversionTask.ObjectStorageFillingStrategy storageFillingStrategy;
 
     private Deque<Long> entityIds;
 
@@ -32,14 +32,14 @@ final public class ConversionGenerator extends BaseGenerator {
                                 ValuedGenerator<String> valuedGenerator,
                                 Function<Context, ResultContextManager> managerCreator,
                                 Class<? extends Task> type,
-                                ConversionTask.ObjectStorageFiller objectStorageFiller) {
+                                ConversionTask.ObjectStorageFillingStrategy storageFillingStrategy) {
         super(key, valuedGenerator, managerCreator);
         this.type = type;
-        this.objectStorageFiller = objectStorageFiller;
+        this.storageFillingStrategy = storageFillingStrategy;
 
         this.fieldValidator
                 .toChecking(type, "Type")
-                .toChecking(objectStorageFiller, "ObjectStorageFiller")
+                .toChecking(storageFillingStrategy, "ObjectStorageFiller")
                 .caller(getClass().getSimpleName());
     }
 
@@ -52,7 +52,7 @@ final public class ConversionGenerator extends BaseGenerator {
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
                     .field("key", key)
-                    .field("objectStorageFiller", objectStorageFiller)
+                    .field("storageFillingStrategy", storageFillingStrategy)
                     .field("entityId", maybeId.get())
                     .build();
             return Optional.of(seed);
@@ -75,20 +75,20 @@ final public class ConversionGenerator extends BaseGenerator {
 
     public static class Builder extends BaseBuilder {
         private Class<? extends Task> type;
-        private ConversionTask.ObjectStorageFiller objectStorageFiller;
+        private ConversionTask.ObjectStorageFillingStrategy objectStorageFillingStrategy;
 
         public Builder type(Class<? extends Task> type){
             this.type = type;
             return this;
         }
 
-        public Builder objectStorageFiller(ConversionTask.ObjectStorageFiller objectStorageFiller){
-            this.objectStorageFiller = objectStorageFiller;
+        public Builder objectStorageFiller(ConversionTask.ObjectStorageFillingStrategy objectStorageFillingStrategy){
+            this.objectStorageFillingStrategy = objectStorageFillingStrategy;
             return this;
         }
 
         public ConversionGenerator build(){
-            return new ConversionGenerator(key, valuedGenerator, managerCreator, type, objectStorageFiller);
+            return new ConversionGenerator(key, valuedGenerator, managerCreator, type, objectStorageFillingStrategy);
         }
     }
 }

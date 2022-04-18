@@ -106,7 +106,7 @@ class ConversionTaskTest {
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
         task.setEntityId(ENTITY_ID);
-        task.setObjectStorageFiller((context, jsonEntity) -> {
+        task.setStorageFillingStrategy((storage, jsonEntity, manager) -> {
             return success ? Optional.empty() : Optional.of(Codes.ENTITY_CONVERSION_FAIL);
         });
 

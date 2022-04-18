@@ -15,7 +15,7 @@ final public class ConversionTask extends BaseTask {
     @Setter
     private Long entityId;
     @Setter
-    private ObjectStorageFiller objectStorageFiller;
+    private ObjectStorageFillingStrategy storageFillingStrategy;
 
     @Override
     public void execute(Context context) {
@@ -25,7 +25,8 @@ final public class ConversionTask extends BaseTask {
         if (result.isSuccess()){
             ObjectStorage jsonStorage = result.getValue();
             if (jsonStorage.containsKey(entityId)){
-                Optional<Codes> fillingResult = objectStorageFiller.fill(context, jsonStorage.get(entityId));
+                Optional<Codes> fillingResult
+                        = storageFillingStrategy.fill(storage, jsonStorage.get(entityId), createContextManager(context));
                 if (fillingResult.isPresent()){
                     calculateAndSetCode(key, fillingResult.get());
                 } else {
@@ -55,7 +56,7 @@ final public class ConversionTask extends BaseTask {
     }
 
     @FunctionalInterface
-    public interface ObjectStorageFiller{
-        Optional<Codes> fill(Context context, Object jsonEntity);
+    public interface ObjectStorageFillingStrategy {
+        Optional<Codes> fill(ObjectStorage storage, Object jsonEntity, ResultContextManager manager);
     }
 }
