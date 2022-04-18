@@ -57,6 +57,6 @@ final public class ConversionTask extends BaseTask {
 
     @FunctionalInterface
     public interface ObjectStorageFillingStrategy {
-        Optional<Codes> fill(ObjectStorage storage, Object jsonEntity, ResultContextManager manager);
+        Optional<Codes> fill(ObjectStorage storage, Object value, ResultContextManager manager);
     }
 }

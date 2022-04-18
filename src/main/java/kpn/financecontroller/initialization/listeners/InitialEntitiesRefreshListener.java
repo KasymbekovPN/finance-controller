@@ -8,10 +8,11 @@ import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.initialization.entities.CountryJsonEntity;
+import kpn.financecontroller.initialization.entities.RegionJsonEntity;
+import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.seed.*;
-import kpn.financecontroller.initialization.generators.valued.Entities;
-import kpn.financecontroller.initialization.generators.valued.Valued;
-import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
+import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.listeners.jobjects.CountryLongKeyJsonObj;
 import kpn.financecontroller.initialization.listeners.jobjects.RegionLongKeyJsonObj;
 import kpn.financecontroller.initialization.listeners.jobjects.TagLongKeyJsonObj;
@@ -20,17 +21,15 @@ import kpn.financecontroller.initialization.managers.context.ResultContextManage
 import kpn.financecontroller.initialization.setting.Setting;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.CreationTask;
-import kpn.financecontroller.initialization.tasks.conversion.CountryConversionTask;
-import kpn.financecontroller.initialization.tasks.conversion.RegionConversionTask;
-import kpn.financecontroller.initialization.tasks.conversion.TagConversionTask;
+import kpn.financecontroller.initialization.tasks.ConversionTask;
 import kpn.financecontroller.initialization.tasks.saving.CountrySavingTask;
 import kpn.financecontroller.initialization.tasks.saving.RegionSavingTask;
 import kpn.financecontroller.initialization.tasks.saving.TagSavingTask;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import kpn.taskexecutor.lib.executors.DefaultExecutor;
 import kpn.taskexecutor.lib.seed.generator.Generator;
-import kpn.taskexecutor.lib.task.Task;
 import kpn.taskexecutor.lib.task.configurer.DefaultTaskConfigurer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +42,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Slf4j
@@ -102,9 +102,44 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             );
             Generator creationGenerator = createCreationGenerator(pairs);
 
-            Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, TagConversionTask.class);
-            Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, CountryConversionTask.class);
-            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, RegionConversionTask.class);
+            ConversionTask.ObjectStorageFillingStrategy tagFillingStrategy = (storage, value, manager) -> {
+                TagJsonEntity jsonEntity = (TagJsonEntity) value;
+                TagEntity entity = new TagEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                storage.put(jsonEntity.getId(), entity);
+                return Optional.empty();
+            };
+            ConversionTask.ObjectStorageFillingStrategy countryFillingStrategy = (storage, value, manager) -> {
+                CountryJsonEntity jsonEntity = (CountryJsonEntity) value;
+                CountryEntity entity = new CountryEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                storage.put(jsonEntity.getId(), entity);
+
+                return Optional.empty();
+            };
+            ConversionTask.ObjectStorageFillingStrategy regionFillingStrategy = (storage, value, manager) -> {
+                RegionJsonEntity jsonEntity = (RegionJsonEntity) value;
+
+                Result<ObjectStorage> result = manager.get(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+                if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCountryId())){
+                    RegionEntity entity = new RegionEntity();
+                    entity.setId(jsonEntity.getId());
+                    entity.setName(jsonEntity.getName());
+                    entity.setCountryEntity((CountryEntity) result.getValue().get(jsonEntity.getCountryId()));
+
+                    storage.put(jsonEntity.getId(), entity);
+
+                    return Optional.empty();
+                }
+
+                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+            };
+
+            Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, tagFillingStrategy);
+            Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, countryFillingStrategy);
+            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, regionFillingStrategy);
 
             List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
                     new Pair<>(Entities.REGIONS, regionDtoService),
@@ -169,11 +204,12 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 .build();
     }
 
-    private Generator createConversionGenerator(Valued<String> key,
-                                                Class<? extends Task> taskType) {
 
+    private Generator createConversionGenerator(Valued<String> key,
+                                                ConversionTask.ObjectStorageFillingStrategy objectStorageFillingStrategy) {
         return ConversionGenerator.builder()
-                .type(taskType)
+                .type(ConversionTask.class)
+                .objectStorageFiller(objectStorageFillingStrategy)
                 .managerCreator(createManagerCreator())
                 .valuedGenerator(createValuedStringGenerator())
                 .key(key)
