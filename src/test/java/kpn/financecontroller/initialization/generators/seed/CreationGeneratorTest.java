@@ -71,7 +71,4 @@ public class CreationGeneratorTest {
         maybeSeed = seedGenerator.getNextIfExist(CONTEXT);
         assertThat(maybeSeed).isEmpty();
     }
-
-    // TODO: 17.04.2022 del
-//    public static class TestJsonObj extends LongKeyJsonObj<String>{}
 }
