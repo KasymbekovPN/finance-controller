@@ -31,7 +31,7 @@ public class ConversionGeneratorTest {
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Valued<String> KEY = TestKeys.KEY;
     private static final Class<? extends Task> TYPE = Task.class;
-    private static final ConversionTask.ObjectStorageFillingStrategy OSF = (storage, jsonEntity, manager) -> {return Optional.empty();};
+    private static final ConversionTask.Strategy OSF = (storage, jsonEntity, manager) -> {return Optional.empty();};
     private static final Long ENTITY_ID = 1L;
 
     @Test
@@ -103,7 +103,7 @@ public class ConversionGeneratorTest {
                 "managerCreator", CREATOR,
                 "entityId", ENTITY_ID,
                 "key", KEY,
-                "storageFillingStrategy", OSF
+                "strategy", OSF
         );
 
         TestJsonEntity entity = new TestJsonEntity();

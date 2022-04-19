@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 final public class ConversionGenerator extends BaseGenerator {
     private final Class<? extends Task> type;
-    private final ConversionTask.ObjectStorageFillingStrategy storageFillingStrategy;
+    private final ConversionTask.Strategy strategy;
 
     private Deque<Long> entityIds;
 
@@ -32,14 +32,14 @@ final public class ConversionGenerator extends BaseGenerator {
                                 ValuedGenerator<String> valuedGenerator,
                                 Function<Context, ResultContextManager> managerCreator,
                                 Class<? extends Task> type,
-                                ConversionTask.ObjectStorageFillingStrategy storageFillingStrategy) {
+                                ConversionTask.Strategy strategy) {
         super(key, valuedGenerator, managerCreator);
         this.type = type;
-        this.storageFillingStrategy = storageFillingStrategy;
+        this.strategy = strategy;
 
         this.fieldValidator
                 .toChecking(type, "Type")
-                .toChecking(storageFillingStrategy, "ObjectStorageFiller")
+                .toChecking(strategy, "Strategy")
                 .caller(getClass().getSimpleName());
     }
 
@@ -52,7 +52,7 @@ final public class ConversionGenerator extends BaseGenerator {
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
                     .field("key", key)
-                    .field("storageFillingStrategy", storageFillingStrategy)
+                    .field("strategy", strategy)
                     .field("entityId", maybeId.get())
                     .build();
             return Optional.of(seed);
@@ -75,20 +75,20 @@ final public class ConversionGenerator extends BaseGenerator {
 
     public static class Builder extends BaseBuilder {
         private Class<? extends Task> type;
-        private ConversionTask.ObjectStorageFillingStrategy objectStorageFillingStrategy;
+        private ConversionTask.Strategy strategy;
 
         public Builder type(Class<? extends Task> type){
             this.type = type;
             return this;
         }
 
-        public Builder objectStorageFiller(ConversionTask.ObjectStorageFillingStrategy objectStorageFillingStrategy){
-            this.objectStorageFillingStrategy = objectStorageFillingStrategy;
+        public Builder objectStorageFiller(ConversionTask.Strategy strategy){
+            this.strategy = strategy;
             return this;
         }
 
         public ConversionGenerator build(){
-            return new ConversionGenerator(key, valuedGenerator, managerCreator, type, objectStorageFillingStrategy);
+            return new ConversionGenerator(key, valuedGenerator, managerCreator, type, strategy);
         }
     }
 }
