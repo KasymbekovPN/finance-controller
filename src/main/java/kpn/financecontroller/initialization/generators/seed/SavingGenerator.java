@@ -17,7 +17,6 @@ import java.util.function.Function;
 
 final public class SavingGenerator extends BaseGenerator {
 
-    private final Class<? extends Task> type;
     private final SavingTask.Strategy strategy;
 
     private Deque<Long> entityIds;
@@ -29,14 +28,11 @@ final public class SavingGenerator extends BaseGenerator {
     private SavingGenerator(Valued<String> key,
                             ValuedGenerator<String> valuedGenerator,
                             Function<Context, ResultContextManager> managerCreator,
-                            Class<? extends Task> type,
                             SavingTask.Strategy strategy) {
         super(key, valuedGenerator, managerCreator);
-        this.type = type;
         this.strategy = strategy;
 
         this.fieldValidator
-                .toChecking(type, "Type")
                 .toChecking(strategy, "Strategy")
                 .caller(getClass().getSimpleName());
     }
@@ -46,7 +42,7 @@ final public class SavingGenerator extends BaseGenerator {
         Optional<Long> maybeId = getNextEntityId(context);
         if (maybeId.isPresent()){
             Seed seed = DefaultSeed.builder()
-                    .type(type)
+                    .type(SavingTask.class)
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
                     .field("key", key)
@@ -72,13 +68,7 @@ final public class SavingGenerator extends BaseGenerator {
     }
 
     public static class Builder extends BaseBuilder{
-        private Class<? extends Task> type;
         private SavingTask.Strategy strategy;
-
-        public Builder type(Class<? extends Task> type) {
-            this.type = type;
-            return this;
-        }
 
         public Builder strategy(SavingTask.Strategy strategy) {
             this.strategy = strategy;
@@ -86,7 +76,7 @@ final public class SavingGenerator extends BaseGenerator {
         }
 
         public SavingGenerator build(){
-            return new SavingGenerator(key, valuedGenerator, managerCreator, type, strategy);
+            return new SavingGenerator(key, valuedGenerator, managerCreator, strategy);
         }
     }
 }

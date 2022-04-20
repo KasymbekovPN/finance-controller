@@ -29,9 +29,8 @@ public class SavingGeneratorTest {
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Valued<String> KEY = TestKeys.KEY;
-    private static final Class<? extends Task> TYPE = Task.class;
+    private static final Class<? extends Task> TYPE = SavingTask.class;
     private static final Long ENTITY_ID = 1L;
-    private static final Class<? extends Map<Long, ?>> STORAGE_TYPE = ObjectStorage.class;
     private static final SavingTask.Strategy STRATEGY = value -> Optional.empty();
 
     @Test
@@ -74,7 +73,6 @@ public class SavingGeneratorTest {
     @Test
     void shouldCheckNextGetting_ifStrategy() {
         Generator seedGenerator = SavingGenerator.builder()
-                .type(TYPE)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .key(KEY)
@@ -86,7 +84,6 @@ public class SavingGeneratorTest {
     @Test
     void shouldCheckNextGetting_ifConversionResultAbsent() {
         Generator seedGenerator = SavingGenerator.builder()
-                .type(TYPE)
                 .strategy(STRATEGY)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
@@ -113,7 +110,6 @@ public class SavingGeneratorTest {
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
         Generator seedGenerator = SavingGenerator.builder()
-                .type(TYPE)
                 .strategy(STRATEGY)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)

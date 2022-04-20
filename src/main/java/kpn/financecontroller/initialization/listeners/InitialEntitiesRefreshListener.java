@@ -1,5 +1,6 @@
 package kpn.financecontroller.initialization.listeners;
 
+import com.google.gson.Gson;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.tag.Tag;
@@ -7,19 +8,27 @@ import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.initialization.entities.CountryJsonEntity;
+import kpn.financecontroller.initialization.entities.RegionJsonEntity;
+import kpn.financecontroller.initialization.entities.TagJsonEntity;
 import kpn.financecontroller.initialization.generators.seed.*;
 import kpn.financecontroller.initialization.generators.valued.*;
+import kpn.financecontroller.initialization.listeners.jobjects.CountryLongKeyJsonObj;
+import kpn.financecontroller.initialization.listeners.jobjects.RegionLongKeyJsonObj;
+import kpn.financecontroller.initialization.listeners.jobjects.TagLongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
 import kpn.financecontroller.initialization.setting.Setting;
+import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.CreationTask;
 import kpn.financecontroller.initialization.tasks.ConversionTask;
-// TODO: 18.04.2022 del
-//import kpn.financecontroller.initialization.tasks.saving.CountrySavingTask;
-//import kpn.financecontroller.initialization.tasks.saving.RegionSavingTask;
-//import kpn.financecontroller.initialization.tasks.saving.TagSavingTask;
+import kpn.financecontroller.initialization.tasks.SavingTask;
+import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
+import kpn.taskexecutor.lib.contexts.DefaultContext;
+import kpn.taskexecutor.lib.executors.DefaultExecutor;
 import kpn.taskexecutor.lib.seed.generator.Generator;
+import kpn.taskexecutor.lib.task.configurer.DefaultTaskConfigurer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -31,6 +40,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Slf4j
@@ -54,131 +64,138 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         if (setting.isEnable()){
             log.info("DB init. data saving starting");
 
-            // TODO: 18.04.2022 restore
-//            DefaultTaskConfigurer taskConfigurer = DefaultTaskConfigurer.builder().build();
-//            DefaultContext context = new DefaultContext();
-//            DefaultExecutor executor = new DefaultExecutor(taskConfigurer, context);
-//
-//            List<Entities> entities = List.of(
-//                    Entities.TAGS,
-//                    Entities.COUNTRIES,
-//                    Entities.REGIONS
-//            );
-//            Generator readingGenerator = createReadingGenerators(entities);
-//
-//            CreationTask.ObjectStorageCreator tagOSC = (str) -> {
-//                TagLongKeyJsonObj jsonObj = new Gson().fromJson(str, TagLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            CreationTask.ObjectStorageCreator countryOSC = (str) -> {
-//                CountryLongKeyJsonObj jsonObj = new Gson().fromJson(str, CountryLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            CreationTask.ObjectStorageCreator regionOSC = (str) -> {
-//                RegionLongKeyJsonObj jsonObj = new Gson().fromJson(str, RegionLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            List<Pair<Entities, CreationTask.ObjectStorageCreator>> pairs = List.of(
-//                    new Pair<>(Entities.TAGS, tagOSC),
-//                    new Pair<>(Entities.COUNTRIES, countryOSC),
-//                    new Pair<>(Entities.REGIONS, regionOSC)
-//            );
-//            Generator creationGenerator = createCreationGenerator(pairs);
-//
-//            ConversionTask.ObjectStorageFillingStrategy tagFillingStrategy = (storage, value, manager) -> {
-//                TagJsonEntity jsonEntity = (TagJsonEntity) value;
-//                TagEntity entity = new TagEntity();
-//                entity.setId(jsonEntity.getId());
-//                entity.setName(jsonEntity.getName());
-//                storage.put(jsonEntity.getId(), entity);
-//                return Optional.empty();
-//            };
-//            ConversionTask.ObjectStorageFillingStrategy countryFillingStrategy = (storage, value, manager) -> {
-//                CountryJsonEntity jsonEntity = (CountryJsonEntity) value;
-//                CountryEntity entity = new CountryEntity();
-//                entity.setId(jsonEntity.getId());
-//                entity.setName(jsonEntity.getName());
-//                storage.put(jsonEntity.getId(), entity);
-//
-//                return Optional.empty();
-//            };
-//            ConversionTask.ObjectStorageFillingStrategy regionFillingStrategy = (storage, value, manager) -> {
-//                RegionJsonEntity jsonEntity = (RegionJsonEntity) value;
-//
-//                Result<ObjectStorage> result = manager.get(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
-//                if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCountryId())){
-//                    RegionEntity entity = new RegionEntity();
-//                    entity.setId(jsonEntity.getId());
-//                    entity.setName(jsonEntity.getName());
-//                    entity.setCountryEntity((CountryEntity) result.getValue().get(jsonEntity.getCountryId()));
-//
-//                    storage.put(jsonEntity.getId(), entity);
-//
-//                    return Optional.empty();
-//                }
-//
-//                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
-//            };
-//
-//            Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, tagFillingStrategy);
-//            Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, countryFillingStrategy);
-//            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, regionFillingStrategy);
-//
-//            List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
-//                    new Pair<>(Entities.REGIONS, regionDtoService),
-//                    new Pair<>(Entities.COUNTRIES, countryDtoService),
-//                    new Pair<>(Entities.TAGS, tagDtoService)
-//            );
-//            Generator cleanupGenerator = createCleanupGenerator(cleanupInit);
-//
-//            Generator tagSavingGenerator = SavingGenerator.builder()
-//                    .dtoService(tagDtoService)
-//                    .storageType(ObjectStorage.class)
-//                    .type(TagSavingTask.class)
-//                    .managerCreator(createManagerCreator())
-//                    .valuedGenerator(createValuedStringGenerator())
-//                    .key(Entities.TAGS)
-//                    .build();
-//            Generator countrySavingGenerator = SavingGenerator.builder()
-//                    .dtoService(countryDtoService)
-//                    .storageType(ObjectStorage.class)
-//                    .type(CountrySavingTask.class)
-//                    .managerCreator(createManagerCreator())
-//                    .valuedGenerator(createValuedStringGenerator())
-//                    .key(Entities.COUNTRIES)
-//                    .build();
-//            Generator regionSavingGenerator = SavingGenerator.builder()
-//                    .dtoService(regionDtoService)
-//                    .storageType(ObjectStorage.class)
-//                    .type(RegionSavingTask.class)
-//                    .managerCreator(createManagerCreator())
-//                    .valuedGenerator(createValuedStringGenerator())
-//                    .key(Entities.REGIONS)
-//                    .build();
-//
-//            executor
-//                    .addGenerator(readingGenerator)
-//                    .addGenerator(creationGenerator)
-//
-//                    .addGenerator(cleanupGenerator)
-//
-//                    .addGenerator(tagConversationGenerator)
-//                    .addGenerator(tagSavingGenerator)
-//
-//                    .addGenerator(countryConversionGenerator)
-//                    .addGenerator(countrySavingGenerator)
-//
-//                    .addGenerator(regionConversionGenerator)
-//                    .addGenerator(regionSavingGenerator);
-//
-//            Boolean executionResult = executor.execute();
-//            log.info("result: {}", executionResult);
+            DefaultTaskConfigurer taskConfigurer = DefaultTaskConfigurer.builder().build();
+            DefaultContext context = new DefaultContext();
+            DefaultExecutor executor = new DefaultExecutor(taskConfigurer, context);
+
+            List<Entities> entities = List.of(
+                    Entities.TAGS,
+                    Entities.COUNTRIES,
+                    Entities.REGIONS
+            );
+            Generator readingGenerator = createReadingGenerators(entities);
+
+            CreationTask.ObjectStorageCreator tagOSC = (str) -> {
+                TagLongKeyJsonObj jsonObj = new Gson().fromJson(str, TagLongKeyJsonObj.class);
+                ObjectStorage storage = new ObjectStorage();
+                storage.putAll(jsonObj.getEntities());
+                return storage;
+            };
+            CreationTask.ObjectStorageCreator countryOSC = (str) -> {
+                CountryLongKeyJsonObj jsonObj = new Gson().fromJson(str, CountryLongKeyJsonObj.class);
+                ObjectStorage storage = new ObjectStorage();
+                storage.putAll(jsonObj.getEntities());
+                return storage;
+            };
+            CreationTask.ObjectStorageCreator regionOSC = (str) -> {
+                RegionLongKeyJsonObj jsonObj = new Gson().fromJson(str, RegionLongKeyJsonObj.class);
+                ObjectStorage storage = new ObjectStorage();
+                storage.putAll(jsonObj.getEntities());
+                return storage;
+            };
+            List<Pair<Entities, CreationTask.ObjectStorageCreator>> pairs = List.of(
+                    new Pair<>(Entities.TAGS, tagOSC),
+                    new Pair<>(Entities.COUNTRIES, countryOSC),
+                    new Pair<>(Entities.REGIONS, regionOSC)
+            );
+            Generator creationGenerator = createCreationGenerator(pairs);
+
+            ConversionTask.Strategy tagFillingStrategy = (storage, value, manager) -> {
+                TagJsonEntity jsonEntity = (TagJsonEntity) value;
+                TagEntity entity = new TagEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                storage.put(jsonEntity.getId(), entity);
+                return Optional.empty();
+            };
+            ConversionTask.Strategy countryFillingStrategy = (storage, value, manager) -> {
+                CountryJsonEntity jsonEntity = (CountryJsonEntity) value;
+                CountryEntity entity = new CountryEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                storage.put(jsonEntity.getId(), entity);
+
+                return Optional.empty();
+            };
+            ConversionTask.Strategy regionFillingStrategy = (storage, value, manager) -> {
+                RegionJsonEntity jsonEntity = (RegionJsonEntity) value;
+
+                Result<ObjectStorage> result = manager.get(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+                if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCountryId())){
+                    RegionEntity entity = new RegionEntity();
+                    entity.setId(jsonEntity.getId());
+                    entity.setName(jsonEntity.getName());
+                    entity.setCountryEntity((CountryEntity) result.getValue().get(jsonEntity.getCountryId()));
+
+                    storage.put(jsonEntity.getId(), entity);
+
+                    return Optional.empty();
+                }
+
+                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+            };
+
+            Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, tagFillingStrategy);
+            Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, countryFillingStrategy);
+            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, regionFillingStrategy);
+
+            List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
+                    new Pair<>(Entities.REGIONS, regionDtoService),
+                    new Pair<>(Entities.COUNTRIES, countryDtoService),
+                    new Pair<>(Entities.TAGS, tagDtoService)
+            );
+            Generator cleanupGenerator = createCleanupGenerator(cleanupInit);
+
+            SavingTask.Strategy tagSavingStrategy = value -> {
+                TagEntity entity = (TagEntity) value;
+                Result<Tag> result = tagDtoService.saver().save(entity);
+                if (result.isSuccess()){
+                    entity.setId(result.getValue().getId());
+                    return Optional.empty();
+                }
+                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+            };
+            Generator tagSavingGenerator = createSavingGenerator(Entities.TAGS, tagSavingStrategy);
+
+            SavingTask.Strategy countrySavingStrategy = value -> {
+                CountryEntity entity = (CountryEntity) value;
+                Result<Country> result = countryDtoService.saver().save(entity);
+                if (result.isSuccess()){
+                    entity.setId(result.getValue().getId());
+                    return Optional.empty();
+                }
+                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+            };
+            Generator countrySavingGenerator = createSavingGenerator(Entities.COUNTRIES, countrySavingStrategy);
+
+            SavingTask.Strategy regionSavingStrategy =value -> {
+                RegionEntity entity = (RegionEntity) value;
+                Result<Region> result = regionDtoService.saver().save(entity);
+                if (result.isSuccess()){
+                    entity.setId(result.getValue().getId());
+                    return Optional.empty();
+                }
+                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+            };
+            Generator regionSavingGenerator = createSavingGenerator(Entities.REGIONS, regionSavingStrategy);
+
+            executor
+                    .addGenerator(readingGenerator)
+                    .addGenerator(creationGenerator)
+
+                    .addGenerator(cleanupGenerator)
+
+                    .addGenerator(tagConversationGenerator)
+                    .addGenerator(tagSavingGenerator)
+
+                    .addGenerator(countryConversionGenerator)
+                    .addGenerator(countrySavingGenerator)
+
+                    .addGenerator(regionConversionGenerator)
+                    .addGenerator(regionSavingGenerator);
+
+            Boolean executionResult = executor.execute();
+            log.info("result: {}", executionResult);
         }
     }
 
@@ -225,6 +242,15 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         return builder
                 .managerCreator(createManagerCreator())
                 .valuedGenerator(createValuedStringGenerator())
+                .build();
+    }
+
+    private Generator createSavingGenerator(Valued<String> key, SavingTask.Strategy strategy) {
+        return SavingGenerator.builder()
+                .strategy(strategy)
+                .managerCreator(createManagerCreator())
+                .valuedGenerator(createValuedStringGenerator())
+                .key(key)
                 .build();
     }
 
