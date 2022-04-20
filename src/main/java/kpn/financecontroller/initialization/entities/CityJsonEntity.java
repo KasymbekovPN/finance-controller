@@ -3,9 +3,9 @@ package kpn.financecontroller.initialization.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-final public class RegionJsonEntity extends AbstractJsonEntity{
+@Getter
+final public class CityJsonEntity extends AbstractJsonEntity{
     private String name;
-    private Long countryId;
+    private Long regionId;
 }

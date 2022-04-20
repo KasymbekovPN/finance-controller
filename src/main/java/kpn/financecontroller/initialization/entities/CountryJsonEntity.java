@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CountryJsonEntity extends AbstractJsonEntity{
+final public class CountryJsonEntity extends AbstractJsonEntity{
     private String name;
 }

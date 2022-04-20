@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TagJsonEntity extends AbstractJsonEntity {
+final public class TagJsonEntity extends AbstractJsonEntity {
     private String name;
 }
