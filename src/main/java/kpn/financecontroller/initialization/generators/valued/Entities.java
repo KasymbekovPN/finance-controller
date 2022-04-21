@@ -8,7 +8,8 @@ public enum Entities implements Valued<String> {
     TAGS("tags"),
     COUNTRIES("countries"),
     REGIONS("regions"),
-    CITIES("cities");
+    CITIES("cities"),
+    STREETS("streets");
 
     @Getter
     private final String value;

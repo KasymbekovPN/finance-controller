@@ -4,22 +4,18 @@ import com.google.gson.Gson;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
+import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
+import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
-import kpn.financecontroller.initialization.entities.CityJsonEntity;
-import kpn.financecontroller.initialization.entities.CountryJsonEntity;
-import kpn.financecontroller.initialization.entities.RegionJsonEntity;
-import kpn.financecontroller.initialization.entities.TagJsonEntity;
+import kpn.financecontroller.initialization.entities.*;
 import kpn.financecontroller.initialization.generators.seed.*;
 import kpn.financecontroller.initialization.generators.valued.*;
-import kpn.financecontroller.initialization.listeners.jobjects.CityLongKeyJsonObj;
-import kpn.financecontroller.initialization.listeners.jobjects.CountryLongKeyJsonObj;
-import kpn.financecontroller.initialization.listeners.jobjects.RegionLongKeyJsonObj;
-import kpn.financecontroller.initialization.listeners.jobjects.TagLongKeyJsonObj;
+import kpn.financecontroller.initialization.listeners.jobjects.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.managers.context.ResultContextManagerImpl;
 import kpn.financecontroller.initialization.setting.Setting;
@@ -60,6 +56,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private DTOService<Region, RegionEntity, Long> regionDtoService;
     @Autowired
     private DTOService<City, CityEntity, Long> cityDtoService;
+    @Autowired
+    private DTOService<Street, StreetEntity, Long> streetDtoService;
 
     @Autowired
     private Setting setting;
@@ -78,7 +76,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     Entities.TAGS,
                     Entities.COUNTRIES,
                     Entities.REGIONS,
-                    Entities.CITIES
+                    Entities.CITIES,
+                    Entities.STREETS
             );
             Generator readingGenerator = createReadingGenerators(entities);
 
@@ -106,11 +105,18 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 storage.putAll(jsonObj.getEntities());
                 return storage;
             };
+            CreationTask.ObjectStorageCreator streetOSC = (str) -> {
+                StreetLongKeyJsonObj jsonObj = new Gson().fromJson(str, StreetLongKeyJsonObj.class);
+                ObjectStorage storage = new ObjectStorage();
+                storage.putAll(jsonObj.getEntities());
+                return storage;
+            };
             List<Pair<Entities, CreationTask.ObjectStorageCreator>> pairs = List.of(
                     new Pair<>(Entities.TAGS, tagOSC),
                     new Pair<>(Entities.COUNTRIES, countryOSC),
                     new Pair<>(Entities.REGIONS, regionOSC),
-                    new Pair<>(Entities.CITIES, cityOSC)
+                    new Pair<>(Entities.CITIES, cityOSC),
+                    new Pair<>(Entities.STREETS, streetOSC)
             );
             Generator creationGenerator = createCreationGenerator(pairs);
 
@@ -165,12 +171,31 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
 
                 return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
             };
+            ConversionTask.Strategy streetFillingStrategy = (storage, value, manager) -> {
+                StreetJsonEntity jsonEntity = (StreetJsonEntity) value;
+
+                Result<ObjectStorage> result = manager.get(Entities.CITIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+                if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCityId())){
+                    StreetEntity entity = new StreetEntity();
+                    entity.setId(jsonEntity.getId());
+                    entity.setName(jsonEntity.getName());
+                    entity.setCityEntity((CityEntity) result.getValue().get(jsonEntity.getCityId()));
+
+                    storage.put(jsonEntity.getId(), entity);
+
+                    return Optional.empty();
+                }
+
+                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+            };
             Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, tagFillingStrategy);
             Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, countryFillingStrategy);
             Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, regionFillingStrategy);
             Generator cityConversionGenerator = createConversionGenerator(Entities.CITIES, cityFillingStrategy);
+            Generator streetConversionGenerator = createConversionGenerator(Entities.STREETS, streetFillingStrategy);
 
             List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
+                    new Pair<>(Entities.STREETS, streetDtoService),
                     new Pair<>(Entities.CITIES, cityDtoService),
                     new Pair<>(Entities.REGIONS, regionDtoService),
                     new Pair<>(Entities.COUNTRIES, countryDtoService),
@@ -178,6 +203,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             );
             Generator cleanupGenerator = createCleanupGenerator(cleanupInit);
 
+            //<
             SavingTask.Strategy tagSavingStrategy = value -> {
                 TagEntity entity = (TagEntity) value;
                 Result<Tag> result = tagDtoService.saver().save(entity);
@@ -187,8 +213,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 }
                 return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
             };
-            Generator tagSavingGenerator = createSavingGenerator(Entities.TAGS, tagSavingStrategy);
-
             SavingTask.Strategy countrySavingStrategy = value -> {
                 CountryEntity entity = (CountryEntity) value;
                 Result<Country> result = countryDtoService.saver().save(entity);
@@ -198,8 +222,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 }
                 return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
             };
-            Generator countrySavingGenerator = createSavingGenerator(Entities.COUNTRIES, countrySavingStrategy);
-
             SavingTask.Strategy regionSavingStrategy =value -> {
                 RegionEntity entity = (RegionEntity) value;
                 Result<Region> result = regionDtoService.saver().save(entity);
@@ -209,8 +231,6 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 }
                 return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
             };
-            Generator regionSavingGenerator = createSavingGenerator(Entities.REGIONS, regionSavingStrategy);
-
             SavingTask.Strategy citySavingStrategy = value -> {
                 CityEntity entity = (CityEntity) value;
                 Result<City> result = cityDtoService.saver().save(entity);
@@ -220,12 +240,24 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 }
                 return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
             };
+            SavingTask.Strategy streetSavingStrategy = value -> {
+                StreetEntity entity = (StreetEntity) value;
+                Result<Street> result = streetDtoService.saver().save(entity);
+                if (result.isSuccess()){
+                    entity.setId(result.getValue().getId());
+                    return Optional.empty();
+                }
+                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+            };
+            Generator tagSavingGenerator = createSavingGenerator(Entities.TAGS, tagSavingStrategy);
+            Generator countrySavingGenerator = createSavingGenerator(Entities.COUNTRIES, countrySavingStrategy);
+            Generator regionSavingGenerator = createSavingGenerator(Entities.REGIONS, regionSavingStrategy);
             Generator citySavingGenerator = createSavingGenerator(Entities.CITIES, citySavingStrategy);
+            Generator streetSavingGenerator = createSavingGenerator(Entities.STREETS, streetSavingStrategy);
 
             executor
                     .addGenerator(readingGenerator)
                     .addGenerator(creationGenerator)
-
                     .addGenerator(cleanupGenerator)
 
                     .addGenerator(tagConversationGenerator)
@@ -238,7 +270,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .addGenerator(regionSavingGenerator)
 
                     .addGenerator(cityConversionGenerator)
-                    .addGenerator(citySavingGenerator);
+                    .addGenerator(citySavingGenerator)
+
+                    .addGenerator(streetConversionGenerator)
+                    .addGenerator(streetSavingGenerator);
 
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
