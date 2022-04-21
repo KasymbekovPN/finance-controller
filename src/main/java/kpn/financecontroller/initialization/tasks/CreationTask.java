@@ -1,12 +1,15 @@
 package kpn.financecontroller.initialization.tasks;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
+import kpn.financecontroller.initialization.listeners.jobjects.LongKeyJsonObj;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.lib.result.Result;
 import kpn.taskexecutor.lib.contexts.Context;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 final public class CreationTask extends BaseTask {
@@ -33,8 +36,15 @@ final public class CreationTask extends BaseTask {
         putResultIntoContext(context, Properties.JSON_OBJECT_CREATION_RESULT, storage);
     }
 
-    @FunctionalInterface
-    public interface ObjectStorageCreator{
-        ObjectStorage create(String source);
+    @RequiredArgsConstructor
+    public static class ObjectStorageCreator {
+        private final Class<? extends LongKeyJsonObj<?>> type;
+
+        public ObjectStorage create(String source){
+            LongKeyJsonObj<?> jsonObj = new Gson().fromJson(source, type);
+            ObjectStorage storage = new ObjectStorage();
+            storage.putAll(jsonObj.getEntities());
+            return storage;
+        }
     }
 }

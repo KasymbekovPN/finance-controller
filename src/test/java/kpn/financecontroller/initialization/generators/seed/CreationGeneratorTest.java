@@ -4,8 +4,8 @@ import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
-import kpn.financecontroller.initialization.storage.ObjectStorage;
 import kpn.financecontroller.initialization.tasks.CreationTask;
+import kpn.financecontroller.initialization.tasks.testUtils.TestJsonObj;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
 import kpn.taskexecutor.lib.contexts.Context;
@@ -25,9 +25,7 @@ public class CreationGeneratorTest {
     private static final Function<Context, ResultContextManager> CREATOR = new TestManagerCreator();
     private static final ValuedGenerator<String> VALUED_GENERATOR = new ValuedStringGenerator();
     private static final Valued<String> KEY = TestKeys.KEY;
-    private static final CreationTask.ObjectStorageCreator OSC = (str) -> {
-        return new ObjectStorage();
-    };
+    private static final CreationTask.ObjectStorageCreator OSC = new CreationTask.ObjectStorageCreator(TestJsonObj.class);
 
     @Test
     void shouldCheckNextGetting_ifManagerCreatorNull() {

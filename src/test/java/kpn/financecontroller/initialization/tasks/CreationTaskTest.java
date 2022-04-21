@@ -1,6 +1,5 @@
 package kpn.financecontroller.initialization.tasks;
 
-import com.google.gson.Gson;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
@@ -100,15 +99,7 @@ public class CreationTaskTest {
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
-
-        CreationTask.ObjectStorageCreator osc = (str) -> {
-            TestJsonObj testJsonObj = new Gson().fromJson(str, TestJsonObj.class);
-            ObjectStorage storage = new ObjectStorage();
-            storage.putAll(testJsonObj.getEntities());
-
-            return storage;
-        };
-        task.setObjectStorageCreator(osc);
+        task.setObjectStorageCreator(new CreationTask.ObjectStorageCreator(TestJsonObj.class));
 
         return task;
     }
