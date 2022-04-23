@@ -1,6 +1,5 @@
 package kpn.financecontroller.initialization.listeners;
 
-import com.google.gson.Gson;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
@@ -68,274 +67,254 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         if (setting.isEnable()){
             log.info("DB init. data saving starting");
 
-            // TODO: 21.04.2022 restore
-//            DefaultTaskConfigurer taskConfigurer = DefaultTaskConfigurer.builder().build();
-//            DefaultContext context = new DefaultContext();
-//            DefaultExecutor executor = new DefaultExecutor(taskConfigurer, context);
-//
-//            List<Entities> entities = List.of(
-//                    Entities.TAGS,
-//                    Entities.COUNTRIES,
-//                    Entities.REGIONS,
-//                    Entities.CITIES,
-//                    Entities.STREETS
-//            );
-//            Generator readingGenerator = createReadingGenerators(entities);
-//
-//            CreationTask.ObjectStorageCreatorOld tagOSC = (str) -> {
-//                TagLongKeyJsonObj jsonObj = new Gson().fromJson(str, TagLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            CreationTask.ObjectStorageCreatorOld countryOSC = (str) -> {
-//                CountryLongKeyJsonObj jsonObj = new Gson().fromJson(str, CountryLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            CreationTask.ObjectStorageCreatorOld regionOSC = (str) -> {
-//                RegionLongKeyJsonObj jsonObj = new Gson().fromJson(str, RegionLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            CreationTask.ObjectStorageCreatorOld cityOSC = (str) -> {
-//                CityLongKeyJsonObj jsonObj = new Gson().fromJson(str, CityLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            CreationTask.ObjectStorageCreatorOld streetOSC = (str) -> {
-//                StreetLongKeyJsonObj jsonObj = new Gson().fromJson(str, StreetLongKeyJsonObj.class);
-//                ObjectStorage storage = new ObjectStorage();
-//                storage.putAll(jsonObj.getEntities());
-//                return storage;
-//            };
-//            List<Pair<Entities, CreationTask.ObjectStorageCreatorOld>> pairs = List.of(
-//                    new Pair<>(Entities.TAGS, tagOSC),
-//                    new Pair<>(Entities.COUNTRIES, countryOSC),
-//                    new Pair<>(Entities.REGIONS, regionOSC),
-//                    new Pair<>(Entities.CITIES, cityOSC),
-//                    new Pair<>(Entities.STREETS, streetOSC)
-//            );
-//            Generator creationGenerator = createCreationGenerator(pairs);
-//
-//            ConversionTask.Strategy tagFillingStrategy = (storage, value, manager) -> {
-//                TagJsonEntity jsonEntity = (TagJsonEntity) value;
-//                TagEntity entity = new TagEntity();
-//                entity.setId(jsonEntity.getId());
-//                entity.setName(jsonEntity.getName());
-//                storage.put(jsonEntity.getId(), entity);
-//                return Optional.empty();
-//            };
-//            ConversionTask.Strategy countryFillingStrategy = (storage, value, manager) -> {
-//                CountryJsonEntity jsonEntity = (CountryJsonEntity) value;
-//                CountryEntity entity = new CountryEntity();
-//                entity.setId(jsonEntity.getId());
-//                entity.setName(jsonEntity.getName());
-//                storage.put(jsonEntity.getId(), entity);
-//
-//                return Optional.empty();
-//            };
-//            ConversionTask.Strategy regionFillingStrategy = (storage, value, manager) -> {
-//                RegionJsonEntity jsonEntity = (RegionJsonEntity) value;
-//
-//                Result<ObjectStorage> result = manager.get(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
-//                if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCountryId())){
-//                    RegionEntity entity = new RegionEntity();
-//                    entity.setId(jsonEntity.getId());
-//                    entity.setName(jsonEntity.getName());
-//                    entity.setCountryEntity((CountryEntity) result.getValue().get(jsonEntity.getCountryId()));
-//
-//                    storage.put(jsonEntity.getId(), entity);
-//
-//                    return Optional.empty();
-//                }
-//
-//                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
-//            };
-//            ConversionTask.Strategy cityFillingStrategy = (storage, value, manager) -> {
-//                CityJsonEntity jsonEntity = (CityJsonEntity) value;
-//
-//                Result<ObjectStorage> result = manager.get(Entities.REGIONS, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
-//                if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getRegionId())){
-//                    CityEntity entity = new CityEntity();
-//                    entity.setId(jsonEntity.getId());
-//                    entity.setName(jsonEntity.getName());
-//                    entity.setRegionEntity((RegionEntity) result.getValue().get(jsonEntity.getRegionId()));
-//
-//                    storage.put(jsonEntity.getId(), entity);
-//
-//                    return Optional.empty();
-//                }
-//
-//                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
-//            };
-//            ConversionTask.Strategy streetFillingStrategy = (storage, value, manager) -> {
-//                StreetJsonEntity jsonEntity = (StreetJsonEntity) value;
-//
-//                Result<ObjectStorage> result = manager.get(Entities.CITIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
-//                if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCityId())){
-//                    StreetEntity entity = new StreetEntity();
-//                    entity.setId(jsonEntity.getId());
-//                    entity.setName(jsonEntity.getName());
-//                    entity.setCityEntity((CityEntity) result.getValue().get(jsonEntity.getCityId()));
-//
-//                    storage.put(jsonEntity.getId(), entity);
-//
-//                    return Optional.empty();
-//                }
-//
-//                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
-//            };
-//            Generator tagConversationGenerator = createConversionGenerator(Entities.TAGS, tagFillingStrategy);
-//            Generator countryConversionGenerator = createConversionGenerator(Entities.COUNTRIES, countryFillingStrategy);
-//            Generator regionConversionGenerator = createConversionGenerator(Entities.REGIONS, regionFillingStrategy);
-//            Generator cityConversionGenerator = createConversionGenerator(Entities.CITIES, cityFillingStrategy);
-//            Generator streetConversionGenerator = createConversionGenerator(Entities.STREETS, streetFillingStrategy);
-//
-//            List<Pair<Valued<String>, DTOService<?, ?, Long>>> cleanupInit = List.of(
-//                    new Pair<>(Entities.STREETS, streetDtoService),
-//                    new Pair<>(Entities.CITIES, cityDtoService),
-//                    new Pair<>(Entities.REGIONS, regionDtoService),
-//                    new Pair<>(Entities.COUNTRIES, countryDtoService),
-//                    new Pair<>(Entities.TAGS, tagDtoService)
-//            );
-//            Generator cleanupGenerator = createCleanupGenerator(cleanupInit);
-//
-//            //<
-//            SavingTask.Strategy tagSavingStrategy = value -> {
-//                TagEntity entity = (TagEntity) value;
-//                Result<Tag> result = tagDtoService.saver().save(entity);
-//                if (result.isSuccess()){
-//                    entity.setId(result.getValue().getId());
-//                    return Optional.empty();
-//                }
-//                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
-//            };
-//            SavingTask.Strategy countrySavingStrategy = value -> {
-//                CountryEntity entity = (CountryEntity) value;
-//                Result<Country> result = countryDtoService.saver().save(entity);
-//                if (result.isSuccess()){
-//                    entity.setId(result.getValue().getId());
-//                    return Optional.empty();
-//                }
-//                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
-//            };
-//            SavingTask.Strategy regionSavingStrategy =value -> {
-//                RegionEntity entity = (RegionEntity) value;
-//                Result<Region> result = regionDtoService.saver().save(entity);
-//                if (result.isSuccess()){
-//                    entity.setId(result.getValue().getId());
-//                    return Optional.empty();
-//                }
-//                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
-//            };
-//            SavingTask.Strategy citySavingStrategy = value -> {
-//                CityEntity entity = (CityEntity) value;
-//                Result<City> result = cityDtoService.saver().save(entity);
-//                if (result.isSuccess()){
-//                    entity.setId(result.getValue().getId());
-//                    return Optional.empty();
-//                }
-//                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
-//            };
-//            SavingTask.Strategy streetSavingStrategy = value -> {
-//                StreetEntity entity = (StreetEntity) value;
-//                Result<Street> result = streetDtoService.saver().save(entity);
-//                if (result.isSuccess()){
-//                    entity.setId(result.getValue().getId());
-//                    return Optional.empty();
-//                }
-//                return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
-//            };
-//            Generator tagSavingGenerator = createSavingGenerator(Entities.TAGS, tagSavingStrategy);
-//            Generator countrySavingGenerator = createSavingGenerator(Entities.COUNTRIES, countrySavingStrategy);
-//            Generator regionSavingGenerator = createSavingGenerator(Entities.REGIONS, regionSavingStrategy);
-//            Generator citySavingGenerator = createSavingGenerator(Entities.CITIES, citySavingStrategy);
-//            Generator streetSavingGenerator = createSavingGenerator(Entities.STREETS, streetSavingStrategy);
-//
-//            executor
-//                    .addGenerator(readingGenerator)
-//                    .addGenerator(creationGenerator)
-//                    .addGenerator(cleanupGenerator)
-//
-//                    .addGenerator(tagConversationGenerator)
-//                    .addGenerator(tagSavingGenerator)
-//
-//                    .addGenerator(countryConversionGenerator)
-//                    .addGenerator(countrySavingGenerator)
-//
-//                    .addGenerator(regionConversionGenerator)
-//                    .addGenerator(regionSavingGenerator)
-//
-//                    .addGenerator(cityConversionGenerator)
-//                    .addGenerator(citySavingGenerator)
-//
-//                    .addGenerator(streetConversionGenerator)
-//                    .addGenerator(streetSavingGenerator);
-//
-//            Boolean executionResult = executor.execute();
-//            log.info("result: {}", executionResult);
+            DefaultTaskConfigurer taskConfigurer = DefaultTaskConfigurer.builder().build();
+            DefaultContext context = new DefaultContext();
+            DefaultExecutor executor = new DefaultExecutor(taskConfigurer, context);
+
+            Generator readingGenerator = createReadingGenerators(List.of(
+                            Entities.TAGS,
+                            Entities.COUNTRIES,
+                            Entities.REGIONS,
+                            Entities.CITIES,
+                            Entities.STREETS
+            ));
+            executor.addGenerator(readingGenerator);
+
+            Generator creationGenerator = createCreationGenerator(List.of(
+                    new Pair<>(Entities.TAGS, new CreationTask.ObjectStorageCreator(TagLongKeyJsonObj.class)),
+                    new Pair<>(Entities.COUNTRIES, new CreationTask.ObjectStorageCreator(CountryLongKeyJsonObj.class)),
+                    new Pair<>(Entities.REGIONS, new CreationTask.ObjectStorageCreator(RegionLongKeyJsonObj.class)),
+                    new Pair<>(Entities.CITIES, new CreationTask.ObjectStorageCreator(CityLongKeyJsonObj.class)),
+                    new Pair<>(Entities.STREETS, new CreationTask.ObjectStorageCreator(StreetLongKeyJsonObj.class))
+            ));
+            executor.addGenerator(creationGenerator);
+
+            Generator cleanupGenerator = createCleanupGenerator(List.of(
+                    new Pair<>(Entities.STREETS, streetDtoService),
+                    new Pair<>(Entities.CITIES, cityDtoService),
+                    new Pair<>(Entities.REGIONS, regionDtoService),
+                    new Pair<>(Entities.COUNTRIES, countryDtoService),
+                    new Pair<>(Entities.TAGS, tagDtoService)
+            ));
+            executor.addGenerator(cleanupGenerator);
+
+            executor
+                    .addGenerator(createConversionGenerator(Entities.TAGS, createTagFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.TAGS, createTagSavingStrategy()))
+
+                    .addGenerator(createConversionGenerator(Entities.COUNTRIES, createCountryFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.COUNTRIES, createCountrySavingStrategy()))
+
+                    .addGenerator(createConversionGenerator(Entities.REGIONS, createRegionFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.REGIONS, createRegionSavingStrategy()))
+
+                    .addGenerator(createConversionGenerator(Entities.CITIES, createCityFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.CITIES, createCitySavingStrategy()))
+
+                    .addGenerator(createConversionGenerator(Entities.STREETS, createStreetFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.STREETS, createStreetSavingStrategy()));
+
+            Boolean executionResult = executor.execute();
+            log.info("result: {}", executionResult);
         }
     }
 
-    // TODO: 21.04.2022 restore
-//    private Generator createCleanupGenerator(List<Pair<Valued<String>, DTOService<?, ?, Long>>> init) {
-//        CleanupGenerator.Builder builder = CleanupGenerator.builder();
-//        for (Pair<Valued<String>, DTOService<?, ?, Long>> item : init) {
-//            builder.item(item.getKey(), item.getValue());
-//        }
-//        return builder
-//                .managerCreator(createManagerCreator())
-//                .valuedGenerator(createValuedStringGenerator())
-//                .build();
-//    }
-//
-//
-//    private Generator createConversionGenerator(Valued<String> key,
-//                                                ConversionTask.Strategy strategy) {
-//        return ConversionGenerator.builder()
-//                .type(ConversionTask.class)
-//                .objectStorageFiller(strategy)
-//                .managerCreator(createManagerCreator())
-//                .valuedGenerator(createValuedStringGenerator())
-//                .key(key)
-//                .build();
-//    }
-//
-//    private Generator createCreationGenerator(List<Pair<Entities, CreationTask.ObjectStorageCreatorOld>> pairs) {
-//        CreationGenerator.Builder builder = CreationGenerator.builder();
-//        for (Pair<Entities, CreationTask.ObjectStorageCreatorOld> pair : pairs) {
-//            builder.item(pair.getKey(), pair.getValue());
-//        }
-//
-//        return builder
-//                .managerCreator(createManagerCreator())
-//                .valuedGenerator(createValuedStringGenerator())
-//                .build();
-//    }
-//
-//    private Generator createReadingGenerators(List<Entities> entities) {
-//        ReadingGenerator.Builder builder = ReadingGenerator.builder();
-//        for (Entities entity : entities) {
-//            builder.pathItem(entity, setting.getPath(entity));
-//        }
-//        return builder
-//                .managerCreator(createManagerCreator())
-//                .valuedGenerator(createValuedStringGenerator())
-//                .build();
-//    }
-//
-//    private Generator createSavingGenerator(Valued<String> key, SavingTask.Strategy strategy) {
-//        return SavingGenerator.builder()
-//                .strategy(strategy)
-//                .managerCreator(createManagerCreator())
-//                .valuedGenerator(createValuedStringGenerator())
-//                .key(key)
-//                .build();
-//    }
+    private Generator createReadingGenerators(List<Entities> entities) {
+        ReadingGenerator.Builder builder = ReadingGenerator.builder();
+        for (Entities entity : entities) {
+            builder.pathItem(entity, setting.getPath(entity));
+        }
+        return builder
+                .managerCreator(createManagerCreator())
+                .valuedGenerator(createValuedStringGenerator())
+                .build();
+    }
+
+    private Generator createCreationGenerator(List<Pair<Entities, CreationTask.ObjectStorageCreator>> pairs) {
+        CreationGenerator.Builder builder = CreationGenerator.builder();
+        for (Pair<Entities, CreationTask.ObjectStorageCreator> pair : pairs) {
+            builder.item(pair.getKey(), pair.getValue());
+        }
+
+        return builder
+                .managerCreator(createManagerCreator())
+                .valuedGenerator(createValuedStringGenerator())
+                .build();
+    }
+
+    private Generator createCleanupGenerator(List<Pair<Valued<String>, DTOService<?, ?, Long>>> init) {
+        CleanupGenerator.Builder builder = CleanupGenerator.builder();
+        for (Pair<Valued<String>, DTOService<?, ?, Long>> item : init) {
+            builder.item(item.getKey(), item.getValue());
+        }
+        return builder
+                .managerCreator(createManagerCreator())
+                .valuedGenerator(createValuedStringGenerator())
+                .build();
+    }
+
+    private Generator createConversionGenerator(Valued<String> key,
+                                                ConversionTask.Strategy strategy) {
+        return ConversionGenerator.builder()
+                .type(ConversionTask.class)
+                .objectStorageFiller(strategy)
+                .managerCreator(createManagerCreator())
+                .valuedGenerator(createValuedStringGenerator())
+                .key(key)
+                .build();
+    }
+
+    private Generator createSavingGenerator(Valued<String> key, SavingTask.Strategy strategy) {
+        return SavingGenerator.builder()
+                .strategy(strategy)
+                .managerCreator(createManagerCreator())
+                .valuedGenerator(createValuedStringGenerator())
+                .key(key)
+                .build();
+    }
+
+    private SavingTask.Strategy createTagSavingStrategy() {
+        return value -> {
+            TagEntity entity = (TagEntity) value;
+            Result<Tag> result = tagDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
+    private SavingTask.Strategy createCountrySavingStrategy() {
+        return value -> {
+            CountryEntity entity = (CountryEntity) value;
+            Result<Country> result = countryDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
+    private SavingTask.Strategy createRegionSavingStrategy() {
+        return value -> {
+            RegionEntity entity = (RegionEntity) value;
+            Result<Region> result = regionDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
+    private SavingTask.Strategy createCitySavingStrategy() {
+        return value -> {
+            CityEntity entity = (CityEntity) value;
+            Result<City> result = cityDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
+    private SavingTask.Strategy createStreetSavingStrategy() {
+        return value -> {
+            StreetEntity entity = (StreetEntity) value;
+            Result<Street> result = streetDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
+    private ConversionTask.Strategy createTagFillingStrategy() {
+        return (storage, value, manager) -> {
+            TagJsonEntity jsonEntity = (TagJsonEntity) value;
+            TagEntity entity = new TagEntity();
+            entity.setId(jsonEntity.getId());
+            entity.setName(jsonEntity.getName());
+            storage.put(jsonEntity.getId(), entity);
+            return Optional.empty();
+        };
+    }
+
+    private ConversionTask.Strategy createCountryFillingStrategy() {
+        return (storage, value, manager) -> {
+            CountryJsonEntity jsonEntity = (CountryJsonEntity) value;
+            CountryEntity entity = new CountryEntity();
+            entity.setId(jsonEntity.getId());
+            entity.setName(jsonEntity.getName());
+            storage.put(jsonEntity.getId(), entity);
+
+            return Optional.empty();
+        };
+    }
+
+    private ConversionTask.Strategy createRegionFillingStrategy() {
+        return  (storage, value, manager) -> {
+            RegionJsonEntity jsonEntity = (RegionJsonEntity) value;
+
+            Result<ObjectStorage> result = manager.get(Entities.COUNTRIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+            if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCountryId())){
+                RegionEntity entity = new RegionEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                entity.setCountryEntity((CountryEntity) result.getValue().get(jsonEntity.getCountryId()));
+
+                storage.put(jsonEntity.getId(), entity);
+
+                return Optional.empty();
+            }
+
+            return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+        };
+    }
+
+    private ConversionTask.Strategy createCityFillingStrategy() {
+        return (storage, value, manager) -> {
+            CityJsonEntity jsonEntity = (CityJsonEntity) value;
+
+            Result<ObjectStorage> result = manager.get(Entities.REGIONS, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+            if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getRegionId())){
+                CityEntity entity = new CityEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                entity.setRegionEntity((RegionEntity) result.getValue().get(jsonEntity.getRegionId()));
+
+                storage.put(jsonEntity.getId(), entity);
+
+                return Optional.empty();
+            }
+
+            return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+        };
+    }
+
+    private ConversionTask.Strategy createStreetFillingStrategy() {
+        return (storage, value, manager) -> {
+            StreetJsonEntity jsonEntity = (StreetJsonEntity) value;
+
+            Result<ObjectStorage> result = manager.get(Entities.CITIES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+            if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getCityId())){
+                StreetEntity entity = new StreetEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                entity.setCityEntity((CityEntity) result.getValue().get(jsonEntity.getCityId()));
+
+                storage.put(jsonEntity.getId(), entity);
+
+                return Optional.empty();
+            }
+
+            return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+        };
+    }
 
     private ManagerCreatorImpl createManagerCreator(){
         return new ManagerCreatorImpl();
