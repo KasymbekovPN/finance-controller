@@ -1,10 +1,12 @@
 package kpn.financecontroller.initialization.listeners;
 
+import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
@@ -57,6 +59,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private DTOService<City, CityEntity, Long> cityDtoService;
     @Autowired
     private DTOService<Street, StreetEntity, Long> streetDtoService;
+    @Autowired
+    private DTOService<Address, AddressEntity, Long> addressDtoService;
 
     @Autowired
     private Setting setting;
@@ -76,7 +80,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                             Entities.COUNTRIES,
                             Entities.REGIONS,
                             Entities.CITIES,
-                            Entities.STREETS
+                            Entities.STREETS,
+                            Entities.ADDRESSES
             ));
             executor.addGenerator(readingGenerator);
 
@@ -85,11 +90,13 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     new Pair<>(Entities.COUNTRIES, new CreationTask.ObjectStorageCreator(CountryLongKeyJsonObj.class)),
                     new Pair<>(Entities.REGIONS, new CreationTask.ObjectStorageCreator(RegionLongKeyJsonObj.class)),
                     new Pair<>(Entities.CITIES, new CreationTask.ObjectStorageCreator(CityLongKeyJsonObj.class)),
-                    new Pair<>(Entities.STREETS, new CreationTask.ObjectStorageCreator(StreetLongKeyJsonObj.class))
+                    new Pair<>(Entities.STREETS, new CreationTask.ObjectStorageCreator(StreetLongKeyJsonObj.class)),
+                    new Pair<>(Entities.ADDRESSES, new CreationTask.ObjectStorageCreator(AddressLongKeyJsonObj.class))
             ));
             executor.addGenerator(creationGenerator);
 
             Generator cleanupGenerator = createCleanupGenerator(List.of(
+                    new Pair<>(Entities.ADDRESSES, addressDtoService),
                     new Pair<>(Entities.STREETS, streetDtoService),
                     new Pair<>(Entities.CITIES, cityDtoService),
                     new Pair<>(Entities.REGIONS, regionDtoService),
@@ -112,7 +119,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .addGenerator(createSavingGenerator(Entities.CITIES, createCitySavingStrategy()))
 
                     .addGenerator(createConversionGenerator(Entities.STREETS, createStreetFillingStrategy()))
-                    .addGenerator(createSavingGenerator(Entities.STREETS, createStreetSavingStrategy()));
+                    .addGenerator(createSavingGenerator(Entities.STREETS, createStreetSavingStrategy()))
+
+                    .addGenerator(createConversionGenerator(Entities.ADDRESSES, createAddressFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.ADDRESSES, createAddressSavingStrategy()));
 
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
@@ -233,6 +243,18 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         };
     }
 
+    private SavingTask.Strategy createAddressSavingStrategy() {
+        return value -> {
+            AddressEntity entity = (AddressEntity) value;
+            Result<Address> result = addressDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
     private ConversionTask.Strategy createTagFillingStrategy() {
         return (storage, value, manager) -> {
             TagJsonEntity jsonEntity = (TagJsonEntity) value;
@@ -306,6 +328,26 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 entity.setId(jsonEntity.getId());
                 entity.setName(jsonEntity.getName());
                 entity.setCityEntity((CityEntity) result.getValue().get(jsonEntity.getCityId()));
+
+                storage.put(jsonEntity.getId(), entity);
+
+                return Optional.empty();
+            }
+
+            return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+        };
+    }
+
+    private ConversionTask.Strategy createAddressFillingStrategy() {
+        return (storage, value, manager) -> {
+            AddressJsonEntity jsonEntity = (AddressJsonEntity) value;
+
+            Result<ObjectStorage> result = manager.get(Entities.STREETS, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+            if (result.isSuccess() && result.getValue().containsKey(jsonEntity.getStreetId())){
+                AddressEntity entity = new AddressEntity();
+                entity.setId(jsonEntity.getId());
+                entity.setName(jsonEntity.getName());
+                entity.setStreetEntity((StreetEntity) result.getValue().get(jsonEntity.getStreetId()));
 
                 storage.put(jsonEntity.getId(), entity);
 
