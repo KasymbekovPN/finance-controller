@@ -26,7 +26,7 @@ public class PlaceEntity extends AbstractEntity {
     private boolean online;
 
     @ManyToOne
-    @JoinColumn(name = "building_id")
+    @JoinColumn(name = "address_id")
     private AddressEntity addressEntity;
 
     public PlaceEntity(Place place) {

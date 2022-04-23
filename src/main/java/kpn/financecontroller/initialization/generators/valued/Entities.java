@@ -10,7 +10,8 @@ public enum Entities implements Valued<String> {
     REGIONS("regions"),
     CITIES("cities"),
     STREETS("streets"),
-    ADDRESSES("addresses");
+    ADDRESSES("addresses"),
+    PLACES("places");
 
     @Getter
     private final String value;

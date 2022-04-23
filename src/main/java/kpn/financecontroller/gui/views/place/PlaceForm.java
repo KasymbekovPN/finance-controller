@@ -24,7 +24,7 @@ public class PlaceForm extends EditForm<Place> {
 
     private final TextField name = new TextField();
     private final Checkbox online = new Checkbox();
-    private final ComboBox<Address> building = new ComboBox<>();
+    private final ComboBox<Address> address = new ComboBox<>();
 
     public PlaceForm(List<Address> addresses) {
         super(new Binder<>(Place.class));
@@ -37,14 +37,14 @@ public class PlaceForm extends EditForm<Place> {
 
         online.setLabel(getTranslation("gui.online"));
 
-        building.setLabel(getTranslation("gui.building"));
-        building.setItems(addresses);
-        building.setItemLabelGenerator(Address::getFullName);
+        address.setLabel(getTranslation("gui.address"));
+        address.setItems(addresses);
+        address.setItemLabelGenerator(Address::getFullName);
 
         add(
                 name,
                 online,
-                building,
+                address,
                 createButtonsLayout(),
                 createSecondButtonLayout()
         );
@@ -54,7 +54,7 @@ public class PlaceForm extends EditForm<Place> {
         saveWithoutAddress.setText(getTranslation("gui.button.saveWithoutAddress"));
         saveWithoutAddress.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        saveWithoutAddress.addClickListener(event -> validateAndSaveWithoutBuilding());
+        saveWithoutAddress.addClickListener(event -> validateAndSaveWithoutAddress());
 
         binder.addStatusChangeListener(event -> saveWithoutAddress.setEnabled(binder.isValid()));
 
@@ -76,10 +76,10 @@ public class PlaceForm extends EditForm<Place> {
         return new PlaceCloseFormEvent(this);
     }
 
-    private void validateAndSaveWithoutBuilding() {
+    private void validateAndSaveWithoutAddress() {
         try{
             binder.writeBean(value);
-            fireEvent(new PlaceSaveWithoutBuildingFormEvent(this, value));
+            fireEvent(new PlaceSaveWithoutAddressFormEvent(this, value));
         } catch (ValidationException ex){
             ex.printStackTrace();
         }
@@ -91,8 +91,8 @@ public class PlaceForm extends EditForm<Place> {
         }
     }
 
-    public static class PlaceSaveWithoutBuildingFormEvent extends SaveFormEvent<EditForm<Place>, Place>{
-        public PlaceSaveWithoutBuildingFormEvent(EditForm<Place> source, Place value) {
+    public static class PlaceSaveWithoutAddressFormEvent extends SaveFormEvent<EditForm<Place>, Place>{
+        public PlaceSaveWithoutAddressFormEvent(EditForm<Place> source, Place value) {
             super(source, value);
         }
     }

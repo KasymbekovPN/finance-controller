@@ -2,32 +2,32 @@
   "entities":{
     "0": {
       "id": 0,
-      "name": "building 0",
+      "name": "address 0",
       "streetId": 0
     },
     "1": {
       "id": 1,
-      "name": "building 1",
+      "name": "address 1",
       "streetId": 0
     },
     "2": {
       "id": 2,
-      "name": "building 2",
+      "name": "address 2",
       "streetId": 1
     },
     "3": {
       "id": 3,
-      "name": "building 3",
+      "name": "address 3",
       "streetId": 2
     },
     "4": {
       "id": 4,
-      "name": "building 4",
+      "name": "address 4",
       "streetId": 3
     },
     "5": {
       "id": 5,
-      "name": "building 5",
+      "name": "address 5",
       "streetId": 4
     }
   }

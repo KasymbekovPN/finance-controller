@@ -28,16 +28,16 @@ import java.util.List;
 public class PlaceView extends GridView<Place> {
 
     private final DTOService<Place, PlaceEntity, Long> placeService;
-    private final DTOService<Address, AddressEntity, Long> buildingService;
+    private final DTOService<Address, AddressEntity, Long> addressService;
 
     public PlaceView(LocaledMessageSeedFactory seedFactory,
                      I18nService i18nService,
                      NotificationFactory notificationFactory,
                      DTOService<Place, PlaceEntity, Long> placeService,
-                     DTOService<Address, AddressEntity, Long> buildingService) {
+                     DTOService<Address, AddressEntity, Long> addressService) {
         super(new Grid<>(Place.class), seedFactory, i18nService, notificationFactory, "gui.places");
         this.placeService = placeService;
-        this.buildingService = buildingService;
+        this.addressService = addressService;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PlaceView extends GridView<Place> {
 
     @Override
     protected void configureGrid() {
-        grid.addClassName("building-grid");
+        grid.addClassName("address-grid");
         grid.setSizeFull();
 
         grid.setColumns();
@@ -66,11 +66,11 @@ public class PlaceView extends GridView<Place> {
 
     @Override
     protected void configureForm() {
-        form = new PlaceForm(buildingService.loader().all().getValue());
+        form = new PlaceForm(addressService.loader().all().getValue());
         form.setWidth("25em");
 
         form.addListener(PlaceForm.PlaceSaveFormEvent.class, this::saveContact);
-        form.addListener(PlaceForm.PlaceSaveWithoutBuildingFormEvent.class, this::saveContactWithoutBuilding);
+        form.addListener(PlaceForm.PlaceSaveWithoutAddressFormEvent.class, this::saveContactWithoutAddress);
         form.addListener(PlaceForm.PlaceDeleteFormEvent.class, this::deleteEvent);
         form.addListener(PlaceForm.PlaceCloseFormEvent.class, e -> closeEditor());
     }
@@ -91,7 +91,7 @@ public class PlaceView extends GridView<Place> {
         return placeService.saver().save(new PlaceEntity(event.getValue()));
     }
 
-    private void saveContactWithoutBuilding(SaveFormEvent<EditForm<Place>, Place> event) {
+    private void saveContactWithoutAddress(SaveFormEvent<EditForm<Place>, Place> event) {
         Place place = event.getValue();
         place.setAddress(null);
         Result<Place> savingResult = placeService.saver().save(new PlaceEntity(place));
