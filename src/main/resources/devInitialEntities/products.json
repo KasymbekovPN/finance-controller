@@ -1,0 +1,25 @@
+{
+  "entities": {
+    "0": {
+      "id": 0,
+      "name": "product 0",
+      "tags": [
+        0,
+        1
+      ]
+    },
+    "1": {
+      "id": 1,
+      "name": "product 1",
+      "tags": [
+        1,
+        2
+      ]
+    },
+    "2": {
+      "id": 2,
+      "name": "product 2",
+      "tags": [1]
+    }
+  }
+}

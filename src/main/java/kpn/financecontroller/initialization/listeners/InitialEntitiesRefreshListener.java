@@ -4,6 +4,7 @@ import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
@@ -11,6 +12,7 @@ import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.place.PlaceEntity;
+import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
@@ -42,6 +44,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -65,6 +68,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private DTOService<Address, AddressEntity, Long> addressDtoService;
     @Autowired
     private DTOService<Place, PlaceEntity, Long> placeDtoService;
+    @Autowired
+    private DTOService<Product, ProductEntity, Long> productDtoService;
 
     @Autowired
     private Setting setting;
@@ -86,7 +91,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                             Entities.CITIES,
                             Entities.STREETS,
                             Entities.ADDRESSES,
-                            Entities.PLACES
+                            Entities.PLACES,
+                            Entities.PRODUCTS
             ));
             executor.addGenerator(readingGenerator);
 
@@ -97,11 +103,13 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     new Pair<>(Entities.CITIES, new CreationTask.ObjectStorageCreator(CityLongKeyJsonObj.class)),
                     new Pair<>(Entities.STREETS, new CreationTask.ObjectStorageCreator(StreetLongKeyJsonObj.class)),
                     new Pair<>(Entities.ADDRESSES, new CreationTask.ObjectStorageCreator(AddressLongKeyJsonObj.class)),
-                    new Pair<>(Entities.PLACES, new CreationTask.ObjectStorageCreator(PlaceLongKeyJsonObj.class))
+                    new Pair<>(Entities.PLACES, new CreationTask.ObjectStorageCreator(PlaceLongKeyJsonObj.class)),
+                    new Pair<>(Entities.PRODUCTS, new CreationTask.ObjectStorageCreator(ProductLongKeyJsonObj.class))
             ));
             executor.addGenerator(creationGenerator);
 
             Generator cleanupGenerator = createCleanupGenerator(List.of(
+                    new Pair<>(Entities.PRODUCTS, productDtoService),
                     new Pair<>(Entities.PLACES, placeDtoService),
                     new Pair<>(Entities.ADDRESSES, addressDtoService),
                     new Pair<>(Entities.STREETS, streetDtoService),
@@ -132,7 +140,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .addGenerator(createSavingGenerator(Entities.ADDRESSES, createAddressSavingStrategy()))
 
                     .addGenerator(createConversionGenerator(Entities.PLACES, createPlaceFillingStrategy()))
-                    .addGenerator(createSavingGenerator(Entities.PLACES, createPlaceSavingStrategy()));
+                    .addGenerator(createSavingGenerator(Entities.PLACES, createPlaceSavingStrategy()))
+
+                    .addGenerator(createConversionGenerator(Entities.PRODUCTS, createProductFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.PRODUCTS, createProductSavingStrategy()));
 
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
@@ -277,6 +288,18 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         };
     }
 
+    private SavingTask.Strategy createProductSavingStrategy() {
+        return value -> {
+            ProductEntity entity = (ProductEntity) value;
+            Result<Product> result = productDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
     private ConversionTask.Strategy createTagFillingStrategy() {
         return (storage, value, manager) -> {
             TagJsonEntity jsonEntity = (TagJsonEntity) value;
@@ -398,6 +421,33 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 entity.setAddressEntity((AddressEntity) result.getValue().get(jsonEntity.getAddressId()));
             }
 
+            storage.put(jsonEntity.getId(), entity);
+            return Optional.empty();
+        };
+    }
+
+    private ConversionTask.Strategy createProductFillingStrategy() {
+        return (storage, value, manager) -> {
+            ProductJsonEntity jsonEntity = (ProductJsonEntity) value;
+
+            ProductEntity entity = new ProductEntity();
+            entity.setId(jsonEntity.getId());
+            entity.setName(jsonEntity.getName());
+
+            HashSet<TagEntity> tagEntities = new HashSet<>();
+            Result<ObjectStorage> result = manager.get(Entities.TAGS, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+            if (result.isSuccess()){
+                ObjectStorage objectStorage = result.getValue();
+                for (Long tagId : jsonEntity.getTags()) {
+                    if (objectStorage.containsKey(tagId)){
+                        tagEntities.add((TagEntity) objectStorage.get(tagId));
+                    } else {
+                        return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+                    }
+                }
+            }
+
+            entity.setTagEntities(tagEntities);
             storage.put(jsonEntity.getId(), entity);
             return Optional.empty();
         };

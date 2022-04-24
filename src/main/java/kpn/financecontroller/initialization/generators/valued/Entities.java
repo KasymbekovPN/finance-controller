@@ -11,7 +11,8 @@ public enum Entities implements Valued<String> {
     CITIES("cities"),
     STREETS("streets"),
     ADDRESSES("addresses"),
-    PLACES("places");
+    PLACES("places"),
+    PRODUCTS("products");
 
     @Getter
     private final String value;
