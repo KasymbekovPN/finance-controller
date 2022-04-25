@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.entities.payment;
 
-import kpn.financecontroller.data.entities.address.AddressEntity;
+import kpn.financecontroller.data.entities.place.PlaceEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.domains.payment.Currency;
 import kpn.financecontroller.data.domains.payment.Measure;
@@ -21,8 +21,8 @@ import java.time.LocalDate;
 @Entity(name = "payments")
 public class PaymentEntity extends AbstractEntity {
     @ManyToOne
-    @JoinColumn(name = "address_id")
-    private AddressEntity addressEntity;
+    @JoinColumn(name = "place_id")
+    private PlaceEntity placeEntity;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -37,7 +37,7 @@ public class PaymentEntity extends AbstractEntity {
     public PaymentEntity(Payment payment) {
         id = payment.getId();
         productEntity = new ProductEntity(payment.getProduct());
-        addressEntity = new AddressEntity(payment.getAddress());
+        placeEntity = new PlaceEntity(payment.getPlace());
         amount = payment.getAmount();
         measure = payment.getMeasure();
         price = payment.getPrice();

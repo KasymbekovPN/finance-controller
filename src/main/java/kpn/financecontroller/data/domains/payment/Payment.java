@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.domains.payment;
 
-import kpn.financecontroller.data.domains.address.Address;
+import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.domains.product.Product;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class Payment {
     private Long id;
-    private Address address;
+    private Place place;
     private Float amount;
     private Measure measure;
     private Float price;
@@ -24,7 +24,7 @@ public class Payment {
 
     public Payment(PaymentEntity entity) {
         id = entity.getId();
-        address = entity.getAddressEntity() != null ? new Address(entity.getAddressEntity()) : null;
+        place = entity.getPlaceEntity() != null ? new Place(entity.getPlaceEntity()) : null;
         product = entity.getProductEntity() != null ? new Product(entity.getProductEntity()) : null;
         amount = entity.getAmount();
         measure = entity.getMeasure();

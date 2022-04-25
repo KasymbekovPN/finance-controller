@@ -3,6 +3,7 @@ package kpn.financecontroller.initialization.listeners;
 import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
@@ -11,6 +12,7 @@ import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
+import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.entities.place.PlaceEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
@@ -70,6 +72,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private DTOService<Place, PlaceEntity, Long> placeDtoService;
     @Autowired
     private DTOService<Product, ProductEntity, Long> productDtoService;
+    @Autowired
+    private DTOService<Payment, PaymentEntity, Long> paymentDtoService;
 
     @Autowired
     private Setting setting;
@@ -92,7 +96,8 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                             Entities.STREETS,
                             Entities.ADDRESSES,
                             Entities.PLACES,
-                            Entities.PRODUCTS
+                            Entities.PRODUCTS,
+                            Entities.PAYMENTS
             ));
             executor.addGenerator(readingGenerator);
 
@@ -104,11 +109,13 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     new Pair<>(Entities.STREETS, new CreationTask.ObjectStorageCreator(StreetLongKeyJsonObj.class)),
                     new Pair<>(Entities.ADDRESSES, new CreationTask.ObjectStorageCreator(AddressLongKeyJsonObj.class)),
                     new Pair<>(Entities.PLACES, new CreationTask.ObjectStorageCreator(PlaceLongKeyJsonObj.class)),
-                    new Pair<>(Entities.PRODUCTS, new CreationTask.ObjectStorageCreator(ProductLongKeyJsonObj.class))
+                    new Pair<>(Entities.PRODUCTS, new CreationTask.ObjectStorageCreator(ProductLongKeyJsonObj.class)),
+                    new Pair<>(Entities.PAYMENTS, new CreationTask.ObjectStorageCreator(PaymentLongKeyJsonObj.class))
             ));
             executor.addGenerator(creationGenerator);
 
             Generator cleanupGenerator = createCleanupGenerator(List.of(
+                    new Pair<>(Entities.PAYMENTS, paymentDtoService),
                     new Pair<>(Entities.PRODUCTS, productDtoService),
                     new Pair<>(Entities.PLACES, placeDtoService),
                     new Pair<>(Entities.ADDRESSES, addressDtoService),
@@ -143,7 +150,10 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                     .addGenerator(createSavingGenerator(Entities.PLACES, createPlaceSavingStrategy()))
 
                     .addGenerator(createConversionGenerator(Entities.PRODUCTS, createProductFillingStrategy()))
-                    .addGenerator(createSavingGenerator(Entities.PRODUCTS, createProductSavingStrategy()));
+                    .addGenerator(createSavingGenerator(Entities.PRODUCTS, createProductSavingStrategy()))
+
+                    .addGenerator(createConversionGenerator(Entities.PAYMENTS, createPaymentFillingStrategy()))
+                    .addGenerator(createSavingGenerator(Entities.PAYMENTS, createPaymentSavingStrategy()));
 
             Boolean executionResult = executor.execute();
             log.info("result: {}", executionResult);
@@ -300,6 +310,18 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
         };
     }
 
+    private SavingTask.Strategy createPaymentSavingStrategy() {
+        return value -> {
+            PaymentEntity entity = (PaymentEntity) value;
+            Result<Payment> result = paymentDtoService.saver().save(entity);
+            if (result.isSuccess()){
+                entity.setId(result.getValue().getId());
+                return Optional.empty();
+            }
+            return Optional.of(Codes.FAIL_SAVING_ATTEMPT);
+        };
+    }
+
     private ConversionTask.Strategy createTagFillingStrategy() {
         return (storage, value, manager) -> {
             TagJsonEntity jsonEntity = (TagJsonEntity) value;
@@ -448,6 +470,36 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             }
 
             entity.setTagEntities(tagEntities);
+            storage.put(jsonEntity.getId(), entity);
+            return Optional.empty();
+        };
+    }
+
+    private ConversionTask.Strategy createPaymentFillingStrategy() {
+        return (storage, value, manager) -> {
+            PaymentJsonEntity jsonEntity = (PaymentJsonEntity) value;
+
+            Result<ObjectStorage> placeResult = manager.get(Entities.PLACES, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+            Result<ObjectStorage> productResult = manager.get(Entities.PRODUCTS, Properties.JSON_TO_DB_CONVERSION_RESULT, ObjectStorage.class);
+            Long placeId = jsonEntity.getPlaceId();
+            Long productId = jsonEntity.getProductId();
+            if (!placeResult.isSuccess() ||
+                !productResult.isSuccess() ||
+                !placeResult.getValue().containsKey(placeId) ||
+                !productResult.getValue().containsKey(productId)){
+                return Optional.of(Codes.ENTITY_CONVERSION_FAIL);
+            }
+
+            PaymentEntity entity = new PaymentEntity();
+            entity.setId(jsonEntity.getId());
+            entity.setAmount(jsonEntity.getAmount());
+            entity.setMeasure(jsonEntity.getMeasure());
+            entity.setPrice(jsonEntity.getPrice());
+            entity.setCurrency(jsonEntity.getCurrency());
+            entity.setCreatedAt(jsonEntity.getCreatedAt());
+            entity.setPlaceEntity((PlaceEntity) placeResult.getValue().get(placeId));
+            entity.setProductEntity((ProductEntity) productResult.getValue().get(productId));
+
             storage.put(jsonEntity.getId(), entity);
             return Optional.empty();
         };

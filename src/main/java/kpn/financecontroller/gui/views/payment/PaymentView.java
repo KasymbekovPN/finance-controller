@@ -66,7 +66,11 @@ public class PaymentView extends GridView<Payment> {
         grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.currency"));
         grid.addColumn(Payment::getAmount).setHeader(getTranslation("gui.amount"));
         grid.addColumn(p -> p.getMeasure().name()).setHeader(getTranslation("gui.measure"));
-        grid.addColumn(p -> p.getAddress().getFullName()).setHeader(getTranslation("gui.address"));
+
+        // TODO: 24.04.2022 del
+//        grid.addColumn(p -> p.getPlace().getFullName()).setHeader(getTranslation("gui.address"));
+
+        grid.addColumn(p -> p.getPlace().getName()).setHeader(getTranslation("gui.place"));
         grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.createdAt"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
