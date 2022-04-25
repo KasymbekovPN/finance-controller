@@ -88,12 +88,15 @@ public class PlaceView extends GridView<Place> {
 
     @Override
     protected Result<Place> handleSaveEvent(SaveFormEvent<EditForm<Place>, Place> event) {
-        return placeService.saver().save(new PlaceEntity(event.getValue()));
+        Place place = event.getValue();
+        place.setOnline(false);
+        return placeService.saver().save(new PlaceEntity(place));
     }
 
     private void saveContactWithoutAddress(SaveFormEvent<EditForm<Place>, Place> event) {
         Place place = event.getValue();
         place.setAddress(null);
+        place.setOnline(true);
         Result<Place> savingResult = placeService.saver().save(new PlaceEntity(place));
         createNotification(savingResult);
         updateList();

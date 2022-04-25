@@ -11,6 +11,7 @@ import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.payment.Currency;
 import kpn.financecontroller.data.domains.payment.Measure;
 import kpn.financecontroller.data.domains.payment.Payment;
+import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class PaymentForm extends EditForm<Payment> {
     private final ComboBox<Product> product = new ComboBox<>();
-    private final ComboBox<Address> address = new ComboBox<>();
+    private final ComboBox<Place> place = new ComboBox<>();
     private final TextField amount = new TextField();
     private final ComboBox<Measure> measure = new ComboBox<>();
     private final TextField price = new TextField();
@@ -29,12 +30,12 @@ public class PaymentForm extends EditForm<Payment> {
     private final DatePicker createdAt = new DatePicker();
 
     public PaymentForm(List<Product> products,
-                       List<Address> addresses) {
+                       List<Place> places) {
         super(new Binder<>(Payment.class));
         addClassName("payment-form");
 
         product.setLabel(getTranslation("gui.product"));
-        address.setLabel(getTranslation("gui.address"));
+        place.setLabel(getTranslation("gui.place"));
         amount.setLabel(getTranslation("gui.amount"));
         measure.setLabel(getTranslation("gui.measure"));
         price.setLabel(getTranslation("gui.price"));
@@ -76,8 +77,8 @@ public class PaymentForm extends EditForm<Payment> {
         product.setItems(products);
         product.setItemLabelGenerator(Product::getName);
 
-        address.setItems(addresses);
-        address.setItemLabelGenerator(Address::getFullName);
+        place.setItems(places);
+        place.setItemLabelGenerator(Place::getName);
 
         measure.setItems(Measure.values());
         currency.setItems(Currency.values());
@@ -88,7 +89,7 @@ public class PaymentForm extends EditForm<Payment> {
                 currency,
                 amount,
                 measure,
-                address,
+                place,
                 createdAt,
                 createButtonsLayout()
         );
