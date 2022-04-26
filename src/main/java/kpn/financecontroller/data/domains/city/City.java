@@ -21,6 +21,6 @@ public class City {
     }
 
     public String getFullName(){
-        return getName() + ", " + getRegion().getFullName();
+        return getName() + ", " + getRegion().getInfo();
     }
 }

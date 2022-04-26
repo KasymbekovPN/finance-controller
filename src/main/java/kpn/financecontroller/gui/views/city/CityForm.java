@@ -27,7 +27,7 @@ public class CityForm extends EditForm<City> {
 
         region.setLabel(getTranslation("gui.region"));
         region.setItems(regions);
-        region.setItemLabelGenerator(Region::getFullName);
+        region.setItemLabelGenerator(Region::getInfo);
 
         add(
                 name,
