@@ -9,20 +9,21 @@ import org.junit.jupiter.api.Test;
 
 class AddressTest {
 
-    @Test
-    void shouldCheckFullNameGetting() {
-        String addressName = "4";
-        String streetName = "some street";
-        String cityName = "some city";
-        String regionName = "region name";
-        String countryName = "some country";
-        Country country = new Country(1L, countryName);
-        Region region = new Region(1L, regionName, country);
-        City city = new City(1L, cityName, region);
-        Street street = new Street(1L, streetName, city);
-        Address address = new Address(1L, addressName, street);
-
-        String expectedFullName = addressName + ", " + streetName + ", " + cityName + ", " + regionName + ", " + countryName;
-        Assertions.assertThat(expectedFullName).isEqualTo(address.getFullName());
-    }
+    // TODO: 26.04.2022 del
+//    @Test
+//    void shouldCheckFullNameGetting() {
+//        String addressName = "4";
+//        String streetName = "some street";
+//        String cityName = "some city";
+//        String regionName = "region name";
+//        String countryName = "some country";
+//        Country country = new Country(1L, countryName);
+//        Region region = new Region(1L, regionName, country);
+//        City city = new City(1L, cityName, region);
+//        Street street = new Street(1L, streetName, city);
+//        Address address = new Address(1L, addressName, street);
+//
+//        String expectedFullName = addressName + ", " + streetName + ", " + cityName + ", " + regionName + ", " + countryName;
+//        Assertions.assertThat(expectedFullName).isEqualTo(address.getFullName());
+//    }
 }
