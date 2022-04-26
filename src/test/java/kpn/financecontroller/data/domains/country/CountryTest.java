@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 26.04.2022 del
 public class CountryTest {
 
     @Test

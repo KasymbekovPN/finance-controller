@@ -53,7 +53,7 @@ public class TagView extends GridView<Tag> {
 
         grid.setColumns();
         grid.addColumn(Tag::getId).setHeader(getTranslation("gui.id"));
-        grid.addColumn(Tag::getName).setHeader(getTranslation("gui.name"));
+        grid.addColumn(Tag::getInfo).setHeader(getTranslation("gui.name"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));

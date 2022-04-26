@@ -22,7 +22,8 @@ public class Product {
         name = entity.getName();
         tags = entity.getTagEntities().stream().map(Tag::new).collect(Collectors.toSet());
     }
-    
+
+    // TODO: 26.04.2022 del
     public String getTagsAsStr() {
         StringBuilder result = new StringBuilder();
         String delimiter = "";

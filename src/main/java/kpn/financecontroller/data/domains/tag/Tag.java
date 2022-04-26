@@ -1,15 +1,14 @@
 package kpn.financecontroller.data.domains.tag;
 
+import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public class Tag {
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class Tag extends AbstractDomain {
     private String name;
 
     public Tag(TagEntity entity) {
@@ -18,7 +17,7 @@ public class Tag {
     }
 
     @Override
-    public String toString() {
-        return name;
+    public String getInfo() {
+        return getName();
     }
 }
