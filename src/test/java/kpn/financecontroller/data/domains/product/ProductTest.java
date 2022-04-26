@@ -1,38 +1,31 @@
 package kpn.financecontroller.data.domains.product;
 
 import kpn.financecontroller.data.domains.tag.Tag;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Set;
 
-// TODO: 26.04.2022 del
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ProductTest {
+    @Test
+    void shouldCheckInfoGetting() {
+        Set<String> rawTags = Set.of("tag0", "tag1", "tag2");
+        HashSet<Tag> tags = new HashSet<>();
+        for (String rawTag : rawTags) {
+            Tag tag = new Tag();
+            tag.setName(rawTag);
+            tags.add(tag);
+        }
 
-//    @Test
-//    void shouldCheckGettingTagsAsString() {
-//        int tagAmount = 3;
-//        HashSet<Tag> tags = new HashSet<>();
-//        for (int i = 0; i < tagAmount; i++) {
-//            tags.add(new Tag((long) i, String.format("tag%s", i)));
-//        }
-//
-//        Product product = new Product();
-//        product.setTags(tags);
-//
-//        String expected = createTagsAsString(tags);
-//        Assertions.assertThat(expected).isEqualTo(product.getTagsAsStr());
-//    }
-//
-//    private String createTagsAsString(HashSet<Tag> tags) {
-//        StringBuilder result = new StringBuilder();
-//        String delimiter = "";
-//
-//        for (Tag tag : tags) {
-//            result.append(delimiter).append(tag.toString());
-//            delimiter = ", ";
-//        }
-//
-//        return result.toString();
-//    }
+        Product product = new Product();
+        product.setTags(tags);
+
+        Set<String> split = new HashSet<>(Set.of(product.getInfo().split(", ")));
+        for (String rawTag : rawTags) {
+            split.remove(rawTag);
+        }
+        assertThat(split.size()).isZero();
+    }
 }

@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.domains.product;
 
+import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.domains.tag.Tag;
 import lombok.*;
@@ -10,10 +11,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public class Product {
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class Product extends AbstractDomain {
     private String name;
     private Set<Tag> tags;
 
@@ -23,16 +22,16 @@ public class Product {
         tags = entity.getTagEntities().stream().map(Tag::new).collect(Collectors.toSet());
     }
 
-    // TODO: 26.04.2022 del
-    public String getTagsAsStr() {
+    @Override
+    public String getInfo() {
         StringBuilder result = new StringBuilder();
-        String delimiter = "";
-
-        for (Tag tag : tags) {
-            result.append(delimiter).append(tag.toString());
-            delimiter = ", ";
+        if (tags != null) {
+            String delimiter = "";
+            for (Tag tag : tags) {
+                result.append(delimiter).append(tag.getInfo());
+                delimiter = ", ";
+            }
         }
-
         return result.toString();
     }
 }

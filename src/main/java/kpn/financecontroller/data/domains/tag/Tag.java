@@ -20,4 +20,9 @@ public class Tag extends AbstractDomain {
     public String getInfo() {
         return getName();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

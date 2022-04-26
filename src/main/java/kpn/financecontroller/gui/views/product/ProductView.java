@@ -59,7 +59,7 @@ public class ProductView extends GridView<Product> {
         grid.setColumns();
         grid.addColumn(Product::getId).setHeader(getTranslation("gui.id"));
         grid.addColumn(Product::getName).setHeader(getTranslation("gui.name"));
-        grid.addColumn(Product::getTagsAsStr).setHeader(getTranslation("gui.tags"));
+        grid.addColumn(Product::getInfo).setHeader(getTranslation("gui.tags"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
