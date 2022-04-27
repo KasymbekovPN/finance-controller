@@ -28,7 +28,7 @@ public class AddressForm extends EditForm<Address> {
 
         street.setLabel(getTranslation("gui.street"));
         street.setItems(streets);
-        street.setItemLabelGenerator(Street::getFullName);
+        street.setItemLabelGenerator(Street::getInfo);
 
         add(
                 name,

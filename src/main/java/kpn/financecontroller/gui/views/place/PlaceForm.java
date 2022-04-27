@@ -39,7 +39,7 @@ public class PlaceForm extends EditForm<Place> {
 
         address.setLabel(getTranslation("gui.address"));
         address.setItems(addresses);
-        address.setItemLabelGenerator(Address::getFullName);
+        address.setItemLabelGenerator(Address::getInfo);
 
         add(
                 name,

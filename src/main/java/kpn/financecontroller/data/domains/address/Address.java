@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.domains.address;
 
+import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.domains.street.Street;
 import lombok.*;
@@ -7,10 +8,8 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public class Address {
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class Address extends AbstractDomain {
     private String name;
     private Street street;
 
@@ -20,7 +19,8 @@ public class Address {
         street = entity.getStreetEntity() != null ? new Street(entity.getStreetEntity()) : null;
     }
 
-    public String getFullName(){
-        return getName() + ", " + street.getFullName();
+    @Override
+    public String getInfo() {
+        return getName() + ", " + street.getInfo();
     }
 }

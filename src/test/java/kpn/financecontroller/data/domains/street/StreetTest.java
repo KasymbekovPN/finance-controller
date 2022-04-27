@@ -8,21 +8,28 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StreetTest {
+    @Test
+    void shouldInfoGetting() {
+        String countryName = "country.name";
+        Country country = new Country();
+        country.setName(countryName);
 
-    // TODO: 26.04.2022 del
-//    @Test
-//    void shouldCheckFullNameGetting() {
-//        String stringName = "some street";
-//        String cityName = "Moscow";
-//        String regionName = "Moscow";
-//        String countryName = "Russia";
-//        String expectedResult = stringName + ", " + cityName + ", " + regionName + ", " + countryName;
-//
-//        Country country = new Country(1L, countryName);
-//        Region region = new Region(1L, regionName, country);
-//        City city = new City(1L, cityName, region);
-//        Street street = new Street(1L, stringName, city);
-//
-//        assertThat(expectedResult).isEqualTo(street.getFullName());
-//    }
+        String regionName = "region.name";
+        Region region = new Region();
+        region.setName(regionName);
+        region.setCountry(country);
+
+        String cityName = "city.name";
+        City city = new City();
+        city.setName(cityName);
+        city.setRegion(region);
+
+        Street street = new Street();
+        String streetName = "street.name";
+        street.setName(streetName);
+        street.setCity(city);
+
+        String expected = streetName + ", " + cityName + ", " + regionName + ", " + countryName;
+        assertThat(expected).isEqualTo(street.getInfo());
+    }
 }

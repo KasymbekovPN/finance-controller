@@ -58,7 +58,7 @@ public class PlaceView extends GridView<Place> {
         grid.addColumn(Place::getId).setHeader(getTranslation("gui.id"));
         grid.addColumn(Place::getName).setHeader(getTranslation("gui.name"));
         grid.addColumn(Place::isOnline).setHeader(getTranslation("gui.online"));
-        grid.addColumn(p -> {return p.getAddress() != null ? p.getAddress().getFullName() : "-";}).setHeader(getTranslation("gui.address"));
+        grid.addColumn(p -> {return p.getAddress() != null ? p.getAddress().getInfo() : "-";}).setHeader(getTranslation("gui.address"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
