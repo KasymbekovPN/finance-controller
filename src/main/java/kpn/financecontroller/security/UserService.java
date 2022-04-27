@@ -4,7 +4,6 @@ import kpn.financecontroller.data.domains.user.User;
 import kpn.financecontroller.data.entities.user.UserEntity;
 import kpn.financecontroller.data.repos.user.UserRepo;
 import kpn.financecontroller.i18n.I18nService;
-import org.jasypt.encryption.pbe.PBEStringCleanablePasswordEncryptor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,13 +13,10 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserRepo userRepo;
-    private final PBEStringCleanablePasswordEncryptor encryptor;
-
     private final I18nService i18nService;
 
-    public UserService(UserRepo userRepo, PBEStringCleanablePasswordEncryptor encryptor, I18nService i18nService) {
+    public UserService(UserRepo userRepo, I18nService i18nService) {
         this.userRepo = userRepo;
-        this.encryptor = encryptor;
         this.i18nService = i18nService;
     }
 
@@ -31,7 +27,7 @@ public class UserService implements UserDetailsService {
             UserEntity userEntity = userEntities.get(0);
             return User.builder()
                     .username(userEntity.getUsername())
-                    .password(encryptor.decrypt(userEntity.getPassword()))
+                    .password(userEntity.getPassword())
                     .role(userEntity.getRole())
                     .build();
         }

@@ -5,7 +5,6 @@ import kpn.financecontroller.data.domains.user.User;
 import kpn.financecontroller.data.entities.user.UserEntity;
 import kpn.financecontroller.data.repos.user.UserRepo;
 import kpn.financecontroller.i18n.I18nService;
-import org.jasypt.encryption.pbe.PBEStringCleanablePasswordEncryptor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -32,7 +31,7 @@ class UserServiceTest {
     @BeforeAll
     static void beforeAll() {
         userEntity = createUserEntity();
-        userService = new UserService(createUserRepo(), createEncryptor(), createI18nService());
+        userService = new UserService(createUserRepo(), createI18nService());
 
         expectedUser = User.builder()
                 .username(userEntity.getUsername())
@@ -74,14 +73,6 @@ class UserServiceTest {
                 .when(repo.findByUsername(WRONG_USER_NAME))
                 .thenReturn(List.of());
         return repo;
-    }
-
-    private static PBEStringCleanablePasswordEncryptor createEncryptor() {
-        PBEStringCleanablePasswordEncryptor encryptor = Mockito.mock(PBEStringCleanablePasswordEncryptor.class);
-        Mockito
-                .when(encryptor.decrypt(PASSWORD))
-                .thenReturn(PASSWORD);
-        return encryptor;
     }
 
     private static UserEntity createUserEntity() {
