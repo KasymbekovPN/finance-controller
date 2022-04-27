@@ -1,16 +1,15 @@
 package kpn.financecontroller.data.domains.city;
 
+import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-public class City {
-    private Long id;
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class City extends AbstractDomain {
     private String name;
     private Region region;
 
@@ -20,7 +19,8 @@ public class City {
         region = entity.getRegionEntity() != null ? new Region(entity.getRegionEntity()) : null;
     }
 
-    public String getFullName(){
+    @Override
+    public String getInfo() {
         return getName() + ", " + getRegion().getInfo();
     }
 }

@@ -27,7 +27,7 @@ public class StreetForm extends EditForm<Street> {
 
         city.setLabel(getTranslation("gui.city"));
         city.setItems(cities);
-        city.setItemLabelGenerator(City::getFullName);
+        city.setItemLabelGenerator(City::getInfo);
 
         add(
                 name,

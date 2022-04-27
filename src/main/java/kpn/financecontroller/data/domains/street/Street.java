@@ -21,6 +21,6 @@ public class Street {
     }
 
     public String getFullName(){
-        return getName() + ", " + getCity().getFullName();
+        return getName() + ", " + getCity().getInfo();
     }
 }
