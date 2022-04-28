@@ -7,7 +7,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
-import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.payment.Currency;
 import kpn.financecontroller.data.domains.payment.Measure;
 import kpn.financecontroller.data.domains.payment.Payment;
@@ -43,35 +42,12 @@ public class PaymentForm extends EditForm<Payment> {
         createdAt.setLabel(getTranslation("gui.createdAt"));
 
         binder.forField(amount)
-                .withConverter(new Converter<String, Float>() {
-
-                    @Override
-                    public Result<Float> convertToModel(String value, ValueContext context) {
-                        return Result.<Float>ok(value != null && !value.isEmpty() ? Float.parseFloat(value) : 0.0f);
-                    }
-
-                    @Override
-                    public String convertToPresentation(Float value, ValueContext context) {
-                        return value != null ? String.valueOf(value) : "";
-                    }
-                })
+                .withConverter(new StringFloatConverter())
                 .bind(Payment::getAmount, Payment::setAmount);
 
         binder.forField(price)
-                .withConverter(new Converter<String, Float>() {
-
-                    @Override
-                    public Result<Float> convertToModel(String value, ValueContext context) {
-                        return Result.<Float>ok(value != null && !value.isEmpty() ? Float.parseFloat(value) : 0.0f);
-                    }
-
-                    @Override
-                    public String convertToPresentation(Float value, ValueContext context) {
-                        return value != null ? String.valueOf(value) : "";
-                    }
-                })
+                .withConverter(new StringFloatConverter())
                 .bind(Payment::getPrice, Payment::setPrice);
-
         binder.bindInstanceFields(this);
 
         product.setItems(products);
@@ -125,6 +101,18 @@ public class PaymentForm extends EditForm<Payment> {
     public static class PaymentCloseFormEvent extends CloseFormEvent<EditForm<Payment>, Payment> {
         public PaymentCloseFormEvent(EditForm<Payment> source) {
             super(source);
+        }
+    }
+
+    private static class StringFloatConverter implements Converter<String, Float>{
+        @Override
+        public Result<Float> convertToModel(String value, ValueContext context) {
+            return Result.<Float>ok(value != null && !value.isEmpty() ? Float.parseFloat(value) : 0.0f);
+        }
+
+        @Override
+        public String convertToPresentation(Float value, ValueContext context) {
+            return value != null ? String.valueOf(value) : "";
         }
     }
 }
