@@ -1,39 +1,27 @@
 package kpn.financecontroller.i18n;
 
-import kpn.financecontroller.message.LocaledMessageSeed;
-import lombok.Setter;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-@Setter
-@ConfigurationProperties(prefix = "i18n")
 public class I18nServiceImpl implements I18nService {
 
     private final MessageSource messageSource;
-
-    private List<Locale> providedLocales;
-    private Locale defaultLocale;
+    @Getter
+    private final List<Locale> providedLocales;
+    private final Locale defaultLocale;
 
     @Autowired
-    public I18nServiceImpl(MessageSource messageSource) {
+    public I18nServiceImpl(MessageSource messageSource, List<Locale> providedLocales, Locale defaultLocale) {
         this.messageSource = messageSource;
-    }
-
-    @Override
-    public String getTranslation(LocaledMessageSeed seed) {
-        return getTranslation(seed.getCode(), seed.getLocale(), seed.getArgs());
-    }
-
-    @Override
-    public String getTranslation(String key, Object... params) {
-        return getTranslation(key, defaultLocale, params);
+        this.providedLocales = providedLocales;
+        this.defaultLocale = defaultLocale;
     }
 
     @Override
@@ -41,12 +29,13 @@ public class I18nServiceImpl implements I18nService {
         try{
             return messageSource.getMessage(key, params, locale);
         } catch (NoSuchMessageException ex){
-            return key + " " + List.of(params);
+            List<Object> args = Arrays.stream(params).collect(Collectors.toList());
+            return key + " " + args;
         }
     }
 
     @Override
-    public List<Locale> getProvidedLocales() {
-        return providedLocales;
+    public String getTranslation(String key, Object... params) {
+        return getTranslation(key, defaultLocale, params);
     }
 }

@@ -30,8 +30,8 @@ class DeleterAllAndByIdTest {
         long expectedId = 1L;
         Result<Void> result = deleter.byId(expectedId);
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("deleter.deleteById.fail");
-        assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME, expectedId).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("deleter.deleteById.fail");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(DELETER_NAME, expectedId).toArray());
     }
 
     @Test
@@ -40,16 +40,16 @@ class DeleterAllAndByIdTest {
         String value = "value";
         Result<Void> result = deleter.by(attribute, value);
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("deleter.by.attribute.disallowed");
-        assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME, attribute, value).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("deleter.by.attribute.disallowed");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(DELETER_NAME, attribute, value).toArray());
     }
 
     @Test
     void shouldCheckAll() {
         Result<Void> result = deleter.all();
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("deleter.deleteAll.fail");
-        assertThat(result.getArgs()).isEqualTo(List.of(DELETER_NAME).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("deleter.deleteAll.fail");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(DELETER_NAME).toArray());
     }
 
     private static JpaRepository<TestEntity, Long> createRepo(){

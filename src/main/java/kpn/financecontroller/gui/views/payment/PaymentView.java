@@ -15,8 +15,6 @@ import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
-import kpn.financecontroller.i18n.I18nService;
-import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.lib.result.Result;
 import org.springframework.context.annotation.Scope;
 
@@ -33,13 +31,11 @@ public class PaymentView extends GridView<Payment> {
     private final DTOService<Place, PlaceEntity, Long> placeService;
     private final DTOService<Product, ProductEntity, Long> productService;
 
-    public PaymentView(LocaledMessageSeedFactory seedFactory,
-                       I18nService i18nService,
-                       NotificationFactory notificationFactory,
+    public PaymentView(NotificationFactory notificationFactory,
                        DTOService<Payment, PaymentEntity, Long> paymentService,
                        DTOService<Place, PlaceEntity, Long> placeService,
                        DTOService<Product, ProductEntity, Long> productService) {
-        super(new Grid<>(Payment.class), seedFactory, i18nService, notificationFactory, "gui.payments");
+        super(new Grid<>(Payment.class), notificationFactory, "gui.payments");
         this.paymentService = paymentService;
         this.placeService = placeService;
         this.productService = productService;

@@ -11,8 +11,6 @@ import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
-import kpn.financecontroller.i18n.I18nService;
-import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -29,11 +27,9 @@ public class CountryView extends GridView<Country>{
     private final DTOService<Country, CountryEntity, Long> countryService;
 
     @Autowired
-    public CountryView(LocaledMessageSeedFactory seedFactory,
-                       I18nService i18nService,
-                       NotificationFactory notificationFactory,
+    public CountryView(NotificationFactory notificationFactory,
                        DTOService<Country, CountryEntity, Long> countryService) {
-        super(new Grid<>(Country.class), seedFactory, i18nService, notificationFactory, "gui.countries");
+        super(new Grid<>(Country.class), notificationFactory, "gui.countries");
         this.countryService = countryService;
     }
 

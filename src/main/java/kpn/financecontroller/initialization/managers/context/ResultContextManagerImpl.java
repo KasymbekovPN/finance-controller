@@ -21,8 +21,8 @@ public class ResultContextManagerImpl implements ResultContextManager {
         PropertyNames propertyNames = calculatePropertyNames(k, p);
         context.put(propertyNames.getSuccessName(), result.isSuccess());
         context.put(propertyNames.getValueName(), result.getValue());
-        context.put(propertyNames.getCodeName(), result.getCode());
-        context.put(propertyNames.getArgsName(), result.getArgs());
+        context.put(propertyNames.getCodeName(), result.getSeed().getCode());
+        context.put(propertyNames.getArgsName(), result.getSeed().getArgs());
     }
 
     @Override

@@ -44,7 +44,7 @@ class UserServiceContextTest {
     void setUp() {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(USER_NAME);
-        userEntity.setPassword(encryptor.encrypt(PASSWORD));
+        userEntity.setPassword(PASSWORD);
         userEntity.setRole(ROLE);
 
         userRepo.save(userEntity);

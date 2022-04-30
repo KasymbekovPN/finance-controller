@@ -13,8 +13,6 @@ import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
-import kpn.financecontroller.i18n.I18nService;
-import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.lib.result.Result;
 import org.springframework.context.annotation.Scope;
 
@@ -30,12 +28,10 @@ public class PlaceView extends GridView<Place> {
     private final DTOService<Place, PlaceEntity, Long> placeService;
     private final DTOService<Address, AddressEntity, Long> addressService;
 
-    public PlaceView(LocaledMessageSeedFactory seedFactory,
-                     I18nService i18nService,
-                     NotificationFactory notificationFactory,
+    public PlaceView(NotificationFactory notificationFactory,
                      DTOService<Place, PlaceEntity, Long> placeService,
                      DTOService<Address, AddressEntity, Long> addressService) {
-        super(new Grid<>(Place.class), seedFactory, i18nService, notificationFactory, "gui.places");
+        super(new Grid<>(Place.class), notificationFactory, "gui.places");
         this.placeService = placeService;
         this.addressService = addressService;
     }

@@ -13,8 +13,6 @@ import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
-import kpn.financecontroller.i18n.I18nService;
-import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.lib.result.Result;
 import org.springframework.context.annotation.Scope;
 
@@ -30,12 +28,10 @@ public class StreetView extends GridView<Street>{
     private final DTOService<Street, StreetEntity, Long> streetService;
     private final DTOService<City, CityEntity, Long> cityService;
 
-    public StreetView(LocaledMessageSeedFactory seedFactory,
-                      I18nService i18nService,
-                      NotificationFactory notificationFactory,
+    public StreetView(NotificationFactory notificationFactory,
                       DTOService<Street, StreetEntity, Long> streetService,
                       DTOService<City, CityEntity, Long> cityService) {
-        super(new Grid<>(Street.class), seedFactory, i18nService, notificationFactory, "gui.streets");
+        super(new Grid<>(Street.class), notificationFactory, "gui.streets");
         this.streetService = streetService;
         this.cityService = cityService;
     }

@@ -28,7 +28,7 @@ public abstract class BaseTask implements Task {
 
     protected final void reset(){
         continuationPossible = false;
-        code = null;
+        code = "";
         args = List.of(key);
     }
 

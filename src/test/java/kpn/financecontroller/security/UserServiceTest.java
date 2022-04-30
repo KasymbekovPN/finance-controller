@@ -57,11 +57,11 @@ class UserServiceTest {
     }
 
     private static I18nService createI18nService() {
-        I18nService i18nService = Mockito.mock(I18nService.class);
+        I18nService i18NService = Mockito.mock(I18nService.class);
         Mockito
-                .when(i18nService.getTranslation("exception.user.notFound", WRONG_USER_NAME))
+                .when(i18NService.getTranslation("exception.user.notFound", WRONG_USER_NAME))
                 .thenReturn(String.format(ERROR_TEMPLATE, WRONG_USER_NAME));
-        return i18nService;
+        return i18NService;
     }
 
     private static UserRepo createUserRepo() {

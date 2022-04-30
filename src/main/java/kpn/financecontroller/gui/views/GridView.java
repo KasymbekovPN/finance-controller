@@ -12,9 +12,6 @@ import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
-import kpn.financecontroller.i18n.I18nService;
-import kpn.financecontroller.message.LocaledMessageSeed;
-import kpn.financecontroller.message.LocaledMessageSeedFactory;
 import kpn.lib.result.Result;
 
 import javax.annotation.PostConstruct;
@@ -23,20 +20,13 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
 
     protected final Grid<D> grid;
 
-    private final LocaledMessageSeedFactory seedFactory;
-    protected final I18nService i18nService;
     private final NotificationFactory notificationFactory;
     private final String titleCode;
 
     protected EditForm<D> form;
 
-    public GridView(Grid<D> grid,
-                    LocaledMessageSeedFactory seedFactory,
-                    I18nService i18nService,
-                    NotificationFactory notificationFactory, String titleCode) {
+    public GridView(Grid<D> grid, NotificationFactory notificationFactory, String titleCode) {
         this.grid = grid;
-        this.seedFactory = seedFactory;
-        this.i18nService = i18nService;
         this.notificationFactory = notificationFactory;
         this.titleCode = titleCode;
     }
@@ -112,8 +102,7 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
 
     protected void createNotification(Result<?> result) {
         if (!result.isSuccess()){
-            LocaledMessageSeed seed = seedFactory.create(result);
-            String text = i18nService.getTranslation(seed);
+            String text = getTranslation(result.getSeed().getCode(), result.getSeed().getArgs());
             notificationFactory.getBuilder(Notifications.ERROR)
                     .duration(60_000)
                     .text(text)

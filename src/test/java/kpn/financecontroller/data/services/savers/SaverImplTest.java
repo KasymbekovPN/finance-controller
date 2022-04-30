@@ -47,8 +47,8 @@ class SaverImplTest {
     void shouldCheckWrongWaySaving() {
         Result<TestModel> result = saver.save(throwEntity);
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("saver.saveImpl.fail");
-        assertThat(result.getArgs()).isEqualTo(List.of(SAVER_NAME).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("saver.saveImpl.fail");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(SAVER_NAME).toArray());
     }
 
     private static JpaRepository<TestEntity, Long> createRepo(){

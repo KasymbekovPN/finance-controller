@@ -1,7 +1,6 @@
 package kpn.financecontroller.config;
 
 import kpn.financecontroller.i18n.I18nService;
-import org.assertj.core.api.Assertions;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -54,11 +53,11 @@ class JasyptDecConfigTest {
     }
 
     private static I18nService createI18nService(){
-        I18nService i18nService = Mockito.mock(I18nService.class);
+        I18nService i18NService = Mockito.mock(I18nService.class);
         Mockito
-                .when(i18nService.getTranslation("exception.envVar.notExist", WRONG_PASSWORD_NAME))
+                .when(i18NService.getTranslation("exception.envVar.notExist", WRONG_PASSWORD_NAME))
                 .thenReturn(String.format(ERROR_MESSAGE_TEMPLATE, WRONG_PASSWORD_NAME));
 
-        return i18nService;
+        return i18NService;
     }
 }

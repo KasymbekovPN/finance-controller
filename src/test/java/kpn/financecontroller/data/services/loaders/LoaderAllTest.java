@@ -46,8 +46,8 @@ class LoaderAllTest {
         long expectedId = 1L;
         Result<TestModel> result = loader.byId(expectedId);
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("loader.loadById.unsupported");
-        assertThat(result.getArgs()).isEqualTo(List.of(LOADER_NAME, expectedId).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("loader.loadById.unsupported");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(LOADER_NAME, expectedId).toArray());
     }
 
     @Test
@@ -56,8 +56,8 @@ class LoaderAllTest {
         String value = "value";
         Result<List<TestModel>> result = loader.by(attribute, value);
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("loader.by.disallowedAttribute");
-        assertThat(result.getArgs()).isEqualTo(List.of(LOADER_NAME, attribute, value).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("loader.by.disallowedAttribute");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(LOADER_NAME, attribute, value).toArray());
     }
 
     @Test
@@ -71,8 +71,8 @@ class LoaderAllTest {
     void shouldCheckWrongAll() {
         Result<List<TestModel>> result = wrongLoader.all();
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getCode()).isEqualTo("loader.loadAll.fail");
-        assertThat(result.getArgs()).isEqualTo(List.of(WRONG_LOADER_NAME).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("loader.loadAll.fail");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(WRONG_LOADER_NAME).toArray());
     }
 
     private static JpaRepository<TestEntity, Long> createRepo() {
