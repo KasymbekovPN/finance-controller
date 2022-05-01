@@ -12,7 +12,7 @@ import kpn.financecontroller.gui.views.EditForm;
 
 import java.util.List;
 
-public class ProductForm extends EditForm<Product> {
+final public class ProductForm extends EditForm<Product> {
 
     private final TextField name = new TextField();
     private final MultiSelectListBox<Tag> tags = new MultiSelectListBox<>();

@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.views.address;
+package kpn.financecontroller.gui.views.geo.address;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.textfield.TextField;
@@ -12,7 +12,7 @@ import kpn.financecontroller.gui.views.EditForm;
 
 import java.util.List;
 
-public class AddressForm extends EditForm<Address> {
+final public class AddressForm extends EditForm<Address> {
 
     private final TextField name = new TextField();
     private final ComboBox<Street> street = new ComboBox<>();

@@ -8,7 +8,7 @@ import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 
-public class TagForm extends EditForm<Tag> {
+final public class TagForm extends EditForm<Tag> {
 
     private final TextField name = new TextField();
 

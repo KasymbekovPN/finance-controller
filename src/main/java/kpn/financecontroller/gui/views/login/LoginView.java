@@ -7,7 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 
 @Route("login")
-public class LoginView extends VerticalLayout implements BeforeEnterListener, HasDynamicTitle {
+final public class LoginView extends VerticalLayout implements BeforeEnterListener, HasDynamicTitle {
 
     private final LoginForm login = new LoginForm();
 

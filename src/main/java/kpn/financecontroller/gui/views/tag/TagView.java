@@ -22,7 +22,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "tag", layout = MainLayout.class)
 @PermitAll
-public class TagView extends GridView<Tag> {
+final public class TagView extends GridView<Tag> {
 
     private final DTOService<Tag, TagEntity, Long> tagService;
 

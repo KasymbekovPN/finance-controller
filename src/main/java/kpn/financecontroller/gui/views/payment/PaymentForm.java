@@ -19,7 +19,7 @@ import kpn.financecontroller.gui.views.EditForm;
 
 import java.util.List;
 
-public class PaymentForm extends EditForm<Payment> {
+final public class PaymentForm extends EditForm<Payment> {
     private final ComboBox<Product> product = new ComboBox<>();
     private final ComboBox<Place> place = new ComboBox<>();
     private final TextField amount = new TextField();

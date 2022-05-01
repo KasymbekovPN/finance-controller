@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.views.country;
+package kpn.financecontroller.gui.views.geo.country;
 
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -8,7 +8,7 @@ import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 
-public class CountryForm extends EditForm<Country> {
+final public class CountryForm extends EditForm<Country> {
 
     private final TextField name = new TextField();
 

@@ -24,7 +24,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "product", layout = MainLayout.class)
 @PermitAll
-public class ProductView extends GridView<Product> {
+final public class ProductView extends GridView<Product> {
 
     private final DTOService<Product, ProductEntity, Long> service;
     private final DTOService<Tag, TagEntity, Long> tagService;

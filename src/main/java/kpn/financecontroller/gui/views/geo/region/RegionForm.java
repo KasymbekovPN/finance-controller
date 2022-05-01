@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.views.region;
+package kpn.financecontroller.gui.views.geo.region;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.textfield.TextField;
@@ -12,7 +12,7 @@ import kpn.financecontroller.gui.views.EditForm;
 
 import java.util.List;
 
-public class RegionForm extends EditForm<Region> {
+final public class RegionForm extends EditForm<Region> {
 
     private final TextField name = new TextField();
     private final ComboBox<Country> country = new ComboBox<>();

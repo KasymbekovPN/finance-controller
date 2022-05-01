@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.views.region;
+package kpn.financecontroller.gui.views.geo.region;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
@@ -24,7 +24,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "region", layout = MainLayout.class)
 @PermitAll
-public class RegionView extends GridView<Region>{
+final public class RegionView extends GridView<Region>{
 
     private final DTOService<Region, RegionEntity, Long> regionService;
     private final DTOService<Country, CountryEntity, Long> countryService;

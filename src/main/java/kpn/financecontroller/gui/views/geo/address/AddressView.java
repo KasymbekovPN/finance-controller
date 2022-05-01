@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.views.address;
+package kpn.financecontroller.gui.views.geo.address;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
@@ -23,7 +23,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "address", layout = MainLayout.class)
 @PermitAll
-public class AddressView extends GridView<Address> {
+final public class AddressView extends GridView<Address> {
 
     private final DTOService<Address, AddressEntity, Long> addressService;
     private final DTOService<Street, StreetEntity, Long> streetService;

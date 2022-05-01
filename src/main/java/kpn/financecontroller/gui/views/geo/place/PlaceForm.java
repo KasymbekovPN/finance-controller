@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.views.place;
+package kpn.financecontroller.gui.views.geo.place;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -18,7 +18,7 @@ import kpn.financecontroller.gui.views.EditForm;
 
 import java.util.List;
 
-public class PlaceForm extends EditForm<Place> {
+final public class PlaceForm extends EditForm<Place> {
 
     private final Button saveWithoutAddress = new Button();
 

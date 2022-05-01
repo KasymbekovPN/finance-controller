@@ -25,7 +25,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
-public class PaymentView extends GridView<Payment> {
+final public class PaymentView extends GridView<Payment> {
 
     private final DTOService<Payment, PaymentEntity, Long> paymentService;
     private final DTOService<Place, PlaceEntity, Long> placeService;

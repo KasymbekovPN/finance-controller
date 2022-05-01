@@ -10,14 +10,15 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
-import kpn.financecontroller.gui.views.address.AddressView;
-import kpn.financecontroller.gui.views.city.CityView;
-import kpn.financecontroller.gui.views.country.CountryView;
+import kpn.financecontroller.gui.views.geo.address.AddressView;
+import kpn.financecontroller.gui.views.geo.city.CityView;
+import kpn.financecontroller.gui.views.geo.country.CountryView;
 import kpn.financecontroller.gui.views.payment.PaymentView;
-import kpn.financecontroller.gui.views.place.PlaceView;
+import kpn.financecontroller.gui.views.geo.place.PlaceView;
 import kpn.financecontroller.gui.views.product.ProductView;
-import kpn.financecontroller.gui.views.region.RegionView;
-import kpn.financecontroller.gui.views.street.StreetView;
+import kpn.financecontroller.gui.views.geo.region.RegionView;
+import kpn.financecontroller.gui.views.geo.street.StreetView;
+import kpn.financecontroller.gui.views.statistic.ByTagStatistic;
 import kpn.financecontroller.gui.views.tag.TagView;
 import kpn.financecontroller.security.SecurityService;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainLayout extends AppLayout {
+final public class MainLayout extends AppLayout {
 
     private static final MenuItemInfo[] MENU_ITEMS = new MenuItemInfo[]{
             new MenuItemInfo("gui.payments",  "la la-globe", PaymentView.class),
@@ -39,7 +40,8 @@ public class MainLayout extends AppLayout {
             new MenuItemInfo("gui.streets",  "la la-globe", StreetView.class),
             new MenuItemInfo("gui.cities",  "la la-globe", CityView.class),
             new MenuItemInfo("gui.regions", "la la-globe", RegionView.class),
-            new MenuItemInfo("gui.countries", "la la-globe", CountryView.class)
+            new MenuItemInfo("gui.countries", "la la-globe", CountryView.class),
+            new MenuItemInfo("gui.byTagStatistic", "la la-globe", ByTagStatistic.class)
     };
 
     @Setter
