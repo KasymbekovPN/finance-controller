@@ -22,10 +22,10 @@ final public class CityForm extends EditForm<City> {
         addClassName("city-form");
         binder.bindInstanceFields(this);
 
-        name.setLabel(getTranslation("gui.name"));
+        name.setLabel(getTranslation("gui.label.name"));
         name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
 
-        region.setLabel(getTranslation("gui.region"));
+        region.setLabel(getTranslation("gui.label.region"));
         region.setItems(regions);
         region.setItemLabelGenerator(Region::getInfo);
 

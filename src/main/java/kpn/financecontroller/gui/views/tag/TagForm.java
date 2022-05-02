@@ -17,7 +17,7 @@ final public class TagForm extends EditForm<Tag> {
         addClassName("tag-form");
         binder.bindInstanceFields(this);
 
-        name.setLabel(getTranslation("gui.name"));
+        name.setLabel(getTranslation("gui.label.name"));
         name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
 
         add(

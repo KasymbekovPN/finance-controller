@@ -80,7 +80,7 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     }
 
     private Button createButton(ComponentEventListener<ClickEvent<Button>> listener) {
-        Button button = new Button(getTranslation("gui.calculateStatistic"));;
+        Button button = new Button(getTranslation("gui.button.calculateStatistic"));;
         button.addClickListener(listener);
         return button;
     }
@@ -113,7 +113,7 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     private VerticalLayout createSelectArea() {
         configureTags();
         VerticalLayout selectArea = new VerticalLayout(
-                createCheckBox("gui.forAllTags", this::callOnAllTagsCheckBoxStateChanging),
+                createCheckBox("gui.label.forAllTags", this::callOnAllTagsCheckBoxStateChanging),
                 tags
         );
         selectArea.setSizeFull();

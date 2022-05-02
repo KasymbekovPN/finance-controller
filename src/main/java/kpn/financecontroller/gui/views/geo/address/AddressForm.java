@@ -23,10 +23,10 @@ final public class AddressForm extends EditForm<Address> {
         addClassName("address-form");
         binder.bindInstanceFields(this);
 
-        name.setLabel(getTranslation("gui.name"));
+        name.setLabel(getTranslation("gui.label.name"));
         name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
 
-        street.setLabel(getTranslation("gui.street"));
+        street.setLabel(getTranslation("gui.label.street"));
         street.setItems(streets);
         street.setItemLabelGenerator(Street::getInfo);
 

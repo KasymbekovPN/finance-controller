@@ -22,10 +22,10 @@ final public class StreetForm extends EditForm<Street> {
         addClassName("street-form");
         binder.bindInstanceFields(this);
 
-        name.setLabel(getTranslation("gui.name"));
+        name.setLabel(getTranslation("gui.label.name"));
         name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
 
-        city.setLabel(getTranslation("gui.city"));
+        city.setLabel(getTranslation("gui.label.city"));
         city.setItems(cities);
         city.setItemLabelGenerator(City::getInfo);
 

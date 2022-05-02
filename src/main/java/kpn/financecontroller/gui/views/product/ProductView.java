@@ -9,7 +9,6 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
@@ -20,23 +19,15 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "product", layout = MainLayout.class)
 @PermitAll
 final public class ProductView extends GridView<Product> {
 
-    private final DTOService<Product, ProductEntity, Long> service;
-    private final DTOService<Tag, TagEntity, Long> tagService;
-
     @Autowired
-    public ProductView(NotificationFactory notificationFactory,
-                       DTOService<Product, ProductEntity, Long> service,
-                       DTOService<Tag, TagEntity, Long> tagService) {
-        super(new Grid<>(Product.class), notificationFactory, "gui.products");
-        this.service = service;
-        this.tagService = tagService;
-    }
+    private DTOService<Product, ProductEntity, Long> service;
+    @Autowired
+    private DTOService<Tag, TagEntity, Long> tagService;
 
     @Override
     protected Result<?> updateListImpl() {
@@ -49,13 +40,14 @@ final public class ProductView extends GridView<Product> {
 
     @Override
     protected void configureGrid() {
+        grid = new Grid<>(Product.class);
         grid.addClassName("product-grid");
         grid.setSizeFull();
 
         grid.setColumns();
-        grid.addColumn(Product::getId).setHeader(getTranslation("gui.id"));
-        grid.addColumn(Product::getName).setHeader(getTranslation("gui.name"));
-        grid.addColumn(Product::getInfo).setHeader(getTranslation("gui.tags"));
+        grid.addColumn(Product::getId).setHeader(getTranslation("gui.header.id"));
+        grid.addColumn(Product::getName).setHeader(getTranslation("gui.header.name"));
+        grid.addColumn(Product::getInfo).setHeader(getTranslation("gui.header.tags"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 

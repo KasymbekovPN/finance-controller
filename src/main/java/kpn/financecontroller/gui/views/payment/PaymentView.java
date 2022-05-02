@@ -11,35 +11,27 @@ import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 final public class PaymentView extends GridView<Payment> {
 
-    private final DTOService<Payment, PaymentEntity, Long> paymentService;
-    private final DTOService<Place, PlaceEntity, Long> placeService;
-    private final DTOService<Product, ProductEntity, Long> productService;
-
-    public PaymentView(NotificationFactory notificationFactory,
-                       DTOService<Payment, PaymentEntity, Long> paymentService,
-                       DTOService<Place, PlaceEntity, Long> placeService,
-                       DTOService<Product, ProductEntity, Long> productService) {
-        super(new Grid<>(Payment.class), notificationFactory, "gui.payments");
-        this.paymentService = paymentService;
-        this.placeService = placeService;
-        this.productService = productService;
-    }
+    @Autowired
+    private DTOService<Payment, PaymentEntity, Long> paymentService;
+    @Autowired
+    private DTOService<Place, PlaceEntity, Long> placeService;
+    @Autowired
+    private DTOService<Product, ProductEntity, Long> productService;
 
     @Override
     protected Result<?> updateListImpl() {
@@ -52,18 +44,19 @@ final public class PaymentView extends GridView<Payment> {
 
     @Override
     protected void configureGrid() {
+        grid = new Grid<>(Payment.class);
         grid.addClassName("payment-grid");
         grid.setSizeFull();
 
         grid.setColumns();
-        grid.addColumn(Payment::getId).setHeader(getTranslation("gui.id"));
-        grid.addColumn(p -> p.getProduct().getName()).setHeader(getTranslation("gui.product"));
-        grid.addColumn(Payment::getPrice).setHeader(getTranslation("gui.price"));
-        grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.currency"));
-        grid.addColumn(Payment::getAmount).setHeader(getTranslation("gui.amount"));
-        grid.addColumn(p -> p.getMeasure().name()).setHeader(getTranslation("gui.measure"));
-        grid.addColumn(p -> p.getPlace().getName()).setHeader(getTranslation("gui.place"));
-        grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.createdAt"));
+        grid.addColumn(Payment::getId).setHeader(getTranslation("gui.header.id"));
+        grid.addColumn(p -> p.getProduct().getName()).setHeader(getTranslation("gui.header.product"));
+        grid.addColumn(Payment::getPrice).setHeader(getTranslation("gui.header.price"));
+        grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.header.currency"));
+        grid.addColumn(Payment::getAmount).setHeader(getTranslation("gui.header.amount"));
+        grid.addColumn(p -> p.getMeasure().name()).setHeader(getTranslation("gui.header.measure"));
+        grid.addColumn(p -> p.getPlace().getName()).setHeader(getTranslation("gui.header.place"));
+        grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.header.createdAt"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 

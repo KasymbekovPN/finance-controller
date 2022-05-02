@@ -22,9 +22,9 @@ final public class RegionForm extends EditForm<Region> {
         addClassName("region-form");
         binder.bindInstanceFields(this);
 
-        name.setLabel(getTranslation("gui.name"));
+        name.setLabel(getTranslation("gui.label.name"));
         name.setPlaceholder(getTranslation("gui.placeholder.type-name"));
-        country.setLabel(getTranslation("gui.country"));
+        country.setLabel(getTranslation("gui.label.country"));
 
         country.setItems(countries);
         country.setItemLabelGenerator(Country::getName);

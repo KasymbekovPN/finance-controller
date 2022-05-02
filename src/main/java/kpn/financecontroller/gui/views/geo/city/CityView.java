@@ -9,7 +9,6 @@ import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
@@ -20,23 +19,15 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "city", layout = MainLayout.class)
 @PermitAll
 final public class CityView extends GridView<City> {
 
-    private final DTOService<City, CityEntity, Long> cityService;
-    private final DTOService<Region, RegionEntity, Long> regionService;
-
     @Autowired
-    public CityView(NotificationFactory notificationFactory,
-                    DTOService<City, CityEntity, Long> cityService,
-                    DTOService<Region, RegionEntity, Long> regionService) {
-        super(new Grid<>(City.class), notificationFactory, "gui.cities");
-        this.cityService = cityService;
-        this.regionService = regionService;
-    }
+    private DTOService<City, CityEntity, Long> cityService;
+    @Autowired
+    private DTOService<Region, RegionEntity, Long> regionService;
 
     @Override
     protected Result<?> updateListImpl() {
@@ -49,14 +40,15 @@ final public class CityView extends GridView<City> {
 
     @Override
     protected void configureGrid() {
+        grid = new Grid<>(City.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
 
         grid.setColumns();
-        grid.addColumn(City::getId).setHeader(getTranslation("gui.id"));
-        grid.addColumn(City::getName).setHeader(getTranslation("gui.name"));
-        grid.addColumn(city -> city.getRegion().getName()).setHeader(getTranslation("gui.region"));
-        grid.addColumn(city -> city.getRegion().getCountry().getName()).setHeader(getTranslation("gui.country"));
+        grid.addColumn(City::getId).setHeader(getTranslation("gui.header.id"));
+        grid.addColumn(City::getName).setHeader(getTranslation("gui.header.name"));
+        grid.addColumn(city -> city.getRegion().getName()).setHeader(getTranslation("gui.header.region"));
+        grid.addColumn(city -> city.getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 

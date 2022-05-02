@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
+import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.views.geo.address.AddressView;
 import kpn.financecontroller.gui.views.geo.city.CityView;
 import kpn.financecontroller.gui.views.geo.country.CountryView;
@@ -31,18 +32,18 @@ import java.util.List;
 
 final public class MainLayout extends AppLayout {
 
-    private static final MenuItemInfo[] MENU_ITEMS = new MenuItemInfo[]{
-            new MenuItemInfo("gui.payments",  "la la-globe", PaymentView.class),
-            new MenuItemInfo("gui.products",  "la la-globe", ProductView.class),
-            new MenuItemInfo("gui.tags",  "la la-globe", TagView.class),
-            new MenuItemInfo("gui.places",  "la la-globe", PlaceView.class),
-            new MenuItemInfo("gui.address",  "la la-globe", AddressView.class),
-            new MenuItemInfo("gui.streets",  "la la-globe", StreetView.class),
-            new MenuItemInfo("gui.cities",  "la la-globe", CityView.class),
-            new MenuItemInfo("gui.regions", "la la-globe", RegionView.class),
-            new MenuItemInfo("gui.countries", "la la-globe", CountryView.class),
-            new MenuItemInfo("gui.byTagStatistic", "la la-globe", ByTagStatistic.class)
-    };
+    private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
+        PaymentView.class,
+        ProductView.class,
+        TagView.class,
+        PlaceView.class,
+        AddressView.class,
+        StreetView.class,
+        CityView.class,
+        RegionView.class,
+        CountryView.class,
+        ByTagStatistic.class
+    );
 
     @Setter
     @Getter
@@ -55,10 +56,12 @@ final public class MainLayout extends AppLayout {
 
     private final H1 viewTitle = new H1();
     private final SecurityService securityService;
+    private final ClassAliasGenerator classAliasGenerator;
 
     @Autowired
-    public MainLayout(SecurityService securityService) {
+    public MainLayout(SecurityService securityService, ClassAliasGenerator classAliasGenerator) {
         this.securityService = securityService;
+        this.classAliasGenerator = classAliasGenerator;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerComponent());
@@ -72,7 +75,7 @@ final public class MainLayout extends AppLayout {
 
     private Component createAndCustomizeHeader(DrawerToggle toggle, H1 viewTitle) {
 
-        Button logout = new Button("Log out", e -> securityService.logout());
+        Button logout = new Button(getTranslation("gui.login.logout"), e -> securityService.logout());
 
         HorizontalLayout header = new HorizontalLayout(toggle, viewTitle, logout);
         header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
@@ -133,11 +136,16 @@ final public class MainLayout extends AppLayout {
 
     private List<RouterLink> createLinks() {
         List<RouterLink> links = new ArrayList<>();
-        for (MenuItemInfo menuItemInfo : MENU_ITEMS) {
+        for (Class<? extends Component> menuClass : MENU_CLASSES) {
+            MenuItemInfo menuItemInfo = createMenuItemInfo(menuClass);
             links.add(createLink(menuItemInfo));
-
         }
         return links;
+    }
+
+    private MenuItemInfo createMenuItemInfo(Class<? extends Component> type) {
+        String text = classAliasGenerator.generate(type);
+        return new MenuItemInfo(text, "la la-globe", type);
     }
 
     private RouterLink createLink(MenuItemInfo menuItemInfo) {

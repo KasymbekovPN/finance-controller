@@ -33,13 +33,13 @@ final public class PaymentForm extends EditForm<Payment> {
         super(new Binder<>(Payment.class));
         addClassName("payment-form");
 
-        product.setLabel(getTranslation("gui.product"));
-        place.setLabel(getTranslation("gui.place"));
-        amount.setLabel(getTranslation("gui.amount"));
-        measure.setLabel(getTranslation("gui.measure"));
-        price.setLabel(getTranslation("gui.price"));
-        currency.setLabel(getTranslation("gui.currency"));
-        createdAt.setLabel(getTranslation("gui.createdAt"));
+        product.setLabel(getTranslation("gui.label.product"));
+        place.setLabel(getTranslation("gui.label.place"));
+        amount.setLabel(getTranslation("gui.label.amount"));
+        measure.setLabel(getTranslation("gui.label.measure"));
+        price.setLabel(getTranslation("gui.label.price"));
+        currency.setLabel(getTranslation("gui.label.currency"));
+        createdAt.setLabel(getTranslation("gui.label.createdAt"));
 
         binder.forField(amount)
                 .withConverter(new StringFloatConverter())

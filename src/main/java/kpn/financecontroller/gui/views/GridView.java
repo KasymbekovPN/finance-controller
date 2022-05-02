@@ -10,30 +10,27 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
+import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.lib.result.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
 abstract public class GridView<D> extends VerticalLayout implements HasDynamicTitle {
 
-    protected final Grid<D> grid;
-
-    private final NotificationFactory notificationFactory;
-    private final String titleCode;
+    @Autowired
+    private NotificationFactory notificationFactory;
+    @Autowired
+    private ClassAliasGenerator classAliasGenerator;
 
     protected EditForm<D> form;
-
-    public GridView(Grid<D> grid, NotificationFactory notificationFactory, String titleCode) {
-        this.grid = grid;
-        this.notificationFactory = notificationFactory;
-        this.titleCode = titleCode;
-    }
+    protected Grid<D> grid;
 
     @Override
     public String getPageTitle() {
-        return getTranslation(titleCode);
+        return getTranslation(classAliasGenerator.generate(getClass()));
     }
 
     @PostConstruct
@@ -47,7 +44,7 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     }
 
     private Component getToolBar() {
-        Button addContactButton = new Button(getTranslation("gui.add"));
+        Button addContactButton = new Button(getTranslation("gui.button.add"));
         addContactButton.addClickListener(e -> add());
 
         HorizontalLayout toolbar = new HorizontalLayout(addContactButton);

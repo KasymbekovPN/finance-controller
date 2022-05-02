@@ -7,7 +7,6 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
@@ -18,20 +17,13 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "tag", layout = MainLayout.class)
 @PermitAll
 final public class TagView extends GridView<Tag> {
 
-    private final DTOService<Tag, TagEntity, Long> tagService;
-
     @Autowired
-    public TagView(NotificationFactory notificationFactory,
-                   DTOService<Tag, TagEntity, Long> tagService) {
-        super(new Grid<>(Tag.class), notificationFactory, "gui.tags");
-        this.tagService = tagService;
-    }
+    private DTOService<Tag, TagEntity, Long> tagService;
 
     @Override
     protected Result<?> updateListImpl() {
@@ -44,12 +36,13 @@ final public class TagView extends GridView<Tag> {
 
     @Override
     protected void configureGrid() {
+        grid = new Grid<>(Tag.class);
         grid.addClassName("tag-grid");
         grid.setSizeFull();
 
         grid.setColumns();
-        grid.addColumn(Tag::getId).setHeader(getTranslation("gui.id"));
-        grid.addColumn(Tag::getInfo).setHeader(getTranslation("gui.name"));
+        grid.addColumn(Tag::getId).setHeader(getTranslation("gui.header.id"));
+        grid.addColumn(Tag::getInfo).setHeader(getTranslation("gui.header.name"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));

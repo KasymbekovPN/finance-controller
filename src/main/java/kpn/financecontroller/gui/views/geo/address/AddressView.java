@@ -9,32 +9,25 @@ import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "address", layout = MainLayout.class)
 @PermitAll
 final public class AddressView extends GridView<Address> {
 
-    private final DTOService<Address, AddressEntity, Long> addressService;
-    private final DTOService<Street, StreetEntity, Long> streetService;
-
-    public AddressView(NotificationFactory notificationFactory,
-                       DTOService<Address, AddressEntity, Long> addressService,
-                       DTOService<Street, StreetEntity, Long> streetService) {
-        super(new Grid<>(Address.class), notificationFactory, "gui.addresses");
-        this.addressService = addressService;
-        this.streetService = streetService;
-    }
+    @Autowired
+    private DTOService<Address, AddressEntity, Long> addressService;
+    @Autowired
+    private DTOService<Street, StreetEntity, Long> streetService;
 
     @Override
     protected Result<?> updateListImpl() {
@@ -47,16 +40,17 @@ final public class AddressView extends GridView<Address> {
 
     @Override
     protected void configureGrid() {
+        grid = new Grid<>(Address.class);
         grid.addClassName("address-grid");
         grid.setSizeFull();
 
         grid.setColumns();
-        grid.addColumn(Address::getId).setHeader(getTranslation("gui.id"));
-        grid.addColumn(Address::getName).setHeader(getTranslation("gui.name"));
-        grid.addColumn(b -> b.getStreet().getName()).setHeader(getTranslation("gui.street"));
-        grid.addColumn(b -> b.getStreet().getCity().getName()).setHeader(getTranslation("gui.city"));
-        grid.addColumn(b -> b.getStreet().getCity().getRegion().getName()).setHeader(getTranslation("gui.region"));
-        grid.addColumn(b -> b.getStreet().getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.country"));
+        grid.addColumn(Address::getId).setHeader(getTranslation("gui.header.id"));
+        grid.addColumn(Address::getName).setHeader(getTranslation("gui.header.name"));
+        grid.addColumn(b -> b.getStreet().getName()).setHeader(getTranslation("gui.header.street"));
+        grid.addColumn(b -> b.getStreet().getCity().getName()).setHeader(getTranslation("gui.header.city"));
+        grid.addColumn(b -> b.getStreet().getCity().getRegion().getName()).setHeader(getTranslation("gui.header.region"));
+        grid.addColumn(b -> b.getStreet().getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
