@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.services.savers;
+package kpn.financecontroller.data.services.dto.savers;
 
 import kpn.lib.result.Result;
 

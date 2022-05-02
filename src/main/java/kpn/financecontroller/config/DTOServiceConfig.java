@@ -16,13 +16,13 @@ import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.DTOService;
-import kpn.financecontroller.data.services.DTOServiceImpl;
-import kpn.financecontroller.data.services.deleters.Deleter;
+import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceImpl;
+import kpn.financecontroller.data.services.dto.deleters.Deleter;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.data.services.loaders.Loader;
-import kpn.financecontroller.data.services.savers.Saver;
+import kpn.financecontroller.data.services.dto.loaders.Loader;
+import kpn.financecontroller.data.services.dto.savers.Saver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

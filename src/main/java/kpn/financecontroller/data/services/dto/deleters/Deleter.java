@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.services.deleters;
+package kpn.financecontroller.data.services.dto.deleters;
 
 import kpn.lib.result.Result;
 

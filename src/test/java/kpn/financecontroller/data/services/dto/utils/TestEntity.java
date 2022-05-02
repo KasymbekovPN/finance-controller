@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.services.utils;
+package kpn.financecontroller.data.services.dto.utils;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,8 @@
-package kpn.financecontroller.data.services.deleters;
+package kpn.financecontroller.data.services.dto.deleters;
 
-import kpn.financecontroller.data.services.utils.TestEntity;
-import kpn.financecontroller.data.services.utils.TestModel;
-import kpn.financecontroller.data.services.utils.TestRepo;
+import kpn.financecontroller.data.services.dto.utils.TestEntity;
+import kpn.financecontroller.data.services.dto.utils.TestModel;
+import kpn.financecontroller.data.services.dto.utils.TestRepo;
 import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
-package kpn.financecontroller.data.services.loaders;
+package kpn.financecontroller.data.services.dto.loaders;
 
-import kpn.financecontroller.data.services.DTOServiceException;
+import kpn.financecontroller.data.services.dto.DTOServiceException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

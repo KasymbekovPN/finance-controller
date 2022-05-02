@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.services;
+package kpn.financecontroller.data.services.dto;
 
 import lombok.Getter;
 

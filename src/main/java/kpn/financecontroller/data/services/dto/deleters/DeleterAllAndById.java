@@ -1,6 +1,6 @@
-package kpn.financecontroller.data.services.deleters;
+package kpn.financecontroller.data.services.dto.deleters;
 
-import kpn.financecontroller.data.services.DTOServiceException;
+import kpn.financecontroller.data.services.dto.DTOServiceException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 final public class DeleterAllAndById<D, E, I> extends AbstractDeleter<D, E, I>{

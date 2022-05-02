@@ -1,8 +1,8 @@
-package kpn.financecontroller.data.services.loaders;
+package kpn.financecontroller.data.services.dto.loaders;
 
-import kpn.financecontroller.data.services.utils.TestEntity;
-import kpn.financecontroller.data.services.utils.TestModel;
-import kpn.financecontroller.data.services.utils.TestRepo;
+import kpn.financecontroller.data.services.dto.utils.TestEntity;
+import kpn.financecontroller.data.services.dto.utils.TestModel;
+import kpn.financecontroller.data.services.dto.utils.TestRepo;
 import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,22 +11,20 @@ import org.mockito.exceptions.base.MockitoException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LoaderAllAndByIdTest {
+class LoaderAllTest {
 
     private static final String LOADER_NAME = "loader";
     private static final String WRONG_LOADER_NAME = "wrong.loader";
 
-    private static LoaderAllAndById<TestModel, TestEntity, Long> loader;
-    private static LoaderAllAndById<TestModel, TestEntity, Long> wrongLoader;
+    private static LoaderAll<TestModel, TestEntity, Long> loader;
+    private static LoaderAll<TestModel, TestEntity, Long> wrongLoader;
     private static List<TestModel> expectedDomains;
     private static TestEntity inputEntity;
-    private static TestModel expectedDomain;
 
     @BeforeAll
     static void beforeAll() {
@@ -35,30 +33,21 @@ class LoaderAllAndByIdTest {
         inputEntity.setId(1L);
         inputEntity.setValue("value");
         expectedDomains = List.of(new TestModel(inputEntity));
-        expectedDomain = new TestModel(inputEntity);
 
         Function<List<TestEntity>, List<TestModel>> toDomains = (entities) -> {
             return entities.stream().map(TestModel::new).collect(Collectors.toList());
         };
-        loader = new LoaderAllAndById<>(createRepo(), LOADER_NAME, TestModel::new, toDomains);
-        wrongLoader = new LoaderAllAndById<>(createWrongRepo(), WRONG_LOADER_NAME, TestModel::new, toDomains);
+        loader = new LoaderAll<>(createRepo(), LOADER_NAME, TestModel::new, toDomains);
+        wrongLoader = new LoaderAll<>(createWrongRepo(), WRONG_LOADER_NAME, TestModel::new, toDomains);
     }
 
     @Test
     void shouldCheckById() {
         long expectedId = 1L;
         Result<TestModel> result = loader.byId(expectedId);
-        assertThat(result.isSuccess()).isTrue();
-        assertThat(result.getValue()).isEqualTo(expectedDomain);
-    }
-
-    @Test
-    void shouldCheckWrongById() {
-        long expectedId = 1L;
-        Result<TestModel> result = wrongLoader.byId(expectedId);
         assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getSeed().getCode()).isEqualTo("loader.loadById.fail");
-        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(WRONG_LOADER_NAME, expectedId).toArray());
+        assertThat(result.getSeed().getCode()).isEqualTo("loader.loadById.unsupported");
+        assertThat(result.getSeed().getArgs()).isEqualTo(List.of(LOADER_NAME, expectedId).toArray());
     }
 
     @Test
@@ -92,9 +81,6 @@ class LoaderAllAndByIdTest {
         Mockito
                 .when(repo.findAll())
                 .thenReturn(List.of(inputEntity));
-        Mockito
-                .when(repo.findById(Mockito.any(Long.class)))
-                .thenReturn(Optional.of(inputEntity));
         return repo;
     }
 
@@ -103,9 +89,6 @@ class LoaderAllAndByIdTest {
 
         Mockito
                 .when(repo.findAll())
-                .thenThrow(new MockitoException(""));
-        Mockito
-                .when(repo.findById(Mockito.any(Long.class)))
                 .thenThrow(new MockitoException(""));
         return repo;
     }

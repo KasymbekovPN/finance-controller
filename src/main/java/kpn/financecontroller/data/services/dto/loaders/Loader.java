@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.services.loaders;
+package kpn.financecontroller.data.services.dto.loaders;
 
 import kpn.lib.result.Result;
 

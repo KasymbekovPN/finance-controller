@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.tasks;
 
-import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.data.services.dto.DTOService;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.lib.result.Result;

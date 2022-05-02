@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.services.utils;
+package kpn.financecontroller.data.services.dto.utils;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

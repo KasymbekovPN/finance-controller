@@ -1,8 +1,8 @@
-package kpn.financecontroller.data.services;
+package kpn.financecontroller.data.services.dto;
 
-import kpn.financecontroller.data.services.deleters.Deleter;
-import kpn.financecontroller.data.services.loaders.Loader;
-import kpn.financecontroller.data.services.savers.Saver;
+import kpn.financecontroller.data.services.dto.deleters.Deleter;
+import kpn.financecontroller.data.services.dto.loaders.Loader;
+import kpn.financecontroller.data.services.dto.savers.Saver;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

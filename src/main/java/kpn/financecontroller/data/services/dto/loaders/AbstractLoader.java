@@ -1,6 +1,6 @@
-package kpn.financecontroller.data.services.loaders;
+package kpn.financecontroller.data.services.dto.loaders;
 
-import kpn.financecontroller.data.services.DTOServiceException;
+import kpn.financecontroller.data.services.dto.DTOServiceException;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 
