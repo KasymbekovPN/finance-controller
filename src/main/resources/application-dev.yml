@@ -30,4 +30,4 @@ initial.entities:
   directory: devInitialEntities
 
 generators.alias.class:
-  prefix: "gui.alias.class"
+  prefix: "gui.alias.class."

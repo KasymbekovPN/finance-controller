@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.views.MainLayout;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +28,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-
-@org.springframework.stereotype.Component
 @Scope("prototype")
 @Route(value = "byTagStatistic", layout = MainLayout.class)
 @PermitAll
@@ -37,15 +36,12 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     private final MultiSelectListBox<Tag> tags = createMultiSelectListBox(this::callOnMultiSelectListBoxValueChanging);
     private final DatePicker beginTime = createDatePicker(this::callOnStartDatePickerStateChanging);
     private final DatePicker endTime = createDatePicker(this::callOnEndDatePickerStateChanging);
-
     private final State state = new State();
 
-    private final DTOService<Tag, TagEntity, Long> tagDtoService;
-
     @Autowired
-    public ByTagStatistic(DTOService<Tag, TagEntity, Long> tagDtoService) {
-        this.tagDtoService = tagDtoService;
-    }
+    private DTOService<Tag, TagEntity, Long> tagDtoService;
+    @Autowired
+    private ClassAliasGenerator classAliasGenerator;
 
     @PostConstruct
     public void init(){
@@ -55,7 +51,7 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
 
     @Override
     public String getPageTitle() {
-        return getTranslation("gui.byTagStatistic");
+        return getTranslation(classAliasGenerator.generate(getClass()));
     }
 
     private Component createToolBar() {

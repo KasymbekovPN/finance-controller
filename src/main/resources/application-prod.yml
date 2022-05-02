@@ -26,4 +26,4 @@ i18n:
     - ru
 
 generators.alias.class:
-  prefix: "gui.alias.class"
+  prefix: "gui.alias.class."
