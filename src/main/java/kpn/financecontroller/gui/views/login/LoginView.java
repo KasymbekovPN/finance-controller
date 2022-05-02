@@ -7,7 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 
 @Route("login")
-final public class LoginView extends VerticalLayout implements BeforeEnterListener, HasDynamicTitle {
+final public class LoginView extends VerticalLayout implements BeforeEnterListener {
 
     private final LoginForm login = new LoginForm();
 
@@ -21,11 +21,6 @@ final public class LoginView extends VerticalLayout implements BeforeEnterListen
         login.setAction("login");
 
         add(new H1(getTranslation("gui.login.header.title")), login);
-    }
-
-    @Override
-    public String getPageTitle() {
-        return getTranslation("gui.login");
     }
 
     @Override
