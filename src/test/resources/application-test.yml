@@ -24,3 +24,6 @@ i18n:
   providedLocales:
     - en
     - ru
+
+generators.alias.class:
+    prefix: "gui.alias.class."
