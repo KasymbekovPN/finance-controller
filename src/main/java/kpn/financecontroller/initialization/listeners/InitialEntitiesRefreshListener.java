@@ -53,7 +53,6 @@ import java.util.function.Function;
 
 @Slf4j
 @Component
-@Profile("dev")
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired

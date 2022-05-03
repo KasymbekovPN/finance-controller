@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @Scope("prototype")
@@ -36,7 +35,8 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     private final MultiSelectListBox<Tag> tags = createMultiSelectListBox(this::callOnMultiSelectListBoxValueChanging);
     private final DatePicker beginTime = createDatePicker(this::callOnStartDatePickerStateChanging);
     private final DatePicker endTime = createDatePicker(this::callOnEndDatePickerStateChanging);
-    private final State state = new State();
+    // TODO: 02.05.2022 del
+//    private final State state = new State();
 
     @Autowired
     private DTOService<Tag, TagEntity, Long> tagDtoService;
@@ -133,58 +133,62 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     }
 
     private void callOnStartCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        Boolean enabled = event.getValue();
-        state.setBeginTimeEnable(enabled);
-        beginTime.setEnabled(enabled);
-        if (!enabled){
-            state.setBeginTime(null);
-        }
+        // TODO: 02.05.2022 restore
+//        Boolean enabled = event.getValue();
+//        state.setBeginTimeEnable(enabled);
+//        beginTime.setEnabled(enabled);
+//        if (!enabled){
+//            state.setBeginTime(null);
+//        }
     }
 
     private void callOnStartDatePickerStateChanging(AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate> event) {
-        state.setBeginTime(event.getValue());
+        // TODO: 02.05.2022 restore
+//        state.setBeginTime(event.getValue());
     }
 
     private void callOnEndCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        Boolean enabled = event.getValue();
-        state.setEndTimeEnable(enabled);
-        endTime.setEnabled(enabled);
-        if (!enabled){
-            state.setEndTime(null);
-        }
+        // TODO: 02.05.2022 restore
+//        Boolean enabled = event.getValue();
+//        state.setEndTimeEnable(enabled);
+//        endTime.setEnabled(enabled);
+//        if (!enabled){
+//            state.setEndTime(null);
+//        }
     }
 
     private void callOnEndDatePickerStateChanging(AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate> event) {
-        state.setEndTime(event.getValue());
+        // TODO: 02.05.2022 restore
+//        state.setEndTime(event.getValue());
     }
 
     private void callOnAllTagsCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        state.setForAllTags(event.getValue());
+        // TODO: 02.05.2022 restore
+//        state.setForAllTags(event.getValue());
     }
 
     private void callOnMultiSelectListBoxValueChanging(AbstractField.ComponentValueChangeEvent<MultiSelectListBox<Tag>, Set<Tag>> event) {
-        state.setTags(event.getValue());
+        // TODO: 02.05.2022 restore
+//        state.setTags(event.getValue());
     }
 
     private void callOnButtonClick(ClickEvent<?> event) {
-        if (state.check()){
-            // TODO: 01.05.2022 impl it
-        }
     }
 
-    @Getter
-    @Setter
-    private static class State {
-        private boolean beginTimeEnable;
-        private LocalDate beginTime;
-        private boolean endTimeEnable;
-        private LocalDate endTime;
-        private boolean forAllTags;
-        private Set<Tag> tags = new HashSet<>();
-
-        public boolean check(){
-            // TODO: 01.05.2022 impl it
-            return false;
-        }
-    }
+    // TODO: 02.05.2022 del
+//    @Getter
+//    @Setter
+//    private static class State {
+//        private boolean beginTimeEnable;
+//        private LocalDate beginTime;
+//        private boolean endTimeEnable;
+//        private LocalDate endTime;
+//        private boolean forAllTags;
+//        private Set<Tag> tags = new HashSet<>();
+//
+//        public boolean check(){
+//            // TODO: 01.05.2022 impl it
+//            return false;
+//        }
+//    }
 }

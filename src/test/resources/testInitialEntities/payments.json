@@ -1,0 +1,14 @@
+{
+  "entities": {
+    "0": {
+      "id": 0,
+      "placeId": 0,
+      "productId": 0,
+      "amount": 1.1,
+      "measure": "KG",
+      "price": 123.12,
+      "currency": "RUB",
+      "createdAt": "2022-04-24"
+    }
+  }
+}
