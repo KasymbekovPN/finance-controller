@@ -1,7 +1,12 @@
 package kpn.financecontroller.gui.views.payment;
 
+import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Result;
@@ -27,6 +32,12 @@ final public class PaymentForm extends EditForm<Payment> {
     private final TextField price = new TextField();
     private final ComboBox<Currency> currency = new ComboBox<>();
     private final DatePicker createdAt = new DatePicker();
+
+    private final Checkbox measureCheckBox = new Checkbox();
+    private final Checkbox amountCheckBox = new Checkbox();
+
+    private boolean measurePresent;
+    private boolean amountPresent;
 
     public PaymentForm(List<Product> products,
                        List<Place> places) {
@@ -63,8 +74,8 @@ final public class PaymentForm extends EditForm<Payment> {
                 product,
                 price,
                 currency,
-                amount,
-                measure,
+                createOptionalLine(amountCheckBox, amount, this::callOnAmountCheckBoxStateChanging),
+                createOptionalLine(measureCheckBox, measure, this::callOnMeasureCheckBoxStateChanging),
                 place,
                 createdAt,
                 createButtonsLayout()
@@ -72,7 +83,43 @@ final public class PaymentForm extends EditForm<Payment> {
     }
 
     @Override
+    public void setValue(Payment value) {
+        if (value != null){
+            measurePresent = value.getMeasure() != null;
+            amountPresent = value.getAmount() != null;
+        } else {
+            measurePresent = false;
+            amountPresent = false;
+        }
+        measureCheckBox.setValue(measurePresent);
+        amountCheckBox.setValue(amountPresent);
+
+        super.setValue(value);
+    }
+
+    private HorizontalLayout createOptionalLine(Checkbox checkBox,
+                                                Component component,
+                                                HasValue.ValueChangeListener<? super AbstractField.ComponentValueChangeEvent<Checkbox, Boolean>> listener){
+        checkBox.addValueChangeListener(listener);
+        return new HorizontalLayout(checkBox, component);
+    }
+
+    private void callOnMeasureCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        measurePresent = event.getValue();
+    }
+
+    private void callOnAmountCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        amountPresent = event.getValue();
+    }
+
+    @Override
     protected SaveFormEvent<EditForm<Payment>, Payment> createSaveEvent() {
+        if (!measurePresent){
+            value.setMeasure(null);
+        }
+        if (!amountPresent){
+            value.setAmount(null);
+        }
         return new PaymentSaveFormEvent(this, value);
     }
 
