@@ -55,17 +55,17 @@ abstract public class EditForm<D> extends FormLayout {
      }
 
     protected void validateAndSave() {
-      try{
-           binder.writeBean(value);
-           fireEvent(createSaveEvent());
-      } catch (ValidationException ex){
-           ex.printStackTrace();
-      }
+          try{
+               binder.writeBean(value);
+               fireEvent(createSaveEvent());
+          } catch (ValidationException ex){
+               ex.printStackTrace();
+          }
     }
 
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
-         return getEventBus().addListener(eventType, listener);
+        return getEventBus().addListener(eventType, listener);
     }
 
     protected abstract SaveFormEvent<EditForm<D>, D> createSaveEvent();
