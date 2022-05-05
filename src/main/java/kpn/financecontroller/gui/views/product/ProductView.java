@@ -12,6 +12,7 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
+import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -77,6 +78,17 @@ final public class ProductView extends GridView<Product> {
 
     @Override
     protected Result<Product> handleSaveEvent(SaveFormEvent<EditForm<Product>, Product> event) {
-        return service.saver().save(new ProductEntity(event.getValue()));
+        Product domain = event.getValue();
+        Result<Product> checkingResult = checkDomain(domain);
+        return checkingResult.isSuccess() ? service.saver().save(new ProductEntity(domain)) : checkingResult;
+    }
+
+    private Result<Product> checkDomain(Product domain) {
+        if (domain.getName() == null || domain.getName().isEmpty()){
+            return ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty").build();
+        }
+        return domain.getTags() == null || domain.getTags().isEmpty()
+                ? ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty").build()
+                : ImmutableResult.<Product>ok(domain).build();
     }
 }
