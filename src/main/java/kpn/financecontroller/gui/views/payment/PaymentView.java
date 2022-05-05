@@ -55,7 +55,7 @@ final public class PaymentView extends GridView<Payment> {
         grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.header.currency"));
         grid.addColumn(p -> {return p.getMeasure() != null ? p.getMeasure().name() : "-";}).setHeader(getTranslation("gui.header.amount"));
         grid.addColumn(p -> {return p.getAmount() != null ? p.getAmount() : "-";}).setHeader(getTranslation("gui.header.measure"));
-        grid.addColumn(p -> p.getPlace().getName()).setHeader(getTranslation("gui.header.place"));
+        grid.addColumn(p -> {return p.getPlace() != null ? p.getPlace().getName() : "-";}).setHeader(getTranslation("gui.header.place"));
         grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.header.createdAt"));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));

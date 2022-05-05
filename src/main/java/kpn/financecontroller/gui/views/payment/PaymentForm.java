@@ -21,8 +21,12 @@ import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 final public class PaymentForm extends EditForm<Payment> {
     private final ComboBox<Product> product = new ComboBox<>();
@@ -35,9 +39,32 @@ final public class PaymentForm extends EditForm<Payment> {
 
     private final Checkbox measureCheckBox = new Checkbox();
     private final Checkbox amountCheckBox = new Checkbox();
+    private final Checkbox placeCheckBox = new Checkbox();
 
-    private boolean measurePresent;
-    private boolean amountPresent;
+    private final PresenceStatus measurePresenceStatus = new PresenceStatus(
+            payment -> {
+                return payment != null && payment.getMeasure() != null;
+            },
+            payment -> {
+                payment.setMeasure(null);
+            }
+    );
+    private final PresenceStatus amountPresenceStatus = new PresenceStatus(
+            payment -> {
+                return payment != null && payment.getAmount() != null;
+            },
+            payment -> {
+                payment.setAmount(null);
+            }
+    );
+    private final PresenceStatus placePresenceStatus = new PresenceStatus(
+            payment -> {
+                return payment != null && payment.getPlace() != null;
+            },
+            payment -> {
+                payment.setPlace(null);
+            }
+    );
 
     public PaymentForm(List<Product> products,
                        List<Place> places) {
@@ -74,9 +101,9 @@ final public class PaymentForm extends EditForm<Payment> {
                 product,
                 price,
                 currency,
-                createOptionalLine(amountCheckBox, amount, this::callOnAmountCheckBoxStateChanging),
-                createOptionalLine(measureCheckBox, measure, this::callOnMeasureCheckBoxStateChanging),
-                place,
+                createOptionalLine(amountCheckBox, amount, amountPresenceStatus::set),
+                createOptionalLine(measureCheckBox, measure, measurePresenceStatus::set),
+                createOptionalLine(placeCheckBox, place, placePresenceStatus::set),
                 createdAt,
                 createButtonsLayout()
         );
@@ -84,15 +111,13 @@ final public class PaymentForm extends EditForm<Payment> {
 
     @Override
     public void setValue(Payment value) {
-        if (value != null){
-            measurePresent = value.getMeasure() != null;
-            amountPresent = value.getAmount() != null;
-        } else {
-            measurePresent = false;
-            amountPresent = false;
-        }
-        measureCheckBox.setValue(measurePresent);
-        amountCheckBox.setValue(amountPresent);
+        measurePresenceStatus.calculate(value);
+        amountPresenceStatus.calculate(value);
+        placePresenceStatus.calculate(value);
+
+        measureCheckBox.setValue(measurePresenceStatus.getStatus());
+        amountCheckBox.setValue(amountPresenceStatus.getStatus());
+        placeCheckBox.setValue(placePresenceStatus.getStatus());
 
         super.setValue(value);
     }
@@ -104,22 +129,12 @@ final public class PaymentForm extends EditForm<Payment> {
         return new HorizontalLayout(checkBox, component);
     }
 
-    private void callOnMeasureCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        measurePresent = event.getValue();
-    }
-
-    private void callOnAmountCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        amountPresent = event.getValue();
-    }
-
     @Override
     protected SaveFormEvent<EditForm<Payment>, Payment> createSaveEvent() {
-        if (!measurePresent){
-            value.setMeasure(null);
-        }
-        if (!amountPresent){
-            value.setAmount(null);
-        }
+        measurePresenceStatus.clear(value);
+        amountPresenceStatus.clear(value);
+        placePresenceStatus.clear(value);
+
         return new PaymentSaveFormEvent(this, value);
     }
 
@@ -160,6 +175,29 @@ final public class PaymentForm extends EditForm<Payment> {
         @Override
         public String convertToPresentation(Float value, ValueContext context) {
             return value != null ? String.valueOf(value) : "";
+        }
+    }
+
+    @RequiredArgsConstructor
+    private static class PresenceStatus{
+        private final Function<Payment, Boolean> calculationFunc;
+        private final Consumer<Payment> clearFunc;
+
+        @Getter
+        private Boolean status = false;
+
+        private void set(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+            status = event.getValue();
+        }
+
+        private void calculate(Payment payment){
+            status = calculationFunc.apply(payment);
+        }
+
+        private void clear(Payment payment){
+            if (!status){
+                clearFunc.accept(payment);
+            }
         }
     }
 }

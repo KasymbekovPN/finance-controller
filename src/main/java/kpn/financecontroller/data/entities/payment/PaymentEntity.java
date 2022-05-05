@@ -37,7 +37,7 @@ public class PaymentEntity extends AbstractEntity {
     public PaymentEntity(Payment payment) {
         id = payment.getId();
         productEntity = new ProductEntity(payment.getProduct());
-        placeEntity = new PlaceEntity(payment.getPlace());
+        placeEntity = payment.getPlace() != null ? new PlaceEntity(payment.getPlace()) : null;
         amount = payment.getAmount();
         measure = payment.getMeasure();
         price = payment.getPrice();
