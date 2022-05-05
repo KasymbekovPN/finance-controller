@@ -10,6 +10,7 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
+import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -71,6 +72,16 @@ final public class TagView extends GridView<Tag> {
 
     @Override
     protected Result<Tag> handleSaveEvent(SaveFormEvent<EditForm<Tag>, Tag> event) {
-        return tagService.saver().save(new TagEntity(event.getValue()));
+        Tag domain = event.getValue();
+        Result<Tag> checkingResult = checkDomain(domain);
+        return checkingResult.isSuccess()
+                ? tagService.saver().save(new TagEntity(domain))
+                : checkingResult;
+    }
+
+    private Result<Tag> checkDomain(Tag domain) {
+        return domain.getName() == null || domain.getName().isEmpty()
+                ? ImmutableResult.<Tag>fail("checking.domain.tag.name.isEmpty").build()
+                : ImmutableResult.<Tag>ok(domain).build();
     }
 }
