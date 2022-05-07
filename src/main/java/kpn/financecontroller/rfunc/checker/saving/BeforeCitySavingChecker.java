@@ -4,4 +4,4 @@ import kpn.financecontroller.data.domains.city.City;
 import org.springframework.stereotype.Component;
 
 @Component
-final public class CityBeforeSavingChecker extends AbstractBeforeSavingChecker<City> {}
+final public class BeforeCitySavingChecker extends AbstractBeforeSavingChecker<City> {}
