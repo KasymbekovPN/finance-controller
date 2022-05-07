@@ -10,6 +10,7 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
+import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -71,6 +72,14 @@ final public class CountryView extends GridView<Country>{
 
     @Override
     protected Result<Country> handleSaveEvent(SaveFormEvent<EditForm<Country>, Country> event) {
-        return countryService.saver().save(new CountryEntity(event.getValue()));
+        Country domain = event.getValue();
+        Result<Country> checkingResult = checkDomain(domain);
+        return checkingResult.isSuccess() ? countryService.saver().save(new CountryEntity(domain)) : checkingResult;
+    }
+
+    private Result<Country> checkDomain(Country domain) {
+        return domain.getName() == null || domain.getName().isEmpty()
+            ? ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty").build()
+            : ImmutableResult.<Country>ok(domain).build();
     }
 }
