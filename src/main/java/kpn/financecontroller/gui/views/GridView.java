@@ -8,6 +8,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
+import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
 import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
@@ -27,6 +28,8 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
     private SavingChecker<D> savingChecker;
+    @Autowired
+    private RemovingChecker<D> removingChecker;
 
     protected EditForm<D> form;
     protected Grid<D> grid;
@@ -87,8 +90,12 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     }
 
     protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
-        Result<Void> deletingResult = delete(event.getValue());
-        createNotification(deletingResult);
+        D domain = event.getValue();
+        Result<Void> result = removingChecker.apply(domain);
+        if (result.isSuccess()){
+            result = delete(domain);
+        }
+        createNotification(result);
         updateList();
         closeEditor();
     }
