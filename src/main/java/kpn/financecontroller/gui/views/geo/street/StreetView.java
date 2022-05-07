@@ -72,12 +72,12 @@ final public class StreetView extends GridView<Street>{
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Street>, Street> event) {
-        return streetService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Street domain) {
+        return streetService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Street> save(SaveFormEvent<EditForm<Street>, Street> event) {
-        return streetService.saver().save(new StreetEntity(event.getValue()));
+    protected Result<Street> save(Street domain) {
+        return streetService.saver().save(new StreetEntity(domain));
     }
 }

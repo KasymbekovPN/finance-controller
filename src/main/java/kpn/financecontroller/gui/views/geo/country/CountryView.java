@@ -65,12 +65,12 @@ final public class CountryView extends GridView<Country>{
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Country>, Country> event) {
-        return countryService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Country domain) {
+        return countryService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Country> save(SaveFormEvent<EditForm<Country>, Country> event) {
-        return countryService.saver().save(new CountryEntity(event.getValue()));
+    protected Result<Country> save(Country domain) {
+        return countryService.saver().save(new CountryEntity(domain));
     }
 }

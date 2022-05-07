@@ -87,7 +87,7 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     }
 
     protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
-        Result<Void> deletingResult = delete(event);
+        Result<Void> deletingResult = delete(event.getValue());
         createNotification(deletingResult);
         updateList();
         closeEditor();
@@ -97,7 +97,7 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
         D domain = event.getValue();
         Result<D> result = savingChecker.apply(domain);
         if (result.isSuccess()){
-            result = save(event);
+            result = save(domain);
         }
         createNotification(result);
         updateList();
@@ -122,6 +122,6 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     protected abstract void configureGrid();
     protected abstract void configureForm();
     protected abstract void add();
-    protected abstract Result<Void> delete(DeleteFormEvent<EditForm<D>, D> event);
-    protected abstract Result<D> save(SaveFormEvent<EditForm<D>, D> event);
+    protected abstract Result<Void> delete(D domain);
+    protected abstract Result<D> save(D domain);
 }

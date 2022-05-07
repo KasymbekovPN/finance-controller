@@ -71,12 +71,12 @@ final public class ProductView extends GridView<Product> {
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Product>, Product> event) {
-        return service.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Product domain) {
+        return service.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Product> save(SaveFormEvent<EditForm<Product>, Product> event) {
-        return service.saver().save(new ProductEntity(event.getValue()));
+    protected Result<Product> save(Product domain) {
+        return service.saver().save(new ProductEntity(domain));
     }
 }

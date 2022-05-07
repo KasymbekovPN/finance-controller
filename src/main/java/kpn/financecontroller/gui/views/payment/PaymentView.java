@@ -83,12 +83,12 @@ final public class PaymentView extends GridView<Payment> {
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Payment>, Payment> event) {
-        return paymentService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Payment domain) {
+        return paymentService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Payment> save(SaveFormEvent<EditForm<Payment>, Payment> event) {
-        return paymentService.saver().save(new PaymentEntity(event.getValue()));
+    protected Result<Payment> save(Payment domain) {
+        return paymentService.saver().save(new PaymentEntity(domain));
     }
 }

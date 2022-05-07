@@ -65,12 +65,12 @@ final public class TagView extends GridView<Tag> {
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Tag>, Tag> event) {
-        return tagService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Tag domain) {
+        return tagService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Tag> save(SaveFormEvent<EditForm<Tag>, Tag> event) {
-        return tagService.saver().save(new TagEntity(event.getValue()));
+    protected Result<Tag> save(Tag domain) {
+        return tagService.saver().save(new TagEntity(domain));
     }
 }

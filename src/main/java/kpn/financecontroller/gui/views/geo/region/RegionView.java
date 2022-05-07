@@ -70,12 +70,12 @@ final public class RegionView extends GridView<Region>{
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Region>, Region> event) {
-        return regionService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Region domain) {
+        return regionService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Region> save(SaveFormEvent<EditForm<Region>, Region> event) {
-        return regionService.saver().save(new RegionEntity(event.getValue()));
+    protected Result<Region> save(Region domain) {
+        return regionService.saver().save(new RegionEntity(domain));
     }
 }

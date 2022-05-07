@@ -72,12 +72,12 @@ final public class CityView extends GridView<City> {
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<City>, City> event) {
-        return cityService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(City domain) {
+        return cityService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<City> save(SaveFormEvent<EditForm<City>, City> event) {
-        return cityService.saver().save(new CityEntity(event.getValue()));
+    protected Result<City> save(City domain) {
+        return cityService.saver().save(new CityEntity(domain));
     }
 }

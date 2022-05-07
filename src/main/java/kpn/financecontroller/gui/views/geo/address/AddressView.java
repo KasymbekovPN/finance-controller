@@ -73,12 +73,12 @@ final public class AddressView extends GridView<Address> {
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Address>, Address> event) {
-        return addressService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Address domain) {
+        return addressService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Address> save(SaveFormEvent<EditForm<Address>, Address> event) {
-        return addressService.saver().save(new AddressEntity(event.getValue()));
+    protected Result<Address> save(Address domain) {
+        return addressService.saver().save(new AddressEntity(domain));
     }
 }

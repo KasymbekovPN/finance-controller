@@ -60,7 +60,7 @@ final public class PlaceView extends GridView<Place> {
         form.setWidth("25em");
 
         form.addListener(PlaceForm.PlaceSaveFormEvent.class, this::handleSavingEvent);
-        form.addListener(PlaceForm.PlaceSaveWithoutAddressFormEvent.class, this::saveContactWithoutAddress);
+        form.addListener(PlaceForm.PlaceSaveWithoutAddressFormEvent.class, this::handleSavingWithoutAddress);
         form.addListener(PlaceForm.PlaceDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(PlaceForm.PlaceCloseFormEvent.class, e -> closeEditor());
     }
@@ -72,24 +72,20 @@ final public class PlaceView extends GridView<Place> {
     }
 
     @Override
-    protected Result<Void> delete(DeleteFormEvent<EditForm<Place>, Place> event) {
-        return placeService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Place domain) {
+        return placeService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Place> save(SaveFormEvent<EditForm<Place>, Place> event) {
-        Place place = event.getValue();
-        place.setOnline(false);
-        return placeService.saver().save(new PlaceEntity(place));
+    protected Result<Place> save(Place domain) {
+        domain.setOnline(false);
+        return placeService.saver().save(new PlaceEntity(domain));
     }
 
-    private void saveContactWithoutAddress(SaveFormEvent<EditForm<Place>, Place> event) {
-        Place place = event.getValue();
-        place.setAddress(null);
-        place.setOnline(true);
-        Result<Place> savingResult = placeService.saver().save(new PlaceEntity(place));
-        createNotification(savingResult);
-        updateList();
-        closeEditor();
+    private void handleSavingWithoutAddress(SaveFormEvent<EditForm<Place>, Place> event) {
+        Place domain = event.getValue();
+        domain.setAddress(null);
+        domain.setOnline(true);
+        handleSavingEvent(event);
     }
 }
