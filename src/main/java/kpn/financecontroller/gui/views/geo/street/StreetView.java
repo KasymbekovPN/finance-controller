@@ -60,8 +60,8 @@ final public class StreetView extends GridView<Street>{
         form = new StreetForm(cityService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(StreetForm.StreetSaveFormEvent.class, this::saveContact);
-        form.addListener(StreetForm.StreetDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(StreetForm.StreetSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(StreetForm.StreetDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(StreetForm.StreetCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -72,12 +72,12 @@ final public class StreetView extends GridView<Street>{
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Street>, Street> event) {
-        return streetService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Street domain) {
+        return streetService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Street> handleSaveEvent(SaveFormEvent<EditForm<Street>, Street> event) {
-        return streetService.saver().save(new StreetEntity(event.getValue()));
+    protected Result<Street> save(Street domain) {
+        return streetService.saver().save(new StreetEntity(domain));
     }
 }

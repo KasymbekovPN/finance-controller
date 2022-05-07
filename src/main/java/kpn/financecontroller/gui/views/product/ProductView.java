@@ -60,8 +60,8 @@ final public class ProductView extends GridView<Product> {
         form = new ProductForm(tagService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(ProductForm.ProductSaveFormEvent.class, this::saveContact);
-        form.addListener(ProductForm.ProductDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(ProductForm.ProductSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(ProductForm.ProductDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(ProductForm.ProductCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -72,23 +72,12 @@ final public class ProductView extends GridView<Product> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Product>, Product> event) {
-        return service.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Product domain) {
+        return service.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Product> handleSaveEvent(SaveFormEvent<EditForm<Product>, Product> event) {
-        Product domain = event.getValue();
-        Result<Product> checkingResult = checkDomain(domain);
-        return checkingResult.isSuccess() ? service.saver().save(new ProductEntity(domain)) : checkingResult;
-    }
-
-    private Result<Product> checkDomain(Product domain) {
-        if (domain.getName() == null || domain.getName().isEmpty()){
-            return ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty").build();
-        }
-        return domain.getTags() == null || domain.getTags().isEmpty()
-                ? ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty").build()
-                : ImmutableResult.<Product>ok(domain).build();
+    protected Result<Product> save(Product domain) {
+        return service.saver().save(new ProductEntity(domain));
     }
 }

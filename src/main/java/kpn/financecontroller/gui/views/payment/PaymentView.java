@@ -71,8 +71,8 @@ final public class PaymentView extends GridView<Payment> {
         );
         form.setWidth("25em");
 
-        form.addListener(PaymentForm.PaymentSaveFormEvent.class, this::saveContact);
-        form.addListener(PaymentForm.PaymentDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(PaymentForm.PaymentSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(PaymentForm.PaymentDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(PaymentForm.PaymentCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -83,12 +83,12 @@ final public class PaymentView extends GridView<Payment> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Payment>, Payment> event) {
-        return paymentService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Payment domain) {
+        return paymentService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Payment> handleSaveEvent(SaveFormEvent<EditForm<Payment>, Payment> event) {
-        return paymentService.saver().save(new PaymentEntity(event.getValue()));
+    protected Result<Payment> save(Payment domain) {
+        return paymentService.saver().save(new PaymentEntity(domain));
     }
 }

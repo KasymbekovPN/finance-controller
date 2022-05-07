@@ -25,5 +25,9 @@ i18n:
     - en
     - ru
 
+initial.entities:
+  enable: false
+  directory: testInitialEntities
+
 generators.alias.class:
     prefix: "gui.alias.class."

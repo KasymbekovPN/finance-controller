@@ -61,8 +61,8 @@ final public class AddressView extends GridView<Address> {
         form = new AddressForm(streetService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(AddressForm.AddressSaveFormEvent.class, this::saveContact);
-        form.addListener(AddressForm.AddressDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(AddressForm.AddressSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(AddressForm.AddressDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(AddressForm.AddressCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -73,12 +73,12 @@ final public class AddressView extends GridView<Address> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Address>, Address> event) {
-        return addressService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Address domain) {
+        return addressService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Address> handleSaveEvent(SaveFormEvent<EditForm<Address>, Address> event) {
-        return addressService.saver().save(new AddressEntity(event.getValue()));
+    protected Result<Address> save(Address domain) {
+        return addressService.saver().save(new AddressEntity(domain));
     }
 }

@@ -54,8 +54,8 @@ final public class CountryView extends GridView<Country>{
         form = new CountryForm();
         form.setWidth("25em");
 
-        form.addListener(CountryForm.CountrySaveFormEvent.class, this::saveContact);
-        form.addListener(CountryForm.CountryDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(CountryForm.CountrySaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(CountryForm.CountryDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(CountryForm.CountryCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -66,20 +66,12 @@ final public class CountryView extends GridView<Country>{
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Country>, Country> event) {
-        return countryService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Country domain) {
+        return countryService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Country> handleSaveEvent(SaveFormEvent<EditForm<Country>, Country> event) {
-        Country domain = event.getValue();
-        Result<Country> checkingResult = checkDomain(domain);
-        return checkingResult.isSuccess() ? countryService.saver().save(new CountryEntity(domain)) : checkingResult;
-    }
-
-    private Result<Country> checkDomain(Country domain) {
-        return domain.getName() == null || domain.getName().isEmpty()
-            ? ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty").build()
-            : ImmutableResult.<Country>ok(domain).build();
+    protected Result<Country> save(Country domain) {
+        return countryService.saver().save(new CountryEntity(domain));
     }
 }

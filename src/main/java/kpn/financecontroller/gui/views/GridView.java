@@ -8,6 +8,8 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
+import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
+import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
@@ -24,6 +26,10 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     private NotificationFactory notificationFactory;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
+    @Autowired
+    private SavingChecker<D> savingChecker;
+    @Autowired
+    private RemovingChecker<D> removingChecker;
 
     protected EditForm<D> form;
     protected Grid<D> grid;
@@ -83,16 +89,24 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
         }
     }
 
-    protected void deleteEvent(DeleteFormEvent<EditForm<D>, D> event) {
-        Result<Void> deletingResult = handleDeleteEvent(event);
-        createNotification(deletingResult);
+    protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
+        D domain = event.getValue();
+        Result<Void> result = removingChecker.apply(domain);
+        if (result.isSuccess()){
+            result = delete(domain);
+        }
+        createNotification(result);
         updateList();
         closeEditor();
     }
 
-    protected void saveContact(SaveFormEvent<EditForm<D>, D> event) {
-        Result<D> savingResult = handleSaveEvent(event);
-        createNotification(savingResult);
+    protected void handleSavingEvent(SaveFormEvent<EditForm<D>, D> event) {
+        D domain = event.getValue();
+        Result<D> result = savingChecker.apply(domain);
+        if (result.isSuccess()){
+            result = save(domain);
+        }
+        createNotification(result);
         updateList();
         closeEditor();
     }
@@ -115,6 +129,6 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     protected abstract void configureGrid();
     protected abstract void configureForm();
     protected abstract void add();
-    protected abstract Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<D>, D> event);
-    protected abstract Result<D> handleSaveEvent(SaveFormEvent<EditForm<D>, D> event);
+    protected abstract Result<Void> delete(D domain);
+    protected abstract Result<D> save(D domain);
 }
