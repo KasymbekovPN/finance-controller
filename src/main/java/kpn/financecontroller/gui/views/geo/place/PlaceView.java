@@ -59,9 +59,9 @@ final public class PlaceView extends GridView<Place> {
         form = new PlaceForm(addressService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(PlaceForm.PlaceSaveFormEvent.class, this::saveContact);
+        form.addListener(PlaceForm.PlaceSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(PlaceForm.PlaceSaveWithoutAddressFormEvent.class, this::saveContactWithoutAddress);
-        form.addListener(PlaceForm.PlaceDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(PlaceForm.PlaceDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(PlaceForm.PlaceCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -72,12 +72,12 @@ final public class PlaceView extends GridView<Place> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Place>, Place> event) {
+    protected Result<Void> delete(DeleteFormEvent<EditForm<Place>, Place> event) {
         return placeService.deleter().byId(event.getValue().getId());
     }
 
     @Override
-    protected Result<Place> handleSaveEvent(SaveFormEvent<EditForm<Place>, Place> event) {
+    protected Result<Place> save(SaveFormEvent<EditForm<Place>, Place> event) {
         Place place = event.getValue();
         place.setOnline(false);
         return placeService.saver().save(new PlaceEntity(place));

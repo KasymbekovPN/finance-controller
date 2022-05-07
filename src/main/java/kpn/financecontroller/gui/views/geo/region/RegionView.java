@@ -58,8 +58,8 @@ final public class RegionView extends GridView<Region>{
         form = new RegionForm(countryService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(RegionForm.RegionSaveFormEvent.class, this::saveContact);
-        form.addListener(RegionForm.RegionDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(RegionForm.RegionSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(RegionForm.RegionDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(RegionForm.RegionCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -70,12 +70,12 @@ final public class RegionView extends GridView<Region>{
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Region>, Region> event) {
+    protected Result<Void> delete(DeleteFormEvent<EditForm<Region>, Region> event) {
         return regionService.deleter().byId(event.getValue().getId());
     }
 
     @Override
-    protected Result<Region> handleSaveEvent(SaveFormEvent<EditForm<Region>, Region> event) {
+    protected Result<Region> save(SaveFormEvent<EditForm<Region>, Region> event) {
         return regionService.saver().save(new RegionEntity(event.getValue()));
     }
 }

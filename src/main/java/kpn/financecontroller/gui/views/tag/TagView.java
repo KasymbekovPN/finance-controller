@@ -53,8 +53,8 @@ final public class TagView extends GridView<Tag> {
         form = new TagForm();
         form.setWidth("25em");
 
-        form.addListener(TagForm.TagSaveFormEvent.class, this::saveContact);
-        form.addListener(TagForm.TagDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(TagForm.TagSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(TagForm.TagDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(TagForm.TagCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -65,12 +65,12 @@ final public class TagView extends GridView<Tag> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Tag>, Tag> event) {
+    protected Result<Void> delete(DeleteFormEvent<EditForm<Tag>, Tag> event) {
         return tagService.deleter().byId(event.getValue().getId());
     }
 
     @Override
-    protected Result<Tag> handleSaveEvent(SaveFormEvent<EditForm<Tag>, Tag> event) {
+    protected Result<Tag> save(SaveFormEvent<EditForm<Tag>, Tag> event) {
         return tagService.saver().save(new TagEntity(event.getValue()));
     }
 }

@@ -8,6 +8,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
+import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
@@ -24,6 +25,8 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     private NotificationFactory notificationFactory;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
+    @Autowired
+    private SavingChecker<D> savingChecker;
 
     protected EditForm<D> form;
     protected Grid<D> grid;
@@ -83,16 +86,20 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
         }
     }
 
-    protected void deleteEvent(DeleteFormEvent<EditForm<D>, D> event) {
-        Result<Void> deletingResult = handleDeleteEvent(event);
+    protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
+        Result<Void> deletingResult = delete(event);
         createNotification(deletingResult);
         updateList();
         closeEditor();
     }
 
-    protected void saveContact(SaveFormEvent<EditForm<D>, D> event) {
-        Result<D> savingResult = handleSaveEvent(event);
-        createNotification(savingResult);
+    protected void handleSavingEvent(SaveFormEvent<EditForm<D>, D> event) {
+        D domain = event.getValue();
+        Result<D> result = savingChecker.apply(domain);
+        if (result.isSuccess()){
+            result = save(event);
+        }
+        createNotification(result);
         updateList();
         closeEditor();
     }
@@ -115,6 +122,6 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
     protected abstract void configureGrid();
     protected abstract void configureForm();
     protected abstract void add();
-    protected abstract Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<D>, D> event);
-    protected abstract Result<D> handleSaveEvent(SaveFormEvent<EditForm<D>, D> event);
+    protected abstract Result<Void> delete(DeleteFormEvent<EditForm<D>, D> event);
+    protected abstract Result<D> save(SaveFormEvent<EditForm<D>, D> event);
 }

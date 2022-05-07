@@ -59,8 +59,8 @@ final public class ProductView extends GridView<Product> {
         form = new ProductForm(tagService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(ProductForm.ProductSaveFormEvent.class, this::saveContact);
-        form.addListener(ProductForm.ProductDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(ProductForm.ProductSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(ProductForm.ProductDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(ProductForm.ProductCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -71,12 +71,12 @@ final public class ProductView extends GridView<Product> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Product>, Product> event) {
+    protected Result<Void> delete(DeleteFormEvent<EditForm<Product>, Product> event) {
         return service.deleter().byId(event.getValue().getId());
     }
 
     @Override
-    protected Result<Product> handleSaveEvent(SaveFormEvent<EditForm<Product>, Product> event) {
+    protected Result<Product> save(SaveFormEvent<EditForm<Product>, Product> event) {
         return service.saver().save(new ProductEntity(event.getValue()));
     }
 }

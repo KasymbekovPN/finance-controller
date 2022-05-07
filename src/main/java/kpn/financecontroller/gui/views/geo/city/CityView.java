@@ -60,8 +60,8 @@ final public class CityView extends GridView<City> {
         form = new CityForm(regionService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(CityForm.CitySaveFormEvent.class, this::saveContact);
-        form.addListener(CityForm.CityDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(CityForm.CitySaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(CityForm.CityDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(CityForm.CityCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -72,12 +72,12 @@ final public class CityView extends GridView<City> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<City>, City> event) {
+    protected Result<Void> delete(DeleteFormEvent<EditForm<City>, City> event) {
         return cityService.deleter().byId(event.getValue().getId());
     }
 
     @Override
-    protected Result<City> handleSaveEvent(SaveFormEvent<EditForm<City>, City> event) {
+    protected Result<City> save(SaveFormEvent<EditForm<City>, City> event) {
         return cityService.saver().save(new CityEntity(event.getValue()));
     }
 }

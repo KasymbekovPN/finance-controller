@@ -25,5 +25,9 @@ i18n:
     - en
     - ru
 
+initial.entities:
+  enable: false
+  directory: prodInitialEntities
+
 generators.alias.class:
   prefix: "gui.alias.class."
