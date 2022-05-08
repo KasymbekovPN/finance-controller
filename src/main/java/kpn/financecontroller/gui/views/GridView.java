@@ -8,6 +8,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
+import kpn.financecontroller.data.domains.Domain;
 import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
 import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
@@ -16,11 +17,15 @@ import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.lib.result.Result;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayDeque;
+import java.util.List;
 
-abstract public class GridView<D> extends VerticalLayout implements HasDynamicTitle {
+abstract public class GridView<D extends Domain> extends VerticalLayout implements HasDynamicTitle {
 
     @Autowired
     private NotificationFactory notificationFactory;
@@ -125,10 +130,27 @@ abstract public class GridView<D> extends VerticalLayout implements HasDynamicTi
         }
     }
 
+    protected void configureGridColumns(List<ColumnConfig> configList){
+        grid.setColumns();
+        for (ColumnConfig config : configList) {
+            grid
+                    .addColumn((D d) -> {return d.get(new ArrayDeque<String>(config.getPath()));})
+                    .setHeader(getTranslation(config.getCode()));
+        }
+        grid.getColumns().forEach(column -> column.setAutoWidth(true));
+    }
+
     protected abstract Result<?> updateListImpl();
     protected abstract void configureGrid();
     protected abstract void configureForm();
     protected abstract void add();
     protected abstract Result<Void> delete(D domain);
     protected abstract Result<D> save(D domain);
+
+    @RequiredArgsConstructor
+    @Getter
+    public static class ColumnConfig{
+        private final String code;
+        private final List<String> path;
+    }
 }

@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.domains.payment;
 
+import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.domains.place.Place;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.domains.product.Product;
@@ -10,10 +11,8 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public class Payment {
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class Payment extends AbstractDomain {
     private Place place;
     private Float amount;
     private Measure measure;
@@ -31,5 +30,10 @@ public class Payment {
         price = entity.getPrice();
         currency = entity.getCurrency();
         createdAt = entity.getCreatedAt();
+    }
+
+    @Override
+    public String getInfo() {
+        return getId().toString();
     }
 }
