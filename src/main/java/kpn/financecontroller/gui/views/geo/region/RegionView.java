@@ -7,9 +7,6 @@ import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.services.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -47,7 +44,10 @@ final public class RegionView extends GridView<Region>{
         grid.setColumns();
         grid.addColumn(Region::getId).setHeader(getTranslation("gui.header.id"));
         grid.addColumn(Region::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(region -> region.getCountry().getName()).setHeader(getTranslation("gui.header.country"));
+        grid.addColumn(
+                r -> {return r.getCountry() != null && r.getCountry().getName() != null ? r.getCountry().getName() : "-";}
+                )
+                .setHeader(getTranslation("gui.header.country"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
