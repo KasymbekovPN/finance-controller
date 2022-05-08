@@ -47,9 +47,12 @@ final public class CityView extends GridView<City> {
         grid.setColumns();
         grid.addColumn(City::getId).setHeader(getTranslation("gui.header.id"));
         grid.addColumn(City::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(city -> city.getRegion().getName()).setHeader(getTranslation("gui.header.region"));
-        grid.addColumn(city -> city.getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
-
+        grid.addColumn(
+                city -> {return city.getRegion() != null && city.getRegion().getName() != null ? city.getRegion().getName() : "-";}
+        ).setHeader(getTranslation("gui.header.region"));
+        grid.addColumn(
+                city -> {return city.getRegion() != null && city.getRegion().getCountry() != null && city.getRegion().getCountry().getName() != null ? city.getRegion().getCountry().getName() : "-";}
+        ).setHeader(getTranslation("gui.header.country"));
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
