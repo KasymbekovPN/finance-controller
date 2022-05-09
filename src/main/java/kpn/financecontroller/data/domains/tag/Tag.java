@@ -5,7 +5,6 @@ import kpn.financecontroller.data.entities.tag.TagEntity;
 import lombok.*;
 
 import java.util.Map;
-import java.util.Queue;
 import java.util.function.Function;
 
 @Setter
@@ -13,13 +12,21 @@ import java.util.function.Function;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Tag extends AbstractDomain {
-    private static final Map<String, Function<Tag, String>> GETTERS = Map.of(
+    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
             "id",
-            tag -> {return tag.getId() != null ? tag.getId().toString() : DEFAULT_GETTING_RESULT;},
+            arg -> {
+                Long id = arg.getDomain().getId();
+                return arg.getPath().isEmpty() && id != null
+                        ? id.toString()
+                        : DEFAULT_GETTING_RESULT;
+            },
             "name",
-            tag -> {
-                String name = tag.getName();
-                return name != null && !name.isEmpty() ? name : DEFAULT_GETTING_RESULT;
+            arg -> {
+                Tag domain = (Tag) arg.getDomain();
+                String name = domain.getName();
+                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
+                        ? name
+                        : DEFAULT_GETTING_RESULT;
             }
     );
 
@@ -36,14 +43,8 @@ public class Tag extends AbstractDomain {
     }
 
     @Override
-    public String get(Queue<String> path) {
-        if (path.size() == 1){
-            String key = path.poll();
-            if (GETTERS.containsKey(key)){
-                return GETTERS.get(key).apply(this);
-            }
-        }
-        return DEFAULT_GETTING_RESULT;
+    protected Map<String, Function<GetterArg, String>> takeGetters() {
+        return GETTERS;
     }
 
     @Override

@@ -5,7 +5,6 @@ import kpn.financecontroller.data.entities.country.CountryEntity;
 import lombok.*;
 
 import java.util.Map;
-import java.util.Queue;
 import java.util.function.Function;
 
 @Getter
@@ -14,13 +13,21 @@ import java.util.function.Function;
 @EqualsAndHashCode(callSuper = true)
 public class Country extends AbstractDomain {
 
-    private static final Map<String, Function<Country, String>> GETTERS = Map.of(
+    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
             "id",
-            country -> {return country.getId() != null ? country.getId().toString() : DEFAULT_GETTING_RESULT;},
+            arg -> {
+                Long id = arg.getDomain().getId();
+                return arg.getPath().isEmpty() && id != null
+                        ? id.toString()
+                        : DEFAULT_GETTING_RESULT;
+            },
             "name",
-            country -> {
-                String name = country.getName();
-                return name != null && !name.isEmpty() ? name : DEFAULT_GETTING_RESULT;
+            arg -> {
+                Country domain = (Country) arg.getDomain();
+                String name = domain.getName();
+                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
+                        ? name
+                        : DEFAULT_GETTING_RESULT;
             }
     );
 
@@ -37,13 +44,7 @@ public class Country extends AbstractDomain {
     }
 
     @Override
-    public String get(Queue<String> path) {
-        if (path.size() == 1){
-            String key = path.poll();
-            if (GETTERS.containsKey(key)){
-                return GETTERS.get(key).apply(this);
-            }
-        }
-        return DEFAULT_GETTING_RESULT;
+    protected Map<String, Function<GetterArg, String>> takeGetters() {
+        return GETTERS;
     }
 }

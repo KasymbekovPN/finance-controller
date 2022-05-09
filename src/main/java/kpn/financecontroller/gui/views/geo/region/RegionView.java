@@ -20,6 +20,11 @@ import java.util.List;
 @Route(value = "region", layout = MainLayout.class)
 @PermitAll
 final public class RegionView extends GridView<Region>{
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.country", List.of("country", "name"))
+    );
 
     @Autowired
     private DTOService<Region, RegionEntity, Long> regionService;
@@ -40,16 +45,7 @@ final public class RegionView extends GridView<Region>{
         grid = new Grid<>(Region.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Region::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Region::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(
-                r -> {return r.getCountry() != null && r.getCountry().getName() != null ? r.getCountry().getName() : "-";}
-                )
-                .setHeader(getTranslation("gui.header.country"));
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
