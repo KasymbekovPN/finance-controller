@@ -24,6 +24,11 @@ import java.util.List;
 @Route(value = "product", layout = MainLayout.class)
 @PermitAll
 final public class ProductView extends GridView<Product> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.tags", List.of("tags"))
+    );
 
     @Autowired
     private DTOService<Product, ProductEntity, Long> service;
@@ -44,14 +49,7 @@ final public class ProductView extends GridView<Product> {
         grid = new Grid<>(Product.class);
         grid.addClassName("product-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Product::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Product::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(Product::getInfo).setHeader(getTranslation("gui.header.tags"));
-
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
