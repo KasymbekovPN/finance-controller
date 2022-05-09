@@ -23,6 +23,11 @@ import java.util.List;
 @PermitAll
 final public class CountryView extends GridView<Country>{
 
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name"))
+    );
+
     @Autowired
     private DTOService<Country, CountryEntity, Long> countryService;
 
@@ -40,12 +45,7 @@ final public class CountryView extends GridView<Country>{
         grid = new Grid<>(Country.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Country::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Country::getInfo).setHeader(getTranslation("gui.header.name"));
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
