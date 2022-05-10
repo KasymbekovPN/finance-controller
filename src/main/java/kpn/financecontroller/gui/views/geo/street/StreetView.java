@@ -23,6 +23,13 @@ import java.util.List;
 @Route(value = "street", layout = MainLayout.class)
 @PermitAll
 final public class StreetView extends GridView<Street>{
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.city", List.of("city", "name")),
+            new ColumnConfig("gui.header.region", List.of("city", "region", "name")),
+            new ColumnConfig("gui.header.country", List.of("city", "region", "country", "name"))
+    );
 
     @Autowired
     private DTOService<Street, StreetEntity, Long> streetService;
@@ -43,15 +50,15 @@ final public class StreetView extends GridView<Street>{
         grid = new Grid<>(Street.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Street::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Street::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(street -> street.getCity().getName()).setHeader(getTranslation("gui.header.city"));
-        grid.addColumn(street -> street.getCity().getRegion().getName()).setHeader(getTranslation("gui.header.region"));
-        grid.addColumn(street -> street.getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
+        // TODO: 10.05.2022 del
+//        grid.setColumns();
+//        grid.addColumn(Street::getId).setHeader(getTranslation("gui.header.id"));
+//        grid.addColumn(Street::getName).setHeader(getTranslation("gui.header.name"));
+//        grid.addColumn(street -> street.getCity().getName()).setHeader(getTranslation("gui.header.city"));
+//        grid.addColumn(street -> street.getCity().getRegion().getName()).setHeader(getTranslation("gui.header.region"));
+//        grid.addColumn(street -> street.getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
+//        grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 

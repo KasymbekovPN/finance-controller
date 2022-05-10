@@ -1,35 +1,52 @@
 package kpn.financecontroller.data.domains.street;
 
 import kpn.financecontroller.data.domains.city.City;
-import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.data.domains.region.Region;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.mockito.Mockito;
+
+import java.util.ArrayDeque;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StreetTest {
+
+    private static final String CITY_GET_INFO_ANSWER = "city getInfo answer";
+
     @Test
     void shouldInfoGetting() {
-        String countryName = "country.name";
-        Country country = new Country();
-        country.setName(countryName);
-
-        String regionName = "region.name";
-        Region region = new Region();
-        region.setName(regionName);
-        region.setCountry(country);
-
-        String cityName = "city.name";
-        City city = new City();
-        city.setName(cityName);
-        city.setRegion(region);
-
         Street street = new Street();
         String streetName = "street.name";
         street.setName(streetName);
-        street.setCity(city);
+        street.setCity(createCity(""));
 
-        String expected = streetName + ", " + cityName + ", " + regionName + ", " + countryName;
+        String expected = streetName + ", " + CITY_GET_INFO_ANSWER;
         assertThat(expected).isEqualTo(street.getInfo());
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckGetting.csv")
+    void shouldCheckGetting(Long id, String name, String cityAnswer, String rawPath, String expectedResult) {
+        ArrayDeque<String> path = new ArrayDeque<>(List.of(rawPath.split("\\.")));
+        Street domain = new Street();
+        domain.setId(id);
+        domain.setName(name);
+        domain.setCity(createCity(cityAnswer));
+
+        String result = domain.get(path);
+        assertThat(expectedResult).isEqualTo(result);
+    }
+
+    private City createCity(String cityAnswer) {
+        City city = Mockito.mock(City.class);
+        Mockito
+                .when(city.get(Mockito.any()))
+                .thenReturn(cityAnswer);
+        Mockito
+                .when(city.getInfo())
+                .thenReturn(CITY_GET_INFO_ANSWER);
+        return city;
     }
 }
