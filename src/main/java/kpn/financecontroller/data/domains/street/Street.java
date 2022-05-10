@@ -1,7 +1,6 @@
 package kpn.financecontroller.data.domains.street;
 
 import kpn.financecontroller.data.domains.AbstractDomain;
-import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.domains.city.City;
 import lombok.*;

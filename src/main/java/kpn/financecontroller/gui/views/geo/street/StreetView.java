@@ -7,9 +7,6 @@ import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.services.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -51,14 +48,6 @@ final public class StreetView extends GridView<Street>{
         grid.addClassName("country-grid");
         grid.setSizeFull();
         configureGridColumns(COLUMN_CONFIGS);
-        // TODO: 10.05.2022 del
-//        grid.setColumns();
-//        grid.addColumn(Street::getId).setHeader(getTranslation("gui.header.id"));
-//        grid.addColumn(Street::getName).setHeader(getTranslation("gui.header.name"));
-//        grid.addColumn(street -> street.getCity().getName()).setHeader(getTranslation("gui.header.city"));
-//        grid.addColumn(street -> street.getCity().getRegion().getName()).setHeader(getTranslation("gui.header.region"));
-//        grid.addColumn(street -> street.getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
-//        grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
