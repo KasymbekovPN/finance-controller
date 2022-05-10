@@ -1,0 +1,8 @@
+1,some name,false,address answer,id,1
+1,some name,false,address answer,id.innerId,-
+1,some name,false,address answer,name,some name
+1,some name,false,address answer,name.innerName,-
+1,some name,false,address answer,online,false
+1,some name,false,address answer,online.innerName,-
+1,some name,false,address answer,address,address answer
+1,some name,false,address answer,address.innerAddress,-

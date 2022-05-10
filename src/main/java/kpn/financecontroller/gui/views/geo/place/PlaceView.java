@@ -22,6 +22,12 @@ import java.util.List;
 @Route(value = "place", layout = MainLayout.class)
 @PermitAll
 final public class PlaceView extends GridView<Place> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.online", List.of("online")),
+            new ColumnConfig("gui.header.address", List.of("address"))
+    );
 
     @Autowired
     private DTOService<Place, PlaceEntity, Long> placeService;
@@ -42,14 +48,7 @@ final public class PlaceView extends GridView<Place> {
         grid = new Grid<>(Place.class);
         grid.addClassName("address-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Place::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Place::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(Place::isOnline).setHeader(getTranslation("gui.header.online"));
-        grid.addColumn(p -> {return p.getAddress() != null ? p.getAddress().getInfo() : "-";}).setHeader(getTranslation("gui.header.address"));
-
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
