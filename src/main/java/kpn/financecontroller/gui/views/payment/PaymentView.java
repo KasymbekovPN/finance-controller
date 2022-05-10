@@ -22,6 +22,16 @@ import java.util.List;
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 final public class PaymentView extends GridView<Payment> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.product", List.of("product", "name")),
+            new ColumnConfig("gui.header.price", List.of("price")),
+            new ColumnConfig("gui.header.currency", List.of("currency")),
+            new ColumnConfig("gui.header.amount", List.of("amount")),
+            new ColumnConfig("gui.header.measure", List.of("measure")),
+            new ColumnConfig("gui.header.place", List.of("place", "name")),
+            new ColumnConfig("gui.header.createdAt", List.of("createdAt"))
+    );
 
     @Autowired
     private DTOService<Payment, PaymentEntity, Long> paymentService;
@@ -44,19 +54,7 @@ final public class PaymentView extends GridView<Payment> {
         grid = new Grid<>(Payment.class);
         grid.addClassName("payment-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Payment::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(p -> p.getProduct().getName()).setHeader(getTranslation("gui.header.product"));
-        grid.addColumn(Payment::getPrice).setHeader(getTranslation("gui.header.price"));
-        grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.header.currency"));
-        grid.addColumn(p -> {return p.getMeasure() != null ? p.getMeasure().name() : "-";}).setHeader(getTranslation("gui.header.amount"));
-        grid.addColumn(p -> {return p.getAmount() != null ? p.getAmount() : "-";}).setHeader(getTranslation("gui.header.measure"));
-        grid.addColumn(p -> {return p.getPlace() != null ? p.getPlace().getName() : "-";}).setHeader(getTranslation("gui.header.place"));
-        grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.header.createdAt"));
-
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 

@@ -28,10 +28,7 @@ public abstract class AbstractDomain implements Domain {
         return DEFAULT_GETTING_RESULT;
     }
 
-    // TODO: 09.05.2022 will do it abstract
-    protected Map<String, Function<GetterArg, String>> takeGetters(){
-        return null;
-    }
+    abstract protected Map<String, Function<GetterArg, String>> takeGetters();
 
     @RequiredArgsConstructor
     @Getter
