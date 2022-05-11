@@ -29,7 +29,7 @@ class BeforeStreetSavingCheckerTest {
     }
 
     @Test
-    void shouldCheck_whenRegionNull() {
+    void shouldCheck_whenCityNull() {
         Street domain = new Builder().name("name").build();
         ImmutableResult<Street> expectedResult = ImmutableResult.<Street>fail("checking.domain.street.city.isEmpty").build();
 
