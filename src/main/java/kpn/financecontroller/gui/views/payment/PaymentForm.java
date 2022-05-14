@@ -20,13 +20,11 @@ import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
+import kpn.financecontroller.gui.status.AttributeProcessor;
+import kpn.financecontroller.gui.status.OptionalAttributeProcessor;
 import kpn.financecontroller.gui.views.EditForm;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 final public class PaymentForm extends EditForm<Payment> {
     private final ComboBox<Product> product = new ComboBox<>();
@@ -41,29 +39,17 @@ final public class PaymentForm extends EditForm<Payment> {
     private final Checkbox amountCheckBox = new Checkbox();
     private final Checkbox sellerCheckBox = new Checkbox();
 
-    private final PresenceStatus measurePresenceStatus = new PresenceStatus(
-            payment -> {
-                return payment != null && payment.getMeasure() != null;
-            },
-            payment -> {
-                payment.setMeasure(null);
-            }
+    private final AttributeProcessor<Boolean, Payment> amountOptionalAttributeProcessor = new OptionalAttributeProcessor<>(
+            payment -> {return payment != null && payment.getAmount() != null;},
+            payment -> {payment.setAmount(null);}
     );
-    private final PresenceStatus amountPresenceStatus = new PresenceStatus(
-            payment -> {
-                return payment != null && payment.getAmount() != null;
-            },
-            payment -> {
-                payment.setAmount(null);
-            }
+    private final AttributeProcessor<Boolean, Payment> measureOptionalAttributeProcessor = new OptionalAttributeProcessor<>(
+            payment -> {return payment != null && payment.getMeasure() != null;},
+            payment -> {payment.setMeasure(null);}
     );
-    private final PresenceStatus sellerPresenceStatus = new PresenceStatus(
-            payment -> {
-                return payment != null && payment.getSeller() != null;
-            },
-            payment -> {
-                payment.setSeller(null);
-            }
+    private final AttributeProcessor<Boolean, Payment> sellerOptionalAttributeProcessor = new OptionalAttributeProcessor<>(
+            payment -> {return payment != null && payment.getSeller() != null;},
+            payment -> {payment.setSeller(null);}
     );
 
     public PaymentForm(List<Product> products,
@@ -101,9 +87,9 @@ final public class PaymentForm extends EditForm<Payment> {
                 product,
                 price,
                 currency,
-                createOptionalLine(amountCheckBox, amount, amountPresenceStatus::set),
-                createOptionalLine(measureCheckBox, measure, measurePresenceStatus::set),
-                createOptionalLine(sellerCheckBox, seller, sellerPresenceStatus::set),
+                createOptionalLine(amountCheckBox, amount, this::setAmountStatus),
+                createOptionalLine(measureCheckBox, measure, this::setMeasureStatus),
+                createOptionalLine(sellerCheckBox, seller, this::setSellerStatus),
                 createdAt,
                 createButtonsLayout()
         );
@@ -111,13 +97,13 @@ final public class PaymentForm extends EditForm<Payment> {
 
     @Override
     public void setValue(Payment value) {
-        measurePresenceStatus.calculate(value);
-        amountPresenceStatus.calculate(value);
-        sellerPresenceStatus.calculate(value);
+        measureOptionalAttributeProcessor.calculate(value);
+        amountOptionalAttributeProcessor.calculate(value);
+        sellerOptionalAttributeProcessor.calculate(value);
 
-        measureCheckBox.setValue(measurePresenceStatus.getStatus());
-        amountCheckBox.setValue(amountPresenceStatus.getStatus());
-        sellerCheckBox.setValue(sellerPresenceStatus.getStatus());
+        measureCheckBox.setValue(measureOptionalAttributeProcessor.getStatus());
+        amountCheckBox.setValue(amountOptionalAttributeProcessor.getStatus());
+        sellerCheckBox.setValue(sellerOptionalAttributeProcessor.getStatus());
 
         super.setValue(value);
     }
@@ -131,9 +117,9 @@ final public class PaymentForm extends EditForm<Payment> {
 
     @Override
     protected SaveFormEvent<EditForm<Payment>, Payment> createSaveEvent() {
-        measurePresenceStatus.clear(value);
-        amountPresenceStatus.clear(value);
-        sellerPresenceStatus.clear(value);
+        measureOptionalAttributeProcessor.clear(value);
+        amountOptionalAttributeProcessor.clear(value);
+        sellerOptionalAttributeProcessor.clear(value);
 
         return new PaymentSaveFormEvent(this, value);
     }
@@ -169,36 +155,28 @@ final public class PaymentForm extends EditForm<Payment> {
     private static class StringFloatConverter implements Converter<String, Float>{
         @Override
         public Result<Float> convertToModel(String value, ValueContext context) {
-            return Result.<Float>ok(value != null && !value.isEmpty() ? Float.parseFloat(value) : 0.0f);
+            try{
+                return Result.<Float>ok(Float.parseFloat(value));
+            } catch (NumberFormatException ex){
+                return Result.<Float>ok(0.0f);
+            }
         }
 
         @Override
         public String convertToPresentation(Float value, ValueContext context) {
-            return value != null ? String.valueOf(value) : "";
+            return value != null ? String.valueOf(value) : "0.0";
         }
     }
 
-    // TODO: 12.05.2022 del
-    @RequiredArgsConstructor
-    private static class PresenceStatus{
-        private final Function<Payment, Boolean> calculationFunc;
-        private final Consumer<Payment> clearFunc;
+    private void setAmountStatus(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        amountOptionalAttributeProcessor.setStatus(event.getValue());
+    }
 
-        @Getter
-        private Boolean status = false;
+    private void setMeasureStatus(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        measureOptionalAttributeProcessor.setStatus(event.getValue());
+    }
 
-        private void set(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-            status = event.getValue();
-        }
-
-        private void calculate(Payment payment){
-            status = calculationFunc.apply(payment);
-        }
-
-        private void clear(Payment payment){
-            if (!status){
-                clearFunc.accept(payment);
-            }
-        }
+    private void setSellerStatus(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        sellerOptionalAttributeProcessor.setStatus(event.getValue());
     }
 }
