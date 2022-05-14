@@ -15,7 +15,7 @@ import com.vaadin.flow.data.converter.Converter;
 import kpn.financecontroller.data.domains.payment.Currency;
 import kpn.financecontroller.data.domains.payment.Measure;
 import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
@@ -30,7 +30,7 @@ import java.util.function.Function;
 
 final public class PaymentForm extends EditForm<Payment> {
     private final ComboBox<Product> product = new ComboBox<>();
-    private final ComboBox<Place> place = new ComboBox<>();
+    private final ComboBox<Seller> seller = new ComboBox<>();
     private final TextField amount = new TextField();
     private final ComboBox<Measure> measure = new ComboBox<>();
     private final TextField price = new TextField();
@@ -39,7 +39,7 @@ final public class PaymentForm extends EditForm<Payment> {
 
     private final Checkbox measureCheckBox = new Checkbox();
     private final Checkbox amountCheckBox = new Checkbox();
-    private final Checkbox placeCheckBox = new Checkbox();
+    private final Checkbox sellerCheckBox = new Checkbox();
 
     private final PresenceStatus measurePresenceStatus = new PresenceStatus(
             payment -> {
@@ -57,22 +57,22 @@ final public class PaymentForm extends EditForm<Payment> {
                 payment.setAmount(null);
             }
     );
-    private final PresenceStatus placePresenceStatus = new PresenceStatus(
+    private final PresenceStatus sellerPresenceStatus = new PresenceStatus(
             payment -> {
-                return payment != null && payment.getPlace() != null;
+                return payment != null && payment.getSeller() != null;
             },
             payment -> {
-                payment.setPlace(null);
+                payment.setSeller(null);
             }
     );
 
     public PaymentForm(List<Product> products,
-                       List<Place> places) {
+                       List<Seller> sellers) {
         super(new Binder<>(Payment.class));
         addClassName("payment-form");
 
         product.setLabel(getTranslation("gui.label.product"));
-        place.setLabel(getTranslation("gui.label.place"));
+        seller.setLabel(getTranslation("gui.label.seller"));
         amount.setLabel(getTranslation("gui.label.amount"));
         measure.setLabel(getTranslation("gui.label.measure"));
         price.setLabel(getTranslation("gui.label.price"));
@@ -91,8 +91,8 @@ final public class PaymentForm extends EditForm<Payment> {
         product.setItems(products);
         product.setItemLabelGenerator(Product::getName);
 
-        place.setItems(places);
-        place.setItemLabelGenerator(Place::getName);
+        seller.setItems(sellers);
+        seller.setItemLabelGenerator(Seller::getName);
 
         measure.setItems(Measure.values());
         currency.setItems(Currency.values());
@@ -103,7 +103,7 @@ final public class PaymentForm extends EditForm<Payment> {
                 currency,
                 createOptionalLine(amountCheckBox, amount, amountPresenceStatus::set),
                 createOptionalLine(measureCheckBox, measure, measurePresenceStatus::set),
-                createOptionalLine(placeCheckBox, place, placePresenceStatus::set),
+                createOptionalLine(sellerCheckBox, seller, sellerPresenceStatus::set),
                 createdAt,
                 createButtonsLayout()
         );
@@ -113,11 +113,11 @@ final public class PaymentForm extends EditForm<Payment> {
     public void setValue(Payment value) {
         measurePresenceStatus.calculate(value);
         amountPresenceStatus.calculate(value);
-        placePresenceStatus.calculate(value);
+        sellerPresenceStatus.calculate(value);
 
         measureCheckBox.setValue(measurePresenceStatus.getStatus());
         amountCheckBox.setValue(amountPresenceStatus.getStatus());
-        placeCheckBox.setValue(placePresenceStatus.getStatus());
+        sellerCheckBox.setValue(sellerPresenceStatus.getStatus());
 
         super.setValue(value);
     }
@@ -133,7 +133,7 @@ final public class PaymentForm extends EditForm<Payment> {
     protected SaveFormEvent<EditForm<Payment>, Payment> createSaveEvent() {
         measurePresenceStatus.clear(value);
         amountPresenceStatus.clear(value);
-        placePresenceStatus.clear(value);
+        sellerPresenceStatus.clear(value);
 
         return new PaymentSaveFormEvent(this, value);
     }
@@ -178,6 +178,7 @@ final public class PaymentForm extends EditForm<Payment> {
         }
     }
 
+    // TODO: 12.05.2022 del
     @RequiredArgsConstructor
     private static class PresenceStatus{
         private final Function<Payment, Boolean> calculationFunc;

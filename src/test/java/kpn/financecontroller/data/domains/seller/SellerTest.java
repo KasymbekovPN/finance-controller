@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.domains.place;
+package kpn.financecontroller.data.domains.seller;
 
 import kpn.financecontroller.data.domains.address.Address;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,16 +10,23 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PlaceTest {
+class SellerTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckGetting.csv")
-    void shouldCheckGetting(Long id, String name, boolean online, String addressAnswer, String rawPath, String expectedResult) {
+    void shouldCheckGetting(Long id,
+                            String name,
+                            String url,
+                            String description,
+                            String addressAnswer,
+                            String rawPath,
+                            String expectedResult) {
         ArrayDeque<String> path = new ArrayDeque<>(List.of(rawPath.split("\\.")));
-        Place domain = new Place();
+        Seller domain = new Seller();
         domain.setId(id);
         domain.setName(name);
-        domain.setOnline(online);
+        domain.setUrl(url);
+        domain.setDescription(description);
         domain.setAddress(createAddress(addressAnswer));
 
         String result = domain.get(path);

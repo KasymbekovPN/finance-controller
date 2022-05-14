@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.domains.payment;
 
 import kpn.financecontroller.data.domains.AbstractDomain;
-import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.domains.product.Product;
 import lombok.*;
@@ -64,12 +64,12 @@ public class Payment extends AbstractDomain {
                         ? measure.name()
                         : DEFAULT_GETTING_RESULT;
             },
-            "place",
+            "seller",
             arg -> {
-                Place place = ((Payment) arg.getDomain()).getPlace();
+                Seller seller = ((Payment) arg.getDomain()).getSeller();
                 Queue<String> path = arg.getPath();
-                return !path.isEmpty() && place != null
-                        ? place.get(path)
+                return !path.isEmpty() && seller != null
+                        ? seller.get(path)
                         : DEFAULT_GETTING_RESULT;
             },
             "createdAt",
@@ -81,7 +81,7 @@ public class Payment extends AbstractDomain {
             }
     );
 
-    private Place place;
+    private Seller seller;
     private Float amount;
     private Measure measure;
     private Float price;
@@ -91,7 +91,7 @@ public class Payment extends AbstractDomain {
 
     public Payment(PaymentEntity entity) {
         id = entity.getId();
-        place = entity.getPlaceEntity() != null ? new Place(entity.getPlaceEntity()) : null;
+        seller = entity.getSellerEntity() != null ? new Seller(entity.getSellerEntity()) : null;
         product = entity.getProductEntity() != null ? new Product(entity.getProductEntity()) : null;
         amount = entity.getAmount();
         measure = entity.getMeasure();

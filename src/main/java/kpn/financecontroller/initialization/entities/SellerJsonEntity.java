@@ -5,8 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-final public class PlaceJsonEntity extends AbstractJsonEntity{
+final public class SellerJsonEntity extends AbstractJsonEntity{
     private String name;
-    private Boolean online;
+    private String url;
+    private String description;
     private Long addressId;
 }

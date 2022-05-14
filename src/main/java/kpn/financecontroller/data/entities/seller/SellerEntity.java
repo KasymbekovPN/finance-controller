@@ -1,6 +1,6 @@
-package kpn.financecontroller.data.entities.place;
+package kpn.financecontroller.data.entities.seller;
 
-import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import lombok.Getter;
@@ -16,23 +16,26 @@ import javax.validation.constraints.Size;
 @Setter
 @Getter
 @NoArgsConstructor
-@Entity(name = "places")
-public class PlaceEntity extends AbstractEntity {
+@Entity(name = "sellers")
+public class SellerEntity extends AbstractEntity {
 
     @NotEmpty
     @Size(max = 64)
     private String name;
-
-    private boolean online;
+    @Size(max = 1024)
+    private String url;
+    @Size(max = 1024)
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
     private AddressEntity addressEntity;
 
-    public PlaceEntity(Place place) {
-        id = place.getId();
-        name = place.getName();
-        online = place.isOnline();
-        addressEntity = place.getAddress() != null ? new AddressEntity(place.getAddress()) : null;
+    public SellerEntity(Seller seller) {
+        id = seller.getId();
+        name = seller.getName();
+        url = seller.getUrl();
+        description = seller.getDescription();
+        addressEntity = seller.getAddress() != null ? new AddressEntity(seller.getAddress()) : null;
     }
 }

@@ -3,10 +3,10 @@ package kpn.financecontroller.gui.views.payment;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
-import kpn.financecontroller.data.entities.place.PlaceEntity;
+import kpn.financecontroller.data.entities.seller.SellerEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.views.GridView;
@@ -29,14 +29,14 @@ final public class PaymentView extends GridView<Payment> {
             new ColumnConfig("gui.header.currency", List.of("currency")),
             new ColumnConfig("gui.header.amount", List.of("amount")),
             new ColumnConfig("gui.header.measure", List.of("measure")),
-            new ColumnConfig("gui.header.place", List.of("place", "name")),
+            new ColumnConfig("gui.header.seller", List.of("seller", "name")),
             new ColumnConfig("gui.header.createdAt", List.of("createdAt"))
     );
 
     @Autowired
     private DTOService<Payment, PaymentEntity, Long> paymentService;
     @Autowired
-    private DTOService<Place, PlaceEntity, Long> placeService;
+    private DTOService<Seller, SellerEntity, Long> sellerService;
     @Autowired
     private DTOService<Product, ProductEntity, Long> productService;
 
@@ -62,7 +62,7 @@ final public class PaymentView extends GridView<Payment> {
     protected void configureForm() {
         form = new PaymentForm(
                 productService.loader().all().getValue(),
-                placeService.loader().all().getValue()
+                sellerService.loader().all().getValue()
         );
         form.setWidth("25em");
 

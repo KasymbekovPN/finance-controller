@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.domains.payment;
 
-import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.product.Product;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -22,7 +22,7 @@ class PaymentTest {
                             Currency currency,
                             float amount,
                             Measure measure,
-                            String placeAnswer,
+                            String sellerAnswer,
                             String rawLocalDate,
                             String rawPath,
                             String expectedResult) {
@@ -34,7 +34,7 @@ class PaymentTest {
         domain.setCurrency(currency);
         domain.setAmount(amount);
         domain.setMeasure(measure);
-        domain.setPlace(createPlace(placeAnswer));
+        domain.setSeller(createSeller(sellerAnswer));
         domain.setCreatedAt(LocalDate.parse(rawLocalDate));
 
         String result = domain.get(path);
@@ -49,11 +49,11 @@ class PaymentTest {
         return product;
     }
 
-    private Place createPlace(String placeAnswer) {
-        Place place = Mockito.mock(Place.class);
+    private Seller createSeller(String placeAnswer) {
+        Seller seller = Mockito.mock(Seller.class);
         Mockito
-                .when(place.get(Mockito.any()))
+                .when(seller.get(Mockito.any()))
                 .thenReturn(placeAnswer);
-        return place;
+        return seller;
     }
 }
