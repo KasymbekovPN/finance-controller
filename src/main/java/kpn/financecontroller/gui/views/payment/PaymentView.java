@@ -3,15 +3,12 @@ package kpn.financecontroller.gui.views.payment;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
-import kpn.financecontroller.data.entities.place.PlaceEntity;
+import kpn.financecontroller.data.entities.seller.SellerEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -25,11 +22,21 @@ import java.util.List;
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 final public class PaymentView extends GridView<Payment> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.product", List.of("product", "name")),
+            new ColumnConfig("gui.header.price", List.of("price")),
+            new ColumnConfig("gui.header.currency", List.of("currency")),
+            new ColumnConfig("gui.header.amount", List.of("amount")),
+            new ColumnConfig("gui.header.measure", List.of("measure")),
+            new ColumnConfig("gui.header.seller", List.of("seller", "name")),
+            new ColumnConfig("gui.header.createdAt", List.of("createdAt"))
+    );
 
     @Autowired
     private DTOService<Payment, PaymentEntity, Long> paymentService;
     @Autowired
-    private DTOService<Place, PlaceEntity, Long> placeService;
+    private DTOService<Seller, SellerEntity, Long> sellerService;
     @Autowired
     private DTOService<Product, ProductEntity, Long> productService;
 
@@ -47,19 +54,7 @@ final public class PaymentView extends GridView<Payment> {
         grid = new Grid<>(Payment.class);
         grid.addClassName("payment-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Payment::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(p -> p.getProduct().getName()).setHeader(getTranslation("gui.header.product"));
-        grid.addColumn(Payment::getPrice).setHeader(getTranslation("gui.header.price"));
-        grid.addColumn(p -> p.getCurrency().name()).setHeader(getTranslation("gui.header.currency"));
-        grid.addColumn(p -> {return p.getMeasure() != null ? p.getMeasure().name() : "-";}).setHeader(getTranslation("gui.header.amount"));
-        grid.addColumn(p -> {return p.getAmount() != null ? p.getAmount() : "-";}).setHeader(getTranslation("gui.header.measure"));
-        grid.addColumn(p -> p.getPlace().getName()).setHeader(getTranslation("gui.header.place"));
-        grid.addColumn(Payment::getCreatedAt).setHeader(getTranslation("gui.header.createdAt"));
-
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -67,12 +62,12 @@ final public class PaymentView extends GridView<Payment> {
     protected void configureForm() {
         form = new PaymentForm(
                 productService.loader().all().getValue(),
-                placeService.loader().all().getValue()
+                sellerService.loader().all().getValue()
         );
         form.setWidth("25em");
 
-        form.addListener(PaymentForm.PaymentSaveFormEvent.class, this::saveContact);
-        form.addListener(PaymentForm.PaymentDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(PaymentForm.PaymentSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(PaymentForm.PaymentDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(PaymentForm.PaymentCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -83,12 +78,12 @@ final public class PaymentView extends GridView<Payment> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Payment>, Payment> event) {
-        return paymentService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Payment domain) {
+        return paymentService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Payment> handleSaveEvent(SaveFormEvent<EditForm<Payment>, Payment> event) {
-        return paymentService.saver().save(new PaymentEntity(event.getValue()));
+    protected Result<Payment> save(Payment domain) {
+        return paymentService.saver().save(new PaymentEntity(domain));
     }
 }

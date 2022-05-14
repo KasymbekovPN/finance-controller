@@ -4,10 +4,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -21,6 +18,10 @@ import java.util.List;
 @Route(value = "tag", layout = MainLayout.class)
 @PermitAll
 final public class TagView extends GridView<Tag> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name"))
+    );
 
     @Autowired
     private DTOService<Tag, TagEntity, Long> tagService;
@@ -39,12 +40,7 @@ final public class TagView extends GridView<Tag> {
         grid = new Grid<>(Tag.class);
         grid.addClassName("tag-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Tag::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Tag::getInfo).setHeader(getTranslation("gui.header.name"));
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -53,8 +49,8 @@ final public class TagView extends GridView<Tag> {
         form = new TagForm();
         form.setWidth("25em");
 
-        form.addListener(TagForm.TagSaveFormEvent.class, this::saveContact);
-        form.addListener(TagForm.TagDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(TagForm.TagSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(TagForm.TagDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(TagForm.TagCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -65,12 +61,12 @@ final public class TagView extends GridView<Tag> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Tag>, Tag> event) {
-        return tagService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Tag domain) {
+        return tagService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Tag> handleSaveEvent(SaveFormEvent<EditForm<Tag>, Tag> event) {
-        return tagService.saver().save(new TagEntity(event.getValue()));
+    protected Result<Tag> save(Tag domain) {
+        return tagService.saver().save(new TagEntity(domain));
     }
 }

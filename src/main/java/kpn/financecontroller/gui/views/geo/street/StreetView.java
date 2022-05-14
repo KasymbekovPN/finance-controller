@@ -6,10 +6,7 @@ import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -23,6 +20,13 @@ import java.util.List;
 @Route(value = "street", layout = MainLayout.class)
 @PermitAll
 final public class StreetView extends GridView<Street>{
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.city", List.of("city", "name")),
+            new ColumnConfig("gui.header.region", List.of("city", "region", "name")),
+            new ColumnConfig("gui.header.country", List.of("city", "region", "country", "name"))
+    );
 
     @Autowired
     private DTOService<Street, StreetEntity, Long> streetService;
@@ -43,15 +47,7 @@ final public class StreetView extends GridView<Street>{
         grid = new Grid<>(Street.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Street::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Street::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(street -> street.getCity().getName()).setHeader(getTranslation("gui.header.city"));
-        grid.addColumn(street -> street.getCity().getRegion().getName()).setHeader(getTranslation("gui.header.region"));
-        grid.addColumn(street -> street.getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -60,8 +56,8 @@ final public class StreetView extends GridView<Street>{
         form = new StreetForm(cityService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(StreetForm.StreetSaveFormEvent.class, this::saveContact);
-        form.addListener(StreetForm.StreetDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(StreetForm.StreetSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(StreetForm.StreetDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(StreetForm.StreetCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -72,12 +68,12 @@ final public class StreetView extends GridView<Street>{
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Street>, Street> event) {
-        return streetService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Street domain) {
+        return streetService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Street> handleSaveEvent(SaveFormEvent<EditForm<Street>, Street> event) {
-        return streetService.saver().save(new StreetEntity(event.getValue()));
+    protected Result<Street> save(Street domain) {
+        return streetService.saver().save(new StreetEntity(domain));
     }
 }

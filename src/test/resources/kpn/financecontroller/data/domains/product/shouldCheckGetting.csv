@@ -1,0 +1,4 @@
+1|some name|tag0.tag1.tag2|id|1
+1|some name|tag0.tag1.tag2|id.innerId|-
+1|some name|tag0.tag1.tag2|name|some name
+1|some name|tag0.tag1.tag2|name.innerName|-

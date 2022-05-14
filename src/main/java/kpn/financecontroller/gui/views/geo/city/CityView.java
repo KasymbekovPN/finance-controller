@@ -6,10 +6,7 @@ import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -23,6 +20,12 @@ import java.util.List;
 @Route(value = "city", layout = MainLayout.class)
 @PermitAll
 final public class CityView extends GridView<City> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.region", List.of("region", "name")),
+            new ColumnConfig("gui.header.country", List.of("region", "country", "name"))
+    );
 
     @Autowired
     private DTOService<City, CityEntity, Long> cityService;
@@ -43,15 +46,7 @@ final public class CityView extends GridView<City> {
         grid = new Grid<>(City.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(City::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(City::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(city -> city.getRegion().getName()).setHeader(getTranslation("gui.header.region"));
-        grid.addColumn(city -> city.getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
-
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -60,8 +55,8 @@ final public class CityView extends GridView<City> {
         form = new CityForm(regionService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(CityForm.CitySaveFormEvent.class, this::saveContact);
-        form.addListener(CityForm.CityDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(CityForm.CitySaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(CityForm.CityDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(CityForm.CityCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -72,12 +67,12 @@ final public class CityView extends GridView<City> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<City>, City> event) {
-        return cityService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(City domain) {
+        return cityService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<City> handleSaveEvent(SaveFormEvent<EditForm<City>, City> event) {
-        return cityService.saver().save(new CityEntity(event.getValue()));
+    protected Result<City> save(City domain) {
+        return cityService.saver().save(new CityEntity(domain));
     }
 }

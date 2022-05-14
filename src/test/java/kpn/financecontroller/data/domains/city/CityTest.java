@@ -3,6 +3,12 @@ package kpn.financecontroller.data.domains.city;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.mockito.Mockito;
+
+import java.util.ArrayDeque;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,5 +31,26 @@ class CityTest {
 
         String expected = cityName + ", " + regionName + ", " + countryName;
         assertThat(expected).isEqualTo(city.getInfo());
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckGetting.csv")
+    void shouldCheckGetting(Long id, String name, String regionAnswer, String rawPath, String expectedResult) {
+        ArrayDeque<String> path = new ArrayDeque<>(List.of(rawPath.split("\\.")));
+        City domain = new City();
+        domain.setId(id);
+        domain.setName(name);
+        domain.setRegion(createRegion(regionAnswer));
+
+        String result = domain.get(path);
+        assertThat(expectedResult).isEqualTo(result);
+    }
+
+    private Region createRegion(String regionAnswer) {
+        Region region = Mockito.mock(Region.class);
+        Mockito
+                .when(region.get(Mockito.any()))
+                .thenReturn(regionAnswer);
+        return region;
     }
 }

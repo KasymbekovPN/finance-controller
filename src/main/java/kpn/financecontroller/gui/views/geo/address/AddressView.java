@@ -6,10 +6,7 @@ import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -23,6 +20,14 @@ import java.util.List;
 @Route(value = "address", layout = MainLayout.class)
 @PermitAll
 final public class AddressView extends GridView<Address> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.street", List.of("street", "name")),
+            new ColumnConfig("gui.header.city", List.of("street", "city", "name")),
+            new ColumnConfig("gui.header.region", List.of("street", "city", "region", "name")),
+            new ColumnConfig("gui.header.country", List.of("street", "city", "region", "country", "name"))
+    );
 
     @Autowired
     private DTOService<Address, AddressEntity, Long> addressService;
@@ -43,16 +48,7 @@ final public class AddressView extends GridView<Address> {
         grid = new Grid<>(Address.class);
         grid.addClassName("address-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Address::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Address::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(b -> b.getStreet().getName()).setHeader(getTranslation("gui.header.street"));
-        grid.addColumn(b -> b.getStreet().getCity().getName()).setHeader(getTranslation("gui.header.city"));
-        grid.addColumn(b -> b.getStreet().getCity().getRegion().getName()).setHeader(getTranslation("gui.header.region"));
-        grid.addColumn(b -> b.getStreet().getCity().getRegion().getCountry().getName()).setHeader(getTranslation("gui.header.country"));
-
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -61,8 +57,8 @@ final public class AddressView extends GridView<Address> {
         form = new AddressForm(streetService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(AddressForm.AddressSaveFormEvent.class, this::saveContact);
-        form.addListener(AddressForm.AddressDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(AddressForm.AddressSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(AddressForm.AddressDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(AddressForm.AddressCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -73,12 +69,12 @@ final public class AddressView extends GridView<Address> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Address>, Address> event) {
-        return addressService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Address domain) {
+        return addressService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Address> handleSaveEvent(SaveFormEvent<EditForm<Address>, Address> event) {
-        return addressService.saver().save(new AddressEntity(event.getValue()));
+    protected Result<Address> save(Address domain) {
+        return addressService.saver().save(new AddressEntity(domain));
     }
 }

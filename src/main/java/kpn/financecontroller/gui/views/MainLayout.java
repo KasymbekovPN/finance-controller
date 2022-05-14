@@ -15,7 +15,7 @@ import kpn.financecontroller.gui.views.geo.address.AddressView;
 import kpn.financecontroller.gui.views.geo.city.CityView;
 import kpn.financecontroller.gui.views.geo.country.CountryView;
 import kpn.financecontroller.gui.views.payment.PaymentView;
-import kpn.financecontroller.gui.views.geo.place.PlaceView;
+import kpn.financecontroller.gui.views.geo.seller.SellerView;
 import kpn.financecontroller.gui.views.product.ProductView;
 import kpn.financecontroller.gui.views.geo.region.RegionView;
 import kpn.financecontroller.gui.views.geo.street.StreetView;
@@ -36,7 +36,7 @@ final public class MainLayout extends AppLayout {
         PaymentView.class,
         ProductView.class,
         TagView.class,
-        PlaceView.class,
+        SellerView.class,
         AddressView.class,
         StreetView.class,
         CityView.class,

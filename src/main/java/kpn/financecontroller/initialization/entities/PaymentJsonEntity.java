@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 final public class PaymentJsonEntity extends AbstractJsonEntity{
-    private Long placeId;
+    private Long sellerId;
     private Long productId;
     private Float amount;
     private Measure measure;

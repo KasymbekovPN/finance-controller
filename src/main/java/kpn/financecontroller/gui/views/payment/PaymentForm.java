@@ -15,18 +15,20 @@ import com.vaadin.flow.data.converter.Converter;
 import kpn.financecontroller.data.domains.payment.Currency;
 import kpn.financecontroller.data.domains.payment.Measure;
 import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.place.Place;
+import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
+import kpn.financecontroller.gui.status.AttributeProcessor;
+import kpn.financecontroller.gui.status.OptionalAttributeProcessor;
 import kpn.financecontroller.gui.views.EditForm;
 
 import java.util.List;
 
 final public class PaymentForm extends EditForm<Payment> {
     private final ComboBox<Product> product = new ComboBox<>();
-    private final ComboBox<Place> place = new ComboBox<>();
+    private final ComboBox<Seller> seller = new ComboBox<>();
     private final TextField amount = new TextField();
     private final ComboBox<Measure> measure = new ComboBox<>();
     private final TextField price = new TextField();
@@ -35,17 +37,28 @@ final public class PaymentForm extends EditForm<Payment> {
 
     private final Checkbox measureCheckBox = new Checkbox();
     private final Checkbox amountCheckBox = new Checkbox();
+    private final Checkbox sellerCheckBox = new Checkbox();
 
-    private boolean measurePresent;
-    private boolean amountPresent;
+    private final AttributeProcessor<Boolean, Payment> amountOptionalAttributeProcessor = new OptionalAttributeProcessor<>(
+            payment -> {return payment != null && payment.getAmount() != null;},
+            payment -> {payment.setAmount(null);}
+    );
+    private final AttributeProcessor<Boolean, Payment> measureOptionalAttributeProcessor = new OptionalAttributeProcessor<>(
+            payment -> {return payment != null && payment.getMeasure() != null;},
+            payment -> {payment.setMeasure(null);}
+    );
+    private final AttributeProcessor<Boolean, Payment> sellerOptionalAttributeProcessor = new OptionalAttributeProcessor<>(
+            payment -> {return payment != null && payment.getSeller() != null;},
+            payment -> {payment.setSeller(null);}
+    );
 
     public PaymentForm(List<Product> products,
-                       List<Place> places) {
+                       List<Seller> sellers) {
         super(new Binder<>(Payment.class));
         addClassName("payment-form");
 
         product.setLabel(getTranslation("gui.label.product"));
-        place.setLabel(getTranslation("gui.label.place"));
+        seller.setLabel(getTranslation("gui.label.seller"));
         amount.setLabel(getTranslation("gui.label.amount"));
         measure.setLabel(getTranslation("gui.label.measure"));
         price.setLabel(getTranslation("gui.label.price"));
@@ -64,8 +77,8 @@ final public class PaymentForm extends EditForm<Payment> {
         product.setItems(products);
         product.setItemLabelGenerator(Product::getName);
 
-        place.setItems(places);
-        place.setItemLabelGenerator(Place::getName);
+        seller.setItems(sellers);
+        seller.setItemLabelGenerator(Seller::getName);
 
         measure.setItems(Measure.values());
         currency.setItems(Currency.values());
@@ -74,9 +87,9 @@ final public class PaymentForm extends EditForm<Payment> {
                 product,
                 price,
                 currency,
-                createOptionalLine(amountCheckBox, amount, this::callOnAmountCheckBoxStateChanging),
-                createOptionalLine(measureCheckBox, measure, this::callOnMeasureCheckBoxStateChanging),
-                place,
+                createOptionalLine(amountCheckBox, amount, this::setAmountStatus),
+                createOptionalLine(measureCheckBox, measure, this::setMeasureStatus),
+                createOptionalLine(sellerCheckBox, seller, this::setSellerStatus),
                 createdAt,
                 createButtonsLayout()
         );
@@ -84,15 +97,13 @@ final public class PaymentForm extends EditForm<Payment> {
 
     @Override
     public void setValue(Payment value) {
-        if (value != null){
-            measurePresent = value.getMeasure() != null;
-            amountPresent = value.getAmount() != null;
-        } else {
-            measurePresent = false;
-            amountPresent = false;
-        }
-        measureCheckBox.setValue(measurePresent);
-        amountCheckBox.setValue(amountPresent);
+        measureOptionalAttributeProcessor.calculate(value);
+        amountOptionalAttributeProcessor.calculate(value);
+        sellerOptionalAttributeProcessor.calculate(value);
+
+        measureCheckBox.setValue(measureOptionalAttributeProcessor.getStatus());
+        amountCheckBox.setValue(amountOptionalAttributeProcessor.getStatus());
+        sellerCheckBox.setValue(sellerOptionalAttributeProcessor.getStatus());
 
         super.setValue(value);
     }
@@ -104,22 +115,12 @@ final public class PaymentForm extends EditForm<Payment> {
         return new HorizontalLayout(checkBox, component);
     }
 
-    private void callOnMeasureCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        measurePresent = event.getValue();
-    }
-
-    private void callOnAmountCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        amountPresent = event.getValue();
-    }
-
     @Override
     protected SaveFormEvent<EditForm<Payment>, Payment> createSaveEvent() {
-        if (!measurePresent){
-            value.setMeasure(null);
-        }
-        if (!amountPresent){
-            value.setAmount(null);
-        }
+        measureOptionalAttributeProcessor.clear(value);
+        amountOptionalAttributeProcessor.clear(value);
+        sellerOptionalAttributeProcessor.clear(value);
+
         return new PaymentSaveFormEvent(this, value);
     }
 
@@ -154,12 +155,28 @@ final public class PaymentForm extends EditForm<Payment> {
     private static class StringFloatConverter implements Converter<String, Float>{
         @Override
         public Result<Float> convertToModel(String value, ValueContext context) {
-            return Result.<Float>ok(value != null && !value.isEmpty() ? Float.parseFloat(value) : 0.0f);
+            try{
+                return Result.<Float>ok(Float.parseFloat(value));
+            } catch (NumberFormatException ex){
+                return Result.<Float>ok(0.0f);
+            }
         }
 
         @Override
         public String convertToPresentation(Float value, ValueContext context) {
-            return value != null ? String.valueOf(value) : "";
+            return value != null ? String.valueOf(value) : "0.0";
         }
+    }
+
+    private void setAmountStatus(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        amountOptionalAttributeProcessor.setStatus(event.getValue());
+    }
+
+    private void setMeasureStatus(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        measureOptionalAttributeProcessor.setStatus(event.getValue());
+    }
+
+    private void setSellerStatus(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+        sellerOptionalAttributeProcessor.setStatus(event.getValue());
     }
 }

@@ -12,6 +12,7 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
+import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,6 +24,11 @@ import java.util.List;
 @Route(value = "product", layout = MainLayout.class)
 @PermitAll
 final public class ProductView extends GridView<Product> {
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.tags", List.of("tags"))
+    );
 
     @Autowired
     private DTOService<Product, ProductEntity, Long> service;
@@ -43,14 +49,7 @@ final public class ProductView extends GridView<Product> {
         grid = new Grid<>(Product.class);
         grid.addClassName("product-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Product::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Product::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(Product::getInfo).setHeader(getTranslation("gui.header.tags"));
-
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -59,8 +58,8 @@ final public class ProductView extends GridView<Product> {
         form = new ProductForm(tagService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(ProductForm.ProductSaveFormEvent.class, this::saveContact);
-        form.addListener(ProductForm.ProductDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(ProductForm.ProductSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(ProductForm.ProductDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(ProductForm.ProductCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -71,12 +70,12 @@ final public class ProductView extends GridView<Product> {
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Product>, Product> event) {
-        return service.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Product domain) {
+        return service.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Product> handleSaveEvent(SaveFormEvent<EditForm<Product>, Product> event) {
-        return service.saver().save(new ProductEntity(event.getValue()));
+    protected Result<Product> save(Product domain) {
+        return service.saver().save(new ProductEntity(domain));
     }
 }

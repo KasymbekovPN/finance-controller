@@ -10,6 +10,7 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
+import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -21,6 +22,11 @@ import java.util.List;
 @Route(value = "country", layout = MainLayout.class)
 @PermitAll
 final public class CountryView extends GridView<Country>{
+
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name"))
+    );
 
     @Autowired
     private DTOService<Country, CountryEntity, Long> countryService;
@@ -39,12 +45,7 @@ final public class CountryView extends GridView<Country>{
         grid = new Grid<>(Country.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Country::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Country::getInfo).setHeader(getTranslation("gui.header.name"));
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -53,8 +54,8 @@ final public class CountryView extends GridView<Country>{
         form = new CountryForm();
         form.setWidth("25em");
 
-        form.addListener(CountryForm.CountrySaveFormEvent.class, this::saveContact);
-        form.addListener(CountryForm.CountryDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(CountryForm.CountrySaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(CountryForm.CountryDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(CountryForm.CountryCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -65,12 +66,12 @@ final public class CountryView extends GridView<Country>{
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Country>, Country> event) {
-        return countryService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Country domain) {
+        return countryService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Country> handleSaveEvent(SaveFormEvent<EditForm<Country>, Country> event) {
-        return countryService.saver().save(new CountryEntity(event.getValue()));
+    protected Result<Country> save(Country domain) {
+        return countryService.saver().save(new CountryEntity(domain));
     }
 }

@@ -6,10 +6,7 @@ import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.data.services.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -23,6 +20,11 @@ import java.util.List;
 @Route(value = "region", layout = MainLayout.class)
 @PermitAll
 final public class RegionView extends GridView<Region>{
+    private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
+            new ColumnConfig("gui.header.id", List.of("id")),
+            new ColumnConfig("gui.header.name", List.of("name")),
+            new ColumnConfig("gui.header.country", List.of("country", "name"))
+    );
 
     @Autowired
     private DTOService<Region, RegionEntity, Long> regionService;
@@ -43,13 +45,7 @@ final public class RegionView extends GridView<Region>{
         grid = new Grid<>(Region.class);
         grid.addClassName("country-grid");
         grid.setSizeFull();
-
-        grid.setColumns();
-        grid.addColumn(Region::getId).setHeader(getTranslation("gui.header.id"));
-        grid.addColumn(Region::getName).setHeader(getTranslation("gui.header.name"));
-        grid.addColumn(region -> region.getCountry().getName()).setHeader(getTranslation("gui.header.country"));
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
+        configureGridColumns(COLUMN_CONFIGS);
         grid.asSingleSelect().addValueChangeListener(e -> editValue(e.getValue()));
     }
 
@@ -58,8 +54,8 @@ final public class RegionView extends GridView<Region>{
         form = new RegionForm(countryService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(RegionForm.RegionSaveFormEvent.class, this::saveContact);
-        form.addListener(RegionForm.RegionDeleteFormEvent.class, this::deleteEvent);
+        form.addListener(RegionForm.RegionSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(RegionForm.RegionDeleteFormEvent.class, this::handleDeletingEvent);
         form.addListener(RegionForm.RegionCloseFormEvent.class, e -> closeEditor());
     }
 
@@ -70,12 +66,12 @@ final public class RegionView extends GridView<Region>{
     }
 
     @Override
-    protected Result<Void> handleDeleteEvent(DeleteFormEvent<EditForm<Region>, Region> event) {
-        return regionService.deleter().byId(event.getValue().getId());
+    protected Result<Void> delete(Region domain) {
+        return regionService.deleter().byId(domain.getId());
     }
 
     @Override
-    protected Result<Region> handleSaveEvent(SaveFormEvent<EditForm<Region>, Region> event) {
-        return regionService.saver().save(new RegionEntity(event.getValue()));
+    protected Result<Region> save(Region domain) {
+        return regionService.saver().save(new RegionEntity(domain));
     }
 }
