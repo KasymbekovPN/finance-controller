@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.seller.SellerEntity;
-import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.data.services.dto.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;

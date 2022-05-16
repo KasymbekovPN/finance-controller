@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
-import kpn.financecontroller.data.services.DTOService;
+import kpn.financecontroller.data.services.dto.DTOService;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
