@@ -58,13 +58,7 @@ final public class StreetView extends GridView<Street>{
 
         form.addListener(StreetForm.StreetSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(StreetForm.StreetDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(StreetForm.StreetCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Street());
+        form.addListener(StreetForm.StreetCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

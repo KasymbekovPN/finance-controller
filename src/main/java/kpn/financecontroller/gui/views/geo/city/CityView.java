@@ -57,13 +57,7 @@ final public class CityView extends GridView<City> {
 
         form.addListener(CityForm.CitySaveFormEvent.class, this::handleSavingEvent);
         form.addListener(CityForm.CityDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(CityForm.CityCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new City());
+        form.addListener(CityForm.CityCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

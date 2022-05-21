@@ -51,13 +51,7 @@ final public class TagView extends GridView<Tag> {
 
         form.addListener(TagForm.TagSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(TagForm.TagDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(TagForm.TagCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Tag());
+        form.addListener(TagForm.TagCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

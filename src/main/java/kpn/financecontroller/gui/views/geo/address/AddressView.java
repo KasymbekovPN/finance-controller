@@ -59,13 +59,7 @@ final public class AddressView extends GridView<Address> {
 
         form.addListener(AddressForm.AddressSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(AddressForm.AddressDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(AddressForm.AddressCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Address());
+        form.addListener(AddressForm.AddressCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

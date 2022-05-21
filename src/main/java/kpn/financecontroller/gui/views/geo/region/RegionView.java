@@ -56,13 +56,7 @@ final public class RegionView extends GridView<Region>{
 
         form.addListener(RegionForm.RegionSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(RegionForm.RegionDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(RegionForm.RegionCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Region());
+        form.addListener(RegionForm.RegionCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override
