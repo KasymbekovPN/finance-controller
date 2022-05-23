@@ -18,7 +18,7 @@ class BeforeProductSavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         Product product = new Builder().build();
-        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty").build();
+        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty");
 
         Result<Product> result = new BeforeProductSavingChecker().apply(product);
         assertThat(expectedResult).isEqualTo(result);
@@ -27,7 +27,7 @@ class BeforeProductSavingCheckerTest {
     @Test
     void shouldCheck_whenNameEmpty() {
         Product product = new Builder().name(EMPTY_NAME).build();
-        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty").build();
+        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty");
 
         Result<Product> result = new BeforeProductSavingChecker().apply(product);
         assertThat(expectedResult).isEqualTo(result);
@@ -36,7 +36,7 @@ class BeforeProductSavingCheckerTest {
     @Test
     void shouldCheck_whenTagsNull() {
         Product product = new Builder().name(NAME).build();
-        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty").build();
+        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty");
 
         Result<Product> result = new BeforeProductSavingChecker().apply(product);
         assertThat(expectedResult).isEqualTo(result);
@@ -45,7 +45,7 @@ class BeforeProductSavingCheckerTest {
     @Test
     void shouldCheck_whenTagsEmpty() {
         Product product = new Builder().name(NAME).createTags().build();
-        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty").build();
+        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty");
 
         Result<Product> result = new BeforeProductSavingChecker().apply(product);
         assertThat(expectedResult).isEqualTo(result);
@@ -58,7 +58,7 @@ class BeforeProductSavingCheckerTest {
         tag.setName("tag");
 
         Product product = new Builder().name(NAME).createTags().tag(tag).build();
-        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>ok(product).build();
+        ImmutableResult<Product> expectedResult = ImmutableResult.<Product>ok(product);
 
         Result<Product> result = new BeforeProductSavingChecker().apply(product);
         assertThat(expectedResult).isEqualTo(result);

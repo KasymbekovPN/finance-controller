@@ -32,20 +32,20 @@ class ConversionTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResult_ifNoJsonObj = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
+        expectedResult_ifNoJsonObj = ImmutableResult.<ObjectStorage>bFail(VALUED_GENERATOR.generate(KEY, Codes.NO_JSON_OBJECT))
                 .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
-        expectedResult_ifEntityNotExist = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
+        expectedResult_ifEntityNotExist = ImmutableResult.<ObjectStorage>bFail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_CONVERSION))
                 .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
-        expectedResult_ifEntityConversionFail = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_CONVERSION_FAIL))
+        expectedResult_ifEntityConversionFail = ImmutableResult.<ObjectStorage>bFail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_CONVERSION_FAIL))
                 .value(new ObjectStorage())
                 .arg(KEY)
                 .build();
 
-        expectedResult = ImmutableResult.<ObjectStorage>ok(new ObjectStorage())
+        expectedResult = ImmutableResult.<ObjectStorage>bOk(new ObjectStorage())
                 .arg(KEY)
                 .build();
     }
@@ -137,7 +137,7 @@ class ConversionTaskTest {
 
         public Context build(){
             if (storage != null){
-                Result<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
+                Result<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage);
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
             }
             return context;

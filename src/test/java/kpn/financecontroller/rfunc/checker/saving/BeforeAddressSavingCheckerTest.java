@@ -13,7 +13,7 @@ class BeforeAddressSavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         Address domain = new Builder().build();
-        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>fail("checking.domain.address.name.isEmpty").build();
+        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>fail("checking.domain.address.name.isEmpty");
 
         Result<Address> result = new BeforeAddressSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -22,7 +22,7 @@ class BeforeAddressSavingCheckerTest {
     @Test
     void shouldCheck_whenNameEmpty() {
         Address domain = new Builder().name("").build();
-        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>fail("checking.domain.address.name.isEmpty").build();
+        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>fail("checking.domain.address.name.isEmpty");
 
         Result<Address> result = new BeforeAddressSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -31,7 +31,7 @@ class BeforeAddressSavingCheckerTest {
     @Test
     void shouldCheck_whenStreetNull() {
         Address domain = new Builder().name("name").build();
-        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>fail("checking.domain.address.street.isEmpty").build();
+        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>fail("checking.domain.address.street.isEmpty");
 
         Result<Address> result = new BeforeAddressSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -40,7 +40,7 @@ class BeforeAddressSavingCheckerTest {
     @Test
     void shouldCheck() {
         Address domain = new Builder().name("name").street(new Street()).build();
-        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>ok(domain).build();
+        ImmutableResult<Address> expectedResult = ImmutableResult.<Address>ok(domain);
 
         Result<Address> result = new BeforeAddressSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);

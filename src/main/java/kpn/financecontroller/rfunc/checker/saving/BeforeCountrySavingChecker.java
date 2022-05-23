@@ -11,7 +11,7 @@ final public class BeforeCountrySavingChecker extends AbstractBeforeSavingChecke
     public Result<Country> apply(Country value) {
         String name = value.getName();
         return name == null || name.isEmpty()
-                ? ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty").build()
-                : ImmutableResult.<Country>ok(value).build();
+                ? ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty")
+                : ImmutableResult.<Country>ok(value);
     }
 }

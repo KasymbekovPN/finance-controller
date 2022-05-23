@@ -40,14 +40,14 @@ class ResultContextManagerImplTest {
         valuedStringGenerator = new ValuedStringGenerator();
 
         expectedResultWhenPropertyNotExist
-                = ImmutableResult.<Object>fail(ResultContextManagerImpl.Codes.PROPERTY_NOT_EXIST.getValue()).build();
-        expectedResultWhenExist = ImmutableResult.<Object>ok(VALUE_RESULT_VALUE)
+                = ImmutableResult.<Object>fail(ResultContextManagerImpl.Codes.PROPERTY_NOT_EXIST.getValue());
+        expectedResultWhenExist = ImmutableResult.<Object>bOk(VALUE_RESULT_VALUE)
                 .code(RESULT_CODE)
                 .arg(RESULT_ARG)
                 .build();
         expectedResultWhenFailCast
-                = ImmutableResult.<TestObject>fail(ResultContextManagerImpl.Codes.CAST_FAIL.getValue()).build();
-        expectedResultWhenTestObjectExist = ImmutableResult.<TestObject>ok(TEST_OBJECT)
+                = ImmutableResult.<TestObject>fail(ResultContextManagerImpl.Codes.CAST_FAIL.getValue());
+        expectedResultWhenTestObjectExist = ImmutableResult.<TestObject>bOk(TEST_OBJECT)
                 .code(RESULT_CODE)
                 .arg(RESULT_ARG)
                 .build();

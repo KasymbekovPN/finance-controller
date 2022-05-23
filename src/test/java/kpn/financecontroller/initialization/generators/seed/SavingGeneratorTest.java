@@ -106,7 +106,7 @@ public class SavingGeneratorTest {
         ObjectStorage storage = new ObjectStorage();
         storage.put(ENTITY_ID, new Object());
 
-        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
+        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage);
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
         Generator seedGenerator = SavingGenerator.builder()

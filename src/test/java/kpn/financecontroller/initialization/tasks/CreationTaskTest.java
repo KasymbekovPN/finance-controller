@@ -35,11 +35,11 @@ public class CreationTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultWhenNoContent = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.NO_STRING_CONTENT))
+        expectedResultWhenNoContent = ImmutableResult.<ObjectStorage>bFail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.NO_STRING_CONTENT))
                 .arg(TestKeys.KEY)
                 .build();
 
-        expectedResultWhenJsonSyntaxException = ImmutableResult.<ObjectStorage>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.JSON_SYNTAX_EXCEPTION))
+        expectedResultWhenJsonSyntaxException = ImmutableResult.<ObjectStorage>bFail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.JSON_SYNTAX_EXCEPTION))
                 .arg(TestKeys.KEY)
                 .build();
 
@@ -49,7 +49,7 @@ public class CreationTaskTest {
         ObjectStorage storage = new ObjectStorage();
         storage.put(1L, testEntity);
 
-        expectedResult = ImmutableResult.<ObjectStorage>ok(storage)
+        expectedResult = ImmutableResult.<ObjectStorage>bOk(storage)
                 .arg(TestKeys.KEY)
                 .build();
     }
@@ -112,7 +112,7 @@ public class CreationTaskTest {
         }
 
         public ContextBuilder addSource(String source){
-            Result<String> result = ImmutableResult.<String>ok(source).build();
+            Result<String> result = ImmutableResult.<String>ok(source);
             CREATOR.apply(context).put(KEY, Properties.FILE_READING_RESULT, result);
             return this;
         }

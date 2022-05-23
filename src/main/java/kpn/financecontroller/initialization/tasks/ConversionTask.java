@@ -49,7 +49,7 @@ final public class ConversionTask extends BaseTask {
         }
 
         ObjectStorage storage = new ObjectStorage();
-        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
+        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage);
         contextManager.put(key, Properties.JSON_TO_DB_CONVERSION_RESULT, result);
 
         return storage;

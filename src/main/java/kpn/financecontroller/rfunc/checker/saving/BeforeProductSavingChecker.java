@@ -15,12 +15,12 @@ final public class BeforeProductSavingChecker extends AbstractBeforeSavingChecke
     public Result<Product> apply(Product value) {
         String name = value.getName();
         if (name == null || name.isEmpty()){
-            return ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty").build();
+            return ImmutableResult.<Product>fail("checking.domain.product.name.isEmpty");
         }
 
         Set<Tag> tags = value.getTags();
         return tags == null || tags.isEmpty()
-                ? ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty").build()
-                : ImmutableResult.<Product>ok(value).build();
+                ? ImmutableResult.<Product>fail("checking.domain.product.tags.isEmpty")
+                : ImmutableResult.<Product>ok(value);
     }
 }

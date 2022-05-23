@@ -12,7 +12,7 @@ final public class BeforeTagSavingChecker extends AbstractBeforeSavingChecker<Ta
     public Result<Tag> apply(Tag value) {
         String name = value.getName();
         return name == null || name.isEmpty()
-                ? ImmutableResult.<Tag>fail("checking.domain.tag.name.isEmpty").build()
-                : ImmutableResult.<Tag>ok(value).build();
+                ? ImmutableResult.<Tag>fail("checking.domain.tag.name.isEmpty")
+                : ImmutableResult.<Tag>ok(value);
     }
 }

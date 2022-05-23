@@ -11,7 +11,7 @@ final public class BeforeSellerSavingChecker extends AbstractBeforeSavingChecker
     public Result<Seller> apply(Seller value) {
         String name = value.getName();
         return name == null || name.isEmpty()
-                ? ImmutableResult.<Seller>fail("checking.domain.seller.name.isEmpty").build()
-                : ImmutableResult.<Seller>ok(value).build();
+                ? ImmutableResult.<Seller>fail("checking.domain.seller.name.isEmpty")
+                : ImmutableResult.<Seller>ok(value);
     }
 }

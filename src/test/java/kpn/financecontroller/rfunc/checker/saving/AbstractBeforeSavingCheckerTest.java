@@ -11,7 +11,7 @@ class AbstractBeforeSavingCheckerTest {
     @Test
     void shouldCheckChecking() {
         String value = "value";
-        ImmutableResult<String> expectedResult = ImmutableResult.<String>ok(value).build();
+        ImmutableResult<String> expectedResult = ImmutableResult.<String>ok(value);
         Result<String> result = new TestChecker().apply(value);
         assertThat(expectedResult).isEqualTo(result);
     }

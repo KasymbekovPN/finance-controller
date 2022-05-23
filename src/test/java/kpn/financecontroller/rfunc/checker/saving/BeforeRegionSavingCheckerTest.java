@@ -13,7 +13,7 @@ class BeforeRegionSavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         Region region = new Builder().build();
-        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>fail("checking.domain.region.name.isEmpty").build();
+        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>fail("checking.domain.region.name.isEmpty");
 
         Result<Region> result = new BeforeRegionSavingChecker().apply(region);
         assertThat(expectedResult).isEqualTo(result);
@@ -22,7 +22,7 @@ class BeforeRegionSavingCheckerTest {
     @Test
     void shouldCheck_whenNameEmpty() {
         Region region = new Builder().name("").build();
-        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>fail("checking.domain.region.name.isEmpty").build();
+        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>fail("checking.domain.region.name.isEmpty");
 
         Result<Region> result = new BeforeRegionSavingChecker().apply(region);
         assertThat(expectedResult).isEqualTo(result);
@@ -31,7 +31,7 @@ class BeforeRegionSavingCheckerTest {
     @Test
     void shouldCheck_whenCountryIdNull() {
         Region region = new Builder().name("some.name").build();
-        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>fail("checking.domain.region.country.isEmpty").build();
+        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>fail("checking.domain.region.country.isEmpty");
 
         Result<Region> result = new BeforeRegionSavingChecker().apply(region);
         assertThat(expectedResult).isEqualTo(result);
@@ -40,7 +40,7 @@ class BeforeRegionSavingCheckerTest {
     @Test
     void shouldCheck() {
         Region region = new Builder().name("some.name").country(new Country()).build();
-        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>ok(region).build();
+        ImmutableResult<Region> expectedResult = ImmutableResult.<Region>ok(region);
 
         Result<Region> result = new BeforeRegionSavingChecker().apply(region);
         assertThat(expectedResult).isEqualTo(result);

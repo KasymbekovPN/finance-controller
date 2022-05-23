@@ -11,10 +11,10 @@ final public class BeforeRegionSavingChecker extends AbstractBeforeSavingChecker
     public Result<Region> apply(Region value) {
         String name = value.getName();
         if (name == null || name.isEmpty()){
-            return ImmutableResult.<Region>fail("checking.domain.region.name.isEmpty").build();
+            return ImmutableResult.<Region>fail("checking.domain.region.name.isEmpty");
         }
         return value.getCountry() == null
-            ? ImmutableResult.<Region>fail("checking.domain.region.country.isEmpty").build()
-            : ImmutableResult.<Region>ok(value).build();
+            ? ImmutableResult.<Region>fail("checking.domain.region.country.isEmpty")
+            : ImmutableResult.<Region>ok(value);
     }
 }

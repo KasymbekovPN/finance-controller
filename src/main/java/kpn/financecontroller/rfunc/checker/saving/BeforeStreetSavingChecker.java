@@ -11,10 +11,10 @@ final public class BeforeStreetSavingChecker extends AbstractBeforeSavingChecker
     public Result<Street> apply(Street value) {
         String name = value.getName();
         if (name == null || name.isEmpty()){
-            return ImmutableResult.<Street>fail("checking.domain.street.name.isEmpty").build();
+            return ImmutableResult.<Street>fail("checking.domain.street.name.isEmpty");
         }
         return value.getCity() == null
-            ? ImmutableResult.<Street>fail("checking.domain.street.city.isEmpty").build()
-            : ImmutableResult.<Street>ok(value).build();
+            ? ImmutableResult.<Street>fail("checking.domain.street.city.isEmpty")
+            : ImmutableResult.<Street>ok(value);
     }
 }

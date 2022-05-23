@@ -31,7 +31,7 @@ public class CleanupTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResult_ifCleaningFail = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.DB_FAIL_CLEANING))
+        expectedResult_ifCleaningFail = ImmutableResult.<Void>bFail(VALUED_GENERATOR.generate(KEY, Codes.DB_FAIL_CLEANING))
                 .arg(KEY)
                 .build();
         expectedResult = ImmutableResult.<Void>builder()

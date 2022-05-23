@@ -22,12 +22,12 @@ public abstract class AbstractLoader<D, E, I> implements Loader<D, E, I> {
         try{
             Optional<E> maybeEntity = loadById(id);
             if (maybeEntity.isPresent()){
-                builder = ImmutableResult.<D>ok(convertEntityToDomain(maybeEntity.get()));
+                builder = ImmutableResult.<D>bOk(convertEntityToDomain(maybeEntity.get()));
             } else {
-                builder = ImmutableResult.<D>fail("loader.byId.noOne");
+                builder = ImmutableResult.<D>bFail("loader.byId.noOne");
             }
         } catch (DTOServiceException ex){
-            builder = ImmutableResult.<D>fail(ex.getMessage());
+            builder = ImmutableResult.<D>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 
@@ -44,16 +44,16 @@ public abstract class AbstractLoader<D, E, I> implements Loader<D, E, I> {
             if (checkValue(attribute, value)){
                 try{
                     List<E> entities = loadBy(attribute, value);
-                    builder = ImmutableResult.<List<D>>ok(convertEntitiesToDomains(entities));
+                    builder = ImmutableResult.<List<D>>bOk(convertEntitiesToDomains(entities));
                 } catch (DTOServiceException ex){
-                    builder = ImmutableResult.<List<D>>fail(ex.getMessage());
+                    builder = ImmutableResult.<List<D>>bFail(ex.getMessage());
                     Arrays.stream(ex.getArgs()).forEach(builder::arg);
                 }
             } else {
-                builder = ImmutableResult.<List<D>>fail("loader.by.disallowedValue");
+                builder = ImmutableResult.<List<D>>bFail("loader.by.disallowedValue");
             }
         } else {
-            builder = ImmutableResult.<List<D>>fail("loader.by.disallowedAttribute");
+            builder = ImmutableResult.<List<D>>bFail("loader.by.disallowedAttribute");
         }
 
         return builder
@@ -68,9 +68,9 @@ public abstract class AbstractLoader<D, E, I> implements Loader<D, E, I> {
         ImmutableResult.Builder<List<D>> builder;
         try {
             List<E> entities = loadAll();
-            builder = ImmutableResult.<List<D>>ok(convertEntitiesToDomains(entities));
+            builder = ImmutableResult.<List<D>>bOk(convertEntitiesToDomains(entities));
         } catch (DTOServiceException ex){
-            builder = ImmutableResult.<List<D>>fail(ex.getMessage());
+            builder = ImmutableResult.<List<D>>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 

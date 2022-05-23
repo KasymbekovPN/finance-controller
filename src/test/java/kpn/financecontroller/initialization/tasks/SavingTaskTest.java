@@ -35,11 +35,11 @@ class SavingTaskTest {
     @BeforeAll
     static void beforeAll() {
         expectedResultIfConversionResultNotExist
-                = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.CONVERSION_RESULT_NOT_EXIST_ON_SAVING)).arg(KEY).build();
+                = ImmutableResult.<Void>bFail(VALUED_GENERATOR.generate(KEY, Codes.CONVERSION_RESULT_NOT_EXIST_ON_SAVING)).arg(KEY).build();
         expectedResultIfEntityNotExist
-                = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_SAVING)).arg(KEY).build();
+                = ImmutableResult.<Void>bFail(VALUED_GENERATOR.generate(KEY, Codes.ENTITY_NOT_EXIST_ON_SAVING)).arg(KEY).build();
         expectedResultIfFailSaving
-                = ImmutableResult.<Void>fail(VALUED_GENERATOR.generate(KEY, Codes.FAIL_SAVING_ATTEMPT)).arg(KEY).build();
+                = ImmutableResult.<Void>bFail(VALUED_GENERATOR.generate(KEY, Codes.FAIL_SAVING_ATTEMPT)).arg(KEY).build();
         expectedResult = ImmutableResult.<Void>builder()
                 .success(true)
                 .arg(KEY)
@@ -136,7 +136,7 @@ class SavingTaskTest {
 
         public Context build(){
             if (storage != null){
-                Result<ObjectStorage> tagStorageResult = ImmutableResult.<ObjectStorage>ok(storage).build();
+                Result<ObjectStorage> tagStorageResult = ImmutableResult.<ObjectStorage>ok(storage);
                 CREATOR.apply(context).put(TestKeys.KEY, Properties.JSON_TO_DB_CONVERSION_RESULT, tagStorageResult);
             }
             return context;

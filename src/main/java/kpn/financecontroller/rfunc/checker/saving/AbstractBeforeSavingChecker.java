@@ -7,6 +7,6 @@ abstract public class AbstractBeforeSavingChecker<TYPE> implements SavingChecker
 
     @Override
     public Result<TYPE> apply(TYPE value) {
-        return ImmutableResult.<TYPE>ok(value).build();
+        return ImmutableResult.<TYPE>ok(value);
     }
 }

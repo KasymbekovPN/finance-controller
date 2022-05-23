@@ -112,7 +112,7 @@ public class ConversionGeneratorTest {
         ObjectStorage storage = new ObjectStorage();
         storage.put(ENTITY_ID, entity);
 
-        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage).build();
+        ImmutableResult<ObjectStorage> result = ImmutableResult.<ObjectStorage>ok(storage);
         CREATOR.apply(CONTEXT).put(KEY, Properties.JSON_OBJECT_CREATION_RESULT, result);
 
         Generator seedGenerator = ConversionGenerator.builder()

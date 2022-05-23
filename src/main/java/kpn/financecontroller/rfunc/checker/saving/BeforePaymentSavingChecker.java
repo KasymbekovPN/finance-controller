@@ -15,18 +15,18 @@ final public class BeforePaymentSavingChecker extends AbstractBeforeSavingChecke
 
     private Result<Payment> checkMandatoryAttributes(Payment value) {
         if (value.getProduct() == null){
-            return ImmutableResult.<Payment>fail("checking.domain.payment.product.isEmpty").build();
+            return ImmutableResult.<Payment>fail("checking.domain.payment.product.isEmpty");
         }
         if (value.getCurrency() == null){
-            return ImmutableResult.<Payment>fail("checking.domain.payment.currency.isEmpty").build();
+            return ImmutableResult.<Payment>fail("checking.domain.payment.currency.isEmpty");
         }
         Float price = value.getPrice();
         if (price == null || price <= 0.0f){
-            return ImmutableResult.<Payment>fail("checking.domain.payment.price.isEmpty").build();
+            return ImmutableResult.<Payment>fail("checking.domain.payment.price.isEmpty");
         }
         return value.getCreatedAt() == null
-                ? ImmutableResult.<Payment>fail("checking.domain.payment.createdAt.isEmpty").build()
-                : ImmutableResult.<Payment>ok(value).build();
+                ? ImmutableResult.<Payment>fail("checking.domain.payment.createdAt.isEmpty")
+                : ImmutableResult.<Payment>ok(value);
     }
 
     private Result<Payment> checkAmountAndMeasure(Payment value) {
@@ -35,14 +35,14 @@ final public class BeforePaymentSavingChecker extends AbstractBeforeSavingChecke
         switch (state){
             case 1:
             case 2:
-                return ImmutableResult.<Payment>fail("checking.domain.payment.amountAndMeasure.notConsistent").build();
+                return ImmutableResult.<Payment>fail("checking.domain.payment.amountAndMeasure.notConsistent");
             case 3:
                 if (amount <= 0.0f){
-                    return ImmutableResult.<Payment>fail("checking.domain.payment.amount.isEmpty").build();
+                    return ImmutableResult.<Payment>fail("checking.domain.payment.amount.isEmpty");
                 }
                 break;
         }
 
-        return ImmutableResult.<Payment>ok(value).build();
+        return ImmutableResult.<Payment>ok(value);
     }
 }

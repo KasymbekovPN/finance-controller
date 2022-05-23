@@ -29,10 +29,10 @@ public class ReadingTaskTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultIfFileNotExist = ImmutableResult.<String>fail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.FAIL_FILE_READING))
+        expectedResultIfFileNotExist = ImmutableResult.<String>bFail(VALUED_GENERATOR.generate(TestKeys.KEY, Codes.FAIL_FILE_READING))
                 .arg(TestKeys.KEY)
                 .build();
-        expectedResult = ImmutableResult.<String>ok(FILE_CONTENT)
+        expectedResult = ImmutableResult.<String>bOk(FILE_CONTENT)
                 .arg(TestKeys.KEY)
                 .build();
     }
