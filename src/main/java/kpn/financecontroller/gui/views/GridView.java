@@ -19,25 +19,29 @@ import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.lib.result.Result;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayDeque;
 import java.util.List;
 
-abstract public class GridView<D extends Domain> extends VerticalLayout implements HasDynamicTitle {
+abstract public class GridView<DOMAIN extends Domain> extends VerticalLayout implements HasDynamicTitle {
 
     @Autowired
     private NotificationFactory notificationFactory;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
-    private SavingChecker<D> savingChecker;
+    private SavingChecker<DOMAIN> savingChecker;
     @Autowired
-    private RemovingChecker<D> removingChecker;
+    private RemovingChecker<DOMAIN> removingChecker;
 
-    protected EditForm<D> form;
-    protected Grid<D> grid;
+    private Class<DOMAIN> domainClass;
+
+    protected EditForm<DOMAIN> form;
+    protected Grid<DOMAIN> grid;
 
     @Override
     public String getPageTitle() {
@@ -51,12 +55,12 @@ abstract public class GridView<D extends Domain> extends VerticalLayout implemen
         configureForm();
         add(getToolBar(), getContent());
         updateList();
-        closeEditor();
+        closeEditor(true);
     }
 
     private Component getToolBar() {
         Button addContactButton = new Button(getTranslation("gui.button.add"));
-        addContactButton.addClickListener(e -> add());
+        addContactButton.addClickListener(e -> processAddButtonClick());
 
         HorizontalLayout toolbar = new HorizontalLayout(addContactButton);
         toolbar.addClassName("toolbar");
@@ -78,42 +82,45 @@ abstract public class GridView<D extends Domain> extends VerticalLayout implemen
         createNotification(result);
     }
 
-    protected void closeEditor() {
-        form.setValue(null);
-        form.setVisible(false);
+    protected void closeEditor(boolean reset) {
+        form.close(reset);
         removeClassName("editing");
     }
 
-    protected void editValue(D value){
+    protected void addValue(DOMAIN value){
+        form.setValueIfItNull(value);
+        addClassName("editing");
+    }
+
+    protected void editValue(DOMAIN value){
         if (value == null){
-            closeEditor();
+            closeEditor(true);
         } else {
             form.setValue(value);
-            form.setVisible(true);
             addClassName("editing");
         }
     }
 
-    protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
-        D domain = event.getValue();
+    protected void handleDeletingEvent(DeleteFormEvent<EditForm<DOMAIN>, DOMAIN> event) {
+        DOMAIN domain = event.getValue();
         Result<Void> result = removingChecker.apply(domain);
         if (result.isSuccess()){
             result = delete(domain);
         }
         createNotification(result);
         updateList();
-        closeEditor();
+        closeEditor(true);
     }
 
-    protected void handleSavingEvent(SaveFormEvent<EditForm<D>, D> event) {
-        D domain = event.getValue();
-        Result<D> result = savingChecker.apply(domain);
+    protected void handleSavingEvent(SaveFormEvent<EditForm<DOMAIN>, DOMAIN> event) {
+        DOMAIN domain = event.getValue();
+        Result<DOMAIN> result = savingChecker.apply(domain);
         if (result.isSuccess()){
             result = save(domain);
         }
         createNotification(result);
         updateList();
-        closeEditor();
+        closeEditor(false);
     }
 
     protected void createNotification(Result<?> result) {
@@ -134,18 +141,30 @@ abstract public class GridView<D extends Domain> extends VerticalLayout implemen
         grid.setColumns();
         for (ColumnConfig config : configList) {
             grid
-                    .addColumn((D d) -> {return d.get(new ArrayDeque<String>(config.getPath()));})
+                    .addColumn((DOMAIN d) -> {return d.get(new ArrayDeque<String>(config.getPath()));})
                     .setHeader(getTranslation(config.getCode()));
         }
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
     }
 
+    protected void processAddButtonClick(){
+        grid.asSingleSelect().clear();
+        addValue(createDefaultDomain());
+    }
+
+    @SneakyThrows
+    private DOMAIN createDefaultDomain() {
+        if (domainClass == null){
+            domainClass = (Class<DOMAIN>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        }
+        return domainClass.getConstructor().newInstance();
+    }
+
     protected abstract Result<?> updateListImpl();
     protected abstract void configureGrid();
     protected abstract void configureForm();
-    protected abstract void add();
-    protected abstract Result<Void> delete(D domain);
-    protected abstract Result<D> save(D domain);
+    protected abstract Result<Void> delete(DOMAIN domain);
+    protected abstract Result<DOMAIN> save(DOMAIN domain);
 
     @RequiredArgsConstructor
     @Getter

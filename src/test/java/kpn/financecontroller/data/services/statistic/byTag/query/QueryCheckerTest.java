@@ -19,10 +19,10 @@ class QueryCheckerTest {
 
     @BeforeAll
     static void beforeAll() {
-        expectedResultWhenWrongBeginTimeCondition = ImmutableResult.<Void>fail("checking.query.beginTime.invalid").build();
-        expectedResultWhenWrongEndTimeCondition = ImmutableResult.<Void>fail("checking.query.endTime.invalid").build();
-        expectedResultWhenWrongTagsCondition = ImmutableResult.<Void>fail("checking.query.tags.invalid").build();
-        expectedResult = ImmutableResult.<Void>ok(null).build();
+        expectedResultWhenWrongBeginTimeCondition = ImmutableResult.<Void>fail("checking.query.beginTime.invalid");
+        expectedResultWhenWrongEndTimeCondition = ImmutableResult.<Void>fail("checking.query.endTime.invalid");
+        expectedResultWhenWrongTagsCondition = ImmutableResult.<Void>fail("checking.query.tags.invalid");
+        expectedResult = ImmutableResult.<Void>ok(null);
 
         checker = new QueryChecker();
     }

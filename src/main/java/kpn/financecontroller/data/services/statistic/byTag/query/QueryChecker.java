@@ -38,10 +38,10 @@ final public class QueryChecker implements Function<Query, Result<Void>> {
     }
 
     private Result<Void> createFailResult(String code) {
-        return ImmutableResult.<Void>fail(code).build();
+        return ImmutableResult.<Void>fail(code);
     }
 
     private Result<Void> createOkResult() {
-        return ImmutableResult.<Void>ok(null).build();
+        return ImmutableResult.<Void>ok(null);
     }
 }

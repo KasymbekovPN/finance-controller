@@ -12,7 +12,7 @@ class BeforeCountrySavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         Country domain = new Country();
-        ImmutableResult<Country> expectedResult = ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty").build();
+        ImmutableResult<Country> expectedResult = ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty");
 
         Result<Country> result = new BeforeCountrySavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -22,7 +22,7 @@ class BeforeCountrySavingCheckerTest {
     void shouldCheck_whenNameEmpty() {
         Country domain = new Country();
         domain.setName("");
-        ImmutableResult<Country> expectedResult = ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty").build();
+        ImmutableResult<Country> expectedResult = ImmutableResult.<Country>fail("checking.domain.country.name.isEmpty");
 
         Result<Country> result = new BeforeCountrySavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -32,7 +32,7 @@ class BeforeCountrySavingCheckerTest {
     void shouldCheck() {
         Country domain = new Country();
         domain.setName("some.name");
-        ImmutableResult<Country> expectedResult = ImmutableResult.<Country>ok(domain).build();
+        ImmutableResult<Country> expectedResult = ImmutableResult.<Country>ok(domain);
 
         Result<Country> result = new BeforeCountrySavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);

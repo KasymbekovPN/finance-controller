@@ -13,7 +13,7 @@ class BeforeCitySavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         City city = new Builder().build();
-        ImmutableResult<City> expectedResult = ImmutableResult.<City>fail("checking.domain.city.name.isEmpty").build();
+        ImmutableResult<City> expectedResult = ImmutableResult.<City>fail("checking.domain.city.name.isEmpty");
 
         Result<City> result = new BeforeCitySavingChecker().apply(city);
         assertThat(expectedResult).isEqualTo(result);
@@ -22,7 +22,7 @@ class BeforeCitySavingCheckerTest {
     @Test
     void shouldCheck_whenNameEmpty() {
         City city = new Builder().name("").build();
-        ImmutableResult<City> expectedResult = ImmutableResult.<City>fail("checking.domain.city.name.isEmpty").build();
+        ImmutableResult<City> expectedResult = ImmutableResult.<City>fail("checking.domain.city.name.isEmpty");
 
         Result<City> result = new BeforeCitySavingChecker().apply(city);
         assertThat(expectedResult).isEqualTo(result);
@@ -31,7 +31,7 @@ class BeforeCitySavingCheckerTest {
     @Test
     void shouldCheck_whenRegionNull() {
         City city = new Builder().name("some.name").build();
-        ImmutableResult<City> expectedResult = ImmutableResult.<City>fail("checking.domain.city.region.isEmpty").build();
+        ImmutableResult<City> expectedResult = ImmutableResult.<City>fail("checking.domain.city.region.isEmpty");
 
         Result<City> result = new BeforeCitySavingChecker().apply(city);
         assertThat(expectedResult).isEqualTo(result);
@@ -40,7 +40,7 @@ class BeforeCitySavingCheckerTest {
     @Test
     void shouldCheck() {
         City city = new Builder().name("some.name").region(new Region()).build();
-        ImmutableResult<City> expectedResult = ImmutableResult.<City>ok(city).build();
+        ImmutableResult<City> expectedResult = ImmutableResult.<City>ok(city);
 
         Result<City> result = new BeforeCitySavingChecker().apply(city);
         assertThat(expectedResult).isEqualTo(result);

@@ -19,9 +19,9 @@ public abstract class AbstractSaver<D, E, I> implements Saver<D, E, I> {
         ImmutableResult.Builder<D> builder;
         try{
             E savedEntity = saveImpl(entity);
-            builder = ImmutableResult.<D>ok(convertEntityToDomain(savedEntity));
+            builder = ImmutableResult.<D>bOk(convertEntityToDomain(savedEntity));
         } catch (DTOServiceException ex){
-            builder = ImmutableResult.<D>fail(ex.getMessage());
+            builder = ImmutableResult.<D>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 

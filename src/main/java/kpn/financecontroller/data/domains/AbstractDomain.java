@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.domains;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.function.Function;
 @MappedSuperclass
 @Setter
 @Getter
+@EqualsAndHashCode
 public abstract class AbstractDomain implements Domain {
     protected static final String DEFAULT_GETTING_RESULT = "-";
     protected Long id;

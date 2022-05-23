@@ -11,7 +11,7 @@ class AbstractBeforeRemovingCheckerTest {
     @Test
     void shouldCheckChecking() {
         String value = "value";
-        ImmutableResult<Void> expectedResult = ImmutableResult.<Void>ok(null).build();
+        ImmutableResult<Void> expectedResult = ImmutableResult.<Void>ok(null);
 
         Result<Void> result = new TestChecker().apply(value);
         assertThat(expectedResult).isEqualTo(result);

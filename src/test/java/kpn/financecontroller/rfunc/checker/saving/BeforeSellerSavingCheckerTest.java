@@ -12,7 +12,7 @@ class BeforeSellerSavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         Seller domain = new Builder().build();
-        ImmutableResult<Seller> expectedResult = ImmutableResult.<Seller>fail("checking.domain.seller.name.isEmpty").build();
+        ImmutableResult<Seller> expectedResult = ImmutableResult.<Seller>fail("checking.domain.seller.name.isEmpty");
 
         Result<Seller> result = new BeforeSellerSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -21,7 +21,7 @@ class BeforeSellerSavingCheckerTest {
     @Test
     void shouldCheck_whenNameEmpty() {
         Seller domain = new Builder().name("").build();
-        ImmutableResult<Seller> expectedResult = ImmutableResult.<Seller>fail("checking.domain.seller.name.isEmpty").build();
+        ImmutableResult<Seller> expectedResult = ImmutableResult.<Seller>fail("checking.domain.seller.name.isEmpty");
 
         Result<Seller> result = new BeforeSellerSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -30,7 +30,7 @@ class BeforeSellerSavingCheckerTest {
     @Test
     void shouldCheck() {
         Seller domain = new Builder().name("name").build();
-        ImmutableResult<Seller> expectedResult = ImmutableResult.<Seller>ok(domain).build();
+        ImmutableResult<Seller> expectedResult = ImmutableResult.<Seller>ok(domain);
 
         Result<Seller> result = new BeforeSellerSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);

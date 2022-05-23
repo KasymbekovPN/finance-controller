@@ -7,12 +7,8 @@ import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
-import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -60,13 +56,7 @@ final public class ProductView extends GridView<Product> {
 
         form.addListener(ProductForm.ProductSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(ProductForm.ProductDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(ProductForm.ProductCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Product());
+        form.addListener(ProductForm.ProductCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

@@ -12,7 +12,7 @@ class BeforeTagSavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         Tag tag = new Tag();
-        ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>fail("checking.domain.tag.name.isEmpty").build();
+        ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>fail("checking.domain.tag.name.isEmpty");
 
         Result<Tag> result = new BeforeTagSavingChecker().apply(tag);
         assertThat(expectedResult).isEqualTo(result);
@@ -22,7 +22,7 @@ class BeforeTagSavingCheckerTest {
     void shouldCheck_whenNameEmpty() {
         Tag tag = new Tag();
         tag.setName("");
-        ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>fail("checking.domain.tag.name.isEmpty").build();
+        ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>fail("checking.domain.tag.name.isEmpty");
 
         Result<Tag> result = new BeforeTagSavingChecker().apply(tag);
         assertThat(expectedResult).isEqualTo(result);
@@ -32,7 +32,7 @@ class BeforeTagSavingCheckerTest {
     void shouldCheck() {
         Tag tag = new Tag();
         tag.setName("some.name");
-        ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>ok(tag).build();
+        ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>ok(tag);
 
         Result<Tag> result = new BeforeTagSavingChecker().apply(tag);
         assertThat(expectedResult).isEqualTo(result);

@@ -11,10 +11,10 @@ final public class BeforeCitySavingChecker extends AbstractBeforeSavingChecker<C
     public Result<City> apply(City value) {
         String name = value.getName();
         if (name == null || name.isEmpty()){
-            return ImmutableResult.<City>fail("checking.domain.city.name.isEmpty").build();
+            return ImmutableResult.<City>fail("checking.domain.city.name.isEmpty");
         }
         return value.getRegion() == null
-                ? ImmutableResult.<City>fail("checking.domain.city.region.isEmpty").build()
-                : ImmutableResult.<City>ok(value).build();
+                ? ImmutableResult.<City>fail("checking.domain.city.region.isEmpty")
+                : ImmutableResult.<City>ok(value);
     }
 }

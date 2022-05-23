@@ -68,13 +68,7 @@ final public class PaymentView extends GridView<Payment> {
 
         form.addListener(PaymentForm.PaymentSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(PaymentForm.PaymentDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(PaymentForm.PaymentCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Payment());
+        form.addListener(PaymentForm.PaymentCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

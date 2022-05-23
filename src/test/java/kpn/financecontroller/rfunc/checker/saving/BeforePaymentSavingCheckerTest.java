@@ -17,7 +17,7 @@ class BeforePaymentSavingCheckerTest {
     void shouldCheck_whenProductNull() {
         Payment domain = new Builder().build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.product.isEmpty").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.product.isEmpty");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -27,7 +27,7 @@ class BeforePaymentSavingCheckerTest {
     void shouldCheck_whenCurrencyNull() {
         Payment domain = new Builder().product(new Product()).build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.currency.isEmpty").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.currency.isEmpty");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -40,7 +40,7 @@ class BeforePaymentSavingCheckerTest {
                 .currency(Currency.RUB)
                 .build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.price.isEmpty").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.price.isEmpty");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -54,7 +54,7 @@ class BeforePaymentSavingCheckerTest {
                 .price(0.0f)
                 .build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.price.isEmpty").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.price.isEmpty");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -68,7 +68,7 @@ class BeforePaymentSavingCheckerTest {
                 .price(1.0f)
                 .build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.createdAt.isEmpty").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.createdAt.isEmpty");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -84,7 +84,7 @@ class BeforePaymentSavingCheckerTest {
                 .measure(Measure.KG)
                 .build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.amountAndMeasure.notConsistent").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.amountAndMeasure.notConsistent");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -100,7 +100,7 @@ class BeforePaymentSavingCheckerTest {
                 .amount(1.0f)
                 .build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.amountAndMeasure.notConsistent").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.amountAndMeasure.notConsistent");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -117,7 +117,7 @@ class BeforePaymentSavingCheckerTest {
                 .createAt()
                 .build();
         ImmutableResult<Payment> expectedResult
-                = ImmutableResult.<Payment>fail("checking.domain.payment.amount.isEmpty").build();
+                = ImmutableResult.<Payment>fail("checking.domain.payment.amount.isEmpty");
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);
@@ -131,7 +131,7 @@ class BeforePaymentSavingCheckerTest {
                 .price(1.0f)
                 .createAt()
                 .build();
-        ImmutableResult<Payment> expectedResult = ImmutableResult.<Payment>ok(domain).build();
+        ImmutableResult<Payment> expectedResult = ImmutableResult.<Payment>ok(domain);
 
         Result<Payment> result = new BeforePaymentSavingChecker().apply(domain);
         Assertions.assertThat(expectedResult).isEqualTo(result);

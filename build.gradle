@@ -44,8 +44,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.vaadin:vaadin-spring-boot-starter'
-//<	del ???
-    implementation 'org.testng:testng:7.1.0'
 
     testImplementation 'org.projectlombok:lombok'
 	implementation 'org.projectlombok:lombok'
@@ -57,7 +55,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	implementation 'com.github.KasymbekovPN:task-executor-lib:1.0.4'
-	implementation 'com.github.KasymbekovPN:result-lib:1.6.1'
+	implementation 'com.github.KasymbekovPN:result-lib:1.7.0'
 }
 
 dependencyManagement {

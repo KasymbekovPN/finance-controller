@@ -28,9 +28,9 @@ class ByTagStatisticServiceImplTest {
     @BeforeAll
     static void beforeAll() {
         expectedSeedWhenCheckingFail = ImmutableSeed.builder().code(FAIL_CHECKING_CODE).arg(FAIL_CHECKING_ARG).build();
-        expectedResultWhenCheckingFail = ImmutableResult.<Void>fail(FAIL_CHECKING_CODE).arg(FAIL_CHECKING_ARG).build();
+        expectedResultWhenCheckingFail = ImmutableResult.<Void>bFail(FAIL_CHECKING_CODE).arg(FAIL_CHECKING_ARG).build();
 
-        expectedResultWhenCheckingSuccess = ImmutableResult.<Void>ok(null).build();
+        expectedResultWhenCheckingSuccess = ImmutableResult.<Void>ok(null);
     }
 
     @Test

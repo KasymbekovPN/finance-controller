@@ -5,12 +5,8 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.gui.events.DeleteFormEvent;
-import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
-import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -56,13 +52,7 @@ final public class CountryView extends GridView<Country>{
 
         form.addListener(CountryForm.CountrySaveFormEvent.class, this::handleSavingEvent);
         form.addListener(CountryForm.CountryDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(CountryForm.CountryCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Country());
+        form.addListener(CountryForm.CountryCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

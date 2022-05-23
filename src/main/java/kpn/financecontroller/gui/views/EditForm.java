@@ -15,25 +15,37 @@ import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 
-abstract public class EditForm<D> extends FormLayout {
+abstract public class EditForm<DOMAIN> extends FormLayout {
 
     protected final Button save = new Button();
     protected final Button delete = new Button();
     protected final Button close = new Button();
-    protected final Binder<D> binder;
+    protected final Binder<DOMAIN> binder;
 
-    protected D value;
+    protected DOMAIN value;
 
-    protected EditForm(Binder<D> binder) {
+    protected EditForm(Binder<DOMAIN> binder) {
         this.binder = binder;
     }
 
-    public void setValue(D value) {
-        this.value = value;
-        binder.readBean(value);
+    public void setValueIfItNull(DOMAIN value) {
+        setValue(this.value == null ? value : this.value);
     }
 
-     protected Component createButtonsLayout() {
+    public void setValue(DOMAIN value) {
+        this.value = value;
+        binder.readBean(value);
+        setVisible(true);
+    }
+
+    public void close(boolean reset){
+        if (reset){
+            setValue(null);
+        }
+        setVisible(false);
+    }
+
+    protected Component createButtonsLayout() {
         save.setText(getTranslation("gui.button.save"));
         delete.setText(getTranslation("gui.button.delete"));
         close.setText(getTranslation("gui.button.cancel"));
@@ -45,8 +57,8 @@ abstract public class EditForm<D> extends FormLayout {
         save.addClickShortcut(Key.ENTER);
         close.addClickShortcut(Key.ESCAPE);
 
-        save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(createDeleteEvent()));
+        save.addClickListener(event -> processSaveButtonClick());
+        delete.addClickListener(event ->fireEvent(createDeleteEvent()));
         close.addClickListener(event -> fireEvent(createCloseEvent()));
 
         binder.addStatusChangeListener(event -> save.setEnabled(binder.isValid()));
@@ -54,13 +66,13 @@ abstract public class EditForm<D> extends FormLayout {
         return new HorizontalLayout(save, delete, close);
      }
 
-    protected void validateAndSave() {
-          try{
-               binder.writeBean(value);
-               fireEvent(createSaveEvent());
-          } catch (ValidationException ex){
-               ex.printStackTrace();
-          }
+    protected void processSaveButtonClick() {
+        try{
+           binder.writeBean(value);
+           fireEvent(createSaveEvent());
+        } catch (ValidationException ex){
+           ex.printStackTrace();
+        }
     }
 
     @Override
@@ -68,7 +80,7 @@ abstract public class EditForm<D> extends FormLayout {
         return getEventBus().addListener(eventType, listener);
     }
 
-    protected abstract SaveFormEvent<EditForm<D>, D> createSaveEvent();
-    protected abstract DeleteFormEvent<EditForm<D>, D> createDeleteEvent();
-    protected abstract CloseFormEvent<EditForm<D>, D> createCloseEvent();
+    protected abstract SaveFormEvent<EditForm<DOMAIN>, DOMAIN> createSaveEvent();
+    protected abstract DeleteFormEvent<EditForm<DOMAIN>, DOMAIN> createDeleteEvent();
+    protected abstract CloseFormEvent<EditForm<DOMAIN>, DOMAIN> createCloseEvent();
 }

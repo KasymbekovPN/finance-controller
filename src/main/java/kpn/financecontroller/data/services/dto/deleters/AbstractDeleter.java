@@ -19,9 +19,9 @@ public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
         ImmutableResult.Builder<Void> builder;
         try{
             deleteById(id);
-            builder = ImmutableResult.<Void>ok(null);
+            builder = ImmutableResult.<Void>bOk(null);
         } catch (DTOServiceException ex){
-            builder = ImmutableResult.<Void>fail(ex.getMessage());
+            builder = ImmutableResult.<Void>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 
@@ -38,16 +38,16 @@ public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
             if (checkValue(attribute, value)){
                 try{
                     deleteBy(attribute, value);
-                    builder = ImmutableResult.<Void>ok(null);
+                    builder = ImmutableResult.<Void>bOk(null);
                 } catch (DTOServiceException ex){
-                    builder = ImmutableResult.<Void>fail(ex.getMessage());
+                    builder = ImmutableResult.<Void>bFail(ex.getMessage());
                     Arrays.stream(ex.getArgs()).forEach(builder::arg);
                 }
             } else {
-                builder = ImmutableResult.<Void>fail("deleter.by.value.disallowed");
+                builder = ImmutableResult.<Void>bFail("deleter.by.value.disallowed");
             }
         } else {
-            builder = ImmutableResult.<Void>fail("deleter.by.attribute.disallowed");
+            builder = ImmutableResult.<Void>bFail("deleter.by.attribute.disallowed");
         }
 
         return builder
@@ -62,9 +62,9 @@ public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
         ImmutableResult.Builder<Void> builder;
         try{
             deleteAll();
-            builder = ImmutableResult.<Void>ok(null);
+            builder = ImmutableResult.<Void>bOk(null);
         } catch (DTOServiceException ex){
-            builder = ImmutableResult.<Void>fail(ex.getMessage());
+            builder = ImmutableResult.<Void>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
 

@@ -156,7 +156,7 @@ final public class PaymentForm extends EditForm<Payment> {
         @Override
         public Result<Float> convertToModel(String value, ValueContext context) {
             try{
-                return Result.<Float>ok(Float.parseFloat(value));
+                return Result.<Float>ok(Float.parseFloat(prepareStrValue(value)));
             } catch (NumberFormatException ex){
                 return Result.<Float>ok(0.0f);
             }
@@ -165,6 +165,13 @@ final public class PaymentForm extends EditForm<Payment> {
         @Override
         public String convertToPresentation(Float value, ValueContext context) {
             return value != null ? String.valueOf(value) : "0.0";
+        }
+
+        private String prepareStrValue(String value) {
+            if (value != null){
+                value = value.replace(",", ".");
+            }
+            return value;
         }
     }
 

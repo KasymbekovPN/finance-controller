@@ -13,7 +13,7 @@ class BeforeStreetSavingCheckerTest {
     @Test
     void shouldCheck_whenNameNull() {
         Street domain = new Builder().build();
-        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>fail("checking.domain.street.name.isEmpty").build();
+        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>fail("checking.domain.street.name.isEmpty");
 
         Result<Street> result = new BeforeStreetSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -22,7 +22,7 @@ class BeforeStreetSavingCheckerTest {
     @Test
     void shouldCheck_whenNameEmpty() {
         Street domain = new Builder().name("").build();
-        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>fail("checking.domain.street.name.isEmpty").build();
+        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>fail("checking.domain.street.name.isEmpty");
 
         Result<Street> result = new BeforeStreetSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -31,7 +31,7 @@ class BeforeStreetSavingCheckerTest {
     @Test
     void shouldCheck_whenCityNull() {
         Street domain = new Builder().name("name").build();
-        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>fail("checking.domain.street.city.isEmpty").build();
+        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>fail("checking.domain.street.city.isEmpty");
 
         Result<Street> result = new BeforeStreetSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);
@@ -40,7 +40,7 @@ class BeforeStreetSavingCheckerTest {
     @Test
     void shouldCheck() {
         Street domain = new Builder().name("name").city(new City()).build();
-        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>ok(domain).build();
+        ImmutableResult<Street> expectedResult = ImmutableResult.<Street>ok(domain);
 
         Result<Street> result = new BeforeStreetSavingChecker().apply(domain);
         assertThat(expectedResult).isEqualTo(result);

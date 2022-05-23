@@ -58,13 +58,7 @@ final public class SellerView extends GridView<Seller> {
 
         form.addListener(SellerForm.SellerSaveFormEvent.class, this::handleSavingEvent);
         form.addListener(SellerForm.SellerDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(SellerForm.SellerCloseFormEvent.class, e -> closeEditor());
-    }
-
-    @Override
-    protected void add() {
-        grid.asSingleSelect().clear();
-        editValue(new Seller());
+        form.addListener(SellerForm.SellerCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override
