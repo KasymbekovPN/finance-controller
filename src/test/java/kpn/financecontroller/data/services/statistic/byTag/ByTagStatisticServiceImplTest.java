@@ -35,7 +35,7 @@ class ByTagStatisticServiceImplTest {
 
     @Test
     void shouldCheckCalculation_whenQueryCheckingFail() {
-        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(null, createFailChecker());
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl( createFailChecker());
         Seed seed = service.calculate(new Query());
 
         assertThat(expectedSeedWhenCheckingFail).isEqualTo(seed);
