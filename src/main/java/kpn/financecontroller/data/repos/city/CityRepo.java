@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.repos.city;
 
 import kpn.financecontroller.data.entities.city.CityEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import kpn.financecontroller.data.repos.Repo;
 
-public interface CityRepo extends JpaRepository<CityEntity, Long> {
+public interface CityRepo extends Repo<CityEntity> {
 }

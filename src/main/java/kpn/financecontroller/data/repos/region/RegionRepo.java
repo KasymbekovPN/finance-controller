@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.repos.region;
 
 import kpn.financecontroller.data.entities.region.RegionEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import kpn.financecontroller.data.repos.Repo;
 
-public interface RegionRepo extends JpaRepository<RegionEntity, Long> {
+public interface RegionRepo extends Repo<RegionEntity> {
 }

@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.repos.tag;
 
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import kpn.financecontroller.data.repos.Repo;
 
-public interface TagRepo extends JpaRepository<TagEntity, Long> {
+public interface TagRepo extends Repo<TagEntity> {
 }

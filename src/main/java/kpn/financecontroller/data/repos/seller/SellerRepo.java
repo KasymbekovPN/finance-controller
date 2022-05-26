@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.repos.seller;
 
 import kpn.financecontroller.data.entities.seller.SellerEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import kpn.financecontroller.data.repos.Repo;
 
-public interface SellerRepo extends JpaRepository<SellerEntity, Long> {
+public interface SellerRepo extends Repo<SellerEntity> {
 }
