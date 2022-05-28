@@ -1,7 +1,8 @@
 package kpn.financecontroller.data.repos.street;
 
 import kpn.financecontroller.data.entities.street.StreetEntity;
-import kpn.financecontroller.data.repos.Repo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface StreetRepo extends Repo<StreetEntity> {
+public interface StreetRepo extends JpaRepository<StreetEntity, Long>, QuerydslPredicateExecutor<StreetEntity> {
 }
