@@ -9,7 +9,7 @@ import lombok.Setter;
 
 final public class CleanupTask extends BaseTask {
     @Setter
-    private DTOService<?, ?, Long> dtoService;
+    private DTOService<?, ?> dtoService;
 
     @Override
     public void execute(Context context) {

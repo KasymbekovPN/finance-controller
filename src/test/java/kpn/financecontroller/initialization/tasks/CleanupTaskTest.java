@@ -2,8 +2,8 @@ package kpn.financecontroller.initialization.tasks;
 
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
 import kpn.financecontroller.data.services.dto.deleters.Deleter;
+import kpn.financecontroller.data.services.dto.DTOService;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -95,5 +95,5 @@ public class CleanupTaskTest {
     }
 
     public abstract static class TestDeleter implements Deleter<Tag, TagEntity, Long>{}
-    public abstract static class TestDtoService implements DTOService<Tag, TagEntity, Long>{}
+    public abstract static class TestDtoService implements DTOService<Tag, TagEntity> {}
 }

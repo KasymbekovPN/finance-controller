@@ -29,9 +29,9 @@ final public class StreetView extends GridView<Street>{
     );
 
     @Autowired
-    private DTOService<Street, StreetEntity, Long> streetService;
+    private DTOService<Street, StreetEntity> streetService;
     @Autowired
-    private DTOService<City, CityEntity, Long> cityService;
+    private DTOService<City, CityEntity> cityService;
 
     @Override
     protected Result<?> updateListImpl() {

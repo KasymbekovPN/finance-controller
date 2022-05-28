@@ -24,7 +24,7 @@ final public class TagView extends GridView<Tag> {
     );
 
     @Autowired
-    private DTOService<Tag, TagEntity, Long> tagService;
+    private DTOService<Tag, TagEntity> tagService;
 
     @Override
     protected Result<?> updateListImpl() {

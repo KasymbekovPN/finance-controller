@@ -28,9 +28,9 @@ final public class CityView extends GridView<City> {
     );
 
     @Autowired
-    private DTOService<City, CityEntity, Long> cityService;
+    private DTOService<City, CityEntity> cityService;
     @Autowired
-    private DTOService<Region, RegionEntity, Long> regionService;
+    private DTOService<Region, RegionEntity> regionService;
 
     @Override
     protected Result<?> updateListImpl() {

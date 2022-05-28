@@ -34,11 +34,11 @@ final public class PaymentView extends GridView<Payment> {
     );
 
     @Autowired
-    private DTOService<Payment, PaymentEntity, Long> paymentService;
+    private DTOService<Payment, PaymentEntity> paymentService;
     @Autowired
-    private DTOService<Seller, SellerEntity, Long> sellerService;
+    private DTOService<Seller, SellerEntity> sellerService;
     @Autowired
-    private DTOService<Product, ProductEntity, Long> productService;
+    private DTOService<Product, ProductEntity> productService;
 
     @Override
     protected Result<?> updateListImpl() {

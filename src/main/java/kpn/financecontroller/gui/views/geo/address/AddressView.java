@@ -30,9 +30,9 @@ final public class AddressView extends GridView<Address> {
     );
 
     @Autowired
-    private DTOService<Address, AddressEntity, Long> addressService;
+    private DTOService<Address, AddressEntity> addressService;
     @Autowired
-    private DTOService<Street, StreetEntity, Long> streetService;
+    private DTOService<Street, StreetEntity> streetService;
 
     @Override
     protected Result<?> updateListImpl() {

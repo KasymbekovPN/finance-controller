@@ -56,7 +56,7 @@ final public class CleanupGenerator extends BaseGenerator {
     public static class Builder extends BaseBuilder{
         private final List<Item> items = new ArrayList<>();
 
-        public Builder item(Valued<String> key, DTOService<?, ?, Long> dtoService){
+        public Builder item(Valued<String> key, DTOService<?, ?> dtoService){
             items.add(new Item(key, dtoService));
             return this;
         }
@@ -71,6 +71,6 @@ final public class CleanupGenerator extends BaseGenerator {
     @Getter
     private static class Item{
         private final Valued<String> key;
-        private final DTOService<?, ?, Long> dtoService;
+        private final DTOService<?, ?> dtoService;
     }
 }

@@ -42,7 +42,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -56,23 +55,23 @@ import java.util.function.Function;
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private DTOService<Tag, TagEntity, Long> tagDtoService;
+    private DTOService<Tag, TagEntity> tagDtoService;
     @Autowired
-    private DTOService<Country, CountryEntity, Long> countryDtoService;
+    private DTOService<Country, CountryEntity> countryDtoService;
     @Autowired
-    private DTOService<Region, RegionEntity, Long> regionDtoService;
+    private DTOService<Region, RegionEntity> regionDtoService;
     @Autowired
-    private DTOService<City, CityEntity, Long> cityDtoService;
+    private DTOService<City, CityEntity> cityDtoService;
     @Autowired
-    private DTOService<Street, StreetEntity, Long> streetDtoService;
+    private DTOService<Street, StreetEntity> streetDtoService;
     @Autowired
-    private DTOService<Address, AddressEntity, Long> addressDtoService;
+    private DTOService<Address, AddressEntity> addressDtoService;
     @Autowired
-    private DTOService<Seller, SellerEntity, Long> sellerDtoService;
+    private DTOService<Seller, SellerEntity> sellerDtoService;
     @Autowired
-    private DTOService<Product, ProductEntity, Long> productDtoService;
+    private DTOService<Product, ProductEntity> productDtoService;
     @Autowired
-    private DTOService<Payment, PaymentEntity, Long> paymentDtoService;
+    private DTOService<Payment, PaymentEntity> paymentDtoService;
 
     @Autowired
     private Setting setting;
@@ -182,9 +181,9 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 .build();
     }
 
-    private Generator createCleanupGenerator(List<Pair<Valued<String>, DTOService<?, ?, Long>>> init) {
+    private Generator createCleanupGenerator(List<Pair<Valued<String>, DTOService<?, ?>>> init) {
         CleanupGenerator.Builder builder = CleanupGenerator.builder();
-        for (Pair<Valued<String>, DTOService<?, ?, Long>> item : init) {
+        for (Pair<Valued<String>, DTOService<?, ?>> item : init) {
             builder.item(item.getKey(), item.getValue());
         }
         return builder

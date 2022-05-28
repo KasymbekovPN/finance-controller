@@ -27,9 +27,9 @@ final public class ProductView extends GridView<Product> {
     );
 
     @Autowired
-    private DTOService<Product, ProductEntity, Long> service;
+    private DTOService<Product, ProductEntity> service;
     @Autowired
-    private DTOService<Tag, TagEntity, Long> tagService;
+    private DTOService<Tag, TagEntity> tagService;
 
     @Override
     protected Result<?> updateListImpl() {

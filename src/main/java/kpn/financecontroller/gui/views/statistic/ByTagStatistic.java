@@ -40,7 +40,7 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
 
 
     @Autowired
-    private DTOService<Tag, TagEntity, Long> tagDtoService;
+    private DTOService<Tag, TagEntity> tagDtoService;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
 

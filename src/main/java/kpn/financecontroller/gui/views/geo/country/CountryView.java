@@ -25,7 +25,7 @@ final public class CountryView extends GridView<Country>{
     );
 
     @Autowired
-    private DTOService<Country, CountryEntity, Long> countryService;
+    private DTOService<Country, CountryEntity> countryService;
 
     @Override
     protected Result<?> updateListImpl() {

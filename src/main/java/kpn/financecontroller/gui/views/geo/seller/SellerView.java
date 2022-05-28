@@ -29,9 +29,9 @@ final public class SellerView extends GridView<Seller> {
     );
 
     @Autowired
-    private DTOService<Seller, SellerEntity, Long> sellerService;
+    private DTOService<Seller, SellerEntity> sellerService;
     @Autowired
-    private DTOService<Address, AddressEntity, Long> addressService;
+    private DTOService<Address, AddressEntity> addressService;
 
     @Override
     protected Result<?> updateListImpl() {

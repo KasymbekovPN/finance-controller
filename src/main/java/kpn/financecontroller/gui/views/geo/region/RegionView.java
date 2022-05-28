@@ -27,9 +27,9 @@ final public class RegionView extends GridView<Region>{
     );
 
     @Autowired
-    private DTOService<Region, RegionEntity, Long> regionService;
+    private DTOService<Region, RegionEntity> regionService;
     @Autowired
-    private DTOService<Country, CountryEntity, Long> countryService;
+    private DTOService<Country, CountryEntity> countryService;
 
     @Override
     protected Result<?> updateListImpl() {
