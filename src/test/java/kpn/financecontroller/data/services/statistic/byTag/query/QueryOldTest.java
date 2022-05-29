@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class QueryTest {
+class QueryOldTest {
 
     @Test
     void shouldCheckTassAsIdsGetting_whenNotSet() {
-        Query query = new Query();
-        assertThat(query.getTagsAsIds()).isEmpty();
+        QueryOld queryOld = new QueryOld();
+        assertThat(queryOld.getTagsAsIds()).isEmpty();
     }
 
     @Test
@@ -21,10 +21,10 @@ class QueryTest {
         List<Long> expectedIds = List.of(0L, 1L, 2L);
         List<Tag> tags = expectedIds.stream().map(this::createTag).collect(Collectors.toList());
 
-        Query query = new Query();
-        query.setTags(tags);
+        QueryOld queryOld = new QueryOld();
+        queryOld.setTags(tags);
 
-        assertThat(expectedIds).isEqualTo(query.getTagsAsIds());
+        assertThat(expectedIds).isEqualTo(queryOld.getTagsAsIds());
     }
 
     private Tag createTag(Long id){

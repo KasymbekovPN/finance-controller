@@ -1,24 +1,9 @@
-// TODO: 28.05.2022 restore
-//package kpn.financecontroller.data.services.statistic.byTag;
-//
-//import kpn.financecontroller.data.domains.payment.Payment;
-//import kpn.financecontroller.data.entities.payment.PaymentEntity;
-//import kpn.financecontroller.data.services.dto.DTOService;
-//import kpn.financecontroller.data.services.statistic.byTag.query.Query;
-//import kpn.lib.result.ImmutableResult;
-//import kpn.lib.result.Result;
-//import kpn.lib.seed.ImmutableSeed;
-//import kpn.lib.seed.Seed;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.Mockito;
-//
-//import java.util.function.Function;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//
-//class ByTagStatisticServiceImplTest {
-//
+package kpn.financecontroller.data.services.statistic.byTag;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ByTagStatisticServiceImplTest {
+
 //    private static final String FAIL_CHECKING_CODE = "fail.checking.code";
 //    private static final String FAIL_CHECKING_ARG = "fail.checking.arg";
 //
@@ -68,4 +53,4 @@
 //
 //    private interface TestChecker extends Function<Query, Result<Void>>{}
 //    private interface TestDtoService extends DTOService<Payment, PaymentEntity, Long>{}
-//}
+}

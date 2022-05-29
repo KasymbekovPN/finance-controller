@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-final public class Query {
+final public class QueryOld {
     private boolean beginTimeEnable;
     private LocalDate beginTime;
     private boolean endTimeEnable;
@@ -22,13 +22,13 @@ final public class Query {
     private boolean forAllTags;
     private List<Tag> tags = new ArrayList<>();
 
-    public Query(Query query) {
-        this.beginTimeEnable = query.beginTimeEnable;
-        this.beginTime = LocalDate.from(query.beginTime);
-        this.endTimeEnable = query.endTimeEnable;
-        this.endTime = LocalDate.from(query.endTime);
-        this.forAllTags = query.forAllTags;
-        this.tags = query.tags.stream().map(t -> {
+    public QueryOld(QueryOld queryOld) {
+        this.beginTimeEnable = queryOld.beginTimeEnable;
+        this.beginTime = LocalDate.from(queryOld.beginTime);
+        this.endTimeEnable = queryOld.endTimeEnable;
+        this.endTime = LocalDate.from(queryOld.endTime);
+        this.forAllTags = queryOld.forAllTags;
+        this.tags = queryOld.tags.stream().map(t -> {
             Tag tag = new Tag();
             tag.setId(t.getId());
             tag.setName(t.getName());

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class QueryCheckerTest {
+class QueryOldCheckerTest {
 
     private static QueryChecker checker;
     private static ImmutableResult<Void> expectedResultWhenWrongBeginTimeCondition;
@@ -29,46 +29,46 @@ class QueryCheckerTest {
 
     @Test
     void shouldCheck_whenBeginTimeConditionIsWrong() {
-        Query query = new Query();
-        query.setBeginTimeEnable(true);
+        QueryOld queryOld = new QueryOld();
+        queryOld.setBeginTimeEnable(true);
 
-        Result<Void> result = checker.apply(query);
+        Result<Void> result = checker.apply(queryOld);
         assertThat(expectedResultWhenWrongBeginTimeCondition).isEqualTo(result);
     }
 
     @Test
     void shouldCheck_whenEndTimeConditionIsWrong() {
-        Query query = new Query();
-        query.setBeginTimeEnable(true);
-        query.setBeginTime(LocalDate.now());
-        query.setEndTimeEnable(true);
+        QueryOld queryOld = new QueryOld();
+        queryOld.setBeginTimeEnable(true);
+        queryOld.setBeginTime(LocalDate.now());
+        queryOld.setEndTimeEnable(true);
 
-        Result<Void> result = checker.apply(query);
+        Result<Void> result = checker.apply(queryOld);
         assertThat(expectedResultWhenWrongEndTimeCondition).isEqualTo(result);
     }
 
     @Test
     void shouldCheck_whenTagsConditionIsWrong() {
-        Query query = new Query();
-        query.setBeginTimeEnable(true);
-        query.setBeginTime(LocalDate.now());
-        query.setEndTimeEnable(true);
-        query.setEndTime(LocalDate.now());
+        QueryOld queryOld = new QueryOld();
+        queryOld.setBeginTimeEnable(true);
+        queryOld.setBeginTime(LocalDate.now());
+        queryOld.setEndTimeEnable(true);
+        queryOld.setEndTime(LocalDate.now());
 
-        Result<Void> result = checker.apply(query);
+        Result<Void> result = checker.apply(queryOld);
         assertThat(expectedResultWhenWrongTagsCondition).isEqualTo(result);
     }
 
     @Test
     void shouldCheck() {
-        Query query = new Query();
-        query.setBeginTimeEnable(true);
-        query.setBeginTime(LocalDate.now());
-        query.setEndTimeEnable(true);
-        query.setEndTime(LocalDate.now());
-        query.setForAllTags(true);
+        QueryOld queryOld = new QueryOld();
+        queryOld.setBeginTimeEnable(true);
+        queryOld.setBeginTime(LocalDate.now());
+        queryOld.setEndTimeEnable(true);
+        queryOld.setEndTime(LocalDate.now());
+        queryOld.setForAllTags(true);
 
-        Result<Void> result = checker.apply(query);
+        Result<Void> result = checker.apply(queryOld);
         assertThat(expectedResult).isEqualTo(result);
     }
 }

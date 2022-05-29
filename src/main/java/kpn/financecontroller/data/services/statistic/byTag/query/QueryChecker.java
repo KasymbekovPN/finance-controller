@@ -7,32 +7,32 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 @Component
-final public class QueryChecker implements Function<Query, Result<Void>> {
+final public class QueryChecker implements Function<QueryOld, Result<Void>> {
     @Override
-    public Result<Void> apply(Query query) {
-        Result<Void> result = checkBeginTime(query);
+    public Result<Void> apply(QueryOld queryOld) {
+        Result<Void> result = checkBeginTime(queryOld);
         if (!result.isSuccess()) return result;
 
-        result = checkEndTime(query);
+        result = checkEndTime(queryOld);
         if (!result.isSuccess()) return result;
 
-        return checkTags(query);
+        return checkTags(queryOld);
     }
 
-    private Result<Void> checkBeginTime(Query query) {
-        return query.isBeginTimeEnable() && query.getBeginTime() == null
+    private Result<Void> checkBeginTime(QueryOld queryOld) {
+        return queryOld.isBeginTimeEnable() && queryOld.getBeginTime() == null
                 ? createFailResult("checking.query.beginTime.invalid")
                 : createOkResult();
     }
 
-    private Result<Void> checkEndTime(Query query) {
-        return query.isEndTimeEnable() && query.getEndTime() == null
+    private Result<Void> checkEndTime(QueryOld queryOld) {
+        return queryOld.isEndTimeEnable() && queryOld.getEndTime() == null
                 ? createFailResult("checking.query.endTime.invalid")
                 : createOkResult();
     }
 
-    private Result<Void> checkTags(Query query) {
-        return !query.isForAllTags() && query.getTags().isEmpty()
+    private Result<Void> checkTags(QueryOld queryOld) {
+        return !queryOld.isForAllTags() && queryOld.getTags().isEmpty()
                 ? createFailResult("checking.query.tags.invalid")
                 : createOkResult();
     }

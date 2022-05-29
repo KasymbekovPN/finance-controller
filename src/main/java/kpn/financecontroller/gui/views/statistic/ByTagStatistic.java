@@ -15,7 +15,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.data.services.statistic.byTag.query.Query;
+import kpn.financecontroller.data.services.statistic.byTag.query.QueryOld;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     private final DatePicker beginTime = createDatePicker(this::callOnStartDatePickerStateChanging);
     private final DatePicker endTime = createDatePicker(this::callOnEndDatePickerStateChanging);
 
-    private final Query query = new Query();
+    private final QueryOld queryOld = new QueryOld();
 
 
     @Autowired
@@ -135,39 +135,39 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
 
     private void callOnStartCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
         Boolean enabled = event.getValue();
-        query.setBeginTimeEnable(enabled);
+        queryOld.setBeginTimeEnable(enabled);
         beginTime.setEnabled(enabled);
         if (!enabled){
-            query.setBeginTime(null);
+            queryOld.setBeginTime(null);
         }
     }
 
     private void callOnStartDatePickerStateChanging(AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate> event) {
-        query.setBeginTime(event.getValue());
+        queryOld.setBeginTime(event.getValue());
     }
 
     private void callOnEndCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
         Boolean enabled = event.getValue();
-        query.setEndTimeEnable(enabled);
+        queryOld.setEndTimeEnable(enabled);
         endTime.setEnabled(enabled);
         if (!enabled){
-            query.setEndTime(null);
+            queryOld.setEndTime(null);
         }
     }
 
     private void callOnEndDatePickerStateChanging(AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate> event) {
-        query.setEndTime(event.getValue());
+        queryOld.setEndTime(event.getValue());
     }
 
     private void callOnAllTagsCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        query.setForAllTags(event.getValue());
+        queryOld.setForAllTags(event.getValue());
     }
 
     private void callOnMultiSelectListBoxValueChanging(AbstractField.ComponentValueChangeEvent<MultiSelectListBox<Tag>, Set<Tag>> event) {
-        query.setTags(new ArrayList<>(event.getValue()));
+        queryOld.setTags(new ArrayList<>(event.getValue()));
     }
 
     private void callOnButtonClick(ClickEvent<?> event) {
-        System.out.println(query);
+        System.out.println(queryOld);
     }
 }
