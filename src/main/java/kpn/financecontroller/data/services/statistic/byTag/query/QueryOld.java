@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// TODO: 29.05.2022 del
 @NoArgsConstructor
 @Getter
 @Setter

@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 class ProductTaskTest {
 
     @Test
-    void shouldCheckCopyConstruction() {
+    void shouldCheckCopying() {
         Set<Tag> tags = createTags(1L, 2L, 3L);
-        ProductTask task = createTask(true, tags);
+        ProductTask task = createTask(tags);
         ProductTask copied = ProductTask.copy(task);
 
         Assertions.assertThat(task).isEqualTo(copied);
     }
 
-    private ProductTask createTask(boolean allTags, Set<Tag> tags) {
+    private ProductTask createTask(Set<Tag> tags) {
         ProductTask task = new ProductTask();
-        task.setAllTags(allTags);
+        task.setAllTags(false);
         task.setTags(tags);
         return task;
     }

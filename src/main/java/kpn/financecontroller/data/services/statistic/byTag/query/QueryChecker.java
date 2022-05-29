@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
+// TODO: 29.05.2022 del
 @Component
 final public class QueryChecker implements Function<QueryOld, Result<Void>> {
     @Override
