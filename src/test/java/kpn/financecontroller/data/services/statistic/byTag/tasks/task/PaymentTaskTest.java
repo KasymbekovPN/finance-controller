@@ -1,4 +1,4 @@
-package kpn.financecontroller.data.services.statistic.byTag.task;
+package kpn.financecontroller.data.services.statistic.byTag.tasks.task;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
