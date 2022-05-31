@@ -8,6 +8,7 @@ import kpn.lib.result.Result;
 
 import java.util.Arrays;
 
+// TODO: 31.05.2022 it must be generic
 final public class FailTaskToPaymentRRConverter implements RRFunction<PaymentTask, Payment> {
 
     @Override
