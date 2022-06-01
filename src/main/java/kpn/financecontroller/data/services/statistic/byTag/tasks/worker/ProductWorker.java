@@ -1,27 +1,34 @@
-//package kpn.financecontroller.data.services.statistic.byTag.tasks.worker;
-//
-//import kpn.financecontroller.data.domains.product.Product;
-//import kpn.financecontroller.data.entities.product.ProductEntity;
-//import kpn.financecontroller.data.services.dto.DTOService;
-//import kpn.financecontroller.data.services.statistic.byTag.tasks.checker.Checker;
-//import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
-//import kpn.financecontroller.rfunc.RRFunction;
-//import kpn.lib.result.Result;
-//
-//// TODO: 31.05.2022 it's component
-//final public class ProductWorker extends AbstractWorker<ProductTask, Product> {
-//
-//    private final DTOService<Product, ProductEntity> service;
-//
-//    public ProductWorker(Checker<ProductTask> checker,
-//                         RRFunction<ProductTask, Product> converter,
-//                         DTOService<Product, ProductEntity> service) {
-//        super(checker, converter);
-//        this.service = service;
-//    }
-//
-//    @Override
-//    protected Result<Product> executeTask(ProductTask task) {
-//        return null;
-//    }
-//}
+package kpn.financecontroller.data.services.statistic.byTag.tasks.worker;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
+import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.entities.product.ProductEntity;
+import kpn.financecontroller.data.entities.tag.QTagEntity;
+import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
+import kpn.lib.result.Result;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Component
+@AllArgsConstructor
+final public class ProductWorker implements Worker<ProductTask, Product> {
+
+    private final DTOService<Product, ProductEntity> service;
+
+    @Override
+    public Result<List<Product>> execute(ProductTask task) {
+        if (task.isAllTags()){
+            return service.loader().all();
+        }
+
+        Set<Long> tagIds = task.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
+        BooleanExpression expression = QTagEntity.tagEntity.id.in(tagIds);
+        return service.executor().execute(expression);
+    }
+}
