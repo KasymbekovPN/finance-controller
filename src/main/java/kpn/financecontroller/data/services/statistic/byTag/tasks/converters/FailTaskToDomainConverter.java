@@ -1,19 +1,17 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.converters;
 
-import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
+import kpn.financecontroller.data.domains.Domain;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
 import kpn.financecontroller.rfunc.RRFunction;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 
 import java.util.Arrays;
 
-// TODO: 31.05.2022 it must be generic
-final public class FailTaskToPaymentRRConverter implements RRFunction<PaymentTask, Payment> {
-
+final public class FailTaskToDomainConverter<TASK extends Task, DOMAIN extends Domain> implements RRFunction<TASK, DOMAIN> {
     @Override
-    public Result<Payment> apply(Result<PaymentTask> value) {
-        ImmutableResult.Builder<Payment> builder = ImmutableResult.<Payment>builder()
+    public Result<DOMAIN> apply(Result<TASK> value) {
+        ImmutableResult.Builder<DOMAIN> builder = ImmutableResult.<DOMAIN>builder()
                 .success(value.isSuccess())
                 .code(value.getSeed().getCode());
         Arrays.stream(value.getSeed().getArgs()).forEach(builder::arg);
