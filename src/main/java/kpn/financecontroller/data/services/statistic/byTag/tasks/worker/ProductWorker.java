@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 final public class ProductWorker implements Worker<ProductTask, Product> {
 
     private final DTOService<Product, ProductEntity> service;
+    // TODO: 02.06.2022 add task to expression converter
 
     @Override
     public Result<List<Product>> execute(ProductTask task) {
