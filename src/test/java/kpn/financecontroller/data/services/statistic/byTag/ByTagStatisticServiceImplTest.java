@@ -1,9 +1,42 @@
 package kpn.financecontroller.data.services.statistic.byTag;
 
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ByTagStatisticServiceImplTest {
 
+    @Test
+    void shouldCheckCalculation_whenWrongTaskSize() {
+
+    }
+
+    @Test
+    void shouldCheckCalculation_whenProductTaskHasWrongType() {
+
+    }
+
+    @Test
+    void shouldCheckCalculation_whenPaymentTaskHasWrongType() {
+
+    }
+
+    @Test
+    void shouldCheckCalculation_productExecutorReturnBadResult() {
+
+    }
+
+    @Test
+    void shouldCheckCalculation_paymentExecutorReturnBadResult() {
+
+    }
+
+    @Test
+    void shouldCheckCalculation() {
+
+    }
+
+    // TODO: 04.06.2022 del
 //    private static final String FAIL_CHECKING_CODE = "fail.checking.code";
 //    private static final String FAIL_CHECKING_ARG = "fail.checking.arg";
 //

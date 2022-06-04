@@ -5,9 +5,11 @@ import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
 import kpn.financecontroller.rfunc.RRFunction;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 final public class FailTaskToDomainConverter<TASK extends Task, DOMAIN extends Domain> implements RRFunction<TASK, DOMAIN> {
     @Override
     public Result<DOMAIN> apply(Result<TASK> value) {

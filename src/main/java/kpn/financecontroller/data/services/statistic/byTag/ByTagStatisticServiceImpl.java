@@ -2,39 +2,63 @@ package kpn.financecontroller.data.services.statistic.byTag;
 
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.entities.payment.PaymentEntity;
-import kpn.financecontroller.data.entities.product.ProductEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.data.services.statistic.byTag.query.QueryOld;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.executor.TaskExecutor;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
 import kpn.lib.result.Result;
 import kpn.lib.seed.Seed;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.function.Function;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-final public class ByTagStatisticServiceImpl implements ByTagStatisticService<QueryOld, Seed> {
-    private final Function<QueryOld, Result<Void>> checker;
-    private final DTOService<Product, ProductEntity> productService;
-    private final DTOService<Payment, PaymentEntity> paymentEntity;
-
-    @Autowired
-    public ByTagStatisticServiceImpl(Function<QueryOld, Result<Void>> checker,
-                                     DTOService<Product, ProductEntity> productService,
-                                     DTOService<Payment, PaymentEntity> paymentEntity) {
-        this.checker = checker;
-        this.productService = productService;
-        this.paymentEntity = paymentEntity;
-    }
+@AllArgsConstructor
+final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Task, Seed> {
+    private final TaskExecutor<ProductTask, Product> productTaskExecutor;
+    private final TaskExecutor<PaymentTask, Payment> paymentTaskExecutor;
 
     @Override
-    public Seed calculate(QueryOld queryOld) {
-        Result<Void> checkingResult = checker.apply(queryOld);
-        if (checkingResult.isSuccess()){
-
+    public Seed calculate(Task... tasks) {
+        if (isWrongTaskSize(tasks)){
             return null;
         }
-        return checkingResult.getSeed();
+
+        Optional<ProductTask> maybeProductTask = checkProductTask(tasks[0]);
+        if (maybeProductTask.isEmpty()){
+            return null;
+        }
+
+        Optional<PaymentTask> maybePaymentTask = checkPaymentTask(tasks[1]);
+        if (maybePaymentTask.isEmpty()){
+            return null;
+        }
+
+        Result<List<Product>> productResult = productTaskExecutor.execute(maybeProductTask.get());
+        if (!productResult.isSuccess()){
+            return null;
+        }
+
+        PaymentTask paymentTask = maybePaymentTask.get();
+        paymentTask.setProducts(new HashSet<>(productResult.getValue()));
+        // TODO: 04.06.2022 restore
+//        return paymentTaskExecutor.execute(paymentTask);
+
+        return null;
+    }
+
+    private boolean isWrongTaskSize(Task[] tasks) {
+        return false;
+    }
+
+    private Optional<ProductTask> checkProductTask(Task task) {
+        return null;
+    }
+
+    private Optional<PaymentTask> checkPaymentTask(Task task) {
+        return null;
     }
 }
