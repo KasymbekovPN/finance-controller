@@ -6,6 +6,7 @@ import kpn.financecontroller.data.services.statistic.byTag.tasks.executor.TaskEx
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
+import kpn.financecontroller.rfunc.OFunction;
 import kpn.lib.result.Result;
 import kpn.lib.seed.Seed;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,12 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Task, Seed> {
+    private static final int TASK_AMOUNT = 2;
+
     private final TaskExecutor<ProductTask, Product> productTaskExecutor;
     private final TaskExecutor<PaymentTask, Payment> paymentTaskExecutor;
+    private final OFunction<Task, ProductTask> productTaskChecker;
+    private final OFunction<Task, PaymentTask> paymentTaskChecker;
 
     @Override
     public Seed calculate(Task... tasks) {
@@ -27,12 +32,12 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
             return null;
         }
 
-        Optional<ProductTask> maybeProductTask = checkProductTask(tasks[0]);
+        Optional<ProductTask> maybeProductTask = productTaskChecker.apply(tasks[0]);
         if (maybeProductTask.isEmpty()){
             return null;
         }
 
-        Optional<PaymentTask> maybePaymentTask = checkPaymentTask(tasks[1]);
+        Optional<PaymentTask> maybePaymentTask = paymentTaskChecker.apply(tasks[1]);
         if (maybePaymentTask.isEmpty()){
             return null;
         }
@@ -51,14 +56,6 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
     }
 
     private boolean isWrongTaskSize(Task[] tasks) {
-        return false;
-    }
-
-    private Optional<ProductTask> checkProductTask(Task task) {
-        return null;
-    }
-
-    private Optional<PaymentTask> checkPaymentTask(Task task) {
-        return null;
+        return tasks.length != TASK_AMOUNT;
     }
 }
