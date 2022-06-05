@@ -1,14 +1,30 @@
 package kpn.financecontroller.data.services.statistic.byTag;
 
+import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.executor.TaskExecutor;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
+import kpn.lib.result.Result;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 class ByTagStatisticServiceImplTest {
 
-    @Test
-    void shouldCheckCalculation_whenWrongTaskSize() {
+    // TODO: 05.06.2022 del
+//    @BeforeEach
+//    void setUp() {
+//        new ByTagStatisticServiceImpl(
+//                createProductTaskExecutor(),
+//                createPaymentTaskExecutor(),
+//                createProductTaskChecker(),
+//                createPaymentTaskChecker()
+//        )
+//    }
 
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckCalculation_whenWrongTaskSize.csv")
+    void shouldCheckCalculation_whenWrongTaskSize(int size, boolean expectedResult, String expectedCode) {
     }
 
     @Test

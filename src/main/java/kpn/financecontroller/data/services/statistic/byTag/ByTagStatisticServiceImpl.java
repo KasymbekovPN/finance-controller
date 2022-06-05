@@ -55,6 +55,7 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
         return null;
     }
 
+    // TODO: 05.06.2022 replace with SizeChecker impl
     private boolean isWrongTaskSize(Task[] tasks) {
         return tasks.length != TASK_AMOUNT;
     }
