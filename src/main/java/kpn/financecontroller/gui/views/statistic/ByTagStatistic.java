@@ -15,9 +15,14 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.statistic.byTag.ByTagStatisticService;
 import kpn.financecontroller.data.services.statistic.byTag.query.QueryOld;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
+import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.views.MainLayout;
+import kpn.lib.seed.Seed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
@@ -35,14 +40,17 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     private final MultiSelectListBox<Tag> tags = createMultiSelectListBox(this::callOnMultiSelectListBoxValueChanging);
     private final DatePicker beginTime = createDatePicker(this::callOnStartDatePickerStateChanging);
     private final DatePicker endTime = createDatePicker(this::callOnEndDatePickerStateChanging);
+    private final TextArea output = new TextArea();
 
-    private final QueryOld queryOld = new QueryOld();
-
+    private final ProductTask productTask = new ProductTask();
+    private final PaymentTask paymentTask = new PaymentTask();
 
     @Autowired
     private DTOService<Tag, TagEntity> tagDtoService;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
+    @Autowired
+    private ByTagStatisticService<Task, Seed> byTagStatisticService;
 
     @PostConstruct
     public void init(){
@@ -101,12 +109,10 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     }
 
     private Div createReportArea() {
-        // TODO: 01.05.2022 impl
-        TextArea textArea = new TextArea();
-        textArea.setSizeFull();
-        textArea.setValue("hello \n world");
-        textArea.setReadOnly(true);
-        Div div = new Div(textArea);
+        output.setSizeFull();
+        output.setValue("hello \n world");// TODO: 06.06.2022 del
+        output.setReadOnly(true);
+        Div div = new Div(output);
         div.setSizeFull();
         return div;
     }
@@ -135,39 +141,50 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
 
     private void callOnStartCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
         Boolean enabled = event.getValue();
-        queryOld.setBeginTimeEnable(enabled);
+        paymentTask.setBeginTimeEnable(enabled);
         beginTime.setEnabled(enabled);
         if (!enabled){
-            queryOld.setBeginTime(null);
+            paymentTask.setBeginTime(null);
         }
     }
 
     private void callOnStartDatePickerStateChanging(AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate> event) {
-        queryOld.setBeginTime(event.getValue());
+        paymentTask.setBeginTime(event.getValue());
     }
 
     private void callOnEndCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
         Boolean enabled = event.getValue();
-        queryOld.setEndTimeEnable(enabled);
+        paymentTask.setEndTimeEnable(enabled);
         endTime.setEnabled(enabled);
         if (!enabled){
-            queryOld.setEndTime(null);
+            paymentTask.setEndTime(null);
         }
     }
 
     private void callOnEndDatePickerStateChanging(AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate> event) {
-        queryOld.setEndTime(event.getValue());
+        paymentTask.setEndTime(event.getValue());
     }
 
     private void callOnAllTagsCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
-        queryOld.setForAllTags(event.getValue());
+        productTask.setAllTags(event.getValue());
     }
 
     private void callOnMultiSelectListBoxValueChanging(AbstractField.ComponentValueChangeEvent<MultiSelectListBox<Tag>, Set<Tag>> event) {
-        queryOld.setTags(new ArrayList<>(event.getValue()));
+        productTask.setTags(event.getValue());
     }
 
     private void callOnButtonClick(ClickEvent<?> event) {
-        System.out.println(queryOld);
+        // TODO: 06.06.2022 del
+//        System.out.println(productTask);
+//        System.out.println(paymentTask);
+
+        Seed seed = byTagStatisticService.calculate(ProductTask.copy(productTask), PaymentTask.copy(paymentTask));
+
+        // TODO: 06.06.2022 del
+        System.out.println("----");
+        System.out.println(seed.getCode());
+        for (Object arg : seed.getArgs()) {
+            System.out.println(arg);
+        }
     }
 }

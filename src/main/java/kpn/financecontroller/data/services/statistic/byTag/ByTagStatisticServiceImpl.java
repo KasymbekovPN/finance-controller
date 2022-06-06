@@ -50,7 +50,6 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
         if (maybeProductTask.isEmpty()){
             return createSeed(CODE__WRONG_PRODUCT_TASK, getServiceId());
         }
-        String tagNames = createTagNames(maybeProductTask.get());
 
         Optional<PaymentTask> maybePaymentTask = paymentTaskChecker.apply(tasks[1]);
         if (maybePaymentTask.isEmpty()){
@@ -61,6 +60,7 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
         if (!productResult.isSuccess()){
             return createSeed(CODE__WRONG_PRODUCT_RESULT, getServiceId());
         }
+        String tagNames = createTagNames(maybeProductTask.get());
 
         PaymentTask paymentTask = maybePaymentTask.get();
         paymentTask.setProducts(new HashSet<>(productResult.getValue()));
@@ -70,22 +70,38 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
             return createSeed(CODE__WRONG_PAYMENT_RESULT, getServiceId());
         }
 
+        // TODO: 06.06.2022 test it + should be bean
+        double payment = calculatePayment(paymentResult.getValue());
+
         if (paymentTask.isBeginTimeEnable() && paymentTask.isEndTimeEnable()){
-            return createSeed(CODE__RESULT_BEGIN_END, tagNames, paymentTask.getBeginTime(), paymentTask.getEndTime());
+            return createSeed(CODE__RESULT_BEGIN_END, tagNames, paymentTask.getBeginTime(), paymentTask.getEndTime(), payment);
         }
 
         if (paymentTask.isBeginTimeEnable()){
-            return createSeed(CODE__RESULT_BEGIN_NO_END, tagNames, paymentTask.getBeginTime());
+            return createSeed(CODE__RESULT_BEGIN_NO_END, tagNames, paymentTask.getBeginTime(), payment);
         }
 
         if (paymentTask.isEndTimeEnable()){
-            return createSeed(CODE__RESULT_NO_BEGIN_END, tagNames, paymentTask.getEndTime());
+            return createSeed(CODE__RESULT_NO_BEGIN_END, tagNames, paymentTask.getEndTime(), payment);
         }
 
-        return createSeed(CODE__RESULT_NO_BEGIN_NO_END, tagNames);
+        return createSeed(CODE__RESULT_NO_BEGIN_NO_END, tagNames, payment);
     }
 
+    private double calculatePayment(List<Payment> value) {
+        return value.stream()
+                .map(p -> Double.valueOf(p.getPrice()))
+                .mapToDouble(Double::doubleValue)
+                .sum();
+    }
+
+    // TODO: 06.06.2022 ?? bean
     private String createTagNames(ProductTask productTask) {
+        // TODO: 06.06.2022 it's temp. solv.
+        if (productTask.isAllTags()){
+            return "all-tags";
+        }
+
         StringBuilder tagNamesSB = new StringBuilder();
         String delimiter = "";
         for (Tag tag : productTask.getTags()) {

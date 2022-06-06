@@ -3,7 +3,9 @@ package kpn.financecontroller.data.services.statistic.byTag.tasks.checker;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
+import org.springframework.stereotype.Component;
 
+@Component
 final public class PaymentTaskChecker implements Checker<PaymentTask> {
 
     @Override
