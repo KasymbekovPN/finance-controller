@@ -15,10 +15,8 @@ import kpn.lib.seed.Seed;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 
 @Service
 @AllArgsConstructor
@@ -93,6 +91,7 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
         return createSeed(CODE__RESULT_NO_BEGIN_NO_END, tagNames, payment);
     }
 
+    // TODO: 07.06.2022 use it : Function<Collection<Payment>, Float>
     private double calculatePayment(List<Payment> value) {
         return value.stream()
                 .map(p -> Double.valueOf(p.getPrice()))

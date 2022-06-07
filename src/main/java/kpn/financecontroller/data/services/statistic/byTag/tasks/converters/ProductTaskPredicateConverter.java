@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class ProductTaskPredicateConverter implements Function<ProductTask, Predicate> {
+final public class ProductTaskPredicateConverter implements Function<ProductTask, Predicate> {
 
     @Override
     public Predicate apply(ProductTask productTask) {
