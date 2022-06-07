@@ -24,10 +24,15 @@ import java.util.Optional;
 @AllArgsConstructor
 final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Task, Seed> {
     private static final int TASK_AMOUNT = 2;
+
+    // TODO: 06.06.2022 it must be Enum
     private static final String CODE__WRONG_TASKS_AMOUNT = "service.stat.byTag.wrongTasksAmount";
     private static final String CODE__WRONG_PRODUCT_TASK = "service.stat.byTag.wrongProductTask";
     private static final String CODE__WRONG_PAYMENT_TASK = "service.stat.byTag.wrongPaymentTask";
     private static final String CODE__WRONG_PRODUCT_RESULT = "service.stat.byTag.wrongProductResult";
+
+
+    // TODO: 06.06.2022 it must be Enum
     private static final String CODE__WRONG_PAYMENT_RESULT = "service.stat.byTag.wrongPaymentResult";
     private static final String CODE__RESULT_NO_BEGIN_NO_END = "service.stat.byTag.result.noBeginNoEnd";
     private static final String CODE__RESULT_BEGIN_NO_END = "service.stat.byTag.result.beginNoEnd";
@@ -95,7 +100,7 @@ final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Ta
                 .sum();
     }
 
-    // TODO: 06.06.2022 ?? bean
+    // TODO: 06.06.2022 ?? bean + Function<Collection<Tag>, String>
     private String createTagNames(ProductTask productTask) {
         // TODO: 06.06.2022 it's temp. solv.
         if (productTask.isAllTags()){
