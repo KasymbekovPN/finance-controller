@@ -13,6 +13,8 @@ import kpn.lib.result.Result;
 import kpn.lib.seed.ImmutableSeed;
 import kpn.lib.seed.Seed;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,106 +25,108 @@ import java.util.function.Function;
 final public class ByTagStatisticServiceImpl implements ByTagStatisticService<Task, Seed> {
     private static final int TASK_AMOUNT = 2;
 
-    // TODO: 06.06.2022 it must be Enum
-    private static final String CODE__WRONG_TASKS_AMOUNT = "service.stat.byTag.wrongTasksAmount";
-    private static final String CODE__WRONG_PRODUCT_TASK = "service.stat.byTag.wrongProductTask";
-    private static final String CODE__WRONG_PAYMENT_TASK = "service.stat.byTag.wrongPaymentTask";
-    private static final String CODE__WRONG_PRODUCT_RESULT = "service.stat.byTag.wrongProductResult";
-
-
-    // TODO: 06.06.2022 it must be Enum
-    private static final String CODE__WRONG_PAYMENT_RESULT = "service.stat.byTag.wrongPaymentResult";
-    private static final String CODE__RESULT_NO_BEGIN_NO_END = "service.stat.byTag.result.noBeginNoEnd";
-    private static final String CODE__RESULT_BEGIN_NO_END = "service.stat.byTag.result.beginNoEnd";
-    private static final String CODE__RESULT_NO_BEGIN_END = "service.stat.byTag.result.noBeginEnd";
-    private static final String CODE__RESULT_BEGIN_END = "service.stat.byTag.result.beginEnd";
-
     private final SizeChecker<Task[]> taskAmountChecker;
     private final OFunction<Task, ProductTask> productTaskChecker;
     private final OFunction<Task, PaymentTask> paymentTaskChecker;
     private final TaskExecutor<ProductTask, Product> productTaskExecutor;
     private final TaskExecutor<PaymentTask, Payment> paymentTaskExecutor;
+    private final Function<Collection<Tag>, String> allTagNamesCreator;
+    private final Function<Collection<Payment>, Float> totalPaymentCalculator;
 
     @Override
     public Seed calculate(Task... tasks) {
         if (!taskAmountChecker.check(tasks, TASK_AMOUNT)){
-            return createSeed(CODE__WRONG_TASKS_AMOUNT, getServiceId());
+            return Codes.WRONG_TASKS_AMOUNT.createSeed(getServiceId());
         }
 
         Optional<ProductTask> maybeProductTask = productTaskChecker.apply(tasks[0]);
         if (maybeProductTask.isEmpty()){
-            return createSeed(CODE__WRONG_PRODUCT_TASK, getServiceId());
+            return Codes.WRONG_PRODUCT_TASK.createSeed(getServiceId());
         }
 
         Optional<PaymentTask> maybePaymentTask = paymentTaskChecker.apply(tasks[1]);
         if (maybePaymentTask.isEmpty()){
-            return createSeed(CODE__WRONG_PAYMENT_TASK, getServiceId());
+            return Codes.WRONG_PAYMENT_TASK.createSeed(getServiceId());
         }
 
-        Result<List<Product>> productResult = productTaskExecutor.execute(maybeProductTask.get());
+        ProductTask productTask = maybeProductTask.get();
+        Result<List<Product>> productResult = productTaskExecutor.execute(productTask);
         if (!productResult.isSuccess()){
-            return createSeed(CODE__WRONG_PRODUCT_RESULT, getServiceId());
+            return Codes.WRONG_PRODUCT_RESULT.createSeed(getServiceId());
         }
-        String tagNames = createTagNames(maybeProductTask.get());
 
         PaymentTask paymentTask = maybePaymentTask.get();
         paymentTask.setProducts(new HashSet<>(productResult.getValue()));
 
         Result<List<Payment>> paymentResult = paymentTaskExecutor.execute(paymentTask);
         if (!paymentResult.isSuccess()){
-            return createSeed(CODE__WRONG_PAYMENT_RESULT, getServiceId());
+            return Codes.WRONG_PAYMENT_RESULT.createSeed(getServiceId());
         }
 
-        // TODO: 06.06.2022 test it + should be bean
-        double payment = calculatePayment(paymentResult.getValue());
-
-        if (paymentTask.isBeginTimeEnable() && paymentTask.isEndTimeEnable()){
-            return createSeed(CODE__RESULT_BEGIN_END, tagNames, paymentTask.getBeginTime(), paymentTask.getEndTime(), payment);
+        ImmutableSeed.Builder builder = ImmutableSeed.builder().code(Results.getCode(productTask, paymentTask));
+        if (!productTask.isAllTags()){
+            builder.arg(allTagNamesCreator.apply(productTask.getTags()));
         }
-
         if (paymentTask.isBeginTimeEnable()){
-            return createSeed(CODE__RESULT_BEGIN_NO_END, tagNames, paymentTask.getBeginTime(), payment);
+            builder.arg(paymentTask.getBeginTime());
         }
-
         if (paymentTask.isEndTimeEnable()){
-            return createSeed(CODE__RESULT_NO_BEGIN_END, tagNames, paymentTask.getEndTime(), payment);
+            builder.arg(paymentTask.getEndTime());
         }
 
-        return createSeed(CODE__RESULT_NO_BEGIN_NO_END, tagNames, payment);
-    }
-
-    // TODO: 07.06.2022 use it : Function<Collection<Payment>, Float>
-    private double calculatePayment(List<Payment> value) {
-        return value.stream()
-                .map(p -> Double.valueOf(p.getPrice()))
-                .mapToDouble(Double::doubleValue)
-                .sum();
-    }
-
-    // TODO: 06.06.2022 ?? bean + Function<Collection<Tag>, String>
-    private String createTagNames(ProductTask productTask) {
-        // TODO: 06.06.2022 it's temp. solv.
-        if (productTask.isAllTags()){
-            return "all-tags";
-        }
-
-        StringBuilder tagNamesSB = new StringBuilder();
-        String delimiter = "";
-        for (Tag tag : productTask.getTags()) {
-            tagNamesSB.append(delimiter).append(tag.getName());
-            delimiter = ", ";
-        }
-        return tagNamesSB.toString();
-    }
-
-    private Seed createSeed(String code, Object... args) {
-        ImmutableSeed.Builder builder = ImmutableSeed.builder()
-                .code(code);
-        Arrays.stream(args).forEach(builder::arg);
-        return builder.build();
+        return builder
+                .arg(totalPaymentCalculator.apply(paymentResult.getValue()))
+                .build();
     }
 
     private String getServiceId() {
         return getClass().getSimpleName();
+    }
+
+
+    @RequiredArgsConstructor
+    public enum Codes {
+        WRONG_TASKS_AMOUNT("service.stat.byTag.wrongTasksAmount"),
+        WRONG_PRODUCT_TASK("service.stat.byTag.wrongProductTask"),
+        WRONG_PAYMENT_TASK("service.stat.byTag.wrongPaymentTask"),
+        WRONG_PRODUCT_RESULT("service.stat.byTag.wrongProductResult"),
+        WRONG_PAYMENT_RESULT("service.stat.byTag.wrongPaymentResult");
+
+        @Getter
+        private final String code;
+
+        public Seed createSeed(String arg){
+            return ImmutableSeed.builder()
+                    .code(code)
+                    .arg(arg)
+                    .build();
+        }
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    public enum Results {
+        NO_BEGIN_NO_END("service.stat.byTag.result.noBeginNoEnd.byTags", "service.stat.byTag.result.noBeginNoEnd.allTags"),
+        BEGIN_NO_END("service.stat.byTag.result.beginNoEnd.byTags", "service.stat.byTag.result.beginNoEnd.allTags"),
+        NO_BEGIN_END("service.stat.byTag.result.noBeginEnd.byTags", "service.stat.byTag.result.noBeginEnd.allTags"),
+        BEGIN_END("service.stat.byTag.result.beginEnd.byTags", "service.stat.byTag.result.beginEnd.allTags");
+
+        private final String byTagsCode;
+        private final String allTagsCode;
+
+        public static String getCode(ProductTask productTask, PaymentTask paymentTask){
+            int key = (paymentTask.isBeginTimeEnable() ? 1 : 0) + (paymentTask.isEndTimeEnable() ? 2 : 0);
+            boolean allTags = productTask.isAllTags();
+            return switch (key) {
+                case 0 -> getConcreteCode(NO_BEGIN_NO_END, allTags);
+                case 1 -> getConcreteCode(BEGIN_NO_END, allTags);
+                case 2 -> getConcreteCode(NO_BEGIN_END, allTags);
+                default -> getConcreteCode(BEGIN_END, allTags);
+            };
+        }
+
+        private static String getConcreteCode(Results results, boolean allTags) {
+            return allTags ? results.allTagsCode : results.byTagsCode;
+        }
     }
 }

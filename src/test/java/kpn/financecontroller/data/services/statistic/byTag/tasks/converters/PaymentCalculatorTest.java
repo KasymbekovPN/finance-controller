@@ -11,7 +11,7 @@ class PaymentCalculatorTest {
 
     @Test
     void shouldCheckCalculation() {
-        Set<Float> prices = Set.of(123.45f, 234.56f, 345.67f);
+        Set<Float> prices = Set.of(123f, 234f, 345f);
         Set<Payment> payments = prices.stream()
                 .map(price -> {
                     Payment payment = new Payment();

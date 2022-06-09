@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,12 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ByTagStatisticServiceImplTest {
 
     private static final Set<Long> TAG_IDS = Set.of(1L, 2L);
+    private static final String CLASS_NAME = ByTagStatisticServiceImpl.class.getSimpleName();
+    private static final String NAMES = "names";
+    private static final Float TOTAL_PAYMENT = 1234.56f;
+    private static final LocalDate BEGIN_TIME = LocalDate.now();
+    private static final LocalDate END_TIME = LocalDate.now().plusDays(1);
 
-    private static ProductTask productTask;
+    private static ProductTask productTaskByTags;
+    private static ProductTask productTaskAllTags;
     private static ArrayList<Payment> payments;
-    private static float totalPrice;
-    private static LocalDate beginTime = LocalDate.now();
-    private static LocalDate endTime = LocalDate.now().plusDays(1);
 
     @BeforeAll
     static void beforeAll() {
@@ -41,8 +45,11 @@ class ByTagStatisticServiceImplTest {
             return tag;
         }).collect(Collectors.toSet());
 
-        productTask = new ProductTask();
-        productTask.setTags(tags);
+        productTaskByTags = new ProductTask();
+        productTaskByTags.setTags(tags);
+
+        productTaskAllTags = new ProductTask();
+        productTaskAllTags.setAllTags(true);
 
         payments = new ArrayList<>();
         Set<Float> prices = Set.of(123.45f, 234.56f, 345.67f);
@@ -50,7 +57,6 @@ class ByTagStatisticServiceImplTest {
             Payment payment = new Payment();
             payment.setPrice(price);
             payments.add(payment);
-            totalPrice += price;
         }
     }
 
@@ -58,183 +64,292 @@ class ByTagStatisticServiceImplTest {
         return "tag " + id;
     }
 
-    // TODO: 06.06.2022 restore
-//    @Test
-//    void shouldCheckCalculation_whenWrongTaskSize() {
-//        ImmutableSeed expectedResult = ImmutableSeed.builder()
-//                .code("service.stat.byTag.wrongTasksAmount")
-//                .arg("ByTagStatisticServiceImpl")
-//                .build();
-//
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createWrongTaskAmountChecker(),
-//                null,
-//                null,
-//                null,
-//                null
-//        );
-//        Seed seed = service.calculate(productTask, new PaymentTask());
-//
-//        assertThat(expectedResult).isEqualTo(seed);
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_whenProductTaskHasWrongType() {
-//        ImmutableSeed expectedResult = ImmutableSeed.builder()
-//                .code("service.stat.byTag.wrongProductTask")
-//                .arg("ByTagStatisticServiceImpl")
-//                .build();
-//
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createWrongProductTaskChecker(),
-//                null,
-//                null,
-//                null
-//        );
-//        Seed seed = service.calculate(productTask, new PaymentTask());
-//
-//        assertThat(expectedResult).isEqualTo(seed);
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_whenPaymentTaskHasWrongType() {
-//        ImmutableSeed expectedResult = ImmutableSeed.builder()
-//                .code("service.stat.byTag.wrongPaymentTask")
-//                .arg("ByTagStatisticServiceImpl")
-//                .build();
-//
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createProductTaskChecker(),
-//                createWrongPaymentTaskChecker(),
-//                null,
-//                null
-//        );
-//        Seed seed = service.calculate(productTask, new PaymentTask());
-//
-//        assertThat(expectedResult).isEqualTo(seed);
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_productExecutorReturnBadResult() {
-//        ImmutableSeed expectedResult = ImmutableSeed.builder()
-//                .code("service.stat.byTag.wrongProductResult")
-//                .arg("ByTagStatisticServiceImpl")
-//                .build();
-//
-//        PaymentTask paymentTask = createPaymentTask(null, null);
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createProductTaskChecker(),
-//                createPaymentTaskChecker(paymentTask),
-//                createWrongProductExecutor(),
-//                null
-//        );
-//        Seed seed = service.calculate(productTask, new PaymentTask());
-//
-//        assertThat(expectedResult).isEqualTo(seed);
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_paymentExecutorReturnBadResult() {
-//        ImmutableSeed expectedResult = ImmutableSeed.builder()
-//                .code("service.stat.byTag.wrongPaymentResult")
-//                .arg("ByTagStatisticServiceImpl")
-//                .build();
-//
-//        PaymentTask paymentTask = createPaymentTask(null, null);
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createProductTaskChecker(),
-//                createPaymentTaskChecker(paymentTask),
-//                createProductExecutor(),
-//                createWrongPaymentExecutor()
-//        );
-//        Seed seed = service.calculate(productTask, new PaymentTask());
-//
-//        assertThat(expectedResult).isEqualTo(seed);
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_noBegin_noEnd() {
-//        String code = "service.stat.byTag.result.noBeginNoEnd";
-//
-//        PaymentTask paymentTask = createPaymentTask(null, null);
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createProductTaskChecker(),
-//                createPaymentTaskChecker(paymentTask),
-//                createProductExecutor(),
-//                createPaymentExecutor(payments)
-//        );
-//        Seed seed = service.calculate(productTask, paymentTask);
-//
-//        assertThat(seed).isNotNull();
-//        assertThat(code).isEqualTo(seed.getCode());
-//        assertThat(checkArgs((String) seed.getArgs()[0])).isTrue();
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_begin_noEnd() {
-//        String code = "service.stat.byTag.result.beginNoEnd";
-//
-//        PaymentTask paymentTask = createPaymentTask(beginTime, null);
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createProductTaskChecker(),
-//                createPaymentTaskChecker(paymentTask),
-//                createProductExecutor(),
-//                createPaymentExecutor(payments)
-//        );
-//        Seed seed = service.calculate(productTask, paymentTask);
-//
-//        assertThat(seed).isNotNull();
-//        assertThat(code).isEqualTo(seed.getCode());
-//        assertThat(checkArgs((String) seed.getArgs()[0])).isTrue();
-//        assertThat(beginTime).isEqualTo(seed.getArgs()[1]);
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_begin_End() {
-//        String code = "service.stat.byTag.result.noBeginEnd";
-//
-//        PaymentTask paymentTask = createPaymentTask(null, endTime);
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createProductTaskChecker(),
-//                createPaymentTaskChecker(paymentTask),
-//                createProductExecutor(),
-//                createPaymentExecutor(payments)
-//        );
-//        Seed seed = service.calculate(productTask, paymentTask);
-//
-//        assertThat(seed).isNotNull();
-//        assertThat(code).isEqualTo(seed.getCode());
-//        assertThat(checkArgs((String) seed.getArgs()[0])).isTrue();
-//        assertThat(endTime).isEqualTo(seed.getArgs()[1]);
-//    }
-//
-//    @Test
-//    void shouldCheckCalculation_begin_end() {
-//        String code = "service.stat.byTag.result.beginEnd";
-//
-//        PaymentTask paymentTask = createPaymentTask(beginTime, endTime);
-//        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
-//                createTaskAmountChecker(),
-//                createProductTaskChecker(),
-//                createPaymentTaskChecker(paymentTask),
-//                createProductExecutor(),
-//                createPaymentExecutor(payments)
-//        );
-//        Seed seed = service.calculate(productTask, paymentTask);
-//
-//        assertThat(seed).isNotNull();
-//        assertThat(code).isEqualTo(seed.getCode());
-//        assertThat(checkArgs((String) seed.getArgs()[0])).isTrue();
-//        assertThat(beginTime).isEqualTo(seed.getArgs()[1]);
-//        assertThat(endTime).isEqualTo(seed.getArgs()[2]);
-//    }
+    @Test
+    void shouldCheckCalculation_whenWrongTaskSize() {
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Codes.WRONG_TASKS_AMOUNT.getCode())
+                .arg(CLASS_NAME)
+                .build();
+
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createWrongTaskAmountChecker(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        Seed seed = service.calculate(productTaskByTags, new PaymentTask());
+
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_whenProductTaskHasWrongType() {
+        ImmutableSeed expectedResult = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Codes.WRONG_PRODUCT_TASK.getCode())
+                .arg(CLASS_NAME)
+                .build();
+
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createWrongProductTaskChecker(),
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        Seed seed = service.calculate(productTaskByTags, new PaymentTask());
+
+        assertThat(expectedResult).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_whenPaymentTaskHasWrongType() {
+        ImmutableSeed expectedResult = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Codes.WRONG_PAYMENT_TASK.getCode())
+                .arg(CLASS_NAME)
+                .build();
+
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskByTags),
+                createWrongPaymentTaskChecker(),
+                null,
+                null,
+                null,
+                null
+        );
+        Seed seed = service.calculate(productTaskByTags, new PaymentTask());
+
+        assertThat(expectedResult).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_productExecutorReturnBadResult() {
+        ImmutableSeed expectedResult = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Codes.WRONG_PRODUCT_RESULT.getCode())
+                .arg(CLASS_NAME)
+                .build();
+
+        PaymentTask paymentTask = createPaymentTask(null, null);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskByTags),
+                createPaymentTaskChecker(paymentTask),
+                createWrongProductExecutor(),
+                null,
+                null,
+                null
+        );
+        Seed seed = service.calculate(productTaskByTags, new PaymentTask());
+
+        assertThat(expectedResult).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_paymentExecutorReturnBadResult() {
+        ImmutableSeed expectedResult = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Codes.WRONG_PAYMENT_RESULT.getCode())
+                .arg(CLASS_NAME)
+                .build();
+
+        PaymentTask paymentTask = createPaymentTask(null, null);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskByTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createWrongPaymentExecutor(),
+                null,
+                null
+        );
+        Seed seed = service.calculate(productTaskByTags, new PaymentTask());
+
+        assertThat(expectedResult).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_noBegin_noEnd_byTags() {
+        PaymentTask paymentTask = createPaymentTask(null, null);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskByTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskByTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.NO_BEGIN_NO_END.getByTagsCode())
+                .arg(NAMES)
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_noBegin_noEnd_allTags() {
+        PaymentTask paymentTask = createPaymentTask(null, null);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskAllTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskAllTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.NO_BEGIN_NO_END.getAllTagsCode())
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_begin_noEnd_byTags() {
+        PaymentTask paymentTask = createPaymentTask(BEGIN_TIME, null);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskByTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskByTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.BEGIN_NO_END.getByTagsCode())
+                .arg(NAMES)
+                .arg(BEGIN_TIME)
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_begin_noEnd_allTags() {
+        PaymentTask paymentTask = createPaymentTask(BEGIN_TIME, null);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskAllTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskAllTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.BEGIN_NO_END.getAllTagsCode())
+                .arg(BEGIN_TIME)
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_noBegin_end_byTags() {
+        PaymentTask paymentTask = createPaymentTask(null, END_TIME);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskByTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskByTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.NO_BEGIN_END.getByTagsCode())
+                .arg(NAMES)
+                .arg(END_TIME)
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_noBegin_end_allTags() {
+        PaymentTask paymentTask = createPaymentTask(null, END_TIME);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskAllTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskAllTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.NO_BEGIN_END.getAllTagsCode())
+                .arg(END_TIME)
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_begin_end_byTags() {
+        PaymentTask paymentTask = createPaymentTask(BEGIN_TIME, END_TIME);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskByTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskByTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.BEGIN_END.getByTagsCode())
+                .arg(NAMES)
+                .arg(BEGIN_TIME)
+                .arg(END_TIME)
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
+
+    @Test
+    void shouldCheckCalculation_begin_end_allTags() {
+        PaymentTask paymentTask = createPaymentTask(BEGIN_TIME, END_TIME);
+        ByTagStatisticServiceImpl service = new ByTagStatisticServiceImpl(
+                createTaskAmountChecker(),
+                createProductTaskChecker(productTaskAllTags),
+                createPaymentTaskChecker(paymentTask),
+                createProductExecutor(),
+                createPaymentExecutor(payments),
+                createNamesCalculator(),
+                createPaymentCalculator()
+        );
+        Seed seed = service.calculate(productTaskAllTags, paymentTask);
+
+        ImmutableSeed expectedSeed = ImmutableSeed.builder()
+                .code(ByTagStatisticServiceImpl.Results.BEGIN_END.getAllTagsCode())
+                .arg(BEGIN_TIME)
+                .arg(END_TIME)
+                .arg(TOTAL_PAYMENT)
+                .build();
+        assertThat(expectedSeed).isEqualTo(seed);
+    }
 
     private SizeChecker<Task[]> createWrongTaskAmountChecker() {
         TestTaskAmountChecker checker = Mockito.mock(TestTaskAmountChecker.class);
@@ -260,7 +375,7 @@ class ByTagStatisticServiceImplTest {
         return checker;
     }
 
-    private OFunction<Task, ProductTask> createProductTaskChecker() {
+    private OFunction<Task, ProductTask> createProductTaskChecker(ProductTask productTask) {
         TestProductTaskChecker checker = Mockito.mock(TestProductTaskChecker.class);
         Mockito
                 .when(checker.apply(Mockito.anyObject()))
@@ -329,10 +444,20 @@ class ByTagStatisticServiceImplTest {
         return task;
     }
 
-    private boolean checkArgs(String arg0) {
-        Set<String> expectedTagNames = TAG_IDS.stream().map(ByTagStatisticServiceImplTest::createTagName).collect(Collectors.toSet());
-        HashSet<String> tagNames = new HashSet<>(List.of(arg0.split(", ")));
-        return expectedTagNames.equals(tagNames);
+    private Function<Collection<Tag>, String> createNamesCalculator() {
+        TestNamesCalculator calculator = Mockito.mock(TestNamesCalculator.class);
+        Mockito
+                .when(calculator.apply(Mockito.anyObject()))
+                .thenReturn(NAMES);
+        return calculator;
+    }
+
+    private Function<Collection<Payment>, Float> createPaymentCalculator() {
+        TestPaymentCalculator calculator = Mockito.mock(TestPaymentCalculator.class);
+        Mockito
+                .when(calculator.apply(Mockito.anyObject()))
+                .thenReturn(TOTAL_PAYMENT);
+        return calculator;
     }
 
     abstract private static class TestTaskAmountChecker implements SizeChecker<Task[]>{}
@@ -340,4 +465,6 @@ class ByTagStatisticServiceImplTest {
     abstract private static class TestPaymentTaskChecker implements OFunction<Task, PaymentTask>{}
     abstract private static class TestProductExecutor implements TaskExecutor<ProductTask, Product> {}
     abstract private static class TestPaymentExecutor implements TaskExecutor<PaymentTask, Payment> {}
+    abstract private static class TestNamesCalculator implements Function<Collection<Tag>, String>{}
+    abstract private static class TestPaymentCalculator implements Function<Collection<Payment>, Float>{}
 }
