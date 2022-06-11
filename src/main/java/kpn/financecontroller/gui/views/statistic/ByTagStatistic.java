@@ -16,7 +16,6 @@ import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
 import kpn.financecontroller.data.services.dto.DTOService;
 import kpn.financecontroller.data.services.statistic.byTag.ByTagStatisticService;
-import kpn.financecontroller.data.services.statistic.byTag.query.QueryOld;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
@@ -29,7 +28,6 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Set;
 
 @Scope("prototype")
@@ -110,7 +108,6 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
 
     private Div createReportArea() {
         output.setSizeFull();
-        output.setValue("hello \n world");// TODO: 06.06.2022 del
         output.setReadOnly(true);
         Div div = new Div(output);
         div.setSizeFull();
@@ -174,17 +171,9 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     }
 
     private void callOnButtonClick(ClickEvent<?> event) {
-        // TODO: 06.06.2022 del
-//        System.out.println(productTask);
-//        System.out.println(paymentTask);
-
         Seed seed = byTagStatisticService.calculate(ProductTask.copy(productTask), PaymentTask.copy(paymentTask));
 
-        // TODO: 06.06.2022 del
-        System.out.println("----");
-        System.out.println(seed.getCode());
-        for (Object arg : seed.getArgs()) {
-            System.out.println(arg);
-        }
+        String content = getTranslation(seed.getCode(), seed.getArgs());
+        output.setValue(content);
     }
 }
