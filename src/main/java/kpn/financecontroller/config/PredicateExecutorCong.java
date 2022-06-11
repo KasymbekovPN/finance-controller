@@ -27,81 +27,135 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Configuration
 public class PredicateExecutorCong {
 
     @Bean
-    public PredicateExecutor<Country, Predicate> countryPredicateExecutor(QuerydslPredicateExecutor<CountryEntity> repo){
-        // TODO: 28.05.2022 toDomains must defined in separated @Configuration
-        Function<List<CountryEntity>, List<Country>> toDomains = (entities) -> {
-            return entities.stream().map(Country::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Country, Predicate> countryPredicateExecutor(QuerydslPredicateExecutor<CountryEntity> repo,
+                                                                          Function<List<CountryEntity>, List<Country>> toDomains){
         return new PredicateExecutorImpl<>("country", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Region, Predicate> regionPredicateExecutor(QuerydslPredicateExecutor<RegionEntity> repo){
-        Function<List<RegionEntity>, List<Region>> toDomains = (entities) -> {
-            return entities.stream().map(Region::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Region, Predicate> regionPredicateExecutor(QuerydslPredicateExecutor<RegionEntity> repo,
+                                                                        Function<List<RegionEntity>, List<Region>> toDomains){
         return new PredicateExecutorImpl<>("region", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<City, Predicate> cityPredicateExecutor(QuerydslPredicateExecutor<CityEntity> repo){
-        Function<List<CityEntity>, List<City>> toDomains = (entities) -> {
-            return entities.stream().map(City::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<City, Predicate> cityPredicateExecutor(QuerydslPredicateExecutor<CityEntity> repo,
+                                                                    Function<List<CityEntity>, List<City>> toDomains){
         return new PredicateExecutorImpl<>("city", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Street, Predicate> streetPredicateExecutor(QuerydslPredicateExecutor<StreetEntity> repo){
-        Function<List<StreetEntity>, List<Street>> toDomains = (entities) -> {
-            return entities.stream().map(Street::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Street, Predicate> streetPredicateExecutor(QuerydslPredicateExecutor<StreetEntity> repo,
+                                                                        Function<List<StreetEntity>, List<Street>> toDomains){
         return new PredicateExecutorImpl<>("street", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Address, Predicate> addressPredicateExecutor(QuerydslPredicateExecutor<AddressEntity> repo){
-        Function<List<AddressEntity>, List<Address>> toDomains = (entities) -> {
-            return entities.stream().map(Address::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Address, Predicate> addressPredicateExecutor(QuerydslPredicateExecutor<AddressEntity> repo,
+                                                                          Function<List<AddressEntity>, List<Address>> toDomains){
         return new PredicateExecutorImpl<>("address", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Seller, Predicate> sellerPredicateExecutor(QuerydslPredicateExecutor<SellerEntity> repo){
-        Function<List<SellerEntity>, List<Seller>> toDomains = (entities) -> {
-            return entities.stream().map(Seller::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Seller, Predicate> sellerPredicateExecutor(QuerydslPredicateExecutor<SellerEntity> repo,
+                                                                        Function<List<SellerEntity>, List<Seller>> toDomains){
         return new PredicateExecutorImpl<>("seller", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Payment, Predicate> paymentPredicateExecutor(QuerydslPredicateExecutor<PaymentEntity> repo){
-        Function<List<PaymentEntity>, List<Payment>> toDomains = (entities) -> {
-            return entities.stream().map(Payment::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Payment, Predicate> paymentPredicateExecutor(QuerydslPredicateExecutor<PaymentEntity> repo,
+                                                                          Function<List<PaymentEntity>, List<Payment>> toDomains){
         return new PredicateExecutorImpl<>("payment", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Tag, Predicate> tagPredicateExecutor(QuerydslPredicateExecutor<TagEntity> repo){
-        Function<List<TagEntity>, List<Tag>> toDomains = (entities) -> {
-            return entities.stream().map(Tag::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Tag, Predicate> tagPredicateExecutor(QuerydslPredicateExecutor<TagEntity> repo,
+                                                                  Function<List<TagEntity>, List<Tag>> toDomains){
         return new PredicateExecutorImpl<>("tag", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Product, Predicate> productPredicateExecutor(QuerydslPredicateExecutor<ProductEntity> repo){
-        Function<List<ProductEntity>, List<Product>> toDomains = (entities) -> {
-            return entities.stream().map(Product::new).collect(Collectors.toList());
-        };
+    public PredicateExecutor<Product, Predicate> productPredicateExecutor(QuerydslPredicateExecutor<ProductEntity> repo,
+                                                                          Function<List<ProductEntity>, List<Product>> toDomains){
         return new PredicateExecutorImpl<>("product", repo, toDomains);
     }
+
+    // TODO: 11.06.2022 del
+//    @Bean
+//    public PredicateExecutor<Country, Predicate> countryPredicateExecutor(QuerydslPredicateExecutor<CountryEntity> repo){
+//        // TODO: 28.05.2022 toDomains must defined in separated @Configuration
+//        Function<List<CountryEntity>, List<Country>> toDomains = (entities) -> {
+//            return entities.stream().map(Country::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("country", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<Region, Predicate> regionPredicateExecutor(QuerydslPredicateExecutor<RegionEntity> repo){
+//        Function<List<RegionEntity>, List<Region>> toDomains = (entities) -> {
+//            return entities.stream().map(Region::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("region", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<City, Predicate> cityPredicateExecutor(QuerydslPredicateExecutor<CityEntity> repo){
+//        Function<List<CityEntity>, List<City>> toDomains = (entities) -> {
+//            return entities.stream().map(City::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("city", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<Street, Predicate> streetPredicateExecutor(QuerydslPredicateExecutor<StreetEntity> repo){
+//        Function<List<StreetEntity>, List<Street>> toDomains = (entities) -> {
+//            return entities.stream().map(Street::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("street", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<Address, Predicate> addressPredicateExecutor(QuerydslPredicateExecutor<AddressEntity> repo){
+//        Function<List<AddressEntity>, List<Address>> toDomains = (entities) -> {
+//            return entities.stream().map(Address::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("address", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<Seller, Predicate> sellerPredicateExecutor(QuerydslPredicateExecutor<SellerEntity> repo){
+//        Function<List<SellerEntity>, List<Seller>> toDomains = (entities) -> {
+//            return entities.stream().map(Seller::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("seller", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<Payment, Predicate> paymentPredicateExecutor(QuerydslPredicateExecutor<PaymentEntity> repo){
+//        Function<List<PaymentEntity>, List<Payment>> toDomains = (entities) -> {
+//            return entities.stream().map(Payment::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("payment", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<Tag, Predicate> tagPredicateExecutor(QuerydslPredicateExecutor<TagEntity> repo){
+//        Function<List<TagEntity>, List<Tag>> toDomains = (entities) -> {
+//            return entities.stream().map(Tag::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("tag", repo, toDomains);
+//    }
+//
+//    @Bean
+//    public PredicateExecutor<Product, Predicate> productPredicateExecutor(QuerydslPredicateExecutor<ProductEntity> repo){
+//        Function<List<ProductEntity>, List<Product>> toDomains = (entities) -> {
+//            return entities.stream().map(Product::new).collect(Collectors.toList());
+//        };
+//        return new PredicateExecutorImpl<>("product", repo, toDomains);
+//    }
 }
