@@ -1,13 +1,12 @@
 package kpn.financecontroller.data.entities.country;
 
 import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.data.entities.AbstractEntity;
+import kpn.lib.entity.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -15,14 +14,18 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @Entity(name = "countries")
-public class CountryEntity extends AbstractEntity {
+public final class CountryEntity extends AbstractEntity<Long>{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotEmpty
     @Column(unique = true)
     @Size(max = 100)
     private String name;
 
     public CountryEntity(Country country) {
-        id = country.getId();
-        name = country.getName();
+        setId(country.getId());
+        setName(country.getName());
     }
 }
