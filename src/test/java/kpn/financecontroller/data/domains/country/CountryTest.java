@@ -10,6 +10,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CountryTest {
+
     @Test
     void shouldCheckInfoGetting() {
         String expectedInfo = "country.name";
@@ -27,7 +28,7 @@ public class CountryTest {
         country.setId(id);
         country.setName(name);
 
-        String result = country.get(path);
+        String result = country.getInDeep(path);
         assertThat(expectedResult).isEqualTo(result);
     }
 }
