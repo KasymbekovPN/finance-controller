@@ -4,7 +4,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -25,7 +25,7 @@ final public class CountryView extends GridView<Country>{
     );
 
     @Autowired
-    private DTOService<Country, CountryEntity> countryService;
+    private DTOServiceOLdOld<Country, CountryEntity> countryService;
 
     @Override
     protected Result<?> updateListImpl() {

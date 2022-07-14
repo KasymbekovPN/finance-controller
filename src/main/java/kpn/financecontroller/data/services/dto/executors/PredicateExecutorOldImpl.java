@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class PredicateExecutorImpl<DOMAIN, ENTITY> implements PredicateExecutor<DOMAIN, Predicate> {
+// TODO: 14.07.2022 del
+public class PredicateExecutorOldImpl<DOMAIN, ENTITY> implements PredicateExecutorOld<DOMAIN, Predicate> {
 
     private final String name;
     private final QuerydslPredicateExecutor<ENTITY> repo;
     private final Function<List<ENTITY>, List<DOMAIN>> toDomains;
 
-    public PredicateExecutorImpl(String name, QuerydslPredicateExecutor<ENTITY> repo, Function<List<ENTITY>, List<DOMAIN>> toDomains) {
+    public PredicateExecutorOldImpl(String name, QuerydslPredicateExecutor<ENTITY> repo, Function<List<ENTITY>, List<DOMAIN>> toDomains) {
         this.name = name;
         this.repo = repo;
         this.toDomains = toDomains;

@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.country.CountryEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -27,9 +27,9 @@ final public class RegionView extends GridView<Region>{
     );
 
     @Autowired
-    private DTOService<Region, RegionEntity> regionService;
+    private DTOServiceOLdOld<Region, RegionEntity> regionService;
     @Autowired
-    private DTOService<Country, CountryEntity> countryService;
+    private DTOServiceOLdOld<Country, CountryEntity> countryService;
 
     @Override
     protected Result<?> updateListImpl() {

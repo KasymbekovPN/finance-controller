@@ -36,7 +36,7 @@ public class Region extends AbstractDomain {
                 Country country = domain.getCountry();
                 Queue<String> path = arg.getPath();
                 return path.size() > 0 && country != null
-                        ? country.get(path)
+                        ? country.getInDeep(path)
                         : DEFAULT_GETTING_RESULT;
             }
     );

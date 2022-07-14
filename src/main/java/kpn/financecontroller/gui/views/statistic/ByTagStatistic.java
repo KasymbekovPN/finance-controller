@@ -14,7 +14,7 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.data.services.statistic.byTag.ByTagStatisticService;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
@@ -44,7 +44,7 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     private final PaymentTask paymentTask = new PaymentTask();
 
     @Autowired
-    private DTOService<Tag, TagEntity> tagDtoService;
+    private DTOServiceOLdOld<Tag, TagEntity> tagDtoServiceOLd;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
@@ -133,7 +133,7 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
     }
 
     private void configureTags() {
-        tags.setItems(tagDtoService.loader().all().getValue());
+        tags.setItems(tagDtoServiceOLd.loader().all().getValue());
     }
 
     private void callOnStartCheckBoxStateChanging(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {

@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.generators.seed;
 
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
@@ -45,16 +45,16 @@ public class CleanupGeneratorTest {
 
     @Test
     void shouldCheckNextGetting() {
-        DTOService<?, ?> dtoService = createDTOService();
+        DTOServiceOLdOld<?, ?> dtoServiceOLd = createDTOService();
         Map<String, Object> expectedFields = Map.of(
                 "valuedGenerator", VALUED_GENERATOR,
                 "managerCreator", CREATOR,
-                "dtoService", dtoService,
+                "dtoService", dtoServiceOLd,
                 "key", KEY
         );
 
         Generator seedGenerator = CleanupGenerator.builder()
-                .item(KEY, dtoService)
+                .item(KEY, dtoServiceOLd)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .build();
@@ -69,9 +69,9 @@ public class CleanupGeneratorTest {
         assertThat(maybeSeed).isEmpty();
     }
 
-    private DTOService<?, ?> createDTOService() {
-        return Mockito.mock(TestDTOService.class);
+    private DTOServiceOLdOld<?, ?> createDTOService() {
+        return Mockito.mock(TestDTOServiceOldOLd.class);
     }
 
-    public abstract static class TestDTOService implements DTOService<String, String> {}
+    public abstract static class TestDTOServiceOldOLd implements DTOServiceOLdOld<String, String> {}
 }

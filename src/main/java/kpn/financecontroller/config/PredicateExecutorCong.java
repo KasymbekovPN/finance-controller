@@ -19,8 +19,8 @@ import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.seller.SellerEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.executors.PredicateExecutor;
-import kpn.financecontroller.data.services.dto.executors.PredicateExecutorImpl;
+import kpn.financecontroller.data.services.dto.executors.PredicateExecutorOld;
+import kpn.financecontroller.data.services.dto.executors.PredicateExecutorOldImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -32,57 +32,57 @@ import java.util.function.Function;
 public class PredicateExecutorCong {
 
     @Bean
-    public PredicateExecutor<Country, Predicate> countryPredicateExecutor(QuerydslPredicateExecutor<CountryEntity> repo,
-                                                                          Function<List<CountryEntity>, List<Country>> toDomains){
-        return new PredicateExecutorImpl<>("country", repo, toDomains);
+    public PredicateExecutorOld<Country, Predicate> countryPredicateExecutor(QuerydslPredicateExecutor<CountryEntity> repo,
+                                                                             Function<List<CountryEntity>, List<Country>> toDomains){
+        return new PredicateExecutorOldImpl<>("country", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Region, Predicate> regionPredicateExecutor(QuerydslPredicateExecutor<RegionEntity> repo,
-                                                                        Function<List<RegionEntity>, List<Region>> toDomains){
-        return new PredicateExecutorImpl<>("region", repo, toDomains);
+    public PredicateExecutorOld<Region, Predicate> regionPredicateExecutor(QuerydslPredicateExecutor<RegionEntity> repo,
+                                                                           Function<List<RegionEntity>, List<Region>> toDomains){
+        return new PredicateExecutorOldImpl<>("region", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<City, Predicate> cityPredicateExecutor(QuerydslPredicateExecutor<CityEntity> repo,
-                                                                    Function<List<CityEntity>, List<City>> toDomains){
-        return new PredicateExecutorImpl<>("city", repo, toDomains);
+    public PredicateExecutorOld<City, Predicate> cityPredicateExecutor(QuerydslPredicateExecutor<CityEntity> repo,
+                                                                       Function<List<CityEntity>, List<City>> toDomains){
+        return new PredicateExecutorOldImpl<>("city", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Street, Predicate> streetPredicateExecutor(QuerydslPredicateExecutor<StreetEntity> repo,
-                                                                        Function<List<StreetEntity>, List<Street>> toDomains){
-        return new PredicateExecutorImpl<>("street", repo, toDomains);
+    public PredicateExecutorOld<Street, Predicate> streetPredicateExecutor(QuerydslPredicateExecutor<StreetEntity> repo,
+                                                                           Function<List<StreetEntity>, List<Street>> toDomains){
+        return new PredicateExecutorOldImpl<>("street", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Address, Predicate> addressPredicateExecutor(QuerydslPredicateExecutor<AddressEntity> repo,
-                                                                          Function<List<AddressEntity>, List<Address>> toDomains){
-        return new PredicateExecutorImpl<>("address", repo, toDomains);
+    public PredicateExecutorOld<Address, Predicate> addressPredicateExecutor(QuerydslPredicateExecutor<AddressEntity> repo,
+                                                                             Function<List<AddressEntity>, List<Address>> toDomains){
+        return new PredicateExecutorOldImpl<>("address", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Seller, Predicate> sellerPredicateExecutor(QuerydslPredicateExecutor<SellerEntity> repo,
-                                                                        Function<List<SellerEntity>, List<Seller>> toDomains){
-        return new PredicateExecutorImpl<>("seller", repo, toDomains);
+    public PredicateExecutorOld<Seller, Predicate> sellerPredicateExecutor(QuerydslPredicateExecutor<SellerEntity> repo,
+                                                                           Function<List<SellerEntity>, List<Seller>> toDomains){
+        return new PredicateExecutorOldImpl<>("seller", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Payment, Predicate> paymentPredicateExecutor(QuerydslPredicateExecutor<PaymentEntity> repo,
-                                                                          Function<List<PaymentEntity>, List<Payment>> toDomains){
-        return new PredicateExecutorImpl<>("payment", repo, toDomains);
+    public PredicateExecutorOld<Payment, Predicate> paymentPredicateExecutor(QuerydslPredicateExecutor<PaymentEntity> repo,
+                                                                             Function<List<PaymentEntity>, List<Payment>> toDomains){
+        return new PredicateExecutorOldImpl<>("payment", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Tag, Predicate> tagPredicateExecutor(QuerydslPredicateExecutor<TagEntity> repo,
-                                                                  Function<List<TagEntity>, List<Tag>> toDomains){
-        return new PredicateExecutorImpl<>("tag", repo, toDomains);
+    public PredicateExecutorOld<Tag, Predicate> tagPredicateExecutor(QuerydslPredicateExecutor<TagEntity> repo,
+                                                                     Function<List<TagEntity>, List<Tag>> toDomains){
+        return new PredicateExecutorOldImpl<>("tag", repo, toDomains);
     }
 
     @Bean
-    public PredicateExecutor<Product, Predicate> productPredicateExecutor(QuerydslPredicateExecutor<ProductEntity> repo,
-                                                                          Function<List<ProductEntity>, List<Product>> toDomains){
-        return new PredicateExecutorImpl<>("product", repo, toDomains);
+    public PredicateExecutorOld<Product, Predicate> productPredicateExecutor(QuerydslPredicateExecutor<ProductEntity> repo,
+                                                                             Function<List<ProductEntity>, List<Product>> toDomains){
+        return new PredicateExecutorOldImpl<>("product", repo, toDomains);
     }
 
     // TODO: 11.06.2022 del

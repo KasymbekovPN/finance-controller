@@ -14,15 +14,15 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DeleterAllAndByIdTest {
+class DeleterOldAllAndByIdTest {
 
     private static final String DELETER_NAME = "some.deleter";
 
-    private static DeleterAllAndById<TestModel, TestEntity, Long> deleter;
+    private static DeleterOldAllAndById<TestModel, TestEntity, Long> deleter;
 
     @BeforeAll
     static void beforeAll() {
-        deleter = new DeleterAllAndById<>(createRepo(), DELETER_NAME);
+        deleter = new DeleterOldAllAndById<>(createRepo(), DELETER_NAME);
     }
 
     @Test

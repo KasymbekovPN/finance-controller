@@ -18,8 +18,8 @@ import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.savers.Saver;
-import kpn.financecontroller.data.services.dto.savers.SaverImpl;
+import kpn.financecontroller.data.services.dto.savers.SaverOld;
+import kpn.financecontroller.data.services.dto.savers.SaverOldImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,47 +28,47 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public class SaverConfig {
 
     @Bean
-    public Saver<Country, CountryEntity, Long> countySaver(JpaRepository<CountryEntity, Long> repo){
-        return new SaverImpl<>(repo, Country::new, "country");
+    public SaverOld<Country, CountryEntity, Long> countySaver(JpaRepository<CountryEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Country::new, "country");
     }
 
     @Bean
-    public Saver<Region, RegionEntity, Long> regionSaver(JpaRepository<RegionEntity, Long> repo){
-        return new SaverImpl<>(repo, Region::new, "region");
+    public SaverOld<Region, RegionEntity, Long> regionSaver(JpaRepository<RegionEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Region::new, "region");
     }
 
     @Bean
-    public Saver<City, CityEntity, Long> citySaver(JpaRepository<CityEntity, Long> repo){
-        return new SaverImpl<>(repo, City::new, "city");
+    public SaverOld<City, CityEntity, Long> citySaver(JpaRepository<CityEntity, Long> repo){
+        return new SaverOldImpl<>(repo, City::new, "city");
     }
 
     @Bean
-    public Saver<Street, StreetEntity, Long> streetSaver(JpaRepository<StreetEntity, Long> repo){
-        return new SaverImpl<>(repo, Street::new, "street");
+    public SaverOld<Street, StreetEntity, Long> streetSaver(JpaRepository<StreetEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Street::new, "street");
     }
 
     @Bean
-    public Saver<Address, AddressEntity, Long> addressSaver(JpaRepository<AddressEntity, Long> repo){
-        return new SaverImpl<>(repo, Address::new, "address");
+    public SaverOld<Address, AddressEntity, Long> addressSaver(JpaRepository<AddressEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Address::new, "address");
     }
 
     @Bean
-    public Saver<Product, ProductEntity, Long> productSaver(JpaRepository<ProductEntity, Long> repo){
-        return new SaverImpl<>(repo, Product::new, "product");
+    public SaverOld<Product, ProductEntity, Long> productSaver(JpaRepository<ProductEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Product::new, "product");
     }
 
     @Bean
-    public Saver<Payment, PaymentEntity, Long> paymentSaver(JpaRepository<PaymentEntity, Long> repo){
-        return new SaverImpl<>(repo, Payment::new, "payment");
+    public SaverOld<Payment, PaymentEntity, Long> paymentSaver(JpaRepository<PaymentEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Payment::new, "payment");
     }
 
     @Bean
-    public Saver<Tag, TagEntity, Long> tagSaver(JpaRepository<TagEntity, Long> repo){
-        return new SaverImpl<>(repo, Tag::new, "tag");
+    public SaverOld<Tag, TagEntity, Long> tagSaver(JpaRepository<TagEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Tag::new, "tag");
     }
 
     @Bean
-    public Saver<Seller, SellerEntity, Long> sellerSaver(JpaRepository<SellerEntity, Long> repo){
-        return new SaverImpl<>(repo, Seller::new, "seller");
+    public SaverOld<Seller, SellerEntity, Long> sellerSaver(JpaRepository<SellerEntity, Long> repo){
+        return new SaverOldImpl<>(repo, Seller::new, "seller");
     }
 }

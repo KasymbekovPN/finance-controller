@@ -6,10 +6,10 @@ import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.product.QProductEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.data.services.dto.DTOServiceImpl;
-import kpn.financecontroller.data.services.dto.executors.PredicateExecutor;
-import kpn.financecontroller.data.services.dto.loaders.Loader;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdImplOld;
+import kpn.financecontroller.data.services.dto.executors.PredicateExecutorOld;
+import kpn.financecontroller.data.services.dto.loaders.LoaderOld;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
@@ -77,8 +77,8 @@ class ProductWorkerTest {
         return task;
     }
 
-    private DTOService<Product, ProductEntity> createService() {
-        return new DTOServiceImpl<>(null, createLoader(), null, createExecutor());
+    private DTOServiceOLdOld<Product, ProductEntity> createService() {
+        return new DTOServiceOLdImplOld<>(null, createLoader(), null, createExecutor());
     }
 
     private Function<ProductTask, Predicate> createConverter() {
@@ -89,23 +89,23 @@ class ProductWorkerTest {
         return converter;
     }
 
-    private PredicateExecutor<Product, Predicate> createExecutor() {
-        TestExecutor executor = Mockito.mock(TestExecutor.class);
+    private PredicateExecutorOld<Product, Predicate> createExecutor() {
+        TestExecutorOld executor = Mockito.mock(TestExecutorOld.class);
         Mockito
                 .when(executor.execute(Mockito.anyObject()))
                 .thenReturn(executorResult);
         return executor;
     }
 
-    private Loader<Product, ProductEntity, Long> createLoader() {
-        TestLoader loader = Mockito.mock(TestLoader.class);
+    private LoaderOld<Product, ProductEntity, Long> createLoader() {
+        TestLoaderOld loader = Mockito.mock(TestLoaderOld.class);
         Mockito
                 .when(loader.all())
                 .thenReturn(loaderResult);
         return loader;
     }
 
-    abstract private static class TestExecutor implements PredicateExecutor<Product, Predicate> {}
-    abstract private static class TestLoader implements Loader<Product, ProductEntity, Long>{}
+    abstract private static class TestExecutorOld implements PredicateExecutorOld<Product, Predicate> {}
+    abstract private static class TestLoaderOld implements LoaderOld<Product, ProductEntity, Long> {}
     abstract private static class TestConverter implements Function<ProductTask, Predicate>{}
 }

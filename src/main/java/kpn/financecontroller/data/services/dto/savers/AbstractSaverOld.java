@@ -1,16 +1,17 @@
 package kpn.financecontroller.data.services.dto.savers;
 
-import kpn.financecontroller.data.services.dto.DTOServiceException;
+import kpn.financecontroller.data.services.dto.DTOServiceExceptionOld;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 
 import java.util.Arrays;
 
-public abstract class AbstractSaver<D, E, I> implements Saver<D, E, I> {
+// TODO: 14.07.2022 del
+public abstract class AbstractSaverOld<D, E, I> implements SaverOld<D, E, I> {
 
     private final String name;
 
-    public AbstractSaver(String name) {
+    public AbstractSaverOld(String name) {
         this.name = name;
     }
 
@@ -20,7 +21,7 @@ public abstract class AbstractSaver<D, E, I> implements Saver<D, E, I> {
         try{
             E savedEntity = saveImpl(entity);
             builder = ImmutableResult.<D>bOk(convertEntityToDomain(savedEntity));
-        } catch (DTOServiceException ex){
+        } catch (DTOServiceExceptionOld ex){
             builder = ImmutableResult.<D>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
@@ -30,8 +31,8 @@ public abstract class AbstractSaver<D, E, I> implements Saver<D, E, I> {
                 .build();
     }
 
-    protected E saveImpl(E entity) throws DTOServiceException{
-        throw new DTOServiceException("saver.saveImpl.unsupported");
+    protected E saveImpl(E entity) throws DTOServiceExceptionOld {
+        throw new DTOServiceExceptionOld("saver.saveImpl.unsupported");
     }
 
     protected abstract D convertEntityToDomain(E entity);

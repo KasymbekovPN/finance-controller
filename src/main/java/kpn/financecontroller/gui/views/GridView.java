@@ -27,7 +27,9 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayDeque;
 import java.util.List;
 
-abstract public class GridView<DOMAIN extends Domain> extends VerticalLayout implements HasDynamicTitle {
+//abstract public class GridView<DOMAIN extends Domain> extends VerticalLayout implements HasDynamicTitle {
+// TODO: 13.07.2022 ???
+abstract public class GridView<DOMAIN> extends VerticalLayout implements HasDynamicTitle {
 
     @Autowired
     private NotificationFactory notificationFactory;
@@ -139,11 +141,12 @@ abstract public class GridView<DOMAIN extends Domain> extends VerticalLayout imp
 
     protected void configureGridColumns(List<ColumnConfig> configList){
         grid.setColumns();
-        for (ColumnConfig config : configList) {
-            grid
-                    .addColumn((DOMAIN d) -> {return d.get(new ArrayDeque<String>(config.getPath()));})
-                    .setHeader(getTranslation(config.getCode()));
-        }
+        // TODO: 13.07.2022 !!!
+//        for (ColumnConfig config : configList) {
+//            grid
+//                    .addColumn((DOMAIN d) -> {return d.get(new ArrayDeque<String>(config.getPath()));})
+//                    .setHeader(getTranslation(config.getCode()));
+//        }
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
     }
 

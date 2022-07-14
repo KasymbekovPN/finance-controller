@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PredicateExecutorImplTest {
+class PredicateExecutorOldImplTest {
 
     private static final String EXECUTOR_NAME = "some.executor";
 
@@ -43,8 +43,8 @@ class PredicateExecutorImplTest {
 
     @Test
     void shouldCheckExecution_whenExecutionFail() {
-        PredicateExecutorImpl<TestModel, TestEntity> executor
-                = new PredicateExecutorImpl<TestModel, TestEntity>(EXECUTOR_NAME, createFailExecutor(), null);
+        PredicateExecutorOldImpl<TestModel, TestEntity> executor
+                = new PredicateExecutorOldImpl<TestModel, TestEntity>(EXECUTOR_NAME, createFailExecutor(), null);
         Result<List<TestModel>> result = executor.execute(predicate);
         assertThat(expectedResultWhenExecutionFail).isEqualTo(result);
     }
@@ -59,8 +59,8 @@ class PredicateExecutorImplTest {
 
     @Test
     void shouldCheckExecution() {
-        PredicateExecutorImpl<TestModel, TestEntity> executor
-                = new PredicateExecutorImpl<TestModel, TestEntity>(EXECUTOR_NAME, createExecutor(), new TestConverter());
+        PredicateExecutorOldImpl<TestModel, TestEntity> executor
+                = new PredicateExecutorOldImpl<TestModel, TestEntity>(EXECUTOR_NAME, createExecutor(), new TestConverter());
         Result<List<TestModel>> result = executor.execute(predicate);
         assertThat(expectedResult).isEqualTo(result);
     }

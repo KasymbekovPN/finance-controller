@@ -2,8 +2,8 @@ package kpn.financecontroller.initialization.tasks;
 
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.deleters.Deleter;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.deleters.DeleterOld;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
@@ -47,7 +47,7 @@ public class CleanupTaskTest {
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
-        task.setDtoService(createDtoService(createFailDeleter()));
+        task.setDtoServiceOLd(createDtoService(createFailDeleter()));
 
         task.execute(context);
 
@@ -62,7 +62,7 @@ public class CleanupTaskTest {
         task.setKey(KEY);
         task.setValuedGenerator(VALUED_GENERATOR);
         task.setManagerCreator(CREATOR);
-        task.setDtoService(createDtoService(createDeleter()));
+        task.setDtoServiceOLd(createDtoService(createDeleter()));
 
         task.execute(context);
 
@@ -70,30 +70,30 @@ public class CleanupTaskTest {
         assertThat(expectedResult).isEqualTo(result);
     }
 
-    private TestDeleter createDeleter() {
-        TestDeleter deleter = Mockito.mock(TestDeleter.class);
+    private TestDeleterOld createDeleter() {
+        TestDeleterOld deleter = Mockito.mock(TestDeleterOld.class);
         Mockito
                 .when(deleter.all())
                 .thenReturn(ImmutableResult.<Void>builder().success(true).build());
         return deleter;
     }
 
-    private TestDeleter createFailDeleter() {
-        TestDeleter deleter = Mockito.mock(TestDeleter.class);
+    private TestDeleterOld createFailDeleter() {
+        TestDeleterOld deleter = Mockito.mock(TestDeleterOld.class);
         Mockito
                 .when(deleter.all())
                 .thenReturn(ImmutableResult.<Void>builder().success(false).build());
         return deleter;
     }
 
-    private TestDtoService createDtoService(TestDeleter deleter) {
-        TestDtoService dtoService = Mockito.mock(TestDtoService.class);
+    private TestDtoServiceOldOLd createDtoService(TestDeleterOld deleter) {
+        TestDtoServiceOldOLd dtoService = Mockito.mock(TestDtoServiceOldOLd.class);
         Mockito
                 .when(dtoService.deleter())
                 .thenReturn(deleter);
         return dtoService;
     }
 
-    public abstract static class TestDeleter implements Deleter<Tag, TagEntity, Long>{}
-    public abstract static class TestDtoService implements DTOService<Tag, TagEntity> {}
+    public abstract static class TestDeleterOld implements DeleterOld<Tag, TagEntity, Long> {}
+    public abstract static class TestDtoServiceOldOLd implements DTOServiceOLdOld<Tag, TagEntity> {}
 }

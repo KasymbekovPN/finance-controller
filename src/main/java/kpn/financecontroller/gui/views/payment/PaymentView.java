@@ -8,7 +8,7 @@ import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.entities.seller.SellerEntity;
 import kpn.financecontroller.data.entities.product.ProductEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -34,11 +34,11 @@ final public class PaymentView extends GridView<Payment> {
     );
 
     @Autowired
-    private DTOService<Payment, PaymentEntity> paymentService;
+    private DTOServiceOLdOld<Payment, PaymentEntity> paymentService;
     @Autowired
-    private DTOService<Seller, SellerEntity> sellerService;
+    private DTOServiceOLdOld<Seller, SellerEntity> sellerService;
     @Autowired
-    private DTOService<Product, ProductEntity> productService;
+    private DTOServiceOLdOld<Product, ProductEntity> productService;
 
     @Override
     protected Result<?> updateListImpl() {

@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -27,9 +27,9 @@ final public class ProductView extends GridView<Product> {
     );
 
     @Autowired
-    private DTOService<Product, ProductEntity> service;
+    private DTOServiceOLdOld<Product, ProductEntity> service;
     @Autowired
-    private DTOService<Tag, TagEntity> tagService;
+    private DTOServiceOLdOld<Tag, TagEntity> tagService;
 
     @Override
     protected Result<?> updateListImpl() {

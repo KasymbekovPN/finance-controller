@@ -3,9 +3,9 @@ package kpn.financecontroller.data.services.statistic.byTag.tasks.worker;
 import com.querydsl.core.types.Predicate;
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.data.services.dto.DTOServiceImpl;
-import kpn.financecontroller.data.services.dto.executors.PredicateExecutor;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdImplOld;
+import kpn.financecontroller.data.services.dto.executors.PredicateExecutorOld;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
@@ -49,14 +49,14 @@ class PaymentWorkerTest {
         return paymentEntity.createdAt.after(LocalDate.now());
     }
 
-    private DTOService<Payment, PaymentEntity> createService(Predicate predicate, List<Payment> payments) {
-        TestExecutor executor = Mockito.mock(TestExecutor.class);
+    private DTOServiceOLdOld<Payment, PaymentEntity> createService(Predicate predicate, List<Payment> payments) {
+        TestExecutorOld executor = Mockito.mock(TestExecutorOld.class);
 
         Mockito
                 .when(executor.execute(predicate))
                 .thenReturn(ImmutableResult.<List<Payment>>ok(payments));
 
-        return new DTOServiceImpl<Payment, PaymentEntity>(null, null, null, executor);
+        return new DTOServiceOLdImplOld<Payment, PaymentEntity>(null, null, null, executor);
     }
 
     private Function<PaymentTask, Predicate> createConverter(Predicate predicate) {
@@ -69,6 +69,6 @@ class PaymentWorkerTest {
         return converter;
     }
 
-    abstract private static class TestExecutor implements PredicateExecutor<Payment, Predicate>{}
+    abstract private static class TestExecutorOld implements PredicateExecutorOld<Payment, Predicate> {}
     abstract private static class TestConverter implements Function<PaymentTask, Predicate>{}
 }

@@ -28,10 +28,11 @@ import java.util.function.Function;
 @Configuration
 public class EntityToDomainConfig {
 
-    @Bean
-    public Function<List<CountryEntity>, List<Country>> countryEntitiesToDomainsConverter(){
-        return new ConstructEntitiesToDomainsConverter<CountryEntity, Country>(Country::new);
-    }
+    // TODO: 13.07.2022 ???
+//    @Bean
+//    public Function<List<CountryEntity>, List<Country>> countryEntitiesToDomainsConverter(){
+//        return new ConstructEntitiesToDomainsConverter<CountryEntity, Country>(Country::new);
+//    }
 
     @Bean
     public Function<List<RegionEntity>, List<Region>> regionEntitiesToDomainsConverter(){

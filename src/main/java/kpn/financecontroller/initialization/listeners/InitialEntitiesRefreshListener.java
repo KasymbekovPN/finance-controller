@@ -18,7 +18,7 @@ import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.initialization.entities.*;
 import kpn.financecontroller.initialization.generators.seed.*;
 import kpn.financecontroller.initialization.generators.valued.*;
@@ -55,23 +55,23 @@ import java.util.function.Function;
 public class InitialEntitiesRefreshListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private DTOService<Tag, TagEntity> tagDtoService;
+    private DTOServiceOLdOld<Tag, TagEntity> tagDtoServiceOLd;
     @Autowired
-    private DTOService<Country, CountryEntity> countryDtoService;
+    private DTOServiceOLdOld<Country, CountryEntity> countryDtoServiceOLd;
     @Autowired
-    private DTOService<Region, RegionEntity> regionDtoService;
+    private DTOServiceOLdOld<Region, RegionEntity> regionDtoServiceOLd;
     @Autowired
-    private DTOService<City, CityEntity> cityDtoService;
+    private DTOServiceOLdOld<City, CityEntity> cityDtoServiceOLd;
     @Autowired
-    private DTOService<Street, StreetEntity> streetDtoService;
+    private DTOServiceOLdOld<Street, StreetEntity> streetDtoServiceOLd;
     @Autowired
-    private DTOService<Address, AddressEntity> addressDtoService;
+    private DTOServiceOLdOld<Address, AddressEntity> addressDtoServiceOLd;
     @Autowired
-    private DTOService<Seller, SellerEntity> sellerDtoService;
+    private DTOServiceOLdOld<Seller, SellerEntity> sellerDtoServiceOLd;
     @Autowired
-    private DTOService<Product, ProductEntity> productDtoService;
+    private DTOServiceOLdOld<Product, ProductEntity> productDtoServiceOLd;
     @Autowired
-    private DTOService<Payment, PaymentEntity> paymentDtoService;
+    private DTOServiceOLdOld<Payment, PaymentEntity> paymentDtoServiceOLd;
 
     @Autowired
     private Setting setting;
@@ -113,15 +113,15 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
             executor.addGenerator(creationGenerator);
 
             Generator cleanupGenerator = createCleanupGenerator(List.of(
-                    new Pair<>(Entities.PAYMENTS, paymentDtoService),
-                    new Pair<>(Entities.PRODUCTS, productDtoService),
-                    new Pair<>(Entities.SELLERS, sellerDtoService),
-                    new Pair<>(Entities.ADDRESSES, addressDtoService),
-                    new Pair<>(Entities.STREETS, streetDtoService),
-                    new Pair<>(Entities.CITIES, cityDtoService),
-                    new Pair<>(Entities.REGIONS, regionDtoService),
-                    new Pair<>(Entities.COUNTRIES, countryDtoService),
-                    new Pair<>(Entities.TAGS, tagDtoService)
+                    new Pair<>(Entities.PAYMENTS, paymentDtoServiceOLd),
+                    new Pair<>(Entities.PRODUCTS, productDtoServiceOLd),
+                    new Pair<>(Entities.SELLERS, sellerDtoServiceOLd),
+                    new Pair<>(Entities.ADDRESSES, addressDtoServiceOLd),
+                    new Pair<>(Entities.STREETS, streetDtoServiceOLd),
+                    new Pair<>(Entities.CITIES, cityDtoServiceOLd),
+                    new Pair<>(Entities.REGIONS, regionDtoServiceOLd),
+                    new Pair<>(Entities.COUNTRIES, countryDtoServiceOLd),
+                    new Pair<>(Entities.TAGS, tagDtoServiceOLd)
             ));
             executor.addGenerator(cleanupGenerator);
 
@@ -181,9 +181,9 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
                 .build();
     }
 
-    private Generator createCleanupGenerator(List<Pair<Valued<String>, DTOService<?, ?>>> init) {
+    private Generator createCleanupGenerator(List<Pair<Valued<String>, DTOServiceOLdOld<?, ?>>> init) {
         CleanupGenerator.Builder builder = CleanupGenerator.builder();
-        for (Pair<Valued<String>, DTOService<?, ?>> item : init) {
+        for (Pair<Valued<String>, DTOServiceOLdOld<?, ?>> item : init) {
             builder.item(item.getKey(), item.getValue());
         }
         return builder
@@ -215,7 +215,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createTagSavingStrategy() {
         return value -> {
             TagEntity entity = (TagEntity) value;
-            Result<Tag> result = tagDtoService.saver().save(entity);
+            Result<Tag> result = tagDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -227,7 +227,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createCountrySavingStrategy() {
         return value -> {
             CountryEntity entity = (CountryEntity) value;
-            Result<Country> result = countryDtoService.saver().save(entity);
+            Result<Country> result = countryDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -239,7 +239,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createRegionSavingStrategy() {
         return value -> {
             RegionEntity entity = (RegionEntity) value;
-            Result<Region> result = regionDtoService.saver().save(entity);
+            Result<Region> result = regionDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -251,7 +251,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createCitySavingStrategy() {
         return value -> {
             CityEntity entity = (CityEntity) value;
-            Result<City> result = cityDtoService.saver().save(entity);
+            Result<City> result = cityDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -263,7 +263,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createStreetSavingStrategy() {
         return value -> {
             StreetEntity entity = (StreetEntity) value;
-            Result<Street> result = streetDtoService.saver().save(entity);
+            Result<Street> result = streetDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -275,7 +275,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createAddressSavingStrategy() {
         return value -> {
             AddressEntity entity = (AddressEntity) value;
-            Result<Address> result = addressDtoService.saver().save(entity);
+            Result<Address> result = addressDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -287,7 +287,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createSellerSavingStrategy() {
         return value -> {
             SellerEntity entity = (SellerEntity) value;
-            Result<Seller> result = sellerDtoService.saver().save(entity);
+            Result<Seller> result = sellerDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -299,7 +299,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createProductSavingStrategy() {
         return value -> {
             ProductEntity entity = (ProductEntity) value;
-            Result<Product> result = productDtoService.saver().save(entity);
+            Result<Product> result = productDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();
@@ -311,7 +311,7 @@ public class InitialEntitiesRefreshListener implements ApplicationListener<Conte
     private SavingTask.Strategy createPaymentSavingStrategy() {
         return value -> {
             PaymentEntity entity = (PaymentEntity) value;
-            Result<Payment> result = paymentDtoService.saver().save(entity);
+            Result<Payment> result = paymentDtoServiceOLd.saver().save(entity);
             if (result.isSuccess()){
                 entity.setId(result.getValue().getId());
                 return Optional.empty();

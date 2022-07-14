@@ -4,7 +4,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -24,7 +24,7 @@ final public class TagView extends GridView<Tag> {
     );
 
     @Autowired
-    private DTOService<Tag, TagEntity> tagService;
+    private DTOServiceOLdOld<Tag, TagEntity> tagService;
 
     @Override
     protected Result<?> updateListImpl() {

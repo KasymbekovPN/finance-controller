@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.generators.seed;
 
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
@@ -46,7 +46,7 @@ final public class CleanupGenerator extends BaseGenerator {
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
                     .field("key", item.getKey())
-                    .field("dtoService", item.getDtoService())
+                    .field("dtoService", item.getDtoServiceOLd())
                     .build();
             return Optional.of(seed);
         }
@@ -56,8 +56,8 @@ final public class CleanupGenerator extends BaseGenerator {
     public static class Builder extends BaseBuilder{
         private final List<Item> items = new ArrayList<>();
 
-        public Builder item(Valued<String> key, DTOService<?, ?> dtoService){
-            items.add(new Item(key, dtoService));
+        public Builder item(Valued<String> key, DTOServiceOLdOld<?, ?> dtoServiceOLd){
+            items.add(new Item(key, dtoServiceOLd));
             return this;
         }
 
@@ -71,6 +71,6 @@ final public class CleanupGenerator extends BaseGenerator {
     @Getter
     private static class Item{
         private final Valued<String> key;
-        private final DTOService<?, ?> dtoService;
+        private final DTOServiceOLdOld<?, ?> dtoServiceOLd;
     }
 }

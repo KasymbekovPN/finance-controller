@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LoaderAllTest {
+class LoaderOldAllTest {
 
     private static final String LOADER_NAME = "loader";
     private static final String WRONG_LOADER_NAME = "wrong.loader";
 
-    private static LoaderAll<TestModel, TestEntity, Long> loader;
-    private static LoaderAll<TestModel, TestEntity, Long> wrongLoader;
+    private static LoaderOldAll<TestModel, TestEntity, Long> loader;
+    private static LoaderOldAll<TestModel, TestEntity, Long> wrongLoader;
     private static List<TestModel> expectedDomains;
     private static TestEntity inputEntity;
 
@@ -37,8 +37,8 @@ class LoaderAllTest {
         Function<List<TestEntity>, List<TestModel>> toDomains = (entities) -> {
             return entities.stream().map(TestModel::new).collect(Collectors.toList());
         };
-        loader = new LoaderAll<>(createRepo(), LOADER_NAME, TestModel::new, toDomains);
-        wrongLoader = new LoaderAll<>(createWrongRepo(), WRONG_LOADER_NAME, TestModel::new, toDomains);
+        loader = new LoaderOldAll<>(createRepo(), LOADER_NAME, TestModel::new, toDomains);
+        wrongLoader = new LoaderOldAll<>(createWrongRepo(), WRONG_LOADER_NAME, TestModel::new, toDomains);
     }
 
     @Test

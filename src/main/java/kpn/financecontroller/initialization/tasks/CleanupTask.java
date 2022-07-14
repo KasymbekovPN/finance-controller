@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.tasks;
 
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.initialization.generators.valued.Codes;
 import kpn.financecontroller.initialization.generators.valued.Properties;
 import kpn.lib.result.Result;
@@ -9,12 +9,12 @@ import lombok.Setter;
 
 final public class CleanupTask extends BaseTask {
     @Setter
-    private DTOService<?, ?> dtoService;
+    private DTOServiceOLdOld<?, ?> dtoServiceOLd;
 
     @Override
     public void execute(Context context) {
         reset();
-        Result<Void> cleaningResult = dtoService.deleter().all();
+        Result<Void> cleaningResult = dtoServiceOLd.deleter().all();
         if (cleaningResult.isSuccess()){
             continuationPossible = true;
         } else {

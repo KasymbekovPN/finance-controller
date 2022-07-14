@@ -1,16 +1,17 @@
 package kpn.financecontroller.data.services.dto.deleters;
 
-import kpn.financecontroller.data.services.dto.DTOServiceException;
+import kpn.financecontroller.data.services.dto.DTOServiceExceptionOld;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 
 import java.util.Arrays;
 
-public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
+// TODO: 14.07.2022 del
+public abstract class AbstractDeleterOld<D, E, I> implements DeleterOld<D, E, I> {
 
     private final String name;
 
-    public AbstractDeleter(String name) {
+    public AbstractDeleterOld(String name) {
         this.name = name;
     }
 
@@ -20,7 +21,7 @@ public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
         try{
             deleteById(id);
             builder = ImmutableResult.<Void>bOk(null);
-        } catch (DTOServiceException ex){
+        } catch (DTOServiceExceptionOld ex){
             builder = ImmutableResult.<Void>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
@@ -39,7 +40,7 @@ public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
                 try{
                     deleteBy(attribute, value);
                     builder = ImmutableResult.<Void>bOk(null);
-                } catch (DTOServiceException ex){
+                } catch (DTOServiceExceptionOld ex){
                     builder = ImmutableResult.<Void>bFail(ex.getMessage());
                     Arrays.stream(ex.getArgs()).forEach(builder::arg);
                 }
@@ -63,7 +64,7 @@ public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
         try{
             deleteAll();
             builder = ImmutableResult.<Void>bOk(null);
-        } catch (DTOServiceException ex){
+        } catch (DTOServiceExceptionOld ex){
             builder = ImmutableResult.<Void>bFail(ex.getMessage());
             Arrays.stream(ex.getArgs()).forEach(builder::arg);
         }
@@ -81,15 +82,15 @@ public abstract class AbstractDeleter<D, E, I> implements Deleter<D, E, I> {
         return false;
     }
 
-    protected void deleteById(I id) throws DTOServiceException {
-        throw new DTOServiceException("deleter.deleteById.unsupported");
+    protected void deleteById(I id) throws DTOServiceExceptionOld {
+        throw new DTOServiceExceptionOld("deleter.deleteById.unsupported");
     }
 
-    protected void deleteBy(String attribute, Object value) throws DTOServiceException {
-        throw new DTOServiceException("deleter.deleteBy.unsupported");
+    protected void deleteBy(String attribute, Object value) throws DTOServiceExceptionOld {
+        throw new DTOServiceExceptionOld("deleter.deleteBy.unsupported");
     }
 
-    protected void deleteAll() throws DTOServiceException {
-        throw new DTOServiceException("deleter.deleteAll.unsupported");
+    protected void deleteAll() throws DTOServiceExceptionOld {
+        throw new DTOServiceExceptionOld("deleter.deleteAll.unsupported");
     }
 }

@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -30,9 +30,9 @@ final public class AddressView extends GridView<Address> {
     );
 
     @Autowired
-    private DTOService<Address, AddressEntity> addressService;
+    private DTOServiceOLdOld<Address, AddressEntity> addressService;
     @Autowired
-    private DTOService<Street, StreetEntity> streetService;
+    private DTOServiceOLdOld<Street, StreetEntity> streetService;
 
     @Override
     protected Result<?> updateListImpl() {

@@ -14,14 +14,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SaverImplTest {
+class SaverOldImplTest {
 
     private static final String SAVER_NAME = "saver";
 
     private static TestEntity throwEntity;
     private static TestEntity testEntity;
     private static TestModel testModel;
-    private static SaverImpl<TestModel, TestEntity, Long> saver;
+    private static SaverOldImpl<TestModel, TestEntity, Long> saver;
 
     @BeforeAll
     static void beforeAll() {
@@ -33,7 +33,7 @@ class SaverImplTest {
 
         testModel = new TestModel(testEntity);
 
-        saver = new SaverImpl<>(createRepo(), TestModel::new, SAVER_NAME);
+        saver = new SaverOldImpl<>(createRepo(), TestModel::new, SAVER_NAME);
     }
 
     @Test

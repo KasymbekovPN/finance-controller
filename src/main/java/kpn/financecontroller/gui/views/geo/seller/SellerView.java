@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.entities.seller.SellerEntity;
-import kpn.financecontroller.data.services.dto.DTOService;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
@@ -29,9 +29,9 @@ final public class SellerView extends GridView<Seller> {
     );
 
     @Autowired
-    private DTOService<Seller, SellerEntity> sellerService;
+    private DTOServiceOLdOld<Seller, SellerEntity> sellerService;
     @Autowired
-    private DTOService<Address, AddressEntity> addressService;
+    private DTOServiceOLdOld<Address, AddressEntity> addressService;
 
     @Override
     protected Result<?> updateListImpl() {

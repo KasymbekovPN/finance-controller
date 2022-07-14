@@ -17,14 +17,14 @@ import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.entities.region.RegionEntity;
 import kpn.financecontroller.data.entities.street.StreetEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOServiceImpl;
-import kpn.financecontroller.data.services.dto.deleters.Deleter;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdImplOld;
+import kpn.financecontroller.data.services.dto.deleters.DeleterOld;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.data.services.dto.executors.PredicateExecutor;
-import kpn.financecontroller.data.services.dto.loaders.Loader;
-import kpn.financecontroller.data.services.dto.DTOService;
-import kpn.financecontroller.data.services.dto.savers.Saver;
+import kpn.financecontroller.data.services.dto.executors.PredicateExecutorOld;
+import kpn.financecontroller.data.services.dto.loaders.LoaderOld;
+import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
+import kpn.financecontroller.data.services.dto.savers.SaverOld;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,74 +32,74 @@ import org.springframework.context.annotation.Configuration;
 public class DTOServiceConfig {
 
     @Bean
-    public DTOService<Country, CountryEntity> countryService(Saver<Country, CountryEntity, Long> saver,
-                                                             Loader<Country, CountryEntity, Long> loader,
-                                                             Deleter<Country, CountryEntity, Long> deleter,
-                                                             PredicateExecutor<Country, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Country, CountryEntity> countryService(SaverOld<Country, CountryEntity, Long> saverOld,
+                                                                   LoaderOld<Country, CountryEntity, Long> loaderOld,
+                                                                   DeleterOld<Country, CountryEntity, Long> deleterOld,
+                                                                   PredicateExecutorOld<Country, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<Region, RegionEntity> regionService(Saver<Region, RegionEntity, Long> saver,
-                                                          Loader<Region, RegionEntity, Long> loader,
-                                                          Deleter<Region, RegionEntity, Long> deleter,
-                                                          PredicateExecutor<Region, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Region, RegionEntity> regionService(SaverOld<Region, RegionEntity, Long> saverOld,
+                                                                LoaderOld<Region, RegionEntity, Long> loaderOld,
+                                                                DeleterOld<Region, RegionEntity, Long> deleterOld,
+                                                                PredicateExecutorOld<Region, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<City, CityEntity> cityService(Saver<City, CityEntity, Long> saver,
-                                                                         Loader<City, CityEntity, Long> loader,
-                                                                         Deleter<City, CityEntity, Long> deleter,
-                                                                         PredicateExecutor<City, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<City, CityEntity> cityService(SaverOld<City, CityEntity, Long> saverOld,
+                                                          LoaderOld<City, CityEntity, Long> loaderOld,
+                                                          DeleterOld<City, CityEntity, Long> deleterOld,
+                                                          PredicateExecutorOld<City, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<Street, StreetEntity> streetService(Saver<Street, StreetEntity, Long> saver,
-                                                                               Loader<Street, StreetEntity, Long> loader,
-                                                                               Deleter<Street, StreetEntity, Long> deleter,
-                                                                               PredicateExecutor<Street, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Street, StreetEntity> streetService(SaverOld<Street, StreetEntity, Long> saverOld,
+                                                                LoaderOld<Street, StreetEntity, Long> loaderOld,
+                                                                DeleterOld<Street, StreetEntity, Long> deleterOld,
+                                                                PredicateExecutorOld<Street, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<Address, AddressEntity> addressService(Saver<Address, AddressEntity, Long> saver,
-                                                                                  Loader<Address, AddressEntity, Long> loader,
-                                                                                  Deleter<Address, AddressEntity, Long> deleter,
-                                                                                  PredicateExecutor<Address, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Address, AddressEntity> addressService(SaverOld<Address, AddressEntity, Long> saverOld,
+                                                                   LoaderOld<Address, AddressEntity, Long> loaderOld,
+                                                                   DeleterOld<Address, AddressEntity, Long> deleterOld,
+                                                                   PredicateExecutorOld<Address, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<Product, ProductEntity> productService(Saver<Product, ProductEntity, Long> saver,
-                                                                                  Loader<Product, ProductEntity, Long> loader,
-                                                                                  Deleter<Product, ProductEntity, Long> deleter,
-                                                                                  PredicateExecutor<Product, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Product, ProductEntity> productService(SaverOld<Product, ProductEntity, Long> saverOld,
+                                                                   LoaderOld<Product, ProductEntity, Long> loaderOld,
+                                                                   DeleterOld<Product, ProductEntity, Long> deleterOld,
+                                                                   PredicateExecutorOld<Product, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<Payment, PaymentEntity> paymentService(Saver<Payment, PaymentEntity, Long> saver,
-                                                                                  Loader<Payment, PaymentEntity, Long> loader,
-                                                                                  Deleter<Payment, PaymentEntity, Long> deleter,
-                                                                                  PredicateExecutor<Payment, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Payment, PaymentEntity> paymentService(SaverOld<Payment, PaymentEntity, Long> saverOld,
+                                                                   LoaderOld<Payment, PaymentEntity, Long> loaderOld,
+                                                                   DeleterOld<Payment, PaymentEntity, Long> deleterOld,
+                                                                   PredicateExecutorOld<Payment, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<Tag, TagEntity> tagService(Saver<Tag, TagEntity, Long> saver,
-                                                                      Loader<Tag, TagEntity, Long> loader,
-                                                                      Deleter<Tag, TagEntity, Long> deleter,
-                                                                      PredicateExecutor<Tag, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Tag, TagEntity> tagService(SaverOld<Tag, TagEntity, Long> saverOld,
+                                                       LoaderOld<Tag, TagEntity, Long> loaderOld,
+                                                       DeleterOld<Tag, TagEntity, Long> deleterOld,
+                                                       PredicateExecutorOld<Tag, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 
     @Bean
-    public DTOService<Seller, SellerEntity> sellerService(Saver<Seller, SellerEntity, Long> saver,
-                                                                               Loader<Seller, SellerEntity, Long> loader,
-                                                                               Deleter<Seller, SellerEntity, Long> deleter,
-                                                                               PredicateExecutor<Seller, Predicate> executor){
-        return new DTOServiceImpl<>(saver, loader, deleter, executor);
+    public DTOServiceOLdOld<Seller, SellerEntity> sellerService(SaverOld<Seller, SellerEntity, Long> saverOld,
+                                                                LoaderOld<Seller, SellerEntity, Long> loaderOld,
+                                                                DeleterOld<Seller, SellerEntity, Long> deleterOld,
+                                                                PredicateExecutorOld<Seller, Predicate> executor){
+        return new DTOServiceOLdImplOld<>(saverOld, loaderOld, deleterOld, executor);
     }
 }

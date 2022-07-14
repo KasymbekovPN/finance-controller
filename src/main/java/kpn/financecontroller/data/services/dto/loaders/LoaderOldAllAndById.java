@@ -1,18 +1,19 @@
 package kpn.financecontroller.data.services.dto.loaders;
 
-import kpn.financecontroller.data.services.dto.DTOServiceException;
+import kpn.financecontroller.data.services.dto.DTOServiceExceptionOld;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
-final public class LoaderAll<D, E, I> extends AbstractLoader<D, E, I>{
-
+// TODO: 14.07.2022 del
+final public class LoaderOldAllAndById<D, E, I> extends AbstractLoaderOld<D, E, I> {
     private final JpaRepository<E, I> repo;
     private final Function<E, D> toDomain;
     private final Function<List<E>, List<D>> toDomains;
 
-    public LoaderAll(JpaRepository<E, I> repo, String name, Function<E, D> toDomain, Function<List<E>, List<D>> toDomains) {
+    public LoaderOldAllAndById(JpaRepository<E, I> repo, String name, Function<E, D> toDomain, Function<List<E>, List<D>> toDomains) {
         super(name);
         this.repo = repo;
         this.toDomain = toDomain;
@@ -20,11 +21,20 @@ final public class LoaderAll<D, E, I> extends AbstractLoader<D, E, I>{
     }
 
     @Override
-    protected List<E> loadAll() throws DTOServiceException {
+    protected List<E> loadAll() throws DTOServiceExceptionOld {
         try{
             return repo.findAll();
         } catch (Throwable t){
-            throw new DTOServiceException("loader.loadAll.fail");
+            throw new DTOServiceExceptionOld("loader.loadAll.fail");
+        }
+    }
+
+    @Override
+    protected Optional<E> loadById(I id) throws DTOServiceExceptionOld {
+        try{
+            return repo.findById(id);
+        } catch (Throwable t){
+            throw new DTOServiceExceptionOld("loader.loadById.fail");
         }
     }
 
