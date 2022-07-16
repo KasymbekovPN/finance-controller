@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 16.07.2022 del
 class PredicateExecutorOldImplTest {
 
     private static final String EXECUTOR_NAME = "some.executor";

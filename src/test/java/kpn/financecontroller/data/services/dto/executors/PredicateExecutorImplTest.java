@@ -1,30 +1,21 @@
 package kpn.financecontroller.data.services.dto.executors;
 
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.PathMetadata;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.StringPath;
-import kpn.lib.domain.AbstractDomain;
-import kpn.lib.entity.AbstractEntity;
 import kpn.lib.exception.DTOException;
 import kpn.lib.executor.DefaultExecutorResult;
 import kpn.lib.executor.ExecutorResult;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import support.QTestEntity;
+import support.TestDomain;
+import support.TestEntity;
+import support.TestQuerydslRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -82,55 +73,5 @@ class PredicateExecutorImplTest {
                 .when(repository.findAll(predicate))
                 .thenReturn(entities);
         return repository;
-    }
-
-    // TODO: 14.07.2022 move to file
-    private abstract static class TestQuerydslRepository implements QuerydslPredicateExecutor<TestEntity>{}
-
-    // TODO: 14.07.2022 move to file
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    private static class TestEntity extends AbstractEntity<Long> {
-        private Long id;
-        private String name;
-
-        public TestEntity(TestDomain domain) {
-            setId(domain.getId());
-            setName(domain.getName());
-        }
-    }
-
-    // TODO: 14.07.2022 move to file
-    @Getter
-    @Setter
-    @EqualsAndHashCode(callSuper = true)
-    @NoArgsConstructor
-    private static class TestDomain extends AbstractDomain<Long> {
-        private String name;
-        public TestDomain(TestEntity entity) {
-            setId(entity.getId());
-            setName(entity.getName());
-        }
-    }
-
-    // TODO: 16.07.2022 move to file
-    private static class QTestEntity extends EntityPathBase<TestEntity>{
-        public static final QTestEntity testEntity = new QTestEntity("");
-
-        public final NumberPath<Long> id = createNumber("id", Long.class);
-        public final StringPath name = createString("name");
-
-        public QTestEntity(String variable) {
-            super(TestEntity.class, forVariable(variable));
-        }
-
-        public QTestEntity(Path<? extends TestEntity> path) {
-            super(path.getType(), path.getMetadata());
-        }
-
-        public QTestEntity(PathMetadata metadata) {
-            super(TestEntity.class, metadata);
-        }
     }
 }

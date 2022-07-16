@@ -1,18 +1,16 @@
 package kpn.financecontroller.data.services.dto.deleters;
 
-import kpn.lib.domain.AbstractDomain;
 import kpn.lib.domain.Domain;
-import kpn.lib.entity.AbstractEntity;
 import kpn.lib.exception.DTOException;
 import kpn.lib.executor.DefaultExecutorResult;
 import kpn.lib.executor.ExecutorResult;
-import lombok.Getter;
-import lombok.Setter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
-import org.springframework.data.jpa.repository.JpaRepository;
+import support.TestDomain;
+import support.TestEntity;
+import support.TestJpaRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,17 +45,4 @@ class CompletelyDeletingExecutorImplTest {
     private TestJpaRepository createRepository() {
         return Mockito.mock(TestJpaRepository.class);
     }
-
-    // TODO: 14.07.2022 move to file
-    private abstract static class TestJpaRepository implements JpaRepository<TestEntity, Long>{}
-
-    // TODO: 14.07.2022 move to file
-    @Getter
-    @Setter
-    private static class TestEntity extends AbstractEntity<Long>{
-        private Long id;
-    }
-
-    // TODO: 14.07.2022 move to file
-    private static class TestDomain extends AbstractDomain<Long>{}
 }
