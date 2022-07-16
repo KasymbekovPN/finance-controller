@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.services.dto.deleters;
 
-import kpn.financecontroller.data.services.dto.utils.TestEntity;
-import kpn.financecontroller.data.services.dto.utils.TestModel;
-import kpn.financecontroller.data.services.dto.utils.TestRepo;
+import kpn.financecontroller.data.services.dto.utils.TestEntityOld;
+import kpn.financecontroller.data.services.dto.utils.TestModelOld;
+import kpn.financecontroller.data.services.dto.utils.TestRepoOld;
 import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,11 +14,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 16.07.2022 del
 class DeleterOldAllAndByIdTest {
 
     private static final String DELETER_NAME = "some.deleter";
 
-    private static DeleterOldAllAndById<TestModel, TestEntity, Long> deleter;
+    private static DeleterOldAllAndById<TestModelOld, TestEntityOld, Long> deleter;
 
     @BeforeAll
     static void beforeAll() {
@@ -52,8 +53,8 @@ class DeleterOldAllAndByIdTest {
         assertThat(result.getSeed().getArgs()).isEqualTo(List.of(DELETER_NAME).toArray());
     }
 
-    private static JpaRepository<TestEntity, Long> createRepo(){
-        TestRepo repo = Mockito.mock(TestRepo.class);
+    private static JpaRepository<TestEntityOld, Long> createRepo(){
+        TestRepoOld repo = Mockito.mock(TestRepoOld.class);
 
         Mockito
                 .doThrow(MockitoException.class)

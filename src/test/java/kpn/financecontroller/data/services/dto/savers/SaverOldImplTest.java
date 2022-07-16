@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.services.dto.savers;
 
-import kpn.financecontroller.data.services.dto.utils.TestEntity;
-import kpn.financecontroller.data.services.dto.utils.TestModel;
-import kpn.financecontroller.data.services.dto.utils.TestRepo;
+import kpn.financecontroller.data.services.dto.utils.TestEntityOld;
+import kpn.financecontroller.data.services.dto.utils.TestModelOld;
+import kpn.financecontroller.data.services.dto.utils.TestRepoOld;
 import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,49 +18,49 @@ class SaverOldImplTest {
 
     private static final String SAVER_NAME = "saver";
 
-    private static TestEntity throwEntity;
-    private static TestEntity testEntity;
-    private static TestModel testModel;
-    private static SaverOldImpl<TestModel, TestEntity, Long> saver;
+    private static TestEntityOld throwEntity;
+    private static TestEntityOld testEntityOld;
+    private static TestModelOld testModelOld;
+    private static SaverOldImpl<TestModelOld, TestEntityOld, Long> saver;
 
     @BeforeAll
     static void beforeAll() {
-        throwEntity = new TestEntity();
+        throwEntity = new TestEntityOld();
         throwEntity.setId(-1L);
 
-        testEntity = new TestEntity();
-        testEntity.setId(1L);
+        testEntityOld = new TestEntityOld();
+        testEntityOld.setId(1L);
 
-        testModel = new TestModel(testEntity);
+        testModelOld = new TestModelOld(testEntityOld);
 
-        saver = new SaverOldImpl<>(createRepo(), TestModel::new, SAVER_NAME);
+        saver = new SaverOldImpl<>(createRepo(), TestModelOld::new, SAVER_NAME);
     }
 
     @Test
     void shouldCheckSaving() {
-        Result<TestModel> result = saver.save(testEntity);
+        Result<TestModelOld> result = saver.save(testEntityOld);
         assertThat(result.isSuccess()).isTrue();
-        assertThat(result.getValue()).isEqualTo(testModel);
+        assertThat(result.getValue()).isEqualTo(testModelOld);
     }
 
     @Test
     void shouldCheckWrongWaySaving() {
-        Result<TestModel> result = saver.save(throwEntity);
+        Result<TestModelOld> result = saver.save(throwEntity);
         assertThat(result.isSuccess()).isFalse();
         assertThat(result.getSeed().getCode()).isEqualTo("saver.saveImpl.fail");
         assertThat(result.getSeed().getArgs()).isEqualTo(List.of(SAVER_NAME).toArray());
     }
 
-    private static JpaRepository<TestEntity, Long> createRepo(){
-        TestRepo repo = Mockito.mock(TestRepo.class);
+    private static JpaRepository<TestEntityOld, Long> createRepo(){
+        TestRepoOld repo = Mockito.mock(TestRepoOld.class);
 
         Mockito
                 .when(repo.save(throwEntity))
                 .thenThrow(new MockitoException(""));
 
         Mockito
-                .when(repo.save(testEntity))
-                .thenReturn(testEntity);
+                .when(repo.save(testEntityOld))
+                .thenReturn(testEntityOld);
 
         return repo;
     }

@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @AllArgsConstructor
-public class ByIdDeletingExecutorImpl<D extends Domain<Long>, E extends Entity<Long>> implements ByIdDeletingExecutor<Long, D> {
+public final class ByIdDeletingExecutorImpl<D extends Domain<Long>, E extends Entity<Long>> implements ByIdDeletingExecutor<Long, D> {
     private final JpaRepository<E, Long> repository;
 
     @Override

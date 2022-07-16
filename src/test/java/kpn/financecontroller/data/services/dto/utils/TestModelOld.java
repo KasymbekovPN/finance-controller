@@ -7,11 +7,11 @@ import lombok.*;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class TestModel {
+public class TestModelOld {
     private Long id;
     private String value;
 
-    public TestModel(TestEntity entity) {
+    public TestModelOld(TestEntityOld entity) {
         id = entity.getId();
         value = entity.getValue();
     }
