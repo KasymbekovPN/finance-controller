@@ -1,6 +1,5 @@
 package kpn.financecontroller.data.services.dto.loaders;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import kpn.lib.exception.DTOException;
 import kpn.lib.executor.DefaultExecutorResult;
 import kpn.lib.executor.ExecutorResult;
@@ -13,11 +12,11 @@ import support.TestDomain;
 import support.TestEntity;
 import support.TestJpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ByIdLoadingExecutorImplTest {
+class CompletelyLoadingExecutorImplTest {
 
     private static final String NAME = "name";
 
@@ -25,17 +24,17 @@ class ByIdLoadingExecutorImplTest {
     void shouldCheckLoading_ifFail() {
         Throwable throwable = Assertions.catchThrowable(() -> {
             ExecutorResult<TestDomain> result
-                    = new ByIdLoadingExecutorImpl<TestDomain, TestEntity>(createFailRepository(), TestDomain::new).load(1L);
+                    = new CompletelyLoadingExecutorImpl<TestDomain, TestEntity>(createFailRepository(), TestDomain::new).load();
         });
         assertThat(throwable)
                 .isInstanceOf(DTOException.class)
-                .hasMessage("executor.loading.byId.fail");
+                .hasMessage("executor.loading.completely.fail");
     }
 
     private JpaRepository<TestEntity, Long> createFailRepository() {
         TestJpaRepository repository = Mockito.mock(TestJpaRepository.class);
         Mockito
-                .when(repository.findById(Mockito.anyObject()))
+                .when(repository.findAll())
                 .thenThrow(new MockitoException(""));
         return repository;
     }
@@ -49,7 +48,7 @@ class ByIdLoadingExecutorImplTest {
         DefaultExecutorResult<TestDomain> expectedResult = new DefaultExecutorResult<>(domain);
 
         ExecutorResult<TestDomain> result
-                = new ByIdLoadingExecutorImpl<TestDomain, TestEntity>(createRepository(id), TestDomain::new).load(id);
+                = new CompletelyLoadingExecutorImpl<TestDomain, TestEntity>(createRepository(id), TestDomain::new).load();
         assertThat(result).isEqualTo(expectedResult);
     }
 
@@ -60,8 +59,8 @@ class ByIdLoadingExecutorImplTest {
 
         TestJpaRepository repository = Mockito.mock(TestJpaRepository.class);
         Mockito
-                .when(repository.findById(id))
-                .thenReturn(Optional.of(entity));
+                .when(repository.findAll())
+                .thenReturn(List.of(entity));
         return repository;
     }
 }
