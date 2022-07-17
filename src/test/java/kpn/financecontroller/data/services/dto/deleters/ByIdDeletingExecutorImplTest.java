@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import support.DTOExceptionChecker;
 import support.TestDomain;
 import support.TestEntity;
 import support.TestJpaRepository;
@@ -15,15 +16,22 @@ import support.TestJpaRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ByIdDeletingExecutorImplTest {
+    private static final String EXECUTOR_ID = "some.id";
+    private static final Long ID = 1L;
 
     @Test
     void shouldCheckDeleting_ifFail() {
         Throwable throwable = Assertions.catchThrowable(() -> {
-            ExecutorResult<Domain<Long>> result = new ByIdDeletingExecutorImpl<>(createFailRepository()).delete(1L);
+            ExecutorResult<Domain<Long>> result = new ByIdDeletingExecutorImpl<>(EXECUTOR_ID, createFailRepository()).delete(ID);
         });
+
         assertThat(throwable)
-                .isInstanceOf(DTOException.class)
-                .hasMessage("executor.deleting.byId.fail");
+                .isInstanceOf(DTOException.class);
+        assertThat(new DTOExceptionChecker().check(
+                (DTOException) throwable,
+                "executor.deleting.byId.fail",
+                EXECUTOR_ID, String.valueOf(ID)
+        )).isTrue();
     }
 
     private TestJpaRepository createFailRepository() {
@@ -37,7 +45,9 @@ class ByIdDeletingExecutorImplTest {
 
     @Test
     void shouldCheckDeleting() throws DTOException {
-        ExecutorResult<TestDomain> result = new ByIdDeletingExecutorImpl<TestDomain, TestEntity>(createRepository()).delete(1L);
+        ExecutorResult<TestDomain> result
+                = new ByIdDeletingExecutorImpl<TestDomain, TestEntity>(EXECUTOR_ID, createRepository()).delete(ID);
+
         assertThat(result).isEqualTo(new DefaultExecutorResult<>());
     }
 

@@ -8,10 +8,7 @@ import kpn.lib.executor.ExecutorResult;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
-import support.QTestEntity;
-import support.TestDomain;
-import support.TestEntity;
-import support.TestQuerydslRepository;
+import support.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,18 +18,27 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 class PredicateExecutorImplTest {
     private static final String NAME = "name";
+    private static final String EXECUTOR_ID = "some.id";
 
     private final BooleanExpression predicate = QTestEntity.testEntity.name.eq(NAME);
 
     @Test
     void shouldCheckExecution_ifFail() {
         Throwable throwable = catchThrowable(() -> {
-            ExecutorResult<TestDomain> result
-                    = new PredicateExecutorImpl<TestDomain, TestEntity>(createFailRepository(predicate), TestDomain::new).execute(predicate);
+            ExecutorResult<TestDomain> result = new PredicateExecutorImpl<TestDomain, TestEntity>(
+                    EXECUTOR_ID,
+                    createFailRepository(predicate),
+                    TestDomain::new
+            ).execute(predicate);
         });
+
         assertThat(throwable)
-                .isInstanceOf(DTOException.class)
-                .hasMessage("executor.predicate.fail");
+                .isInstanceOf(DTOException.class);
+        assertThat(new DTOExceptionChecker().check(
+                (DTOException) throwable,
+                "executor.predicate.fail",
+                EXECUTOR_ID
+        )).isTrue();
     }
 
     private TestQuerydslRepository createFailRepository(Predicate predicate) {
@@ -55,8 +61,12 @@ class PredicateExecutorImplTest {
                 }).collect(Collectors.toList())
         );
 
-        ExecutorResult<TestDomain> result
-                = new PredicateExecutorImpl<TestDomain, TestEntity>(creteRepository(predicate, ids), TestDomain::new).execute(predicate);
+        ExecutorResult<TestDomain> result = new PredicateExecutorImpl<TestDomain, TestEntity>(
+                EXECUTOR_ID,
+                creteRepository(predicate, ids),
+                TestDomain::new
+        ).execute(predicate);
+
         assertThat(result).isEqualTo(expectedResult);
     }
 

@@ -16,6 +16,7 @@ import java.util.stream.StreamSupport;
 
 @AllArgsConstructor
 public final class PredicateExecutorImpl<D extends Domain<Long>, E extends Entity<Long>> implements PredicateExecutor<Predicate, D> {
+    private final String executorId;
     private final QuerydslPredicateExecutor<E> repository;
     private final Function<E, D> converter;
 
@@ -29,7 +30,7 @@ public final class PredicateExecutorImpl<D extends Domain<Long>, E extends Entit
                             .collect(Collectors.toList())
             );
         } catch (Throwable t) {
-            throw new DTOException("executor.predicate.fail");
+            throw new DTOException("executor.predicate.fail", executorId);
         }
     }
 }

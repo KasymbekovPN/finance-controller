@@ -13,6 +13,7 @@ import java.util.function.Function;
 
 @AllArgsConstructor
 public final class SavingExecutorImpl<D extends Domain<Long>, E extends Entity<Long>> implements SavingExecutor<D> {
+    private final String executorId;
     private final JpaRepository<E, Long> repository;
     private final Function<E, D> toDomainConverter;
     private final Function<D, E> toEntityConverter;
@@ -23,7 +24,7 @@ public final class SavingExecutorImpl<D extends Domain<Long>, E extends Entity<L
             E savedEntity = repository.save(toEntityConverter.apply(domain));
             return new DefaultExecutorResult<>(toDomainConverter.apply(savedEntity));
         } catch (Throwable t){
-            throw new DTOException("executor.saving.fail");
+            throw new DTOException("executor.saving.fail", executorId);
         }
     }
 }

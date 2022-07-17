@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import support.DTOExceptionChecker;
 import support.TestDomain;
 import support.TestEntity;
 import support.TestJpaRepository;
@@ -19,16 +20,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CompletelyLoadingExecutorImplTest {
 
     private static final String NAME = "name";
+    private static final String EXECUTOR_ID = "some.id";
 
     @Test
     void shouldCheckLoading_ifFail() {
         Throwable throwable = Assertions.catchThrowable(() -> {
-            ExecutorResult<TestDomain> result
-                    = new CompletelyLoadingExecutorImpl<TestDomain, TestEntity>(createFailRepository(), TestDomain::new).load();
+            ExecutorResult<TestDomain> result = new CompletelyLoadingExecutorImpl<TestDomain, TestEntity>(
+                    EXECUTOR_ID,
+                    createFailRepository(),
+                    TestDomain::new
+            ).load();
         });
+
         assertThat(throwable)
-                .isInstanceOf(DTOException.class)
-                .hasMessage("executor.loading.completely.fail");
+                .isInstanceOf(DTOException.class);
+        assertThat(new DTOExceptionChecker().check(
+                (DTOException) throwable,
+                "executor.loading.completely.fail",
+                EXECUTOR_ID
+        )).isTrue();
     }
 
     private JpaRepository<TestEntity, Long> createFailRepository() {
@@ -47,8 +57,12 @@ class CompletelyLoadingExecutorImplTest {
         domain.setName(NAME);
         DefaultExecutorResult<TestDomain> expectedResult = new DefaultExecutorResult<>(domain);
 
-        ExecutorResult<TestDomain> result
-                = new CompletelyLoadingExecutorImpl<TestDomain, TestEntity>(createRepository(id), TestDomain::new).load();
+        ExecutorResult<TestDomain> result = new CompletelyLoadingExecutorImpl<TestDomain, TestEntity>(
+                EXECUTOR_ID,
+                createRepository(id),
+                TestDomain::new
+        ).load();
+
         assertThat(result).isEqualTo(expectedResult);
     }
 

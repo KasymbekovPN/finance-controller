@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @AllArgsConstructor
 public final class CompletelyDeletingExecutorImpl<D extends Domain<Long>, E extends Entity<Long>> implements CompletelyDeletingExecutor<D> {
+    private final String executorId;
     private final JpaRepository<E, Long> repository;
 
     @Override
@@ -19,7 +20,7 @@ public final class CompletelyDeletingExecutorImpl<D extends Domain<Long>, E exte
             repository.deleteAll();
             return new DefaultExecutorResult<>();
         } catch (Throwable t){
-            throw new DTOException("executor.deleting.completely.fail");
+            throw new DTOException("executor.deleting.completely.fail", executorId);
         }
     }
 }

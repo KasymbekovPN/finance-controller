@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @AllArgsConstructor
 public final class ByIdDeletingExecutorImpl<D extends Domain<Long>, E extends Entity<Long>> implements ByIdDeletingExecutor<Long, D> {
+    private final String executorId;
     private final JpaRepository<E, Long> repository;
 
     @Override
@@ -19,7 +20,7 @@ public final class ByIdDeletingExecutorImpl<D extends Domain<Long>, E extends En
             repository.deleteById(id);
             return new DefaultExecutorResult<>();
         } catch (Throwable t){
-            throw new DTOException("executor.deleting.byId.fail");
+            throw new DTOException("executor.deleting.byId.fail", executorId, String.valueOf(id));
         }
     }
 }

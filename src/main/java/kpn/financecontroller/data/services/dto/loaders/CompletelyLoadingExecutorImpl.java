@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public final class CompletelyLoadingExecutorImpl<D extends Domain<Long>, E extends Entity<Long>> implements CompletelyLoadingExecutor<D> {
+    private final String executorId;
     private final JpaRepository<E, Long> repository;
     private final Function<E, D> converter;
 
@@ -24,7 +25,7 @@ public final class CompletelyLoadingExecutorImpl<D extends Domain<Long>, E exten
             List<D> domains = repository.findAll().stream().map(converter).collect(Collectors.toList());
             return new DefaultExecutorResult<>(domains);
         } catch (Throwable t){
-            throw new DTOException("executor.loading.completely.fail");
+            throw new DTOException("executor.loading.completely.fail", executorId);
         }
     }
 }
