@@ -1,13 +1,13 @@
 package kpn.financecontroller.gui.views.geo.country;
 
+import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.data.entities.country.CountryEntity;
-import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
+import kpn.lib.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
@@ -25,7 +25,11 @@ final public class CountryView extends GridView<Country>{
     );
 
     @Autowired
-    private DTOServiceOLdOld<Country, CountryEntity> countryService;
+    private Service<Long, Country, Predicate, Result<List<Country>>> countryService;
+
+    // TODO: 17.07.2022 del
+//    @Autowired
+//    private DTOServiceOLdOld<Country, CountryEntity> countryService;
 
     @Override
     protected Result<?> updateListImpl() {
@@ -56,12 +60,17 @@ final public class CountryView extends GridView<Country>{
     }
 
     @Override
-    protected Result<Void> delete(Country domain) {
+    protected Result<List<Country>> delete(Country domain) {
         return countryService.deleter().byId(domain.getId());
+        // TODO: 17.07.2022 del
+//        return countryService.deleter().byId(domain.getId());
+
     }
 
     @Override
-    protected Result<Country> save(Country domain) {
-        return countryService.saver().save(new CountryEntity(domain));
+    protected Result<List<Country>> save(Country domain) {
+        return countryService.saver().save(domain);
+        // TODO: 17.07.2022 del
+//        return countryService.saver().save(new CountryEntity(domain));
     }
 }

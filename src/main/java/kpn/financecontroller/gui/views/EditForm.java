@@ -14,25 +14,26 @@ import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
+import kpn.lib.domain.Domain;
 
-abstract public class EditForm<DOMAIN> extends FormLayout {
+abstract public class EditForm<D extends Domain<Long>> extends FormLayout {
 
     protected final Button save = new Button();
     protected final Button delete = new Button();
     protected final Button close = new Button();
-    protected final Binder<DOMAIN> binder;
+    protected final Binder<D> binder;
 
-    protected DOMAIN value;
+    protected D value;
 
-    protected EditForm(Binder<DOMAIN> binder) {
+    protected EditForm(Binder<D> binder) {
         this.binder = binder;
     }
 
-    public void setValueIfItNull(DOMAIN value) {
+    public void setValueIfItNull(D value) {
         setValue(this.value == null ? value : this.value);
     }
 
-    public void setValue(DOMAIN value) {
+    public void setValue(D value) {
         this.value = value;
         binder.readBean(value);
         setVisible(true);
@@ -80,7 +81,7 @@ abstract public class EditForm<DOMAIN> extends FormLayout {
         return getEventBus().addListener(eventType, listener);
     }
 
-    protected abstract SaveFormEvent<EditForm<DOMAIN>, DOMAIN> createSaveEvent();
-    protected abstract DeleteFormEvent<EditForm<DOMAIN>, DOMAIN> createDeleteEvent();
-    protected abstract CloseFormEvent<EditForm<DOMAIN>, DOMAIN> createCloseEvent();
+    protected abstract SaveFormEvent<EditForm<D>, D> createSaveEvent();
+    protected abstract DeleteFormEvent<EditForm<D>, D> createDeleteEvent();
+    protected abstract CloseFormEvent<EditForm<D>, D> createCloseEvent();
 }

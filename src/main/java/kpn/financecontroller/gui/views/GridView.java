@@ -8,7 +8,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
-import kpn.financecontroller.data.domains.Domain;
 import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
 import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
@@ -16,6 +15,7 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.lib.domain.Domain;
 import kpn.lib.result.Result;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,23 +27,21 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayDeque;
 import java.util.List;
 
-//abstract public class GridView<DOMAIN extends Domain> extends VerticalLayout implements HasDynamicTitle {
-// TODO: 13.07.2022 ???
-abstract public class GridView<DOMAIN> extends VerticalLayout implements HasDynamicTitle {
+abstract public class GridView<D extends Domain<Long>> extends VerticalLayout implements HasDynamicTitle {
 
     @Autowired
     private NotificationFactory notificationFactory;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
-    private SavingChecker<DOMAIN> savingChecker;
+    private SavingChecker<D> savingChecker;
     @Autowired
-    private RemovingChecker<DOMAIN> removingChecker;
+    private RemovingChecker<D> removingChecker;
 
-    private Class<DOMAIN> domainClass;
+    private Class<D> domainClass;
 
-    protected EditForm<DOMAIN> form;
-    protected Grid<DOMAIN> grid;
+    protected EditForm<D> form;
+    protected Grid<D> grid;
 
     @Override
     public String getPageTitle() {
@@ -89,12 +87,12 @@ abstract public class GridView<DOMAIN> extends VerticalLayout implements HasDyna
         removeClassName("editing");
     }
 
-    protected void addValue(DOMAIN value){
+    protected void addValue(D value){
         form.setValueIfItNull(value);
         addClassName("editing");
     }
 
-    protected void editValue(DOMAIN value){
+    protected void editValue(D value){
         if (value == null){
             closeEditor(true);
         } else {
@@ -103,24 +101,28 @@ abstract public class GridView<DOMAIN> extends VerticalLayout implements HasDyna
         }
     }
 
-    protected void handleDeletingEvent(DeleteFormEvent<EditForm<DOMAIN>, DOMAIN> event) {
-        DOMAIN domain = event.getValue();
+    protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
+        D domain = event.getValue();
+        // TODO: 17.07.2022 removingChecker must return R<List<>>
         Result<Void> result = removingChecker.apply(domain);
+        Result<List<D>> deleteResult = null;
         if (result.isSuccess()){
-            result = delete(domain);
+            deleteResult = delete(domain);
         }
-        createNotification(result);
+        createNotification(deleteResult == null ? result : deleteResult);
         updateList();
         closeEditor(true);
     }
 
-    protected void handleSavingEvent(SaveFormEvent<EditForm<DOMAIN>, DOMAIN> event) {
-        DOMAIN domain = event.getValue();
-        Result<DOMAIN> result = savingChecker.apply(domain);
+    protected void handleSavingEvent(SaveFormEvent<EditForm<D>, D> event) {
+        D domain = event.getValue();
+        // TODO: 17.07.2022 savingChecker must return R<List<>>
+        Result<D> result = savingChecker.apply(domain);
+        Result<List<D>> saveResult = null;
         if (result.isSuccess()){
-            result = save(domain);
+            saveResult = save(domain);
         }
-        createNotification(result);
+        createNotification(saveResult == null ? result : saveResult);
         updateList();
         closeEditor(false);
     }
@@ -141,12 +143,11 @@ abstract public class GridView<DOMAIN> extends VerticalLayout implements HasDyna
 
     protected void configureGridColumns(List<ColumnConfig> configList){
         grid.setColumns();
-        // TODO: 13.07.2022 !!!
-//        for (ColumnConfig config : configList) {
-//            grid
-//                    .addColumn((DOMAIN d) -> {return d.get(new ArrayDeque<String>(config.getPath()));})
-//                    .setHeader(getTranslation(config.getCode()));
-//        }
+        for (ColumnConfig config : configList) {
+            grid
+                    .addColumn((D d) -> {return d.getInDeep(new ArrayDeque<>(config.getPath()));})
+                    .setHeader(getTranslation(config.getCode()));
+        }
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
     }
 
@@ -156,9 +157,9 @@ abstract public class GridView<DOMAIN> extends VerticalLayout implements HasDyna
     }
 
     @SneakyThrows
-    private DOMAIN createDefaultDomain() {
+    private D createDefaultDomain() {
         if (domainClass == null){
-            domainClass = (Class<DOMAIN>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            domainClass = (Class<D>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         }
         return domainClass.getConstructor().newInstance();
     }
@@ -166,8 +167,13 @@ abstract public class GridView<DOMAIN> extends VerticalLayout implements HasDyna
     protected abstract Result<?> updateListImpl();
     protected abstract void configureGrid();
     protected abstract void configureForm();
-    protected abstract Result<Void> delete(DOMAIN domain);
-    protected abstract Result<DOMAIN> save(DOMAIN domain);
+    protected abstract Result<List<D>> delete(D domain);
+    // TODO: 17.07.2022 del
+//    protected abstract Result<Void> delete(D domain);
+
+    protected abstract Result<List<D>> save(D domain);
+    // TODO: 17.07.2022 del
+//    protected abstract Result<D> save(D domain);
 
     @RequiredArgsConstructor
     @Getter
