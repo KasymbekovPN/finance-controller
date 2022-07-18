@@ -20,7 +20,7 @@ class StreetTest {
         Street street = new Street();
         String streetName = "street.name";
         street.setName(streetName);
-        street.setCity(createCity(""));
+        street.setCity(createCity("", new ArrayDeque<>()));
 
         String expected = streetName + ", " + CITY_GET_INFO_ANSWER;
         assertThat(expected).isEqualTo(street.getInfo());
@@ -33,16 +33,16 @@ class StreetTest {
         Street domain = new Street();
         domain.setId(id);
         domain.setName(name);
-        domain.setCity(createCity(cityAnswer));
+        domain.setCity(createCity(cityAnswer, path));
 
-        String result = domain.get(path);
+        String result = domain.getInDeep(path);
         assertThat(expectedResult).isEqualTo(result);
     }
 
-    private City createCity(String cityAnswer) {
+    private City createCity(String cityAnswer, ArrayDeque<String> path) {
         City city = Mockito.mock(City.class);
         Mockito
-                .when(city.get(Mockito.any()))
+                .when(city.getInDeep(path))
                 .thenReturn(cityAnswer);
         Mockito
                 .when(city.getInfo())

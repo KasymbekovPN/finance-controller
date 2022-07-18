@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.domains.seller;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.entities.seller.SellerEntity;
+import kpn.lib.domain.AbstractDomain;
 import lombok.*;
 
 import java.util.Map;
@@ -12,8 +12,10 @@ import java.util.function.Function;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-public class Seller extends AbstractDomain {
-    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
+public class Seller extends AbstractDomain<Long> {
+    // TODO: 13.07.2022 move into AbstractDomain
+    private static final String DEFAULT_GETTING_RESULT = "-";
+    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
             "id",
             arg -> {
                 Long id = arg.getDomain().getId();
@@ -59,11 +61,11 @@ public class Seller extends AbstractDomain {
     private Address address;
 
     public Seller(SellerEntity sellerEntity) {
-        id = sellerEntity.getId();
-        name = sellerEntity.getName();
-        url = sellerEntity.getUrl();
-        description = sellerEntity.getDescription();
-        address = sellerEntity.getAddressEntity() != null ? new Address(sellerEntity.getAddressEntity()) : null;
+        setId(sellerEntity.getId());
+        setName(sellerEntity.getName());
+        setUrl(sellerEntity.getUrl());
+        setDescription(sellerEntity.getDescription());
+        setAddress(sellerEntity.getAddressEntity() != null ? new Address(sellerEntity.getAddressEntity()) : null);
     }
 
     @Override
@@ -72,7 +74,7 @@ public class Seller extends AbstractDomain {
     }
 
     @Override
-    protected Map<String, Function<GetterArg, String>> takeGetters() {
+    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
         return GETTERS;
     }
 }

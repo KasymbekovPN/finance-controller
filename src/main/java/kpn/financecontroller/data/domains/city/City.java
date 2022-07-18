@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.domains.city;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.entities.city.CityEntity;
+import kpn.lib.domain.AbstractDomain;
 import lombok.*;
 
 import java.util.Map;
@@ -13,8 +13,10 @@ import java.util.function.Function;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class City extends AbstractDomain {
-    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
+public class City extends AbstractDomain<Long> {
+    // TODO: 13.07.2022 move into AbstractDomain
+    private static final String DEFAULT_GETTING_RESULT = "-";
+    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
             "id",
             arg -> {
                 Long id = arg.getDomain().getId();
@@ -36,7 +38,7 @@ public class City extends AbstractDomain {
                 Region region = domain.getRegion();
                 Queue<String> path = arg.getPath();
                 return path.size() > 0 && region != null
-                        ? region.get(path)
+                        ? region.getInDeep(path)
                         : DEFAULT_GETTING_RESULT;
             }
     );
@@ -45,18 +47,18 @@ public class City extends AbstractDomain {
     private Region region;
 
     public City(CityEntity entity) {
-        id = entity.getId();
-        name = entity.getName();
-        region = entity.getRegionEntity() != null ? new Region(entity.getRegionEntity()) : null;
-    }
-
-    @Override
-    protected Map<String, Function<GetterArg, String>> takeGetters() {
-        return GETTERS;
+        setId(entity.getId());
+        setName(entity.getName());
+        setRegion(new Region(entity.getRegionEntity()));
     }
 
     @Override
     public String getInfo() {
         return getName() + ", " + getRegion().getInfo();
+    }
+
+    @Override
+    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
+        return GETTERS;
     }
 }

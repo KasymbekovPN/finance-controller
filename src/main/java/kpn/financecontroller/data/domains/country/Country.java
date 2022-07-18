@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public final class Country extends AbstractDomain<Long>{
+public class Country extends AbstractDomain<Long>{
     // TODO: 13.07.2022 move into AbstractDomain
     private static final String DEFAULT_GETTING_RESULT = "-";
 

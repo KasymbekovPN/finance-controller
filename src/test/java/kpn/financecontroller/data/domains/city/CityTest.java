@@ -40,16 +40,16 @@ class CityTest {
         City domain = new City();
         domain.setId(id);
         domain.setName(name);
-        domain.setRegion(createRegion(regionAnswer));
+        domain.setRegion(createRegion(regionAnswer, path));
 
-        String result = domain.get(path);
+        String result = domain.getInDeep(path);
         assertThat(expectedResult).isEqualTo(result);
     }
 
-    private Region createRegion(String regionAnswer) {
+    private Region createRegion(String regionAnswer, ArrayDeque<String> path) {
         Region region = Mockito.mock(Region.class);
         Mockito
-                .when(region.get(Mockito.any()))
+                .when(region.getInDeep(path))
                 .thenReturn(regionAnswer);
         return region;
     }

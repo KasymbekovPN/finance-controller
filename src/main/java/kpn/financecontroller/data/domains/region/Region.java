@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.domains.region;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.data.entities.region.RegionEntity;
+import kpn.lib.domain.AbstractDomain;
 import lombok.*;
 
 import java.util.Map;
@@ -13,8 +13,11 @@ import java.util.function.Function;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Region extends AbstractDomain {
-    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
+public class Region extends AbstractDomain<Long> {
+    // TODO: 13.07.2022 move into AbstractDomain
+    private static final String DEFAULT_GETTING_RESULT = "-";
+
+    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
             "id",
             arg -> {
                 Long id = arg.getDomain().getId();
@@ -45,9 +48,9 @@ public class Region extends AbstractDomain {
     private Country country;
 
     public Region(RegionEntity regionEntity) {
-        id = regionEntity.getId();
-        name = regionEntity.getName();
-        country = new Country(regionEntity.getCountryEntity());
+        setId(regionEntity.getId());
+        setName(regionEntity.getName());
+        setCountry(new Country(regionEntity.getCountryEntity()));
     }
 
     @Override
@@ -56,7 +59,7 @@ public class Region extends AbstractDomain {
     }
 
     @Override
-    protected Map<String, Function<GetterArg, String>> takeGetters() {
+    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
         return GETTERS;
     }
 }

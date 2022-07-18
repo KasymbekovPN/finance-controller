@@ -11,7 +11,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
+import kpn.financecontroller.gui.views.geo.address.AddressView;
+import kpn.financecontroller.gui.views.geo.city.CityView;
 import kpn.financecontroller.gui.views.geo.country.CountryView;
+import kpn.financecontroller.gui.views.geo.region.RegionView;
+import kpn.financecontroller.gui.views.geo.seller.SellerView;
+import kpn.financecontroller.gui.views.geo.street.StreetView;
 import kpn.financecontroller.security.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +29,11 @@ import java.util.List;
 final public class MainLayout extends AppLayout {
 
     private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
+            SellerView.class,
+            AddressView.class,
+            StreetView.class,
+            CityView.class,
+            RegionView.class,
             CountryView.class
     );
 

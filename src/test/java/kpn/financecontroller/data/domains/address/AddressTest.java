@@ -21,7 +21,7 @@ class AddressTest {
         String addressName = "address.name";
         Address address = new Address();
         address.setName(addressName);
-        address.setStreet(createCity(""));
+        address.setStreet(createCity("", new ArrayDeque<>()));
 
         String expected = addressName + ", " + STREET_GET_INFO_ANSWER;
         assertThat(expected).isEqualTo(address.getInfo());
@@ -34,16 +34,16 @@ class AddressTest {
         Address domain = new Address();
         domain.setId(id);
         domain.setName(name);
-        domain.setStreet(createCity(streetAnswer));
+        domain.setStreet(createCity(streetAnswer, path));
 
-        String result = domain.get(path);
+        String result = domain.getInDeep(path);
         assertThat(expectedResult).isEqualTo(result);
     }
 
-    private Street createCity(String streetAnswer) {
+    private Street createCity(String streetAnswer, ArrayDeque<String> path) {
         Street street = Mockito.mock(Street.class);
         Mockito
-                .when(street.get(Mockito.any()))
+                .when(street.getInDeep(path))
                 .thenReturn(streetAnswer);
         Mockito
                 .when(street.getInfo())

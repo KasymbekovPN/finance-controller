@@ -29,7 +29,7 @@ class SellerTest {
         domain.setDescription(description);
         domain.setAddress(createAddress(addressAnswer));
 
-        String result = domain.get(path);
+        String result = domain.getInDeep(path);
         assertThat(expectedResult).isEqualTo(result);
     }
 

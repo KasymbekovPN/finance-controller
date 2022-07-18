@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.domains.address;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.entities.address.AddressEntity;
 import kpn.financecontroller.data.domains.street.Street;
+import kpn.lib.domain.AbstractDomain;
 import lombok.*;
 
 import java.util.Map;
@@ -13,8 +13,10 @@ import java.util.function.Function;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Address extends AbstractDomain {
-    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
+public class Address extends AbstractDomain<Long> {
+    // TODO: 13.07.2022 move into AbstractDomain
+    private static final String DEFAULT_GETTING_RESULT = "-";
+    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
             "id",
             arg -> {
                 Long id = arg.getDomain().getId();
@@ -36,7 +38,7 @@ public class Address extends AbstractDomain {
                 Street street = domain.getStreet();
                 Queue<String> path = arg.getPath();
                 return path.size() > 0 && street != null
-                        ? street.get(path)
+                        ? street.getInDeep(path)
                         : DEFAULT_GETTING_RESULT;
             }
     );
@@ -45,9 +47,9 @@ public class Address extends AbstractDomain {
     private Street street;
 
     public Address(AddressEntity entity) {
-        id = entity.getId();
-        name = entity.getName();
-        street = entity.getStreetEntity() != null ? new Street(entity.getStreetEntity()) : null;
+        setId(entity.getId());
+        setName(entity.getName());
+        setStreet(new Street(entity.getStreetEntity()));
     }
 
     @Override
@@ -56,7 +58,7 @@ public class Address extends AbstractDomain {
     }
 
     @Override
-    protected Map<String, Function<GetterArg, String>> takeGetters() {
+    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
         return GETTERS;
     }
 }

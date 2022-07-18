@@ -1,15 +1,13 @@
 package kpn.financecontroller.data.entities.street;
 
 import kpn.financecontroller.data.domains.street.Street;
-import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.entities.city.CityEntity;
+import kpn.lib.entity.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -17,7 +15,10 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @Entity(name = "streets")
-public class StreetEntity extends AbstractEntity {
+public final class StreetEntity extends AbstractEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotEmpty
     @Size(max = 64)
@@ -28,8 +29,8 @@ public class StreetEntity extends AbstractEntity {
     private CityEntity cityEntity;
 
     public StreetEntity(Street street) {
-        id = street.getId();
-        name = street.getName();
-        this.cityEntity = street.getCity() != null ? new CityEntity(street.getCity()) : null;
+        setId(street.getId());
+        setName(street.getName());
+        setCityEntity(new CityEntity(street.getCity()));
     }
 }

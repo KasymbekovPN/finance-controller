@@ -69,7 +69,7 @@ public class Payment extends AbstractDomain {
                 Seller seller = ((Payment) arg.getDomain()).getSeller();
                 Queue<String> path = arg.getPath();
                 return !path.isEmpty() && seller != null
-                        ? seller.get(path)
+                        ? seller.getInDeep(path)
                         : DEFAULT_GETTING_RESULT;
             },
             "createdAt",

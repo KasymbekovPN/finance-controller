@@ -2,16 +2,30 @@ package kpn.financecontroller.config;
 
 import com.querydsl.core.types.Predicate;
 import kpn.financecontroller.data.converters.aspect.FromAspectConverter;
+import kpn.financecontroller.data.domains.address.Address;
+import kpn.financecontroller.data.domains.city.City;
+import kpn.financecontroller.data.domains.region.Region;
+import kpn.financecontroller.data.domains.seller.Seller;
+import kpn.financecontroller.data.domains.street.Street;
+import kpn.financecontroller.data.entities.address.AddressEntity;
+import kpn.financecontroller.data.entities.city.CityEntity;
 import kpn.financecontroller.data.entities.country.CountryEntity;
+import kpn.financecontroller.data.entities.region.RegionEntity;
+import kpn.financecontroller.data.entities.seller.SellerEntity;
+import kpn.financecontroller.data.entities.street.StreetEntity;
+import kpn.financecontroller.data.repos.address.AddressRepo;
+import kpn.financecontroller.data.repos.city.CityRepo;
 import kpn.financecontroller.data.repos.country.CountryRepo;
 import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.repos.region.RegionRepo;
+import kpn.financecontroller.data.repos.seller.SellerRepo;
+import kpn.financecontroller.data.repos.street.StreetRepo;
 import kpn.financecontroller.data.services.dto.deleters.ByIdDeletingExecutorImpl;
 import kpn.financecontroller.data.services.dto.deleters.CompletelyDeletingExecutorImpl;
 import kpn.financecontroller.data.services.dto.executors.PredicateExecutorImpl;
 import kpn.financecontroller.data.services.dto.loaders.ByIdLoadingExecutorImpl;
 import kpn.financecontroller.data.services.dto.loaders.CompletelyLoadingExecutorImpl;
 import kpn.financecontroller.data.services.dto.savers.SavingExecutorImpl;
-import kpn.lib.aspect.AspectResult;
 import kpn.lib.buider.ServiceBuider;
 import kpn.lib.domain.Domain;
 import kpn.lib.entity.Entity;
@@ -31,6 +45,31 @@ public class DTOServiceConfig {
     @Bean
     public Service<Long, Country, Predicate, Result<List<Country>>> countryService(CountryRepo repo){
         return createService("country", repo, repo, Country::new, CountryEntity::new);
+    }
+
+    @Bean
+    public Service<Long, Region, Predicate, Result<List<Region>>> regionService(RegionRepo repo){
+        return createService("region", repo, repo, Region::new, RegionEntity::new);
+    }
+
+    @Bean
+    public Service<Long, City, Predicate, Result<List<City>>> cityService(CityRepo repo){
+        return createService("city", repo, repo, City::new, CityEntity::new);
+    }
+
+    @Bean
+    public Service<Long, Street, Predicate, Result<List<Street>>> streetService(StreetRepo repo){
+        return createService("street", repo, repo, Street::new, StreetEntity::new);
+    }
+
+    @Bean
+    public Service<Long, Address, Predicate, Result<List<Address>>> addressService(AddressRepo repo){
+        return createService("address", repo, repo, Address::new, AddressEntity::new);
+    }
+
+    @Bean
+    public Service<Long, Seller, Predicate, Result<List<Seller>>> sellerService(SellerRepo repo){
+        return createService("seller", repo, repo, Seller::new, SellerEntity::new);
     }
 
     private <D extends Domain<Long>, E extends Entity<Long>> Service<Long, D, Predicate, Result<List<D>>> createService(
