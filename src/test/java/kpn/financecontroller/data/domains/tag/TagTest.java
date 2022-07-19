@@ -32,7 +32,7 @@ class TagTest {
         tag.setId(id);
         tag.setName(name);
 
-        String result = tag.get(path);
+        String result = tag.getInDeep(path);
         Assertions.assertThat(expectedResult).isEqualTo(result);
     }
 }

@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.entities.product;
 
 import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.entities.AbstractEntity;
 import kpn.financecontroller.data.entities.tag.TagEntity;
+import kpn.lib.entity.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +17,11 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @Entity(name = "products")
-public class ProductEntity extends AbstractEntity {
+public final class ProductEntity extends AbstractEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotEmpty
     @Column(unique = true)
     @Size(max = 256)
@@ -32,8 +36,8 @@ public class ProductEntity extends AbstractEntity {
     private Set<TagEntity> tagEntities;
 
     public ProductEntity(Product value) {
-        id = value.getId();
-        name = value.getName();
-        tagEntities = value.getTags().stream().map(TagEntity::new).collect(Collectors.toSet());
+        setId(value.getId());
+        setName(value.getName());
+        setTagEntities(value.getTags().stream().map(TagEntity::new).collect(Collectors.toSet()));
     }
 }

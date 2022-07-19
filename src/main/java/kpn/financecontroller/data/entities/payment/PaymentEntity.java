@@ -5,21 +5,23 @@ import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.domains.payment.Currency;
 import kpn.financecontroller.data.domains.payment.Measure;
 import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.entities.AbstractEntity;
+import kpn.lib.entity.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @Entity(name = "payments")
-public class PaymentEntity extends AbstractEntity {
+public final class PaymentEntity extends AbstractEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private SellerEntity sellerEntity;
@@ -35,13 +37,13 @@ public class PaymentEntity extends AbstractEntity {
     private LocalDate createdAt;
 
     public PaymentEntity(Payment payment) {
-        id = payment.getId();
-        productEntity = new ProductEntity(payment.getProduct());
-        sellerEntity = payment.getSeller() != null ? new SellerEntity(payment.getSeller()) : null;
-        amount = payment.getAmount();
-        measure = payment.getMeasure();
-        price = payment.getPrice();
-        currency = payment.getCurrency();
-        createdAt = payment.getCreatedAt();
+        setId(payment.getId());
+        setProductEntity(new ProductEntity(payment.getProduct()));
+        setSellerEntity(payment.getSeller() != null ? new SellerEntity(payment.getSeller()) : null);
+        setAmount(payment.getAmount());
+        setMeasure(payment.getMeasure());
+        setPrice(payment.getPrice());
+        setCurrency(payment.getCurrency());
+        setCreatedAt(payment.getCreatedAt());
     }
 }

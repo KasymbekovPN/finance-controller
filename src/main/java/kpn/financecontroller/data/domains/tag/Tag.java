@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.domains.tag;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.entities.tag.TagEntity;
+import kpn.lib.domain.AbstractDomain;
 import lombok.*;
 
 import java.util.Map;
@@ -11,8 +11,10 @@ import java.util.function.Function;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Tag extends AbstractDomain {
-    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
+public class Tag extends AbstractDomain<Long> {
+    // TODO: 13.07.2022 move into AbstractDomain
+    private static final String DEFAULT_GETTING_RESULT = "-";
+    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
             "id",
             arg -> {
                 Long id = arg.getDomain().getId();
@@ -33,8 +35,8 @@ public class Tag extends AbstractDomain {
     private String name;
 
     public Tag(TagEntity entity) {
-        id = entity.getId();
-        name = entity.getName();
+        setId(entity.getId());
+        setName(entity.getName());
     }
 
     @Override
@@ -43,7 +45,7 @@ public class Tag extends AbstractDomain {
     }
 
     @Override
-    protected Map<String, Function<GetterArg, String>> takeGetters() {
+    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
         return GETTERS;
     }
 

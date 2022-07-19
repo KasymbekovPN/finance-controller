@@ -1,14 +1,13 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.converters;
 
-import kpn.financecontroller.data.domains.Domain;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import support.TestDomain;
 
 import java.util.Arrays;
-import java.util.Queue;
 
 class FailTaskToDomainConverterTest {
 
@@ -34,12 +33,4 @@ class FailTaskToDomainConverterTest {
     }
 
     private static class TestTask implements Task{}
-
-    private static class TestDomain implements Domain {
-        @Override
-        public String getInfo() {return null;}
-
-        @Override
-        public String get(Queue<String> path) {return null;}
-    }
 }

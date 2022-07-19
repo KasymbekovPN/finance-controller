@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.domains.product;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.entities.product.ProductEntity;
 import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.lib.domain.AbstractDomain;
 import lombok.*;
 
 import java.util.Map;
@@ -14,9 +14,11 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Product extends AbstractDomain {
+public class Product extends AbstractDomain<Long> {
+    // TODO: 13.07.2022 move into AbstractDomain
+    private static final String DEFAULT_GETTING_RESULT = "-";
 
-    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
+    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
             "id",
             arg -> {
                 Long id = arg.getDomain().getId();
@@ -45,9 +47,9 @@ public class Product extends AbstractDomain {
     private Set<Tag> tags;
 
     public Product(ProductEntity entity) {
-        id = entity.getId();
-        name = entity.getName();
-        tags = entity.getTagEntities().stream().map(Tag::new).collect(Collectors.toSet());
+        setId(entity.getId());
+        setName(entity.getName());
+        setTags(entity.getTagEntities().stream().map(Tag::new).collect(Collectors.toSet()));
     }
 
     @Override
@@ -64,7 +66,7 @@ public class Product extends AbstractDomain {
     }
 
     @Override
-    protected Map<String, Function<GetterArg, String>> takeGetters() {
+    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
         return GETTERS;
     }
 }

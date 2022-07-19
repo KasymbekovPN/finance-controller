@@ -1,6 +1,5 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.executor;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.checker.Checker;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.Task;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.worker.Worker;
@@ -10,11 +9,10 @@ import kpn.lib.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import support.TestDomain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -95,17 +93,5 @@ class TaskExecutorImplTest {
     abstract private static class TestWorker implements Worker<TestTask, TestDomain> {}
 
     private static class TestTask implements Task {
-    }
-
-    private static class TestDomain extends AbstractDomain {
-        public TestDomain(long id) {
-            this.id = id;
-        }
-
-        @Override
-        protected Map<String, Function<GetterArg, String>> takeGetters() {return null;}
-
-        @Override
-        public String getInfo() {return null;}
     }
 }

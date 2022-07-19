@@ -17,6 +17,10 @@ import kpn.financecontroller.gui.views.geo.country.CountryView;
 import kpn.financecontroller.gui.views.geo.region.RegionView;
 import kpn.financecontroller.gui.views.geo.seller.SellerView;
 import kpn.financecontroller.gui.views.geo.street.StreetView;
+import kpn.financecontroller.gui.views.payment.PaymentView;
+import kpn.financecontroller.gui.views.product.ProductView;
+import kpn.financecontroller.gui.views.statistic.ByTagStatistic;
+import kpn.financecontroller.gui.views.tag.TagView;
 import kpn.financecontroller.security.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,12 +33,16 @@ import java.util.List;
 final public class MainLayout extends AppLayout {
 
     private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
+            PaymentView.class,
+            ProductView.class,
+            TagView.class,
             SellerView.class,
             AddressView.class,
             StreetView.class,
             CityView.class,
             RegionView.class,
-            CountryView.class
+            CountryView.class,
+            ByTagStatistic.class
     );
 
     // TODO: 17.07.2022 del

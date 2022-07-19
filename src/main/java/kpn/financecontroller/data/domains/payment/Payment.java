@@ -1,9 +1,9 @@
 package kpn.financecontroller.data.domains.payment;
 
-import kpn.financecontroller.data.domains.AbstractDomain;
 import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.data.domains.product.Product;
+import kpn.lib.domain.AbstractDomain;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,8 +15,11 @@ import java.util.function.Function;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Payment extends AbstractDomain {
-    private static final Map<String, Function<GetterArg, String>> GETTERS = Map.of(
+public class Payment extends AbstractDomain<Long> {
+    // TODO: 13.07.2022 move into AbstractDomain
+    private static final String DEFAULT_GETTING_RESULT = "-";
+
+    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
             "id",
             arg -> {
                 Long id = arg.getDomain().getId();
@@ -29,7 +32,7 @@ public class Payment extends AbstractDomain {
                 Product product = ((Payment) arg.getDomain()).getProduct();
                 Queue<String> path = arg.getPath();
                 return !path.isEmpty() && product != null
-                        ? product.get(path)
+                        ? product.getInDeep(path)
                         : DEFAULT_GETTING_RESULT;
             },
             "price",
@@ -90,14 +93,14 @@ public class Payment extends AbstractDomain {
     private LocalDate createdAt;
 
     public Payment(PaymentEntity entity) {
-        id = entity.getId();
-        seller = entity.getSellerEntity() != null ? new Seller(entity.getSellerEntity()) : null;
-        product = entity.getProductEntity() != null ? new Product(entity.getProductEntity()) : null;
-        amount = entity.getAmount();
-        measure = entity.getMeasure();
-        price = entity.getPrice();
-        currency = entity.getCurrency();
-        createdAt = entity.getCreatedAt();
+        setId(entity.getId());
+        setSeller(entity.getSellerEntity() != null ? new Seller(entity.getSellerEntity()) : null);
+        setProduct(entity.getProductEntity() != null ? new Product(entity.getProductEntity()) : null);
+        setAmount(entity.getAmount());
+        setMeasure(entity.getMeasure());
+        setPrice(entity.getPrice());
+        setCurrency(entity.getCurrency());
+        setCreatedAt(entity.getCreatedAt());
     }
 
     @Override
@@ -106,7 +109,7 @@ public class Payment extends AbstractDomain {
     }
 
     @Override
-    protected Map<String, Function<GetterArg, String>> takeGetters() {
+    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
         return GETTERS;
     }
 }

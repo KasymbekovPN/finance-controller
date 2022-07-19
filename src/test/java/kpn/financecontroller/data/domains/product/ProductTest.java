@@ -45,7 +45,7 @@ class ProductTest {
         product.setId(id);
         product.setName(name);
         product.setTags(tags);
-        String result = product.get(path);
+        String result = product.getInDeep(path);
 
         assertThat(expectedResult).isEqualTo(result);
     }
@@ -65,7 +65,7 @@ class ProductTest {
         product.setName(name);
         product.setTags(tags);
 
-        String result = product.get(path);
+        String result = product.getInDeep(path);
         Set<String> resultTagNames = Arrays.stream(result.split(", ")).collect(Collectors.toSet());
         Set<String> expectedTagNames = Arrays.stream(rawExpectedResult.split(", ")).collect(Collectors.toSet());
 
