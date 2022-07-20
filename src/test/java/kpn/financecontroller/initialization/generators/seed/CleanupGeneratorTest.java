@@ -1,6 +1,6 @@
 package kpn.financecontroller.initialization.generators.seed;
 
-import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
+import com.querydsl.core.types.Predicate;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.generators.valued.ValuedStringGenerator;
@@ -8,13 +8,17 @@ import kpn.financecontroller.initialization.managers.context.ResultContextManage
 import kpn.financecontroller.initialization.tasks.CleanupTask;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;
 import kpn.financecontroller.initialization.tasks.testUtils.TestManagerCreator;
+import kpn.lib.result.Result;
+import kpn.lib.service.Service;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.contexts.DefaultContext;
 import kpn.taskexecutor.lib.seed.Seed;
 import kpn.taskexecutor.lib.seed.generator.Generator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import support.TestDomain;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -45,16 +49,16 @@ public class CleanupGeneratorTest {
 
     @Test
     void shouldCheckNextGetting() {
-        DTOServiceOLdOld<?, ?> dtoServiceOLd = createDTOService();
+        TestDTOService service = createDTOService();
         Map<String, Object> expectedFields = Map.of(
                 "valuedGenerator", VALUED_GENERATOR,
                 "managerCreator", CREATOR,
-                "dtoService", dtoServiceOLd,
+                "dtoService", service,
                 "key", KEY
         );
 
         Generator seedGenerator = CleanupGenerator.builder()
-                .item(KEY, dtoServiceOLd)
+                .item(KEY, service)
                 .managerCreator(CREATOR)
                 .valuedGenerator(VALUED_GENERATOR)
                 .build();
@@ -69,9 +73,9 @@ public class CleanupGeneratorTest {
         assertThat(maybeSeed).isEmpty();
     }
 
-    private DTOServiceOLdOld<?, ?> createDTOService() {
-        return Mockito.mock(TestDTOServiceOldOLd.class);
+    private TestDTOService createDTOService() {
+        return Mockito.mock(TestDTOService.class);
     }
 
-    public abstract static class TestDTOServiceOldOLd implements DTOServiceOLdOld<String, String> {}
+    public abstract static class TestDTOService implements Service<Long, TestDomain, Predicate, Result<List<TestDomain>>> {}
 }

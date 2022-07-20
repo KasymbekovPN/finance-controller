@@ -14,8 +14,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.tag.Tag;
-import kpn.financecontroller.data.entities.tag.TagEntity;
-import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.data.services.statistic.byTag.ByTagStatisticService;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;

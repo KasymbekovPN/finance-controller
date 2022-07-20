@@ -1,10 +1,13 @@
 package kpn.financecontroller.initialization.generators.seed;
 
-import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
+import com.querydsl.core.types.Predicate;
 import kpn.financecontroller.initialization.generators.valued.Valued;
 import kpn.financecontroller.initialization.generators.valued.ValuedGenerator;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.CleanupTask;
+import kpn.lib.domain.AbstractDomain;
+import kpn.lib.result.Result;
+import kpn.lib.service.Service;
 import kpn.taskexecutor.lib.contexts.Context;
 import kpn.taskexecutor.lib.seed.DefaultSeed;
 import kpn.taskexecutor.lib.seed.Seed;
@@ -46,7 +49,7 @@ final public class CleanupGenerator extends BaseGenerator {
                     .field("managerCreator", managerCreator)
                     .field("valuedGenerator", valuedGenerator)
                     .field("key", item.getKey())
-                    .field("dtoService", item.getDtoServiceOLd())
+                    .field("service", item.getService())
                     .build();
             return Optional.of(seed);
         }
@@ -56,8 +59,8 @@ final public class CleanupGenerator extends BaseGenerator {
     public static class Builder extends BaseBuilder{
         private final List<Item> items = new ArrayList<>();
 
-        public Builder item(Valued<String> key, DTOServiceOLdOld<?, ?> dtoServiceOLd){
-            items.add(new Item(key, dtoServiceOLd));
+        public Builder item(Valued<String> key, Service<Long,? extends AbstractDomain<Long>, Predicate,? extends Result<? extends List<? extends AbstractDomain<Long>>>> service) {
+            items.add(new Item(key, service));
             return this;
         }
 
@@ -71,6 +74,6 @@ final public class CleanupGenerator extends BaseGenerator {
     @Getter
     private static class Item{
         private final Valued<String> key;
-        private final DTOServiceOLdOld<?, ?> dtoServiceOLd;
+        private final Service<Long,? extends AbstractDomain<Long>, Predicate,? extends Result<? extends List<? extends AbstractDomain<Long>>>> service;
     }
 }

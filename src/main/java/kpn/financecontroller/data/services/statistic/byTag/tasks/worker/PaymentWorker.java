@@ -2,8 +2,6 @@ package kpn.financecontroller.data.services.statistic.byTag.tasks.worker;
 
 import com.querydsl.core.types.Predicate;
 import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.entities.payment.PaymentEntity;
-import kpn.financecontroller.data.services.dto.DTOServiceOLdOld;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
