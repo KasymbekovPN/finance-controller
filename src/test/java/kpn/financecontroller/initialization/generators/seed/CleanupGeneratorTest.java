@@ -53,7 +53,7 @@ public class CleanupGeneratorTest {
         Map<String, Object> expectedFields = Map.of(
                 "valuedGenerator", VALUED_GENERATOR,
                 "managerCreator", CREATOR,
-                "dtoService", service,
+                "service", service,
                 "key", KEY
         );
 
