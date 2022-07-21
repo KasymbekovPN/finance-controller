@@ -27,10 +27,6 @@ final public class CountryView extends GridView<Country>{
     @Autowired
     private Service<Long, Country, Predicate, Result<List<Country>>> countryService;
 
-    // TODO: 17.07.2022 del
-//    @Autowired
-//    private DTOServiceOLdOld<Country, CountryEntity> countryService;
-
     @Override
     protected Result<?> updateListImpl() {
         Result<List<Country>> result = countryService.loader().all();
@@ -62,15 +58,10 @@ final public class CountryView extends GridView<Country>{
     @Override
     protected Result<List<Country>> delete(Country domain) {
         return countryService.deleter().byId(domain.getId());
-        // TODO: 17.07.2022 del
-//        return countryService.deleter().byId(domain.getId());
-
     }
 
     @Override
     protected Result<List<Country>> save(Country domain) {
         return countryService.saver().save(domain);
-        // TODO: 17.07.2022 del
-//        return countryService.saver().save(new CountryEntity(domain));
     }
 }

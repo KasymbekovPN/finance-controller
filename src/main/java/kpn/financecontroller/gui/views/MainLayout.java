@@ -45,20 +45,6 @@ final public class MainLayout extends AppLayout {
             ByTagStatistic.class
     );
 
-    // TODO: 17.07.2022 del
-//    private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
-//        PaymentView.class,
-//        ProductView.class,
-//        TagView.class,
-//        SellerView.class,
-//        AddressView.class,
-//        StreetView.class,
-//        CityView.class,
-//        RegionView.class,
-//        CountryView.class,
-//        ByTagStatistic.class
-//    );
-
     @Setter
     @Getter
     @AllArgsConstructor

@@ -168,12 +168,8 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
     protected abstract void configureGrid();
     protected abstract void configureForm();
     protected abstract Result<List<D>> delete(D domain);
-    // TODO: 17.07.2022 del
-//    protected abstract Result<Void> delete(D domain);
 
     protected abstract Result<List<D>> save(D domain);
-    // TODO: 17.07.2022 del
-//    protected abstract Result<D> save(D domain);
 
     @RequiredArgsConstructor
     @Getter

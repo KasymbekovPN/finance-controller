@@ -102,7 +102,7 @@ class ProductWorkerTest {
         TestExecutor executor = Mockito.mock(TestExecutor.class);
         Mockito
                 .when(executor.execute(Mockito.anyObject()))
-                .thenReturn(new DefaultExecutorResult<>(executorResult.getValue()));// TODO: 19.07.2022 ???
+                .thenReturn(new DefaultExecutorResult<>(executorResult.getValue()));
         return executor;
     }
 
@@ -110,7 +110,7 @@ class ProductWorkerTest {
         TestLoader loader = Mockito.mock(TestLoader.class);
         Mockito
                 .when(loader.load())
-                .thenReturn(new DefaultExecutorResult<>(loaderResult.getValue())); // TODO: 19.07.2022 ???
+                .thenReturn(new DefaultExecutorResult<>(loaderResult.getValue()));
         return loader;
     }
 

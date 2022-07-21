@@ -47,8 +47,6 @@ public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
 
     @Autowired
     private Service<Long, Tag, Predicate, Result<List<Tag>>> tagService;
-    // TODO: 19.07.2022 del
-//    private DTOServiceOLdOld<Tag, TagEntity> tagDtoServiceOLd;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired

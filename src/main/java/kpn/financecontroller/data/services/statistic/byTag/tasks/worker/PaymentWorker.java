@@ -15,16 +15,10 @@ import java.util.function.Function;
 @AllArgsConstructor
 final public class PaymentWorker implements Worker<PaymentTask, Payment> {
     private final Service<Long, Payment, Predicate, Result<List<Payment>>> service;
-    // TODO: 19.07.2022 del
-//    private final DTOServiceOLdOld<Payment, PaymentEntity> service;
     private final Function<PaymentTask, Predicate> converter;
 
     @Override
     public Result<List<Payment>> execute(PaymentTask task) {
         return service.executor().execute(converter.apply(task));
-        // TODO: 19.07.2022 del
-//        return service.executor().execute(
-//                converter.apply(task)
-//        );
     }
 }

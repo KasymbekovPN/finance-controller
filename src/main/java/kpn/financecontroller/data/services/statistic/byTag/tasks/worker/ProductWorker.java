@@ -15,8 +15,6 @@ import java.util.function.Function;
 @AllArgsConstructor
 final public class ProductWorker implements Worker<ProductTask, Product> {
     private final Service<Long, Product, Predicate, Result<List<Product>>> service;
-    // TODO: 19.07.2022 del
-//    private final DTOServiceOLdOld<Product, ProductEntity> service;
     private final Function<ProductTask, Predicate> converter;
 
     @Override
