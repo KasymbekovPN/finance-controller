@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+// TODO: 21.07.2022 remake
 @Component
-final public class BeforeProductSavingChecker extends AbstractBeforeSavingChecker<Product> {
+final public class BeforeProductSavingCheckerOld extends AbstractBeforeSavingCheckerOld<Product> {
 
     @Override
     public Result<Product> apply(Product value) {

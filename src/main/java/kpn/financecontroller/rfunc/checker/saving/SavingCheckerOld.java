@@ -2,7 +2,5 @@ package kpn.financecontroller.rfunc.checker.saving;
 
 import kpn.financecontroller.rfunc.RFunction;
 
-import java.util.List;
-
-public interface SavingChecker<T> extends RFunction<T, List<T>> {
-}
+// TODO: 21.07.2022 del
+public interface SavingCheckerOld<TYPE> extends RFunction<TYPE, TYPE> {}

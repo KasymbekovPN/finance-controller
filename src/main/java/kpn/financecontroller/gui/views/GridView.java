@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
-import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
+import kpn.financecontroller.rfunc.checker.saving.SavingCheckerOld;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
@@ -34,7 +34,7 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
-    private SavingChecker<D> savingChecker;
+    private SavingCheckerOld<D> savingChecker;
     @Autowired
     private RemovingChecker<D> removingChecker;
 

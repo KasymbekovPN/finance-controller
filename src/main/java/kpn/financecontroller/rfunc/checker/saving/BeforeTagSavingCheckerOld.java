@@ -5,8 +5,9 @@ import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.stereotype.Component;
 
+// TODO: 21.07.2022 remake
 @Component
-final public class BeforeTagSavingChecker extends AbstractBeforeSavingChecker<Tag> {
+final public class BeforeTagSavingCheckerOld extends AbstractBeforeSavingCheckerOld<Tag> {
 
     @Override
     public Result<Tag> apply(Tag value) {

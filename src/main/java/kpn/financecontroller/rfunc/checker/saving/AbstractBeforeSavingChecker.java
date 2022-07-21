@@ -3,10 +3,11 @@ package kpn.financecontroller.rfunc.checker.saving;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 
-abstract public class AbstractBeforeSavingChecker<TYPE> implements SavingChecker<TYPE> {
+import java.util.List;
 
+public abstract class AbstractBeforeSavingChecker<T> implements SavingChecker<T> {
     @Override
-    public Result<TYPE> apply(TYPE value) {
-        return ImmutableResult.<TYPE>ok(value);
+    public Result<List<T>> apply(T value) {
+        return ImmutableResult.<List<T>>ok(List.of(value));
     }
 }

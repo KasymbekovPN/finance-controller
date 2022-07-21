@@ -5,8 +5,9 @@ import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.stereotype.Component;
 
+// TODO: 21.07.2022 remake
 @Component
-final public class BeforeCitySavingChecker extends AbstractBeforeSavingChecker<City> {
+final public class BeforeCitySavingCheckerOld extends AbstractBeforeSavingCheckerOld<City> {
     @Override
     public Result<City> apply(City value) {
         String name = value.getName();

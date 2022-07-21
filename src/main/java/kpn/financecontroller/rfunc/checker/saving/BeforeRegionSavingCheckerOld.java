@@ -5,8 +5,9 @@ import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.stereotype.Component;
 
+// TODO: 21.07.2022 remake
 @Component
-final public class BeforeRegionSavingChecker extends AbstractBeforeSavingChecker<Region> {
+final public class BeforeRegionSavingCheckerOld extends AbstractBeforeSavingCheckerOld<Region> {
     @Override
     public Result<Region> apply(Region value) {
         String name = value.getName();

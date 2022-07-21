@@ -5,8 +5,9 @@ import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.stereotype.Component;
 
+// TODO: 21.07.2022 remake
 @Component
-final public class BeforePaymentSavingChecker extends AbstractBeforeSavingChecker<Payment> {
+final public class BeforePaymentSavingCheckerOld extends AbstractBeforeSavingCheckerOld<Payment> {
     @Override
     public Result<Payment> apply(Payment value) {
         Result<Payment> result = checkMandatoryAttributes(value);
