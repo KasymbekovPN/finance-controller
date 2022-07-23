@@ -4,4 +4,4 @@ import kpn.financecontroller.data.domains.country.Country;
 import org.springframework.stereotype.Component;
 
 @Component
-final public class BeforeCountryRemovingChecker extends AbstractBeforeRemovingChecker<Country> {}
+public final class BeforeCountryRemovingChecker extends AbstractBeforeRemovingChecker<Country> {}

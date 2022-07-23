@@ -3,9 +3,11 @@ package kpn.financecontroller.rfunc.checker.removing;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 
-abstract public class AbstractBeforeRemovingChecker<TYPE> implements RemovingChecker<TYPE> {
+import java.util.List;
+
+public abstract class AbstractBeforeRemovingChecker<T> implements RemovingChecker<T> {
     @Override
-    public Result<Void> apply(TYPE value) {
-        return ImmutableResult.<Void>ok(null);
+    public Result<List<T>> apply(T value) {
+        return ImmutableResult.<List<T>>ok(null);
     }
 }

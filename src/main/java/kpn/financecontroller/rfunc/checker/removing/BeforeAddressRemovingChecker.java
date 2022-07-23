@@ -4,4 +4,4 @@ import kpn.financecontroller.data.domains.address.Address;
 import org.springframework.stereotype.Component;
 
 @Component
-final public class BeforeAddressRemovingChecker extends AbstractBeforeRemovingChecker<Address> {}
+public final class BeforeAddressRemovingChecker extends AbstractBeforeRemovingChecker<Address> {}

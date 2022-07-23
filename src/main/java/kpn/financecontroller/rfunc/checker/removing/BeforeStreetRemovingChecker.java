@@ -4,4 +4,4 @@ import kpn.financecontroller.data.domains.street.Street;
 import org.springframework.stereotype.Component;
 
 @Component
-final public class BeforeStreetRemovingChecker extends AbstractBeforeRemovingChecker<Street> {}
+public final class BeforeStreetRemovingChecker extends AbstractBeforeRemovingChecker<Street> {}

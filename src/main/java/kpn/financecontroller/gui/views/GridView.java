@@ -9,12 +9,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
-import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
-import kpn.financecontroller.rfunc.checker.saving.SavingCheckerOld;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
+import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
 import kpn.lib.domain.Domain;
 import kpn.lib.result.Result;
 import lombok.Getter;
@@ -34,7 +34,7 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
-    private SavingCheckerOld<D> savingChecker;
+    private SavingChecker<D> savingChecker;
     @Autowired
     private RemovingChecker<D> removingChecker;
 
@@ -103,26 +103,22 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
 
     protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
         D domain = event.getValue();
-        // TODO: 17.07.2022 removingChecker must return R<List<>>
-        Result<Void> result = removingChecker.apply(domain);
-        Result<List<D>> deleteResult = null;
+        Result<List<D>> result = removingChecker.apply(domain);
         if (result.isSuccess()){
-            deleteResult = delete(domain);
+            result = delete(domain);
         }
-        createNotification(deleteResult == null ? result : deleteResult);
+        createNotification(result);
         updateList();
         closeEditor(true);
     }
 
     protected void handleSavingEvent(SaveFormEvent<EditForm<D>, D> event) {
         D domain = event.getValue();
-        // TODO: 17.07.2022 savingChecker must return R<List<>>
-        Result<D> result = savingChecker.apply(domain);
-        Result<List<D>> saveResult = null;
+        Result<List<D>> result = savingChecker.apply(domain);
         if (result.isSuccess()){
-            saveResult = save(domain);
+            result = save(domain);
         }
-        createNotification(saveResult == null ? result : saveResult);
+        createNotification(result);
         updateList();
         closeEditor(false);
     }

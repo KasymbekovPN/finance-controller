@@ -4,4 +4,4 @@ import kpn.financecontroller.data.domains.product.Product;
 import org.springframework.stereotype.Component;
 
 @Component
-final public class BeforeProductRemovingChecker extends AbstractBeforeRemovingChecker<Product> {}
+public final class BeforeProductRemovingChecker extends AbstractBeforeRemovingChecker<Product> {}

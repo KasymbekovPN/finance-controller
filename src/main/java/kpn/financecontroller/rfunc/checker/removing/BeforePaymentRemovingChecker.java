@@ -4,4 +4,4 @@ import kpn.financecontroller.data.domains.payment.Payment;
 import org.springframework.stereotype.Component;
 
 @Component
-final public class BeforePaymentRemovingChecker extends AbstractBeforeRemovingChecker<Payment> {}
+public final class BeforePaymentRemovingChecker extends AbstractBeforeRemovingChecker<Payment> {}

@@ -4,4 +4,4 @@ import kpn.financecontroller.data.domains.tag.Tag;
 import org.springframework.stereotype.Component;
 
 @Component
-final public class BeforeTagRemovingChecker extends AbstractBeforeRemovingChecker<Tag> {}
+public final class BeforeTagRemovingChecker extends AbstractBeforeRemovingChecker<Tag> {}
