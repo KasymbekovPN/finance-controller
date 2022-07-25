@@ -14,35 +14,35 @@ import java.util.function.Function;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Region extends AbstractDomain<Long> {
-    // TODO: 13.07.2022 move into AbstractDomain
-    private static final String DEFAULT_GETTING_RESULT = "-";
-
-    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
-            "id",
-            arg -> {
-                Long id = arg.getDomain().getId();
-                return arg.getPath().isEmpty() && id != null
-                        ? id.toString()
-                        : DEFAULT_GETTING_RESULT;
-            },
-            "name",
-            arg -> {
-                Region domain = (Region) arg.getDomain();
-                String name = domain.getName();
-                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
-                        ? name
-                        : DEFAULT_GETTING_RESULT;
-            },
-            "country",
-            arg -> {
-                Region domain = (Region) arg.getDomain();
-                Country country = domain.getCountry();
-                Queue<String> path = arg.getPath();
-                return path.size() > 0 && country != null
-                        ? country.getInDeep(path)
-                        : DEFAULT_GETTING_RESULT;
-            }
-    );
+    // TODO: 25.07.2022 del
+//    private static final String DEFAULT_GETTING_RESULT = "-";
+//
+//    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
+//            "id",
+//            arg -> {
+//                Long id = arg.getDomain().getId();
+//                return arg.getPath().isEmpty() && id != null
+//                        ? id.toString()
+//                        : DEFAULT_GETTING_RESULT;
+//            },
+//            "name",
+//            arg -> {
+//                Region domain = (Region) arg.getDomain();
+//                String name = domain.getName();
+//                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
+//                        ? name
+//                        : DEFAULT_GETTING_RESULT;
+//            },
+//            "country",
+//            arg -> {
+//                Region domain = (Region) arg.getDomain();
+//                Country country = domain.getCountry();
+//                Queue<String> path = arg.getPath();
+//                return path.size() > 0 && country != null
+//                        ? country.getInDeep(path)
+//                        : DEFAULT_GETTING_RESULT;
+//            }
+//    );
 
     private String name;
     private Country country;
@@ -58,8 +58,9 @@ public class Region extends AbstractDomain<Long> {
         return getName() + ", " + getCountry().getInfo();
     }
 
-    @Override
-    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
-        return GETTERS;
-    }
+    // TODO: 25.07.2022 del
+//    @Override
+//    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
+//        return GETTERS;
+//    }
 }

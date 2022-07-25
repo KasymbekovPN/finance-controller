@@ -14,34 +14,34 @@ import java.util.function.Function;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Street extends AbstractDomain<Long> {
-    // TODO: 13.07.2022 move into AbstractDomain
-    private static final String DEFAULT_GETTING_RESULT = "-";
-    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
-            "id",
-            arg -> {
-                Long id = arg.getDomain().getId();
-                return arg.getPath().isEmpty() && id != null
-                        ? id.toString()
-                        : DEFAULT_GETTING_RESULT;
-            },
-            "name",
-            arg -> {
-                Street domain = (Street) arg.getDomain();
-                String name = domain.getName();
-                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
-                        ? name
-                        : DEFAULT_GETTING_RESULT;
-            },
-            "city",
-            arg -> {
-                Street domain = (Street) arg.getDomain();
-                City city = domain.getCity();
-                Queue<String> path = arg.getPath();
-                return path.size() > 0 && city != null
-                        ? city.getInDeep(path)
-                        : DEFAULT_GETTING_RESULT;
-            }
-    );
+    // TODO: 25.07.2022 del
+//    private static final String DEFAULT_GETTING_RESULT = "-";
+//    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
+//            "id",
+//            arg -> {
+//                Long id = arg.getDomain().getId();
+//                return arg.getPath().isEmpty() && id != null
+//                        ? id.toString()
+//                        : DEFAULT_GETTING_RESULT;
+//            },
+//            "name",
+//            arg -> {
+//                Street domain = (Street) arg.getDomain();
+//                String name = domain.getName();
+//                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
+//                        ? name
+//                        : DEFAULT_GETTING_RESULT;
+//            },
+//            "city",
+//            arg -> {
+//                Street domain = (Street) arg.getDomain();
+//                City city = domain.getCity();
+//                Queue<String> path = arg.getPath();
+//                return path.size() > 0 && city != null
+//                        ? city.getInDeep(path)
+//                        : DEFAULT_GETTING_RESULT;
+//            }
+//    );
 
     private String name;
     private City city;
@@ -57,8 +57,9 @@ public class Street extends AbstractDomain<Long> {
         return getName() + ", " + getCity().getInfo();
     }
 
-    @Override
-    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
-        return GETTERS;
-    }
+    // TODO: 25.07.2022 del
+//    @Override
+//    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
+//        return GETTERS;
+//    }
 }

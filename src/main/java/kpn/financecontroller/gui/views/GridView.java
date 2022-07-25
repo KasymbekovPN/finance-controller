@@ -139,11 +139,12 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
 
     protected void configureGridColumns(List<ColumnConfig> configList){
         grid.setColumns();
-        for (ColumnConfig config : configList) {
-            grid
-                    .addColumn((D d) -> {return d.getInDeep(new ArrayDeque<>(config.getPath()));})
-                    .setHeader(getTranslation(config.getCode()));
-        }
+        // TODO: 25.07.2022 restore
+//        for (ColumnConfig config : configList) {
+//            grid
+//                    .addColumn((D d) -> {return d.getInDeep(new ArrayDeque<>(config.getPath()));})
+//                    .setHeader(getTranslation(config.getCode()));
+//        }
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
     }
 

@@ -14,34 +14,35 @@ import java.util.function.Function;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Address extends AbstractDomain<Long> {
-    // TODO: 13.07.2022 move into AbstractDomain
-    private static final String DEFAULT_GETTING_RESULT = "-";
-    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
-            "id",
-            arg -> {
-                Long id = arg.getDomain().getId();
-                return arg.getPath().isEmpty() && id != null
-                        ? id.toString()
-                        : DEFAULT_GETTING_RESULT;
-            },
-            "name",
-            arg -> {
-                Address domain = (Address) arg.getDomain();
-                String name = domain.getName();
-                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
-                        ? name
-                        : DEFAULT_GETTING_RESULT;
-            },
-            "street",
-            arg -> {
-                Address domain = (Address) arg.getDomain();
-                Street street = domain.getStreet();
-                Queue<String> path = arg.getPath();
-                return path.size() > 0 && street != null
-                        ? street.getInDeep(path)
-                        : DEFAULT_GETTING_RESULT;
-            }
-    );
+
+    // TODO: 25.07.2022 del
+//    private static final String DEFAULT_GETTING_RESULT = "-";
+//    private static final Map<String, Function<GetterArg<Long>, String>> GETTERS = Map.of(
+//            "id",
+//            arg -> {
+//                Long id = arg.getDomain().getId();
+//                return arg.getPath().isEmpty() && id != null
+//                        ? id.toString()
+//                        : DEFAULT_GETTING_RESULT;
+//            },
+//            "name",
+//            arg -> {
+//                Address domain = (Address) arg.getDomain();
+//                String name = domain.getName();
+//                return arg.getPath().isEmpty() && name != null && !name.isEmpty()
+//                        ? name
+//                        : DEFAULT_GETTING_RESULT;
+//            },
+//            "street",
+//            arg -> {
+//                Address domain = (Address) arg.getDomain();
+//                Street street = domain.getStreet();
+//                Queue<String> path = arg.getPath();
+//                return path.size() > 0 && street != null
+//                        ? street.getInDeep(path)
+//                        : DEFAULT_GETTING_RESULT;
+//            }
+//    );
 
     private String name;
     private Street street;
@@ -57,8 +58,9 @@ public class Address extends AbstractDomain<Long> {
         return getName() + ", " + street.getInfo();
     }
 
-    @Override
-    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
-        return GETTERS;
-    }
+    // TODO: 25.07.2022 del
+//    @Override
+//    protected Map<String, Function<GetterArg<Long>, String>> takeGetters() {
+//        return GETTERS;
+//    }
 }
