@@ -11,6 +11,7 @@ import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.lib.domain.Domain;
 import kpn.lib.ripper.DefaultRipper;
 import kpn.lib.ripper.DefaultRipperArg;
 import kpn.lib.ripper.Ripper;
@@ -72,52 +73,42 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Payment> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return  arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "price",
                         (RipperArg<Payment> arg) -> {
                             Float price = arg.getDomain().getPrice();
-                            return  arg.getPath().isEmpty() && price != null
-                                    ? Optional.of(String.valueOf(price))
-                                    : Optional.empty();
+                            return doCommonHandling(arg, price);
                         }
                 )
                 .getter(
                         "currency",
                         (RipperArg<Payment> arg) -> {
                             Currency currency = arg.getDomain().getCurrency();
-                            return arg.getPath().isEmpty() && currency != null
-                                    ? Optional.of(currency.name())
-                                    :Optional.empty();
+                            return doCommonHandling(arg, currency);
                         }
                 )
                 .getter(
                         "amount",
                         (RipperArg<Payment> arg) -> {
                             Float amount = arg.getDomain().getAmount();
-                            return  arg.getPath().isEmpty() && amount != null
-                                    ? Optional.of(String.valueOf(amount))
-                                    : Optional.empty();
+                            return doCommonHandling(arg, amount);
                         }
                 )
                 .getter(
                         "measure",
                         (RipperArg<Payment> arg) -> {
                             Measure measure = arg.getDomain().getMeasure();
-                            return arg.getPath().isEmpty() && measure != null
-                                    ? Optional.of(measure.name())
-                                    : Optional.empty();
+                            return doCommonHandling(arg, measure);
                         }
                 )
                 .getter(
                         "createdAt",
                         (RipperArg<Payment> arg) -> {
                             LocalDate createdAt = arg.getDomain().getCreatedAt();
-                            return  arg.getPath().isEmpty() && createdAt != null
-                                    ? Optional.of(String.valueOf(createdAt))
-                                    : Optional.empty();
+                            return doCommonHandling(arg, createdAt);
                         }
                 )
                 .getter(
@@ -148,28 +139,28 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Seller> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return  arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<Seller> arg) -> {
                             String name = arg.getDomain().getName();
-                            return  arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .getter(
                         "url",
                         (RipperArg<Seller> arg) -> {
                             String url = arg.getDomain().getUrl();
-                            return  arg.getPath().isEmpty() && url != null ? Optional.of(url) : Optional.empty();
+                            return doCommonHandling(arg, url);
                         }
                 )
                 .getter(
                         "description",
                         (RipperArg<Seller> arg) -> {
                             String description = arg.getDomain().getDescription();
-                            return  arg.getPath().isEmpty() && description != null ? Optional.of(description) : Optional.empty();
+                            return doCommonHandling(arg, description);
                         }
                 )
                 .getter(
@@ -177,7 +168,7 @@ public class DomainRipperConfig {
                         (RipperArg<Seller> arg) -> {
                             Address address = arg.getDomain().getAddress();
                             Queue<String> path = arg.getPath();
-                            return address != null && path.size() > 0
+                            return address != null && !path.isEmpty()
                                     ? Optional.of(createAddressRipper().run(new DefaultRipperArg<>(address, path)))
                                     : Optional.empty();
                         }
@@ -191,14 +182,14 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Address> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return  arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<Address> arg) -> {
                             String name = arg.getDomain().getName();
-                            return  arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .getter(
@@ -206,7 +197,7 @@ public class DomainRipperConfig {
                         (RipperArg<Address> arg) -> {
                             Street street = arg.getDomain().getStreet();
                             Queue<String> path = arg.getPath();
-                            return street != null && path.size() > 0
+                            return street != null && !path.isEmpty()
                                     ? Optional.of(createStreetRipper().run(new DefaultRipperArg<>(street, path)))
                                     : Optional.empty();
                         }
@@ -220,14 +211,14 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Street> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return  arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<Street> arg) -> {
                             String name = arg.getDomain().getName();
-                            return  arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .getter(
@@ -235,7 +226,7 @@ public class DomainRipperConfig {
                         (RipperArg<Street> arg) -> {
                             City city = arg.getDomain().getCity();
                             Queue<String> path = arg.getPath();
-                            return city != null && path.size() > 0
+                            return city != null && !path.isEmpty()
                                     ? Optional.of(createCityRipper().run(new DefaultRipperArg<>(city, path)))
                                     : Optional.empty();
                         }
@@ -249,14 +240,14 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<City> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return  arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<City> arg) -> {
                             String name = arg.getDomain().getName();
-                            return  arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .getter(
@@ -264,7 +255,7 @@ public class DomainRipperConfig {
                         (RipperArg<City> arg) -> {
                             Region region = arg.getDomain().getRegion();
                             Queue<String> path = arg.getPath();
-                            return region != null && path.size() > 0
+                            return region != null && !path.isEmpty()
                                     ? Optional.of(createRegionRipper().run(new DefaultRipperArg<>(region, path)))
                                     : Optional.empty();
                         }
@@ -278,14 +269,14 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Region> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return  arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<Region> arg) -> {
                             String name = arg.getDomain().getName();
-                            return  arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .getter(
@@ -293,7 +284,7 @@ public class DomainRipperConfig {
                         (RipperArg<Region> arg) -> {
                             Country country = arg.getDomain().getCountry();
                             Queue<String> path = arg.getPath();
-                            return country != null && path.size() > 0
+                            return country != null && !path.isEmpty()
                                     ? Optional.of(createCountryRipper().run(new DefaultRipperArg<>(country, path)))
                                     : Optional.empty();
                         }
@@ -307,14 +298,14 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Country> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<Country> arg) -> {
                             String name = arg.getDomain().getName();
-                            return arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .build();
@@ -326,14 +317,14 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Product> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<Product> arg) -> {
                             String name = arg.getDomain().getName();
-                            return arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .getter(
@@ -351,16 +342,22 @@ public class DomainRipperConfig {
                         "id",
                         (RipperArg<Tag> arg) -> {
                             Long id = arg.getDomain().getId();
-                            return arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                            return doCommonHandling(arg, id);
                         }
                 )
                 .getter(
                         "name",
                         (RipperArg<Tag> arg) -> {
                             String name = arg.getDomain().getName();
-                            return arg.getPath().isEmpty() && name != null ? Optional.of(name) : Optional.empty();
+                            return doCommonHandling(arg, name);
                         }
                 )
                 .build();
+    }
+
+    private <D extends Domain<?>> Optional<String> doCommonHandling(RipperArg<D> arg, Object obj){
+        return arg.getPath().isEmpty() && obj != null
+                ? Optional.of(String.valueOf(obj))
+                : Optional.empty();
     }
 }
