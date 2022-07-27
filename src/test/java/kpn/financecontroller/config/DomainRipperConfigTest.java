@@ -3,6 +3,9 @@ package kpn.financecontroller.config;
 import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.domains.payment.Currency;
+import kpn.financecontroller.data.domains.payment.Measure;
+import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.seller.Seller;
@@ -15,10 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayDeque;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,9 +28,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 class DomainRipperConfigTest {
     private static final Long ID = 1L;
-    private static final String TAG_NAME = "tag name";
-    private static final String FIRST_PRODUCT_NAME = "first product name";
-    private static final String SECOND_PRODUCT_NAME = "second product name";
+    private static final String FIRST_TAG_NAME = "first tag name";
+    private static final String SECOND_TAG_NAME = "second product name";
+    private static final String PRODUCT_NAME = "product name";
     private static final String COUNTRY_NAME = "country name";
     private static final String REGION_NAME = "region name";
     private static final String CITY_NAME = "city name";
@@ -55,6 +56,8 @@ class DomainRipperConfigTest {
     private Ripper<Address> addressRipper;
     @Autowired
     private Ripper<Seller> sellerRipper;
+    @Autowired
+    private Ripper<Payment> paymentRipper;
 
     @Test
     void shouldCheckTagRipper_idGetting_ifItNull() {
@@ -85,11 +88,11 @@ class DomainRipperConfigTest {
     @Test
     void shouldCheckTagRipper_nameGetting() {
         Tag tag = new Tag();
-        tag.setName(TAG_NAME);
+        tag.setName(FIRST_TAG_NAME);
         DefaultRipperArg<Tag> arg = new DefaultRipperArg<>(tag, createPath("name"));
         String result = tagRipper.run(arg);
 
-        assertThat(result).isEqualTo(TAG_NAME);
+        assertThat(result).isEqualTo(FIRST_TAG_NAME);
     }
 
     @Test
@@ -121,11 +124,11 @@ class DomainRipperConfigTest {
     @Test
     void shouldCheckProductRipper_nameGetting() {
         Product product = new Product();
-        product.setName(FIRST_PRODUCT_NAME);
+        product.setName(PRODUCT_NAME);
         DefaultRipperArg<Product> arg = new DefaultRipperArg<>(product, createPath("name"));
         String result = productRipper.run(arg);
 
-        assertThat(result).isEqualTo(FIRST_PRODUCT_NAME);
+        assertThat(result).isEqualTo(PRODUCT_NAME);
     }
 
     @Test
@@ -139,7 +142,7 @@ class DomainRipperConfigTest {
     @Test
     void shouldCheckProductRipper_tagsGetting() {
         Product product = new Product();
-        Set<String> names = Set.of(FIRST_PRODUCT_NAME, SECOND_PRODUCT_NAME);
+        Set<String> names = Set.of(FIRST_TAG_NAME, SECOND_TAG_NAME);
         product.setTags(
                 names.stream().map(n -> {
                     Tag tag = new Tag();
@@ -151,8 +154,8 @@ class DomainRipperConfigTest {
         DefaultRipperArg<Product> arg = new DefaultRipperArg<>(product, createPath("tags"));
         String result = productRipper.run(arg);
 
-        boolean expectedResult0 = result.equals(FIRST_PRODUCT_NAME + ", " + SECOND_PRODUCT_NAME);
-        boolean expectedResult1 = result.equals(SECOND_PRODUCT_NAME + ", " + FIRST_PRODUCT_NAME);
+        boolean expectedResult0 = result.equals(FIRST_TAG_NAME + ", " + SECOND_TAG_NAME);
+        boolean expectedResult1 = result.equals(SECOND_TAG_NAME + ", " + FIRST_TAG_NAME);
         assertThat(expectedResult0 || expectedResult1).isTrue();
     }
 
@@ -508,6 +511,159 @@ class DomainRipperConfigTest {
 
         assertThat(result).isEqualTo(ADDRESS_NAME);
     }
+
+    @Test
+    void shouldCheckPaymentRipper_idGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("id"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_idGetting() {
+        Payment payment = new Payment();
+        payment.setId(ID);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("id"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(String.valueOf(ID));
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_amountGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("id"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_amountGetting() {
+        Payment payment = new Payment();
+        float expectedAmount = 123.45f;
+        payment.setAmount(expectedAmount);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("amount"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(String.valueOf(expectedAmount));
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_measureGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("measure"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_measureGetting() {
+        Payment payment = new Payment();
+        Measure measure = Measure.KG;
+        payment.setMeasure(measure);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("measure"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(measure.name());
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_priceGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("price"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_priceGetting() {
+        Payment payment = new Payment();
+        float expectedPrice = 34.56f;
+        payment.setPrice(expectedPrice);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("price"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(String.valueOf(expectedPrice));
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_currencyGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("currency"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_currencyGetting() {
+        Payment payment = new Payment();
+        Currency expectedCurrency = Currency.RUB;
+        payment.setCurrency(expectedCurrency);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("currency"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(expectedCurrency.name());
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_createdAtGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("createdAt"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_createdAtGetting() {
+        Payment payment = new Payment();
+        LocalDate expectedTime = LocalDate.now();
+        payment.setCreatedAt(expectedTime);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("createdAt"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(String.valueOf(expectedTime));
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_productGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("product", "name"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_productGetting() {
+        Product product = new Product();
+        product.setName(PRODUCT_NAME);
+        Payment payment = new Payment();
+        payment.setProduct(product);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("product", "name"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(PRODUCT_NAME);
+    }
+
+    @Test
+    void shouldCheckPaymentRipper_sellerGetting_ifNull() {
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(new Payment(), createPath("seller", "name"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo("-");
+    }
+    @Test
+    void shouldCheckPaymentRipper_sellerGetting() {
+        Seller seller = new Seller();
+        seller.setName(SELLER_NAME);
+        Payment payment = new Payment();
+        payment.setSeller(seller);
+        DefaultRipperArg<Payment> arg = new DefaultRipperArg<>(payment, createPath("seller", "name"));
+        String result = paymentRipper.run(arg);
+
+        assertThat(result).isEqualTo(SELLER_NAME);
+    }
+
 
     private Queue<String> createPath(String... path) {
         return new ArrayDeque<>(List.of(path));

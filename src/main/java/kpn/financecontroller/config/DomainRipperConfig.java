@@ -3,6 +3,9 @@ package kpn.financecontroller.config;
 import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.domains.payment.Currency;
+import kpn.financecontroller.data.domains.payment.Measure;
+import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.data.domains.seller.Seller;
@@ -15,6 +18,7 @@ import kpn.lib.ripper.RipperArg;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Queue;
 
@@ -61,6 +65,83 @@ public class DomainRipperConfig {
         return  createSellerRipper();
     }
 
+    @Bean
+    public Ripper<Payment> paymentRipper(){
+        return DefaultRipper.<Payment>buider()
+                .getter(
+                        "id",
+                        (RipperArg<Payment> arg) -> {
+                            Long id = arg.getDomain().getId();
+                            return  arg.getPath().isEmpty() && id != null ? Optional.of(String.valueOf(id)) : Optional.empty();
+                        }
+                )
+                .getter(
+                        "price",
+                        (RipperArg<Payment> arg) -> {
+                            Float price = arg.getDomain().getPrice();
+                            return  arg.getPath().isEmpty() && price != null
+                                    ? Optional.of(String.valueOf(price))
+                                    : Optional.empty();
+                        }
+                )
+                .getter(
+                        "currency",
+                        (RipperArg<Payment> arg) -> {
+                            Currency currency = arg.getDomain().getCurrency();
+                            return arg.getPath().isEmpty() && currency != null
+                                    ? Optional.of(currency.name())
+                                    :Optional.empty();
+                        }
+                )
+                .getter(
+                        "amount",
+                        (RipperArg<Payment> arg) -> {
+                            Float amount = arg.getDomain().getAmount();
+                            return  arg.getPath().isEmpty() && amount != null
+                                    ? Optional.of(String.valueOf(amount))
+                                    : Optional.empty();
+                        }
+                )
+                .getter(
+                        "measure",
+                        (RipperArg<Payment> arg) -> {
+                            Measure measure = arg.getDomain().getMeasure();
+                            return arg.getPath().isEmpty() && measure != null
+                                    ? Optional.of(measure.name())
+                                    : Optional.empty();
+                        }
+                )
+                .getter(
+                        "createdAt",
+                        (RipperArg<Payment> arg) -> {
+                            LocalDate createdAt = arg.getDomain().getCreatedAt();
+                            return  arg.getPath().isEmpty() && createdAt != null
+                                    ? Optional.of(String.valueOf(createdAt))
+                                    : Optional.empty();
+                        }
+                )
+                .getter(
+                        "product",
+                        (RipperArg<Payment> arg) -> {
+                            Product product = arg.getDomain().getProduct();
+                            Queue<String> path = arg.getPath();
+                            return !path.isEmpty() && product != null
+                                    ? Optional.of(createProductRipper().run(new DefaultRipperArg<>(product, path)))
+                                    : Optional.empty();
+                        }
+                )
+                .getter(
+                        "seller",
+                        (RipperArg<Payment> arg) -> {
+                            Seller seller = arg.getDomain().getSeller();
+                            Queue<String> path = arg.getPath();
+                            return !path.isEmpty() && seller != null
+                                    ? Optional.of(createSellerRipper().run(new DefaultRipperArg<>(seller, path)))
+                                    : Optional.empty();
+                        }
+                )
+                .build();
+    }
     private Ripper<Seller> createSellerRipper() {
         return DefaultRipper.<Seller>buider()
                 .getter(
