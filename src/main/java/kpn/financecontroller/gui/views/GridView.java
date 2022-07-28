@@ -8,6 +8,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
+import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
@@ -17,6 +18,8 @@ import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
 import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
 import kpn.lib.domain.Domain;
 import kpn.lib.result.Result;
+import kpn.lib.ripper.DefaultRipperArg;
+import kpn.lib.ripper.Ripper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -37,6 +40,8 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
     private SavingChecker<D> savingChecker;
     @Autowired
     private RemovingChecker<D> removingChecker;
+    @Autowired
+    private Ripper<D> domainRipper;
 
     private Class<D> domainClass;
 
@@ -139,12 +144,13 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
 
     protected void configureGridColumns(List<ColumnConfig> configList){
         grid.setColumns();
-        // TODO: 25.07.2022 restore
-//        for (ColumnConfig config : configList) {
-//            grid
-//                    .addColumn((D d) -> {return d.getInDeep(new ArrayDeque<>(config.getPath()));})
-//                    .setHeader(getTranslation(config.getCode()));
-//        }
+        for (ColumnConfig config : configList) {
+            grid
+                    .addColumn((D d) -> {
+                        return domainRipper.run(new DefaultRipperArg<>(d, new ArrayDeque<>(config.getPath())));
+                    })
+                    .setHeader(getTranslation(config.getCode()));
+        }
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
     }
 

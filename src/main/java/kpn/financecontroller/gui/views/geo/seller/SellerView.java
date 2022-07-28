@@ -24,7 +24,7 @@ final public class SellerView extends GridView<Seller> {
             new ColumnConfig("gui.header.name", List.of("name")),
             new ColumnConfig("gui.header.url", List.of("url")),
             new ColumnConfig("gui.header.description", List.of("description")),
-            new ColumnConfig("gui.header.address", List.of("address"))
+            new ColumnConfig("gui.header.address", List.of("address", "name"))
     );
 
     @Autowired

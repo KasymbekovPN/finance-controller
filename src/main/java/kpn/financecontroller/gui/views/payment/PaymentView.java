@@ -6,7 +6,6 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.entities.payment.PaymentEntity;
 import kpn.financecontroller.gui.views.GridView;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
