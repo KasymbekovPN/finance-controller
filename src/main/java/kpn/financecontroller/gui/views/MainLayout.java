@@ -11,14 +11,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
-import kpn.financecontroller.gui.views.geo.address.AddressView;
-import kpn.financecontroller.gui.views.geo.city.CityView;
-import kpn.financecontroller.gui.views.geo.country.CountryView;
-import kpn.financecontroller.gui.views.geo.region.RegionView;
-import kpn.financecontroller.gui.views.geo.seller.SellerView;
-import kpn.financecontroller.gui.views.geo.street.StreetView;
-import kpn.financecontroller.gui.views.payment.PaymentView;
-import kpn.financecontroller.gui.views.product.ProductView;
+import kpn.financecontroller.gui.views.geo.address.AddressViewOld;
+import kpn.financecontroller.gui.views.geo.city.CityViewOld;
+import kpn.financecontroller.gui.views.geo.country.CountryViewOld;
+import kpn.financecontroller.gui.views.geo.region.RegionViewOld;
+import kpn.financecontroller.gui.views.geo.seller.SellerViewOld;
+import kpn.financecontroller.gui.views.geo.street.StreetViewOld;
+import kpn.financecontroller.gui.views.payment.PaymentViewOld;
+import kpn.financecontroller.gui.views.product.ProductViewOld;
 import kpn.financecontroller.gui.views.statistic.ByTagStatistic;
 import kpn.financecontroller.gui.views.tag.TagView;
 import kpn.financecontroller.security.SecurityService;
@@ -33,15 +33,16 @@ import java.util.List;
 final public class MainLayout extends AppLayout {
 
     private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
-            PaymentView.class,
-            ProductView.class,
+            PaymentViewOld.class,
+            ProductViewOld.class,
+//            TagViewOld.class, // TODO: 30.07.2022 ???
             TagView.class,
-            SellerView.class,
-            AddressView.class,
-            StreetView.class,
-            CityView.class,
-            RegionView.class,
-            CountryView.class,
+            SellerViewOld.class,
+            AddressViewOld.class,
+            StreetViewOld.class,
+            CityViewOld.class,
+            RegionViewOld.class,
+            CountryViewOld.class,
             ByTagStatistic.class
     );
 

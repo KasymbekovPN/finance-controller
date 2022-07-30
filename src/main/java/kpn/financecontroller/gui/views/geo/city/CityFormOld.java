@@ -8,16 +8,16 @@ import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.gui.views.EditFormOld;
 
 import java.util.List;
 
-final public class CityForm extends EditForm<City> {
+final public class CityFormOld extends EditFormOld<City> {
 
     private final TextField name = new TextField();
     private final ComboBox<Region> region = new ComboBox<>();
 
-    public CityForm(List<Region> regions) {
+    public CityFormOld(List<Region> regions) {
         super(new Binder<>(City.class));
         addClassName("city-form");
         binder.bindInstanceFields(this);
@@ -37,34 +37,34 @@ final public class CityForm extends EditForm<City> {
     }
 
     @Override
-    protected SaveFormEvent<EditForm<City>, City> createSaveEvent() {
+    protected SaveFormEvent<EditFormOld<City>, City> createSaveEvent() {
         return new CitySaveFormEvent(this, value);
     }
 
     @Override
-    protected DeleteFormEvent<EditForm<City>, City> createDeleteEvent() {
+    protected DeleteFormEvent<EditFormOld<City>, City> createDeleteEvent() {
         return new CityDeleteFormEvent(this, value);
     }
 
     @Override
-    protected CloseFormEvent<EditForm<City>, City> createCloseEvent() {
+    protected CloseFormEvent<EditFormOld<City>, City> createCloseEvent() {
         return new CityCloseFormEvent(this);
     }
 
-    public static class CitySaveFormEvent extends SaveFormEvent<EditForm<City>, City> {
-        public CitySaveFormEvent(EditForm<City> source, City value) {
+    public static class CitySaveFormEvent extends SaveFormEvent<EditFormOld<City>, City> {
+        public CitySaveFormEvent(EditFormOld<City> source, City value) {
             super(source, value);
         }
     }
 
-    public static class CityDeleteFormEvent extends DeleteFormEvent<EditForm<City>, City> {
-        public CityDeleteFormEvent(EditForm<City> source, City value) {
+    public static class CityDeleteFormEvent extends DeleteFormEvent<EditFormOld<City>, City> {
+        public CityDeleteFormEvent(EditFormOld<City> source, City value) {
             super(source, value);
         }
     }
 
-    public static class CityCloseFormEvent extends CloseFormEvent<EditForm<City>, City> {
-        public CityCloseFormEvent(EditForm<City> source) {
+    public static class CityCloseFormEvent extends CloseFormEvent<EditFormOld<City>, City> {
+        public CityCloseFormEvent(EditFormOld<City> source) {
             super(source);
         }
     }

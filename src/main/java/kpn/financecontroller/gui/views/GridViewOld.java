@@ -8,7 +8,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
-import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
@@ -30,7 +29,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayDeque;
 import java.util.List;
 
-abstract public class GridView<D extends Domain<Long>> extends VerticalLayout implements HasDynamicTitle {
+abstract public class GridViewOld<D extends Domain<Long>> extends VerticalLayout implements HasDynamicTitle {
 
     @Autowired
     private NotificationFactory notificationFactory;
@@ -45,7 +44,7 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
 
     private Class<D> domainClass;
 
-    protected EditForm<D> form;
+    protected EditFormOld<D> form;
     protected Grid<D> grid;
 
     @Override
@@ -106,7 +105,7 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
         }
     }
 
-    protected void handleDeletingEvent(DeleteFormEvent<EditForm<D>, D> event) {
+    protected void handleDeletingEvent(DeleteFormEvent<EditFormOld<D>, D> event) {
         D domain = event.getValue();
         Result<List<D>> result = removingChecker.apply(domain);
         if (result.isSuccess()){
@@ -117,7 +116,7 @@ abstract public class GridView<D extends Domain<Long>> extends VerticalLayout im
         closeEditor(true);
     }
 
-    protected void handleSavingEvent(SaveFormEvent<EditForm<D>, D> event) {
+    protected void handleSavingEvent(SaveFormEvent<EditFormOld<D>, D> event) {
         D domain = event.getValue();
         Result<List<D>> result = savingChecker.apply(domain);
         if (result.isSuccess()){

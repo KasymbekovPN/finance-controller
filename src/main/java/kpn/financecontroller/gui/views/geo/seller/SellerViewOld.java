@@ -5,7 +5,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.seller.Seller;
-import kpn.financecontroller.gui.views.GridView;
+import kpn.financecontroller.gui.views.GridViewOld;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "seller", layout = MainLayout.class)
 @PermitAll
-final public class SellerView extends GridView<Seller> {
+final public class SellerViewOld extends GridViewOld<Seller> {
     private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
             new ColumnConfig("gui.header.id", List.of("id")),
             new ColumnConfig("gui.header.name", List.of("name")),
@@ -52,12 +52,12 @@ final public class SellerView extends GridView<Seller> {
 
     @Override
     protected void configureForm() {
-        form = new SellerForm(addressService.loader().all().getValue());
+        form = new SellerFormOld(addressService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(SellerForm.SellerSaveFormEvent.class, this::handleSavingEvent);
-        form.addListener(SellerForm.SellerDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(SellerForm.SellerCloseFormEvent.class, e -> closeEditor(true));
+        form.addListener(SellerFormOld.SellerSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(SellerFormOld.SellerDeleteFormEvent.class, this::handleDeletingEvent);
+        form.addListener(SellerFormOld.SellerCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

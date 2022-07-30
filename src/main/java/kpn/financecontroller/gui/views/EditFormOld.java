@@ -16,7 +16,7 @@ import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.lib.domain.Domain;
 
-abstract public class EditForm<D extends Domain<Long>> extends FormLayout {
+abstract public class EditFormOld<D extends Domain<Long>> extends FormLayout {
 
     protected final Button save = new Button();
     protected final Button delete = new Button();
@@ -25,7 +25,7 @@ abstract public class EditForm<D extends Domain<Long>> extends FormLayout {
 
     protected D value;
 
-    protected EditForm(Binder<D> binder) {
+    protected EditFormOld(Binder<D> binder) {
         this.binder = binder;
     }
 
@@ -81,7 +81,7 @@ abstract public class EditForm<D extends Domain<Long>> extends FormLayout {
         return getEventBus().addListener(eventType, listener);
     }
 
-    protected abstract SaveFormEvent<EditForm<D>, D> createSaveEvent();
-    protected abstract DeleteFormEvent<EditForm<D>, D> createDeleteEvent();
-    protected abstract CloseFormEvent<EditForm<D>, D> createCloseEvent();
+    protected abstract SaveFormEvent<EditFormOld<D>, D> createSaveEvent();
+    protected abstract DeleteFormEvent<EditFormOld<D>, D> createDeleteEvent();
+    protected abstract CloseFormEvent<EditFormOld<D>, D> createCloseEvent();
 }

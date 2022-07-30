@@ -5,7 +5,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.data.domains.street.Street;
-import kpn.financecontroller.gui.views.GridView;
+import kpn.financecontroller.gui.views.GridViewOld;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "address", layout = MainLayout.class)
 @PermitAll
-final public class AddressView extends GridView<Address> {
+final public class AddressViewOld extends GridViewOld<Address> {
     private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
             new ColumnConfig("gui.header.id", List.of("id")),
             new ColumnConfig("gui.header.name", List.of("name")),
@@ -53,12 +53,12 @@ final public class AddressView extends GridView<Address> {
 
     @Override
     protected void configureForm() {
-        form = new AddressForm(streetService.loader().all().getValue());
+        form = new AddressFormOld(streetService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(AddressForm.AddressSaveFormEvent.class, this::handleSavingEvent);
-        form.addListener(AddressForm.AddressDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(AddressForm.AddressCloseFormEvent.class, e -> closeEditor(true));
+        form.addListener(AddressFormOld.AddressSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(AddressFormOld.AddressDeleteFormEvent.class, this::handleDeletingEvent);
+        form.addListener(AddressFormOld.AddressCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

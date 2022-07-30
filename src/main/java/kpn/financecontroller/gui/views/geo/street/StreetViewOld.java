@@ -5,7 +5,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.data.domains.street.Street;
-import kpn.financecontroller.gui.views.GridView;
+import kpn.financecontroller.gui.views.GridViewOld;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "street", layout = MainLayout.class)
 @PermitAll
-final public class StreetView extends GridView<Street>{
+final public class StreetViewOld extends GridViewOld<Street> {
     private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
             new ColumnConfig("gui.header.id", List.of("id")),
             new ColumnConfig("gui.header.name", List.of("name")),
@@ -52,12 +52,12 @@ final public class StreetView extends GridView<Street>{
 
     @Override
     protected void configureForm() {
-        form = new StreetForm(cityService.loader().all().getValue());
+        form = new StreetFormOld(cityService.loader().all().getValue());
         form.setWidth("25em");
 
-        form.addListener(StreetForm.StreetSaveFormEvent.class, this::handleSavingEvent);
-        form.addListener(StreetForm.StreetDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(StreetForm.StreetCloseFormEvent.class, e -> closeEditor(true));
+        form.addListener(StreetFormOld.StreetSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(StreetFormOld.StreetDeleteFormEvent.class, this::handleDeletingEvent);
+        form.addListener(StreetFormOld.StreetCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

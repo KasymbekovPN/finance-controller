@@ -22,11 +22,11 @@ import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.status.AttributeProcessor;
 import kpn.financecontroller.gui.status.OptionalAttributeProcessor;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.gui.views.EditFormOld;
 
 import java.util.List;
 
-final public class PaymentForm extends EditForm<Payment> {
+final public class PaymentFormOld extends EditFormOld<Payment> {
     private final ComboBox<Product> product = new ComboBox<>();
     private final ComboBox<Seller> seller = new ComboBox<>();
     private final TextField amount = new TextField();
@@ -52,8 +52,8 @@ final public class PaymentForm extends EditForm<Payment> {
             payment -> {payment.setSeller(null);}
     );
 
-    public PaymentForm(List<Product> products,
-                       List<Seller> sellers) {
+    public PaymentFormOld(List<Product> products,
+                          List<Seller> sellers) {
         super(new Binder<>(Payment.class));
         addClassName("payment-form");
 
@@ -116,7 +116,7 @@ final public class PaymentForm extends EditForm<Payment> {
     }
 
     @Override
-    protected SaveFormEvent<EditForm<Payment>, Payment> createSaveEvent() {
+    protected SaveFormEvent<EditFormOld<Payment>, Payment> createSaveEvent() {
         measureOptionalAttributeProcessor.clear(value);
         amountOptionalAttributeProcessor.clear(value);
         sellerOptionalAttributeProcessor.clear(value);
@@ -125,29 +125,29 @@ final public class PaymentForm extends EditForm<Payment> {
     }
 
     @Override
-    protected DeleteFormEvent<EditForm<Payment>, Payment> createDeleteEvent() {
+    protected DeleteFormEvent<EditFormOld<Payment>, Payment> createDeleteEvent() {
         return new PaymentDeleteFormEvent(this, value);
     }
 
     @Override
-    protected CloseFormEvent<EditForm<Payment>, Payment> createCloseEvent() {
+    protected CloseFormEvent<EditFormOld<Payment>, Payment> createCloseEvent() {
         return new PaymentCloseFormEvent(this);
     }
 
-    public static class PaymentSaveFormEvent extends SaveFormEvent<EditForm<Payment>, Payment> {
-        public PaymentSaveFormEvent(EditForm<Payment> source, Payment value) {
+    public static class PaymentSaveFormEvent extends SaveFormEvent<EditFormOld<Payment>, Payment> {
+        public PaymentSaveFormEvent(EditFormOld<Payment> source, Payment value) {
             super(source, value);
         }
     }
 
-    public static class PaymentDeleteFormEvent extends DeleteFormEvent<EditForm<Payment>, Payment> {
-        public PaymentDeleteFormEvent(EditForm<Payment> source, Payment value) {
+    public static class PaymentDeleteFormEvent extends DeleteFormEvent<EditFormOld<Payment>, Payment> {
+        public PaymentDeleteFormEvent(EditFormOld<Payment> source, Payment value) {
             super(source, value);
         }
     }
 
-    public static class PaymentCloseFormEvent extends CloseFormEvent<EditForm<Payment>, Payment> {
-        public PaymentCloseFormEvent(EditForm<Payment> source) {
+    public static class PaymentCloseFormEvent extends CloseFormEvent<EditFormOld<Payment>, Payment> {
+        public PaymentCloseFormEvent(EditFormOld<Payment> source) {
             super(source);
         }
     }

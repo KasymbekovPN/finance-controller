@@ -8,16 +8,16 @@ import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.gui.views.EditFormOld;
 
 import java.util.List;
 
-final public class RegionForm extends EditForm<Region> {
+final public class RegionFormOld extends EditFormOld<Region> {
 
     private final TextField name = new TextField();
     private final ComboBox<Country> country = new ComboBox<>();
 
-    public RegionForm(List<Country> countries) {
+    public RegionFormOld(List<Country> countries) {
         super(new Binder<>(Region.class));
         addClassName("region-form");
         binder.bindInstanceFields(this);
@@ -37,34 +37,34 @@ final public class RegionForm extends EditForm<Region> {
     }
 
     @Override
-    protected SaveFormEvent<EditForm<Region>, Region> createSaveEvent() {
+    protected SaveFormEvent<EditFormOld<Region>, Region> createSaveEvent() {
         return new RegionSaveFormEvent(this, value);
     }
 
     @Override
-    protected DeleteFormEvent<EditForm<Region>, Region> createDeleteEvent() {
+    protected DeleteFormEvent<EditFormOld<Region>, Region> createDeleteEvent() {
         return new RegionDeleteFormEvent(this, value);
     }
 
     @Override
-    protected CloseFormEvent<EditForm<Region>, Region> createCloseEvent() {
+    protected CloseFormEvent<EditFormOld<Region>, Region> createCloseEvent() {
         return new RegionCloseFormEvent(this);
     }
 
-    public static class RegionSaveFormEvent extends SaveFormEvent<EditForm<Region>, Region> {
-        public RegionSaveFormEvent(EditForm<Region> source, Region value) {
+    public static class RegionSaveFormEvent extends SaveFormEvent<EditFormOld<Region>, Region> {
+        public RegionSaveFormEvent(EditFormOld<Region> source, Region value) {
             super(source, value);
         }
     }
 
-    public static class RegionDeleteFormEvent extends DeleteFormEvent<EditForm<Region>, Region> {
-        public RegionDeleteFormEvent(EditForm<Region> source, Region value) {
+    public static class RegionDeleteFormEvent extends DeleteFormEvent<EditFormOld<Region>, Region> {
+        public RegionDeleteFormEvent(EditFormOld<Region> source, Region value) {
             super(source, value);
         }
     }
 
-    public static class RegionCloseFormEvent extends CloseFormEvent<EditForm<Region>, Region> {
-        public RegionCloseFormEvent(EditForm<Region> source) {
+    public static class RegionCloseFormEvent extends CloseFormEvent<EditFormOld<Region>, Region> {
+        public RegionCloseFormEvent(EditFormOld<Region> source) {
             super(source);
         }
     }

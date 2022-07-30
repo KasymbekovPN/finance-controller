@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.gui.views.GridView;
+import kpn.financecontroller.gui.views.GridViewOld;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
@@ -17,7 +17,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "country", layout = MainLayout.class)
 @PermitAll
-final public class CountryView extends GridView<Country>{
+final public class CountryViewOld extends GridViewOld<Country> {
 
     private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
             new ColumnConfig("gui.header.id", List.of("id")),
@@ -47,12 +47,12 @@ final public class CountryView extends GridView<Country>{
 
     @Override
     protected void configureForm() {
-        form = new CountryForm();
+        form = new CountryFormOld();
         form.setWidth("25em");
 
-        form.addListener(CountryForm.CountrySaveFormEvent.class, this::handleSavingEvent);
-        form.addListener(CountryForm.CountryDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(CountryForm.CountryCloseFormEvent.class, e -> closeEditor(true));
+        form.addListener(CountryFormOld.CountrySaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(CountryFormOld.CountryDeleteFormEvent.class, this::handleDeletingEvent);
+        form.addListener(CountryFormOld.CountryCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

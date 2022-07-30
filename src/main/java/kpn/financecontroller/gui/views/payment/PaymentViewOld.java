@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.gui.views.GridView;
+import kpn.financecontroller.gui.views.GridViewOld;
 import kpn.financecontroller.gui.views.MainLayout;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
@@ -19,7 +19,7 @@ import java.util.List;
 @Scope("prototype")
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
-final public class PaymentView extends GridView<Payment> {
+final public class PaymentViewOld extends GridViewOld<Payment> {
     private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(
             new ColumnConfig("gui.header.id", List.of("id")),
             new ColumnConfig("gui.header.product", List.of("product", "name")),
@@ -58,15 +58,15 @@ final public class PaymentView extends GridView<Payment> {
 
     @Override
     protected void configureForm() {
-        form = new PaymentForm(
+        form = new PaymentFormOld(
                 productService.loader().all().getValue(),
                 sellerService.loader().all().getValue()
         );
         form.setWidth("25em");
 
-        form.addListener(PaymentForm.PaymentSaveFormEvent.class, this::handleSavingEvent);
-        form.addListener(PaymentForm.PaymentDeleteFormEvent.class, this::handleDeletingEvent);
-        form.addListener(PaymentForm.PaymentCloseFormEvent.class, e -> closeEditor(true));
+        form.addListener(PaymentFormOld.PaymentSaveFormEvent.class, this::handleSavingEvent);
+        form.addListener(PaymentFormOld.PaymentDeleteFormEvent.class, this::handleDeletingEvent);
+        form.addListener(PaymentFormOld.PaymentCloseFormEvent.class, e -> closeEditor(true));
     }
 
     @Override

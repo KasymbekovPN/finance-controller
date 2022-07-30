@@ -8,16 +8,16 @@ import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.gui.views.EditFormOld;
 
 import java.util.List;
 
-final public class ProductForm extends EditForm<Product> {
+final public class ProductFormOld extends EditFormOld<Product> {
 
     private final TextField name = new TextField();
     private final MultiSelectListBox<Tag> tags = new MultiSelectListBox<>();
 
-    public ProductForm(List<Tag> tagList) {
+    public ProductFormOld(List<Tag> tagList) {
         super(new Binder<>(Product.class));
         addClassName("product-form");
         binder.bindInstanceFields(this);
@@ -35,34 +35,34 @@ final public class ProductForm extends EditForm<Product> {
     }
 
     @Override
-    protected SaveFormEvent<EditForm<Product>, Product> createSaveEvent() {
+    protected SaveFormEvent<EditFormOld<Product>, Product> createSaveEvent() {
         return new ProductSaveFormEvent(this, value);
     }
 
     @Override
-    protected DeleteFormEvent<EditForm<Product>, Product> createDeleteEvent() {
+    protected DeleteFormEvent<EditFormOld<Product>, Product> createDeleteEvent() {
         return new ProductDeleteFormEvent(this, value);
     }
 
     @Override
-    protected CloseFormEvent<EditForm<Product>, Product> createCloseEvent() {
+    protected CloseFormEvent<EditFormOld<Product>, Product> createCloseEvent() {
         return new ProductCloseFormEvent(this);
     }
 
-    public static class ProductSaveFormEvent extends SaveFormEvent<EditForm<Product>, Product> {
-        public ProductSaveFormEvent(EditForm<Product> source, Product value) {
+    public static class ProductSaveFormEvent extends SaveFormEvent<EditFormOld<Product>, Product> {
+        public ProductSaveFormEvent(EditFormOld<Product> source, Product value) {
             super(source, value);
         }
     }
 
-    public static class ProductDeleteFormEvent extends DeleteFormEvent<EditForm<Product>, Product> {
-        public ProductDeleteFormEvent(EditForm<Product> source, Product value) {
+    public static class ProductDeleteFormEvent extends DeleteFormEvent<EditFormOld<Product>, Product> {
+        public ProductDeleteFormEvent(EditFormOld<Product> source, Product value) {
             super(source, value);
         }
     }
 
-    public static class ProductCloseFormEvent extends CloseFormEvent<EditForm<Product>, Product> {
-        public ProductCloseFormEvent(EditForm<Product> source) {
+    public static class ProductCloseFormEvent extends CloseFormEvent<EditFormOld<Product>, Product> {
+        public ProductCloseFormEvent(EditFormOld<Product> source) {
             super(source);
         }
     }

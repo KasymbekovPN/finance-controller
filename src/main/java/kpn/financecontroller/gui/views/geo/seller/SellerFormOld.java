@@ -15,11 +15,11 @@ import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.status.AttributeProcessor;
 import kpn.financecontroller.gui.status.OptionalAttributeProcessor;
-import kpn.financecontroller.gui.views.EditForm;
+import kpn.financecontroller.gui.views.EditFormOld;
 
 import java.util.List;
 
-final public class SellerForm extends EditForm<Seller> {
+final public class SellerFormOld extends EditFormOld<Seller> {
 
     private final TextField name = new TextField();
     private final TextField url = new TextField();
@@ -43,7 +43,7 @@ final public class SellerForm extends EditForm<Seller> {
             seller -> {seller.setAddress(null);}
     );
 
-    public SellerForm(List<Address> addresses) {
+    public SellerFormOld(List<Address> addresses) {
         super(new Binder<>(Seller.class));
 
         addClassName("seller-form");
@@ -92,7 +92,7 @@ final public class SellerForm extends EditForm<Seller> {
     }
 
     @Override
-    protected SaveFormEvent<EditForm<Seller>, Seller> createSaveEvent() {
+    protected SaveFormEvent<EditFormOld<Seller>, Seller> createSaveEvent() {
         urlOptionalAttributeProcessor.clear(value);
         descriptionOptionalAttributeProcessor.clear(value);
         addressOptionalAttributeProcessor.clear(value);
@@ -101,12 +101,12 @@ final public class SellerForm extends EditForm<Seller> {
     }
 
     @Override
-    protected DeleteFormEvent<EditForm<Seller>, Seller> createDeleteEvent() {
+    protected DeleteFormEvent<EditFormOld<Seller>, Seller> createDeleteEvent() {
         return new SellerDeleteFormEvent(this, value);
     }
 
     @Override
-    protected CloseFormEvent<EditForm<Seller>, Seller> createCloseEvent() {
+    protected CloseFormEvent<EditFormOld<Seller>, Seller> createCloseEvent() {
         return new SellerCloseFormEvent(this);
     }
 
@@ -122,20 +122,20 @@ final public class SellerForm extends EditForm<Seller> {
         urlOptionalAttributeProcessor.setStatus(event.getValue());
     }
 
-    public static class SellerSaveFormEvent extends SaveFormEvent<EditForm<Seller>, Seller> {
-        public SellerSaveFormEvent(EditForm<Seller> source, Seller value) {
+    public static class SellerSaveFormEvent extends SaveFormEvent<EditFormOld<Seller>, Seller> {
+        public SellerSaveFormEvent(EditFormOld<Seller> source, Seller value) {
             super(source, value);
         }
     }
 
-    public static class SellerDeleteFormEvent extends DeleteFormEvent<EditForm<Seller>, Seller> {
-        public SellerDeleteFormEvent(EditForm<Seller> source, Seller value) {
+    public static class SellerDeleteFormEvent extends DeleteFormEvent<EditFormOld<Seller>, Seller> {
+        public SellerDeleteFormEvent(EditFormOld<Seller> source, Seller value) {
             super(source, value);
         }
     }
 
-    public static class SellerCloseFormEvent extends CloseFormEvent<EditForm<Seller>, Seller> {
-        public SellerCloseFormEvent(EditForm<Seller> source) {
+    public static class SellerCloseFormEvent extends CloseFormEvent<EditFormOld<Seller>, Seller> {
+        public SellerCloseFormEvent(EditFormOld<Seller> source) {
             super(source);
         }
     }
