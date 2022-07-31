@@ -3,23 +3,22 @@ package kpn.financecontroller.gui.views.tag;
 import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domains.tag.Tag;
 import kpn.financecontroller.gui.events.CloseFormEvent;
 import kpn.financecontroller.gui.events.DeleteFormEvent;
 import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
-import kpn.financecontroller.gui.notifications.NotificationFactory;
 import kpn.financecontroller.gui.notifications.Notifications;
 import kpn.financecontroller.gui.views.MainLayout;
-import kpn.financecontroller.gui.views.tag.controller.TagDataController;
+import kpn.financecontroller.gui.views.tag.controller.TagDomainController;
 import kpn.financecontroller.gui.views.tag.event.*;
 import kpn.lib.result.Result;
 import kpn.lib.ripper.DefaultRipperArg;
@@ -45,12 +44,12 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
             new ColumnConfig("gui.header.name", List.of("name"))
     );
 
-    @Autowired
-    private NotificationFactory notificationFactory;
+//    @Autowired
+//    private NotificationFactory notificationFactory;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
-    private TagDataController dataController;
+    private TagDomainController dataController;
 
     // TODO: 30.07.2022 del
 //    @Autowired
@@ -69,6 +68,11 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
     private Grid<Tag> grid;
 
     @Override
+    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
+
+    @Override
     public String getPageTitle() {
         return getTranslation(classAliasGenerator.generate(getClass()));
     }
@@ -81,7 +85,7 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
         setSizeFull();
         configureGrid();
 //        configureForm(); // TODO: 31.07.2022 del
-        bindEvent();
+//        bindEvent(); // TODO: 31.07.2022 del
         add(getToolBar(), getContent());
         updateList();
 //        closeForm(true); // TODO: 31.07.2022 del
@@ -115,14 +119,15 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
 //        form.setWidth("25em");
 //    }
 
+    // TODO: 31.07.2022 del
     // TODO: 30.07.2022 move ???
-    private void bindEvent() {
-        form.addListener(TagSaveButtonOnClickEvent.class, dataController::handleSavingEvent);
-        dataController.addListener(TagSaveReactionEvent.class, this::handleSavingEvent);
-        form.addListener(TagDeleteButtonOnClickEvent.class, dataController::handleDeletingEvent);
-        dataController.addListener(TagDeleteReactionEvent.class, this::handleDeletingEvent);
-        form.addListener(TagCancelButtonClickEvent.class, this::handleCancelEvent);
-    }
+//    private void bindEvent() {
+//        form.addListener(TagSaveButtonOnClickEvent.class, dataController::handleSavingEvent);
+//        dataController.addListener(TagSaveReactionEvent.class, this::handleSavingEvent);
+//        form.addListener(TagDeleteButtonOnClickEvent.class, dataController::handleDeletingEvent);
+//        dataController.addListener(TagDeleteReactionEvent.class, this::handleDeletingEvent);
+//        form.addListener(TagCancelButtonClickEvent.class, this::handleCancelEvent);
+//    }
 
     private Result<?> updateListImpl() {
         Result<List<Tag>> result = tagService.loader().all();
@@ -153,7 +158,7 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
 
     private void updateList(){
         Result<?> result = updateListImpl();
-        createNotification(result);
+        sendNotification(result);
     }
 
     private void closeForm(boolean reset) {
@@ -175,32 +180,25 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
         }
     }
 
-    private void handleSavingEvent(SaveFormEvent<TagDataController, Tag> event) {
+    public void handleSavingEvent(SaveFormEvent<TagDomainController, Tag> event) {
         updateList();
         closeForm(false);
     }
 
-    private void handleDeletingEvent(DeleteFormEvent<TagDataController, Tag> event) {
+    public void handleDeletingEvent(DeleteFormEvent<TagDomainController, Tag> event) {
         updateList();
         closeForm(true);
     }
 
-    private void handleCancelEvent(CloseFormEvent<TagForm, Tag> event) {
+    public void handleCancelEvent(CloseFormEvent<TagForm, Tag> event) {
         closeForm(true);
     }
 
     // TODO: 30.07.2022 bean
-    private void createNotification(Result<?> result) {
-        if (!result.isSuccess()){
+    private void sendNotification(Result<?> result) {
+        if (!result.isSuccess()) {
             String text = getTranslation(result.getSeed().getCode(), result.getSeed().getArgs());
-            notificationFactory.getBuilder(Notifications.ERROR)
-                    .duration(60_000)
-                    .text(text)
-                    .buttonIcon(new Icon("lumo", "cross"))
-                    .buttonThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE)
-                    .buttonAttribute("aria-label", "Close")
-                    .build()
-                    .open();
+            fireEvent(new TagViewNotificationEvent(this, text, Notifications.ERROR));
         }
     }
 
