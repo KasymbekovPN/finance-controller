@@ -14,7 +14,10 @@ import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.tag.event.TagCancelButtonClickEvent;
 import kpn.financecontroller.gui.views.tag.event.TagDeleteButtonOnClickEvent;
 import kpn.financecontroller.gui.views.tag.event.TagSaveButtonOnClickEvent;
+import org.springframework.context.annotation.Scope;
 
+@org.springframework.stereotype.Component
+@Scope("prototype")
 public final class TagForm extends FormLayout {
 
     private final Button save = new Button();
@@ -26,6 +29,9 @@ public final class TagForm extends FormLayout {
     private Tag value;
 
     public TagForm() {
+        // TODO: 31.07.2022 del
+        System.out.println("tag form " + toString());
+
         binder = new Binder<>(Tag.class);
         addClassName("tag-form");
         binder.bindInstanceFields(this);
@@ -37,6 +43,9 @@ public final class TagForm extends FormLayout {
                 name,
                 createButtonsLayout()
         );
+
+        setWidth("25em");
+        close(true);
     }
 
     @Override

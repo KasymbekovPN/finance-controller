@@ -64,6 +64,7 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
     @Autowired
     private Service<Long, Tag, Predicate, Result<List<Tag>>> tagService;
 
+    @Autowired
     private TagForm form;
     private Grid<Tag> grid;
 
@@ -74,13 +75,17 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
 
     @PostConstruct
     private void init() {
+        // TODO: 31.07.2022 del log
+        System.out.println("----------------------------------------" + toString());
+
         setSizeFull();
         configureGrid();
-        configureForm();
+//        configureForm(); // TODO: 31.07.2022 del
         bindEvent();
         add(getToolBar(), getContent());
         updateList();
-        closeForm(true);
+//        closeForm(true); // TODO: 31.07.2022 del
+        removeClassName("editing");
     }
 
     private void configureGrid() {
@@ -103,10 +108,12 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
     }
 
-    private void configureForm() {
-        form = new TagForm();
-        form.setWidth("25em");
-    }
+    // TODO: 31.07.2022 del
+//    private void configureForm() {
+//        // TODO: 31.07.2022 ??
+////        form = new TagForm();
+//        form.setWidth("25em");
+//    }
 
     // TODO: 30.07.2022 move ???
     private void bindEvent() {
