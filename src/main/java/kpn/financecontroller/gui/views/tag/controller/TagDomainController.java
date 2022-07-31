@@ -28,9 +28,6 @@ public final class TagDomainController extends Component {
     private SavingChecker<Tag> savingChecker;
     @Autowired
     private RemovingChecker<Tag> removingChecker;
-    // TODO: 31.07.2022 del
-//    @Autowired
-//    private NotificationFactory notificationFactory;
     @Autowired
     private Service<Long, Tag, Predicate, Result<List<Tag>>> tagService;
 
@@ -59,22 +56,10 @@ public final class TagDomainController extends Component {
         fireEvent(new TagDeleteReactionEvent(this, domain));
     }
 
-    // TODO: 30.07.2022 bean or by event
     private void sendNotification(Result<List<Tag>> result) {
         if (!result.isSuccess()){
             String text = getTranslation(result.getSeed().getCode(), result.getSeed().getArgs());
             fireEvent(new TagDataControllerNotificationEvent(this, text, Notifications.ERROR));
-
-            // TODO: 31.07.2022 del
-//            String text = getTranslation(result.getSeed().getCode(), result.getSeed().getArgs());
-//            notificationFactory.getBuilder(Notifications.ERROR)
-//                    .duration(60_000)
-//                    .text(text)
-//                    .buttonIcon(new Icon("lumo", "cross"))
-//                    .buttonThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE)
-//                    .buttonAttribute("aria-label", "Close")
-//                    .build()
-//                    .open();
         }
     }
 }

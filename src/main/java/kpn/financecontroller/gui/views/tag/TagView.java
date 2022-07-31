@@ -44,27 +44,17 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
             new ColumnConfig("gui.header.name", List.of("name"))
     );
 
-//    @Autowired
-//    private NotificationFactory notificationFactory;
     @Autowired
     private ClassAliasGenerator classAliasGenerator;
     @Autowired
     private TagDomainController dataController;
-
-    // TODO: 30.07.2022 del
-//    @Autowired
-//    private SavingChecker<D> savingChecker;
-//    @Autowired
-//    private RemovingChecker<D> removingChecker;
     @Autowired
     private Ripper<Tag> domainRipper;
-//
-//    private Class<D> domainClass;
     @Autowired
     private Service<Long, Tag, Predicate, Result<List<Tag>>> tagService;
-
     @Autowired
     private TagForm form;
+
     private Grid<Tag> grid;
 
     @Override
@@ -79,16 +69,10 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
 
     @PostConstruct
     private void init() {
-        // TODO: 31.07.2022 del log
-        System.out.println("----------------------------------------" + toString());
-
         setSizeFull();
         configureGrid();
-//        configureForm(); // TODO: 31.07.2022 del
-//        bindEvent(); // TODO: 31.07.2022 del
         add(getToolBar(), getContent());
         updateList();
-//        closeForm(true); // TODO: 31.07.2022 del
         removeClassName("editing");
     }
 
@@ -111,23 +95,6 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
         }
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
     }
-
-    // TODO: 31.07.2022 del
-//    private void configureForm() {
-//        // TODO: 31.07.2022 ??
-////        form = new TagForm();
-//        form.setWidth("25em");
-//    }
-
-    // TODO: 31.07.2022 del
-    // TODO: 30.07.2022 move ???
-//    private void bindEvent() {
-//        form.addListener(TagSaveButtonOnClickEvent.class, dataController::handleSavingEvent);
-//        dataController.addListener(TagSaveReactionEvent.class, this::handleSavingEvent);
-//        form.addListener(TagDeleteButtonOnClickEvent.class, dataController::handleDeletingEvent);
-//        dataController.addListener(TagDeleteReactionEvent.class, this::handleDeletingEvent);
-//        form.addListener(TagCancelButtonClickEvent.class, this::handleCancelEvent);
-//    }
 
     private Result<?> updateListImpl() {
         Result<List<Tag>> result = tagService.loader().all();
@@ -194,7 +161,6 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
         closeForm(true);
     }
 
-    // TODO: 30.07.2022 bean
     private void sendNotification(Result<?> result) {
         if (!result.isSuccess()) {
             String text = getTranslation(result.getSeed().getCode(), result.getSeed().getArgs());
@@ -207,26 +173,10 @@ public final class TagView extends VerticalLayout implements HasDynamicTitle {
         addFormValue(new Tag());
     }
 
-    // TODO: 30.07.2022 ???
-//    protected abstract Result<?> updateListImpl();
-//    protected abstract void configureGrid();
-//    protected abstract void configureForm();
-//    protected abstract Result<List<D>> delete(D domain);
-//
-//    protected abstract Result<List<D>> save(D domain);
-//
     @RequiredArgsConstructor
     @Getter
     public static class ColumnConfig{
         private final String code;
         private final List<String> path;
     }
-
-    // TODO: 30.07.2022 del
-//    public class Xirita {
-//
-//        public void hadleSavingEvent(SaveFormEvent<TagView, Tag> ev) {
-//            ev.getValue();
-//        }
-//    }
 }

@@ -10,7 +10,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domains.tag.Tag;
-import kpn.financecontroller.gui.events.SaveFormEvent;
 import kpn.financecontroller.gui.views.tag.event.TagCancelButtonClickEvent;
 import kpn.financecontroller.gui.views.tag.event.TagDeleteButtonOnClickEvent;
 import kpn.financecontroller.gui.views.tag.event.TagSaveButtonOnClickEvent;
@@ -29,9 +28,6 @@ public final class TagForm extends FormLayout {
     private Tag value;
 
     public TagForm() {
-        // TODO: 31.07.2022 del
-        System.out.println("tag form " + toString());
-
         binder = new Binder<>(Tag.class);
         addClassName("tag-form");
         binder.bindInstanceFields(this);
@@ -106,50 +102,4 @@ public final class TagForm extends FormLayout {
            ex.printStackTrace();
         }
     }
-
-    // TODO: 30.07.2022 del
-//    @Override
-//    protected SaveFormEvent<EditForm<Tag>, Tag> createSaveEvent() {
-//        return new TagSaveFormEvent(this, value);
-//    }
-//
-//    @Override
-//    protected DeleteFormEvent<EditForm<Tag>, Tag> createDeleteEvent() {
-//        return new TagDeleteFormEvent(this, value);
-//    }
-//
-//    @Override
-//    protected CloseFormEvent<EditForm<Tag>, Tag> createCloseEvent() {
-//        return new TagCloseFormEvent(this);
-//    }
-//
-//    public static class TagSaveFormEvent extends SaveFormEvent<EditForm<Tag>, Tag> {
-//        public TagSaveFormEvent(EditForm<Tag> source, Tag value) {
-//            super(source, value);
-//        }
-//    }
-//
-//    public static class TagDeleteFormEvent extends DeleteFormEvent<EditForm<Tag>, Tag> {
-//        public TagDeleteFormEvent(EditForm<Tag> source, Tag value) {
-//            super(source, value);
-//        }
-//    }
-//
-//    public static class TagCloseFormEvent extends CloseFormEvent<EditForm<Tag>, Tag> {
-//        public TagCloseFormEvent(EditForm<Tag> source) {
-//            super(source);
-//        }
-//    }
-//
-//    //<*-----------------------------------
-//
-
-
-//
-
-//
-//    protected abstract SaveFormEvent<EditForm<D>, D> createSaveEvent();
-//    protected abstract DeleteFormEvent<EditForm<D>, D> createDeleteEvent();
-//    protected abstract CloseFormEvent<EditForm<D>, D> createCloseEvent();
-
 }
