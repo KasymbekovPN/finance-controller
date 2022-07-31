@@ -2,7 +2,7 @@ package kpn.financecontroller.gui.notifications;
 
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.Icon;
-import kpn.financecontroller.gui.events.NotificationEvent;
+import kpn.financecontroller.gui.event.NotificationEvent;
 import org.springframework.stereotype.Service;
 
 @Service
