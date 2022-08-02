@@ -7,8 +7,9 @@ import kpn.financecontroller.gui.event.tag.controller.TagControllerNotificationE
 import kpn.financecontroller.gui.event.tag.controller.TagAfterDeletingEvent;
 import kpn.financecontroller.gui.event.tag.controller.TagAfterSavingEvent;
 import kpn.lib.seed.Seed;
+import org.springframework.stereotype.Component;
 
-@org.springframework.stereotype.Component
+@Component
 @com.vaadin.flow.component.Tag(com.vaadin.flow.component.Tag.OBJECT)
 public final class TagViewController extends ViewController<Tag> {
     @Override
