@@ -11,15 +11,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
+import kpn.financecontroller.gui.view.PaymentView;
 import kpn.financecontroller.gui.view.SellerView;
 import kpn.financecontroller.gui.view.TagView;
 import kpn.financecontroller.gui.view.geo.address.AddressViewOld;
 import kpn.financecontroller.gui.view.geo.city.CityViewOld;
 import kpn.financecontroller.gui.view.geo.country.CountryViewOld;
 import kpn.financecontroller.gui.view.geo.region.RegionViewOld;
-import kpn.financecontroller.gui.view.geo.seller.SellerViewOld;
 import kpn.financecontroller.gui.view.geo.street.StreetViewOld;
-import kpn.financecontroller.gui.view.payment.PaymentViewOld;
 import kpn.financecontroller.gui.view.product.ProductViewOld;
 import kpn.financecontroller.gui.view.statistic.ByTagStatistic;
 import kpn.financecontroller.security.SecurityService;
@@ -34,7 +33,8 @@ import java.util.List;
 final public class MainLayout extends AppLayout {
 
     private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
-            PaymentViewOld.class,
+//            PaymentViewOld.class,
+            PaymentView.class,
             ProductViewOld.class,
 //            TagViewOld.class, // TODO: 30.07.2022 ???
             TagView.class,
