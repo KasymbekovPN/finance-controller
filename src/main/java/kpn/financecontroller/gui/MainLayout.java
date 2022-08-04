@@ -12,6 +12,7 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.view.PaymentView;
+import kpn.financecontroller.gui.view.ProductView;
 import kpn.financecontroller.gui.view.SellerView;
 import kpn.financecontroller.gui.view.TagView;
 import kpn.financecontroller.gui.view.geo.address.AddressViewOld;
@@ -19,7 +20,6 @@ import kpn.financecontroller.gui.view.geo.city.CityViewOld;
 import kpn.financecontroller.gui.view.geo.country.CountryViewOld;
 import kpn.financecontroller.gui.view.geo.region.RegionViewOld;
 import kpn.financecontroller.gui.view.geo.street.StreetViewOld;
-import kpn.financecontroller.gui.view.product.ProductViewOld;
 import kpn.financecontroller.gui.view.statistic.ByTagStatistic;
 import kpn.financecontroller.security.SecurityService;
 import lombok.AllArgsConstructor;
@@ -35,7 +35,8 @@ final public class MainLayout extends AppLayout {
     private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
 //            PaymentViewOld.class,
             PaymentView.class,
-            ProductViewOld.class,
+//            ProductViewOld.class, // TODO: 04.08.2022 del
+            ProductView.class,
 //            TagViewOld.class, // TODO: 30.07.2022 ???
             TagView.class,
 //            SellerViewOld.class, // TODO: 02.08.2022 del

@@ -30,7 +30,7 @@ public final class PaymentView extends GridView<Payment> {
     @Override
     protected Grid<Payment> createGrid() {
         Grid<Payment> grid = new Grid<>(Payment.class);
-        grid.addClassName("address-grid");
+        grid.addClassName("payment-grid");
         return grid;
     }
 
