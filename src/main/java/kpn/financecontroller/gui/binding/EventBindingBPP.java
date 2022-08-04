@@ -35,12 +35,58 @@ public abstract class EventBindingBPP<D extends Domain<Long>> implements BeanPos
         }
     }
 
+    protected boolean checkBindingCondition(){
+        return notificationService != null &&
+                viewController != null &&
+                form != null &&
+                gridView != null;
+    }
+
     protected void reset() {
         gridView = null;
         form = null;
     }
 
-    protected abstract boolean checkBindingCondition();
+    protected Function<Object, Boolean> createNotificationServiceChainLink1(Class<? extends NotificationService> type) {
+        return  (Object bean) -> {
+            if (bean.getClass().equals(type)){
+                notificationService = type.cast(bean);
+                return true;
+            }
+            return false;
+        };
+    }
+
+    protected Function<Object, Boolean> createViewControllerChainLink1(Class<? extends ViewController<D>> type) {
+        return  (Object bean) -> {
+            if (bean.getClass().equals(type)){
+                viewController = type.cast(bean);
+                return true;
+            }
+            return false;
+        };
+    }
+
+    protected Function<Object, Boolean> createFormChainLink1(Class<? extends Form<D>> type) {
+        return  (Object bean) -> {
+            if (bean.getClass().equals(type)){
+                form = type.cast(bean);
+                return true;
+            }
+            return false;
+        };
+    }
+
+    protected Function<Object, Boolean> createGridViewChainLink1(Class<? extends GridView<D>> type) {
+        return  (Object bean) -> {
+            if (bean.getClass().equals(type)){
+                gridView = type.cast(bean);
+                return true;
+            }
+            return false;
+        };
+    }
+
     protected abstract void doBinding();
     protected abstract ChainLink createChainLink();
 

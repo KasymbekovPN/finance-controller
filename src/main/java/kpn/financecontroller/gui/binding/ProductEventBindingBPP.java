@@ -14,15 +14,8 @@ import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.ProductView;
 import org.springframework.stereotype.Component;
 
-import java.util.function.Function;
-
 @Component
 public final class ProductEventBindingBPP extends EventBindingBPP<Product> {
-    @Override
-    protected boolean checkBindingCondition() {
-        return form != null && gridView != null && viewController != null;
-    }
-
     @Override
     protected void doBinding() {
         form.addListener(ProductSaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -36,49 +29,9 @@ public final class ProductEventBindingBPP extends EventBindingBPP<Product> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink())
-                .addNext(createViewControllerChainLink())
-                .addNext(createFormChainLink())
-                .addNext(createGridViewChainLink());
-    }
-
-    private Function<Object, Boolean> createNotificationServiceChainLink() {
-        return  (Object bean) -> {
-            if (bean.getClass().equals(NotificationServiceImpl.class)){
-                notificationService = (NotificationServiceImpl) bean;
-                return true;
-            }
-            return false;
-        };
-    }
-
-    private Function<Object, Boolean> createViewControllerChainLink() {
-        return  (Object bean) -> {
-            if (bean.getClass().equals(ProductViewController.class)){
-                viewController = (ProductViewController) bean;
-                return true;
-            }
-            return false;
-        };
-    }
-
-    private Function<Object, Boolean> createFormChainLink() {
-        return  (Object bean) -> {
-            if (bean.getClass().equals(ProductForm.class)){
-                form = (ProductForm) bean;
-                return true;
-            }
-            return false;
-        };
-    }
-
-    private Function<Object, Boolean> createGridViewChainLink() {
-        return  (Object bean) -> {
-            if (bean.getClass().equals(ProductView.class)){
-                gridView = (ProductView) bean;
-                return true;
-            }
-            return false;
-        };
+        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink1(ProductViewController.class))
+                .addNext(createFormChainLink1(ProductForm.class))
+                .addNext(createGridViewChainLink1(ProductView.class));
     }
 }
