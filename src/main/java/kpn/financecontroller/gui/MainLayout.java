@@ -11,10 +11,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
-import kpn.financecontroller.gui.view.PaymentView;
-import kpn.financecontroller.gui.view.ProductView;
-import kpn.financecontroller.gui.view.SellerView;
-import kpn.financecontroller.gui.view.TagView;
+import kpn.financecontroller.gui.view.*;
 import kpn.financecontroller.gui.view.geo.address.AddressViewOld;
 import kpn.financecontroller.gui.view.geo.city.CityViewOld;
 import kpn.financecontroller.gui.view.geo.country.CountryViewOld;
@@ -45,7 +42,8 @@ final public class MainLayout extends AppLayout {
             StreetViewOld.class,
             CityViewOld.class,
             RegionViewOld.class,
-            CountryViewOld.class,
+//            CountryViewOld.class, // TODO: 06.08.2022 del
+            CountryView.class,
             ByTagStatistic.class
     );
 
