@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.region.view.RegionViewNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -31,7 +31,7 @@ public final class RegionView extends GridView<Region> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new RegionViewNotificationEvent(this, text, Notifications.ERROR);
+        return new RegionViewNotificationEvent(this, text, NotificationType.ERROR);
     }
 
     @Override

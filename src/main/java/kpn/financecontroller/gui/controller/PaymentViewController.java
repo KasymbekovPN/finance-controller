@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.gui.event.payment.controller.PaymentAfterDeletingEvent;
 import kpn.financecontroller.gui.event.payment.controller.PaymentAfterSavingEvent;
 import kpn.financecontroller.gui.event.payment.controller.PaymentControllerNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.seed.Seed;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +27,6 @@ public final class PaymentViewController extends ViewController<Payment> {
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
         String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new PaymentControllerNotificationEvent(this, text, Notifications.ERROR);
+        return new PaymentControllerNotificationEvent(this, text, NotificationType.ERROR);
     }
 }

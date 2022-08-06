@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.region.Region;
 import kpn.financecontroller.gui.event.region.controller.RegionAfterDeletingEvent;
 import kpn.financecontroller.gui.event.region.controller.RegionAfterSavingEvent;
 import kpn.financecontroller.gui.event.region.controller.RegionControllerNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.seed.Seed;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +26,6 @@ public final class RegionViewController extends ViewController<Region>{
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
         String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new RegionControllerNotificationEvent(this, text, Notifications.ERROR);
+        return new RegionControllerNotificationEvent(this, text, NotificationType.ERROR);
     }
 }

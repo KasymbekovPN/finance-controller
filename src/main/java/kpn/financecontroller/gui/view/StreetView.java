@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.street.view.StreetViewNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -33,7 +33,7 @@ public final class StreetView extends GridView<Street> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new StreetViewNotificationEvent(this, text, Notifications.ERROR);
+        return new StreetViewNotificationEvent(this, text, NotificationType.ERROR);
     }
 
     @Override

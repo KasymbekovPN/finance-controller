@@ -5,8 +5,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.shared.Registration;
-import kpn.financecontroller.gui.event.DeleteFormEvent;
-import kpn.financecontroller.gui.event.SaveFormEvent;
+import kpn.financecontroller.gui.event.DeleteEvent;
+import kpn.financecontroller.gui.event.SaveEvent;
 import kpn.financecontroller.gui.form.Form;
 import kpn.financecontroller.rfunc.checker.removing.RemovingChecker;
 import kpn.financecontroller.rfunc.checker.saving.SavingChecker;
@@ -31,7 +31,7 @@ public abstract class ViewController<D extends Domain<Long>> extends Component {
         return getEventBus().addListener(eventType, listener);
     }
 
-    public <F extends Form<D>> void handleSavingEvent(SaveFormEvent<F, D> event){
+    public <F extends Form<D>> void handleSavingEvent(SaveEvent<F, D> event){
         D domain = event.getValue();
         Result<List<D>> result = savingChecker.apply(domain);
         if (result.isSuccess()){
@@ -41,7 +41,7 @@ public abstract class ViewController<D extends Domain<Long>> extends Component {
         fireEvent(createAfterSavingEvent(domain));
     }
 
-    public <F extends Form<D>> void handleDeletingEvent(DeleteFormEvent<F, D> event){
+    public <F extends Form<D>> void handleDeletingEvent(DeleteEvent<F, D> event){
         D domain = event.getValue();
         Result<List<D>> result = removingChecker.apply(domain);
         if (result.isSuccess()){

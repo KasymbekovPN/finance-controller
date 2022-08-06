@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.gui.event.seller.controller.SellerAfterDeletingEvent;
 import kpn.financecontroller.gui.event.seller.controller.SellerAfterSavingEvent;
 import kpn.financecontroller.gui.event.seller.controller.SellerControllerNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.seed.Seed;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +26,6 @@ public final class SellerViewController extends ViewController<Seller> {
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
         String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new SellerControllerNotificationEvent(this, text, Notifications.ERROR);
+        return new SellerControllerNotificationEvent(this, text, NotificationType.ERROR);
     }
 }

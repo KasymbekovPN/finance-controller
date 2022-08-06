@@ -11,9 +11,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.gui.controller.ViewController;
-import kpn.financecontroller.gui.event.CloseFormEvent;
-import kpn.financecontroller.gui.event.DeleteFormEvent;
-import kpn.financecontroller.gui.event.SaveFormEvent;
+import kpn.financecontroller.gui.event.CancelEvent;
+import kpn.financecontroller.gui.event.DeleteEvent;
+import kpn.financecontroller.gui.event.SaveEvent;
 import kpn.financecontroller.gui.form.Form;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.lib.domain.Domain;
@@ -130,17 +130,17 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         }
     }
 
-    public <F extends ViewController<D>> void handleSavingEvent(SaveFormEvent<F, D> event) {
+    public <F extends ViewController<D>> void handleSavingEvent(SaveEvent<F, D> event) {
         updateList();
         closeForm(false);
     }
 
-    public <F extends ViewController<D>> void handleDeletingEvent(DeleteFormEvent<F, D> event) {
+    public <F extends ViewController<D>> void handleDeletingEvent(DeleteEvent<F, D> event) {
         updateList();
         closeForm(true);
     }
 
-    public <F extends Form<D>> void handleCancelEvent(CloseFormEvent<F, D> event) {
+    public <F extends Form<D>> void handleCancelEvent(CancelEvent<F, D> event) {
         closeForm(true);
     }
 

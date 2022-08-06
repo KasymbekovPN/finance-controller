@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.gui.event.country.controller.CountryAfterDeletingEvent;
 import kpn.financecontroller.gui.event.country.controller.CountryAfterSavingEvent;
 import kpn.financecontroller.gui.event.country.controller.CountryControllerNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.seed.Seed;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +26,6 @@ public final class CountryViewController extends ViewController<Country> {
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
         String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new CountryControllerNotificationEvent(this, text, Notifications.ERROR);
+        return new CountryControllerNotificationEvent(this, text, NotificationType.ERROR);
     }
 }

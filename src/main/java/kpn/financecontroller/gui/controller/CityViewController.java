@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.city.City;
 import kpn.financecontroller.gui.event.city.controller.CityAfterDeletingEvent;
 import kpn.financecontroller.gui.event.city.controller.CityAfterSavingEvent;
 import kpn.financecontroller.gui.event.city.controller.CityControllerNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.seed.Seed;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +26,6 @@ public final class CityViewController extends ViewController<City> {
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
         String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new CityControllerNotificationEvent(this, text, Notifications.ERROR);
+        return new CityControllerNotificationEvent(this, text, NotificationType.ERROR);
     }
 }

@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.product.Product;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.product.view.ProductViewNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -31,7 +31,7 @@ public final class ProductView extends GridView<Product> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new ProductViewNotificationEvent(this, text, Notifications.ERROR);
+        return new ProductViewNotificationEvent(this, text, NotificationType.ERROR);
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.vaadin.flow.component.Tag;
 import kpn.financecontroller.data.domains.address.Address;
 import kpn.financecontroller.gui.event.address.controller.AddressAfterSavingEvent;
 import kpn.financecontroller.gui.event.address.controller.AddressControllerNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.seed.Seed;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +25,6 @@ public final class AddressViewController extends ViewController<Address> {
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
         String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new AddressControllerNotificationEvent(this, text, Notifications.ERROR);
+        return new AddressControllerNotificationEvent(this, text, NotificationType.ERROR);
     }
 }

@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.country.Country;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.country.view.CountryViewNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -30,7 +30,7 @@ public final class CountryView extends GridView<Country> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new CountryViewNotificationEvent(this, text, Notifications.ERROR);
+        return new CountryViewNotificationEvent(this, text, NotificationType.ERROR);
     }
 
     @Override

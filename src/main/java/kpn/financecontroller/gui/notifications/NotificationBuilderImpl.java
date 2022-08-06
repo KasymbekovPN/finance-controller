@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-class NotificationBuilderImpl implements NotificationBuilder {
+final class NotificationBuilderImpl implements NotificationBuilder {
 
-    private final Notifications type;
+    private final NotificationType type;
     private int duration;
     private Icon icon;
     private ButtonVariant buttonVariant;

@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.payment.Payment;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.payment.view.PaymentViewNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -36,7 +36,7 @@ public final class PaymentView extends GridView<Payment> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new PaymentViewNotificationEvent(this, text, Notifications.ERROR);
+        return new PaymentViewNotificationEvent(this, text, NotificationType.ERROR);
     }
 
     @Override

@@ -6,7 +6,7 @@ import kpn.financecontroller.data.domains.street.Street;
 import kpn.financecontroller.gui.event.street.controller.StreetAfterDeletingEventOnClickEvent;
 import kpn.financecontroller.gui.event.street.controller.StreetAfterSavingEventOnClickEvent;
 import kpn.financecontroller.gui.event.street.controller.StreetControllerNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.seed.Seed;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +26,6 @@ public final class StreetViewController extends ViewController<Street> {
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
         String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new StreetControllerNotificationEvent(this, text, Notifications.ERROR);
+        return new StreetControllerNotificationEvent(this, text, NotificationType.ERROR);
     }
 }

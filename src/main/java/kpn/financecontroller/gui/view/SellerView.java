@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import kpn.financecontroller.data.domains.seller.Seller;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.seller.view.SellerViewNotificationEvent;
-import kpn.financecontroller.gui.notifications.Notifications;
+import kpn.financecontroller.gui.notifications.NotificationType;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -33,7 +33,7 @@ public final class SellerView extends GridView<Seller> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new SellerViewNotificationEvent(this, text, Notifications.ERROR);
+        return new SellerViewNotificationEvent(this, text, NotificationType.ERROR);
     }
 
     @Override
