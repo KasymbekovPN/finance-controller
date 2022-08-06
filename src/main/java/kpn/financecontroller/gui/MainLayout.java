@@ -13,7 +13,6 @@ import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.view.*;
 import kpn.financecontroller.gui.view.geo.address.AddressViewOld;
-import kpn.financecontroller.gui.view.geo.city.CityViewOld;
 import kpn.financecontroller.gui.view.geo.street.StreetViewOld;
 import kpn.financecontroller.gui.view.statistic.ByTagStatistic;
 import kpn.financecontroller.security.SecurityService;
@@ -38,7 +37,7 @@ final public class MainLayout extends AppLayout {
             SellerView.class,
             AddressViewOld.class,
             StreetViewOld.class,
-            CityViewOld.class,
+            CityView.class,
             RegionView.class,
 //            CountryViewOld.class, // TODO: 06.08.2022 del
             CountryView.class,

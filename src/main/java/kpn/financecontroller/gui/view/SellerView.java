@@ -27,7 +27,7 @@ public final class SellerView extends GridView<Seller> {
     @Override
     protected Grid<Seller> createGrid() {
         Grid<Seller> grid = new Grid<>(Seller.class);
-        grid.addClassName("address-grid");
+        grid.addClassName("seller-grid");
         return grid;
     }
 

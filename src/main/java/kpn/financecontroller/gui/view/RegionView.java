@@ -25,7 +25,7 @@ public final class RegionView extends GridView<Region> {
     @Override
     protected Grid<Region> createGrid() {
         Grid<Region> grid = new Grid<>(Region.class);
-        grid.addClassName("tag-grid");
+        grid.addClassName("region-grid");
         return grid;
     }
 
