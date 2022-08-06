@@ -12,7 +12,6 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.RouterLink;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.view.*;
-import kpn.financecontroller.gui.view.geo.address.AddressViewOld;
 import kpn.financecontroller.gui.view.statistic.ByTagStatistic;
 import kpn.financecontroller.security.SecurityService;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ final public class MainLayout extends AppLayout {
             ProductView.class,
             TagView.class,
             SellerView.class,
-            AddressViewOld.class,
+            AddressView.class,
             StreetView.class,
             CityView.class,
             RegionView.class,
