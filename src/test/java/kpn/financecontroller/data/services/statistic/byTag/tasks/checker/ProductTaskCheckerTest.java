@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.checker;
 
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Tag;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;

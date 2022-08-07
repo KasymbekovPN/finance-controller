@@ -1,7 +1,7 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domain.Payment;
+import kpn.financecontroller.data.domain.Product;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.checker.Checker;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.executor.TaskExecutor;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.executor.TaskExecutorImpl;

@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.country.form;
 
-import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.domain.Country;
 import kpn.financecontroller.gui.event.DeleteEvent;
 import kpn.financecontroller.gui.form.CountryForm;
 

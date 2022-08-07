@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.seller.form;
 
-import kpn.financecontroller.data.domains.seller.Seller;
+import kpn.financecontroller.data.domain.Seller;
 import kpn.financecontroller.gui.event.SaveEvent;
 import kpn.financecontroller.gui.form.SellerForm;
 

@@ -3,7 +3,7 @@ package kpn.financecontroller.gui.view;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.Route;
-import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domain.Product;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.product.view.ProductViewNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;

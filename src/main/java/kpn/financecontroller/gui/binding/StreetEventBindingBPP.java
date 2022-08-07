@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.binding;
 
-import kpn.financecontroller.data.domains.street.Street;
+import kpn.financecontroller.data.domain.Street;
 import kpn.financecontroller.gui.controller.StreetViewController;
 import kpn.financecontroller.gui.event.street.controller.StreetAfterDeletingEventOnClickEvent;
 import kpn.financecontroller.gui.event.street.controller.StreetAfterSavingEventOnClickEvent;

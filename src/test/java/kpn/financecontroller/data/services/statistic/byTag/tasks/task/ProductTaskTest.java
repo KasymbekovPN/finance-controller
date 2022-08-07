@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.task;
 
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Tag;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

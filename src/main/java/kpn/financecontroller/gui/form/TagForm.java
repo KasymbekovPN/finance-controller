@@ -3,7 +3,7 @@ package kpn.financecontroller.gui.form;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Tag;
 import kpn.financecontroller.gui.event.tag.form.TagCancelButtonOnClickEvent;
 import kpn.financecontroller.gui.event.tag.form.TagDeleteButtonOnClickEvent;
 import kpn.financecontroller.gui.event.tag.form.TagSaveButtonOnClickEvent;

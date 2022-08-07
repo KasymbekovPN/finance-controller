@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.address.form;
 
-import kpn.financecontroller.data.domains.address.Address;
+import kpn.financecontroller.data.domain.Address;
 import kpn.financecontroller.gui.event.SaveEvent;
 import kpn.financecontroller.gui.form.AddressForm;
 

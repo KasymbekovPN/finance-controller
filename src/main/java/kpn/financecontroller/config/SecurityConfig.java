@@ -1,10 +1,10 @@
 package kpn.financecontroller.config;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
-import kpn.financecontroller.data.repos.user.UserRepo;
+import kpn.financecontroller.data.repo.UserRepo;
 import kpn.financecontroller.i18n.I18nService;
 import kpn.financecontroller.security.UserService;
-import kpn.financecontroller.gui.view.login.LoginView;
+import kpn.financecontroller.gui.view.LoginView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

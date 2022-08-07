@@ -1,7 +1,7 @@
 package kpn.financecontroller.gui.controller;
 
 import com.vaadin.flow.component.ComponentEvent;
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Tag;
 import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.financecontroller.gui.event.tag.controller.TagControllerNotificationEvent;
 import kpn.financecontroller.gui.event.tag.controller.TagAfterDeletingEvent;

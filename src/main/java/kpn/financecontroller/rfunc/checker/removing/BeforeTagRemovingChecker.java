@@ -1,6 +1,6 @@
 package kpn.financecontroller.rfunc.checker.removing;
 
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Tag;
 import org.springframework.stereotype.Component;
 
 @Component

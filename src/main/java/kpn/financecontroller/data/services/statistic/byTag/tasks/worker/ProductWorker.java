@@ -1,7 +1,7 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.worker;
 
 import com.querydsl.core.types.Predicate;
-import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domain.Product;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;

@@ -1,7 +1,7 @@
 package kpn.financecontroller.initialization.entities;
 
-import kpn.financecontroller.data.domains.payment.Currency;
-import kpn.financecontroller.data.domains.payment.Measure;
+import kpn.financecontroller.data.domain.auxi.Currency;
+import kpn.financecontroller.data.domain.auxi.Measure;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.product.form;
 
-import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domain.Product;
 import kpn.financecontroller.gui.event.CancelEvent;
 import kpn.financecontroller.gui.form.ProductForm;
 

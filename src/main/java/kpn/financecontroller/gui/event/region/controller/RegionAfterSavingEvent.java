@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.region.controller;
 
-import kpn.financecontroller.data.domains.region.Region;
+import kpn.financecontroller.data.domain.Region;
 import kpn.financecontroller.gui.controller.RegionViewController;
 import kpn.financecontroller.gui.event.SaveEvent;
 

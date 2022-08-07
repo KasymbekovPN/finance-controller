@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.seller.controller;
 
-import kpn.financecontroller.data.domains.seller.Seller;
+import kpn.financecontroller.data.domain.Seller;
 import kpn.financecontroller.gui.controller.SellerViewController;
 import kpn.financecontroller.gui.event.DeleteEvent;
 

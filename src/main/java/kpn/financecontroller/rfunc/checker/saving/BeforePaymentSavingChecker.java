@@ -1,6 +1,6 @@
 package kpn.financecontroller.rfunc.checker.saving;
 
-import kpn.financecontroller.data.domains.payment.Payment;
+import kpn.financecontroller.data.domain.Payment;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.springframework.stereotype.Component;

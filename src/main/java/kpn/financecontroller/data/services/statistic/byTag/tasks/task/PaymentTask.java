@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.task;
 
-import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domain.Product;
 import lombok.*;
 
 import java.time.LocalDate;

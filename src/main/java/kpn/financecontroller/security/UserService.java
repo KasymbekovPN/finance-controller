@@ -1,8 +1,8 @@
 package kpn.financecontroller.security;
 
-import kpn.financecontroller.data.domains.user.User;
-import kpn.financecontroller.data.entities.user.UserEntity;
-import kpn.financecontroller.data.repos.user.UserRepo;
+import kpn.financecontroller.data.domain.User;
+import kpn.financecontroller.data.entity.UserEntity;
+import kpn.financecontroller.data.repo.UserRepo;
 import kpn.financecontroller.i18n.I18nService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

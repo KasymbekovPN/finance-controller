@@ -1,11 +1,11 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.worker;
 
 import com.querydsl.core.types.Predicate;
-import kpn.financecontroller.data.converters.aspect.FromAspectConverter;
-import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.domains.tag.Tag;
-import kpn.financecontroller.data.entities.product.QProductEntity;
-import kpn.financecontroller.data.entities.tag.TagEntity;
+import kpn.financecontroller.data.converter.aspect.FromAspectConverter;
+import kpn.financecontroller.data.domain.Product;
+import kpn.financecontroller.data.domain.Tag;
+import kpn.financecontroller.data.entity.QProductEntity;
+import kpn.financecontroller.data.entity.TagEntity;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
 import kpn.lib.buider.ServiceBuider;
 import kpn.lib.exception.DTOException;

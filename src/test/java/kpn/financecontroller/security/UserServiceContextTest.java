@@ -1,8 +1,8 @@
 package kpn.financecontroller.security;
 
-import kpn.financecontroller.data.domains.user.Role;
-import kpn.financecontroller.data.entities.user.UserEntity;
-import kpn.financecontroller.data.repos.user.UserRepo;
+import kpn.financecontroller.data.domain.auxi.Role;
+import kpn.financecontroller.data.entity.UserEntity;
+import kpn.financecontroller.data.repo.UserRepo;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package kpn.financecontroller.rfunc.checker.saving;
 
-import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.data.domains.region.Region;
+import kpn.financecontroller.data.domain.Country;
+import kpn.financecontroller.data.domain.Region;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.junit.jupiter.api.Test;

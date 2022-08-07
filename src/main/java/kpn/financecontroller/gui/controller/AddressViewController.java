@@ -2,7 +2,7 @@ package kpn.financecontroller.gui.controller;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.Tag;
-import kpn.financecontroller.data.domains.address.Address;
+import kpn.financecontroller.data.domain.Address;
 import kpn.financecontroller.gui.event.address.controller.AddressAfterSavingEvent;
 import kpn.financecontroller.gui.event.address.controller.AddressControllerNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;

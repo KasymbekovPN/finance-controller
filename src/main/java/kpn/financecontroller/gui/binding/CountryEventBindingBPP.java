@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.binding;
 
-import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.domain.Country;
 import kpn.financecontroller.gui.controller.CountryViewController;
 import kpn.financecontroller.gui.event.country.controller.CountryAfterDeletingEvent;
 import kpn.financecontroller.gui.event.country.controller.CountryAfterSavingEvent;

@@ -2,9 +2,9 @@ package kpn.financecontroller.data.services.statistic.byTag.tasks.converters;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.entities.payment.QPaymentEntity;
-import kpn.financecontroller.data.entities.product.ProductEntity;
+import kpn.financecontroller.data.domain.Product;
+import kpn.financecontroller.data.entity.QPaymentEntity;
+import kpn.financecontroller.data.entity.ProductEntity;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

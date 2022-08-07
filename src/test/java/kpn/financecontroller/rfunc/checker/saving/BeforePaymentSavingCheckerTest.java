@@ -1,9 +1,9 @@
 package kpn.financecontroller.rfunc.checker.saving;
 
-import kpn.financecontroller.data.domains.payment.Currency;
-import kpn.financecontroller.data.domains.payment.Measure;
-import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.product.Product;
+import kpn.financecontroller.data.domain.auxi.Currency;
+import kpn.financecontroller.data.domain.auxi.Measure;
+import kpn.financecontroller.data.domain.Payment;
+import kpn.financecontroller.data.domain.Product;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.assertj.core.api.Assertions;

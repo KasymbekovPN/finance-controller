@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.binding;
 
-import kpn.financecontroller.data.domains.address.Address;
+import kpn.financecontroller.data.domain.Address;
 import kpn.financecontroller.gui.controller.AddressViewController;
 import kpn.financecontroller.gui.event.address.controller.AddressAfterDeletingEvent;
 import kpn.financecontroller.gui.event.address.controller.AddressAfterSavingEvent;

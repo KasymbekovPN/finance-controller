@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.worker;
 
 import com.querydsl.core.types.Predicate;
-import kpn.financecontroller.data.converters.aspect.FromAspectConverter;
-import kpn.financecontroller.data.domains.payment.Payment;
+import kpn.financecontroller.data.converter.aspect.FromAspectConverter;
+import kpn.financecontroller.data.domain.Payment;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.lib.buider.ServiceBuider;
 import kpn.lib.exception.DTOException;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static kpn.financecontroller.data.entities.payment.QPaymentEntity.paymentEntity;
+import static kpn.financecontroller.data.entity.QPaymentEntity.paymentEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PaymentWorkerTest {

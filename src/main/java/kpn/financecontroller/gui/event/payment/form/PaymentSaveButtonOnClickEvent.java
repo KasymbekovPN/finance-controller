@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.payment.form;
 
-import kpn.financecontroller.data.domains.payment.Payment;
+import kpn.financecontroller.data.domain.Payment;
 import kpn.financecontroller.gui.event.SaveEvent;
 import kpn.financecontroller.gui.form.PaymentForm;
 

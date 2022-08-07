@@ -1,7 +1,7 @@
 package kpn.financecontroller.initialization.tasks;
 
 import com.querydsl.core.types.Predicate;
-import kpn.financecontroller.data.converters.aspect.FromAspectConverter;
+import kpn.financecontroller.data.converter.aspect.FromAspectConverter;
 import kpn.financecontroller.initialization.generators.valued.*;
 import kpn.financecontroller.initialization.managers.context.ResultContextManager;
 import kpn.financecontroller.initialization.tasks.testUtils.TestKeys;

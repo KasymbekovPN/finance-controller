@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.tag.form;
 
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Tag;
 import kpn.financecontroller.gui.event.CancelEvent;
 import kpn.financecontroller.gui.form.TagForm;
 

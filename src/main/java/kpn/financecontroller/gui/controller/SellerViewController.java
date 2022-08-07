@@ -2,7 +2,7 @@ package kpn.financecontroller.gui.controller;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.Tag;
-import kpn.financecontroller.data.domains.seller.Seller;
+import kpn.financecontroller.data.domain.Seller;
 import kpn.financecontroller.gui.event.seller.controller.SellerAfterDeletingEvent;
 import kpn.financecontroller.gui.event.seller.controller.SellerAfterSavingEvent;
 import kpn.financecontroller.gui.event.seller.controller.SellerControllerNotificationEvent;

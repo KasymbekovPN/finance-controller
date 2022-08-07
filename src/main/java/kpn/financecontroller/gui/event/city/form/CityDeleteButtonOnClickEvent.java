@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.event.city.form;
 
-import kpn.financecontroller.data.domains.city.City;
+import kpn.financecontroller.data.domain.City;
 import kpn.financecontroller.gui.event.DeleteEvent;
 import kpn.financecontroller.gui.form.CityForm;
 

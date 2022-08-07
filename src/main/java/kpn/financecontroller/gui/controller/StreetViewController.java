@@ -2,7 +2,7 @@ package kpn.financecontroller.gui.controller;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.Tag;
-import kpn.financecontroller.data.domains.street.Street;
+import kpn.financecontroller.data.domain.Street;
 import kpn.financecontroller.gui.event.street.controller.StreetAfterDeletingEventOnClickEvent;
 import kpn.financecontroller.gui.event.street.controller.StreetAfterSavingEventOnClickEvent;
 import kpn.financecontroller.gui.event.street.controller.StreetControllerNotificationEvent;

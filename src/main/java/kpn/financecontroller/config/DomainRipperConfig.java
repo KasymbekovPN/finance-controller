@@ -1,16 +1,16 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.domains.address.Address;
-import kpn.financecontroller.data.domains.city.City;
-import kpn.financecontroller.data.domains.country.Country;
-import kpn.financecontroller.data.domains.payment.Currency;
-import kpn.financecontroller.data.domains.payment.Measure;
-import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.domains.region.Region;
-import kpn.financecontroller.data.domains.seller.Seller;
-import kpn.financecontroller.data.domains.street.Street;
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Address;
+import kpn.financecontroller.data.domain.City;
+import kpn.financecontroller.data.domain.Country;
+import kpn.financecontroller.data.domain.auxi.Currency;
+import kpn.financecontroller.data.domain.auxi.Measure;
+import kpn.financecontroller.data.domain.Payment;
+import kpn.financecontroller.data.domain.Product;
+import kpn.financecontroller.data.domain.Region;
+import kpn.financecontroller.data.domain.Seller;
+import kpn.financecontroller.data.domain.Street;
+import kpn.financecontroller.data.domain.Tag;
 import kpn.lib.domain.Domain;
 import kpn.lib.ripper.DefaultRipper;
 import kpn.lib.ripper.DefaultRipperArg;

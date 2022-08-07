@@ -3,7 +3,7 @@ package kpn.financecontroller.gui.form;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import kpn.financecontroller.data.domains.country.Country;
+import kpn.financecontroller.data.domain.Country;
 import kpn.financecontroller.gui.event.country.form.CountryCancelButtonOnClickEvent;
 import kpn.financecontroller.gui.event.country.form.CountryDeleteButtonOnClickEvent;
 import kpn.financecontroller.gui.event.country.form.CountrySaveButtonOnClickEvent;

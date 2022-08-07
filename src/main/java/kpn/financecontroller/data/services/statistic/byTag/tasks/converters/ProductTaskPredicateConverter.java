@@ -2,8 +2,8 @@ package kpn.financecontroller.data.services.statistic.byTag.tasks.converters;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import kpn.financecontroller.data.entities.product.QProductEntity;
-import kpn.financecontroller.data.entities.tag.TagEntity;
+import kpn.financecontroller.data.entity.QProductEntity;
+import kpn.financecontroller.data.entity.TagEntity;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;
 import org.springframework.stereotype.Component;
 

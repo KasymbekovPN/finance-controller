@@ -1,6 +1,6 @@
 package kpn.financecontroller.rfunc.checker.saving;
 
-import kpn.financecontroller.data.domains.seller.Seller;
+import kpn.financecontroller.data.domain.Seller;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.junit.jupiter.api.Test;

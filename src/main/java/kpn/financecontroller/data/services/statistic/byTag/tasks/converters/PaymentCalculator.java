@@ -1,6 +1,6 @@
 package kpn.financecontroller.data.services.statistic.byTag.tasks.converters;
 
-import kpn.financecontroller.data.domains.payment.Payment;
+import kpn.financecontroller.data.domain.Payment;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

@@ -1,8 +1,8 @@
 package kpn.financecontroller.data.services.statistic.byTag;
 
-import kpn.financecontroller.data.domains.payment.Payment;
-import kpn.financecontroller.data.domains.product.Product;
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Payment;
+import kpn.financecontroller.data.domain.Product;
+import kpn.financecontroller.data.domain.Tag;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.executor.TaskExecutor;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.PaymentTask;
 import kpn.financecontroller.data.services.statistic.byTag.tasks.task.ProductTask;

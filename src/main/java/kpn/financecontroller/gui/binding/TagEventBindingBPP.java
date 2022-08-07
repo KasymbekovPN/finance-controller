@@ -1,6 +1,6 @@
 package kpn.financecontroller.gui.binding;
 
-import kpn.financecontroller.data.domains.tag.Tag;
+import kpn.financecontroller.data.domain.Tag;
 import kpn.financecontroller.gui.controller.TagViewController;
 import kpn.financecontroller.gui.event.tag.controller.TagAfterDeletingEvent;
 import kpn.financecontroller.gui.event.tag.controller.TagAfterSavingEvent;
