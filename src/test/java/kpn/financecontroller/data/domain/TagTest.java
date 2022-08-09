@@ -1,6 +1,5 @@
 package kpn.financecontroller.data.domain;
 
-import kpn.financecontroller.data.domain.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
