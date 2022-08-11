@@ -1,5 +1,6 @@
 package kpn.financecontroller.data.domain;
 
+import kpn.financecontroller.data.entity.ActionEntity;
 import kpn.lib.domain.AbstractDomain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,9 +14,12 @@ import lombok.Setter;
 public class Action extends AbstractDomain<Long> {
     private String description;
     private String algorithm;
-    private boolean isValid;
 
-    // TODO: 09.08.2022 add constructor
+    public Action(ActionEntity entity) {
+        setId(entity.getId());
+        setDescription(entity.getDescription());
+        setAlgorithm(entity.getAlgorithm());
+    }
 
     @Override
     public String getInfo() {

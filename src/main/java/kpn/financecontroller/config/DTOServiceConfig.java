@@ -2,33 +2,9 @@ package kpn.financecontroller.config;
 
 import com.querydsl.core.types.Predicate;
 import kpn.financecontroller.data.converter.aspect.FromAspectConverter;
-import kpn.financecontroller.data.domain.Address;
-import kpn.financecontroller.data.domain.City;
-import kpn.financecontroller.data.domain.Payment;
-import kpn.financecontroller.data.domain.Product;
-import kpn.financecontroller.data.domain.Region;
-import kpn.financecontroller.data.domain.Seller;
-import kpn.financecontroller.data.domain.Street;
-import kpn.financecontroller.data.domain.Tag;
-import kpn.financecontroller.data.entity.AddressEntity;
-import kpn.financecontroller.data.entity.CityEntity;
-import kpn.financecontroller.data.entity.CountryEntity;
-import kpn.financecontroller.data.entity.PaymentEntity;
-import kpn.financecontroller.data.entity.ProductEntity;
-import kpn.financecontroller.data.entity.RegionEntity;
-import kpn.financecontroller.data.entity.SellerEntity;
-import kpn.financecontroller.data.entity.StreetEntity;
-import kpn.financecontroller.data.entity.TagEntity;
-import kpn.financecontroller.data.repo.AddressRepo;
-import kpn.financecontroller.data.repo.CityRepo;
-import kpn.financecontroller.data.repo.CountryRepo;
-import kpn.financecontroller.data.domain.Country;
-import kpn.financecontroller.data.repo.PaymentRepo;
-import kpn.financecontroller.data.repo.ProductRepo;
-import kpn.financecontroller.data.repo.RegionRepo;
-import kpn.financecontroller.data.repo.SellerRepo;
-import kpn.financecontroller.data.repo.StreetRepo;
-import kpn.financecontroller.data.repo.TagRepo;
+import kpn.financecontroller.data.domain.*;
+import kpn.financecontroller.data.entity.*;
+import kpn.financecontroller.data.repo.*;
 import kpn.financecontroller.data.services.dto.deleter.ByIdDeletingExecutorImpl;
 import kpn.financecontroller.data.services.dto.deleter.CompletelyDeletingExecutorImpl;
 import kpn.financecontroller.data.services.dto.executor.PredicateExecutorImpl;
@@ -94,6 +70,11 @@ public class DTOServiceConfig {
     @Bean
     public Service<Long, Payment, Predicate, Result<List<Payment>>> paymentService(PaymentRepo repo){
         return createService("payment", repo, repo, Payment::new, PaymentEntity::new);
+    }
+
+    @Bean
+    public Service<Long, Action, Predicate, Result<List<Action>>> actionService(ActionRepo repo){
+        return createService("action", repo, repo, Action::new, ActionEntity::new);
     }
 
     private <D extends Domain<Long>, E extends Entity<Long>> Service<Long, D, Predicate, Result<List<D>>> createService(

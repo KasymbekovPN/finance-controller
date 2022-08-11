@@ -13,7 +13,7 @@ import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @Scope("prototype")
-@Route(value = "payment", layout = MainLayout.class)
+@Route(value = "", layout = MainLayout.class)
 @PermitAll
 public final class PaymentView extends GridView<Payment> {
     private static final List<ColumnConfig> COLUMN_CONFIGS = List.of(

@@ -1,16 +1,8 @@
 package kpn.financecontroller.config;
 
-import kpn.financecontroller.data.domain.Address;
-import kpn.financecontroller.data.domain.City;
-import kpn.financecontroller.data.domain.Country;
+import kpn.financecontroller.data.domain.*;
 import kpn.financecontroller.data.domain.auxi.Currency;
 import kpn.financecontroller.data.domain.auxi.Measure;
-import kpn.financecontroller.data.domain.Payment;
-import kpn.financecontroller.data.domain.Product;
-import kpn.financecontroller.data.domain.Region;
-import kpn.financecontroller.data.domain.Seller;
-import kpn.financecontroller.data.domain.Street;
-import kpn.financecontroller.data.domain.Tag;
 import kpn.lib.domain.Domain;
 import kpn.lib.ripper.DefaultRipper;
 import kpn.lib.ripper.DefaultRipperArg;
@@ -129,6 +121,33 @@ public class DomainRipperConfig {
                             return !path.isEmpty() && seller != null
                                     ? Optional.of(createSellerRipper().run(new DefaultRipperArg<>(seller, path)))
                                     : Optional.empty();
+                        }
+                )
+                .build();
+    }
+
+    @Bean
+    public Ripper<Action> actionRipper(){
+        return DefaultRipper.<Action>buider()
+                .getter(
+                        "id",
+                        (RipperArg<Action> arg) -> {
+                            Long id = arg.getDomain().getId();
+                            return doCommonHandling(arg, id);
+                        }
+                )
+                .getter(
+                        "description",
+                        (RipperArg<Action> arg) -> {
+                            String description = arg.getDomain().getDescription();
+                            return doCommonHandling(arg, description);
+                        }
+                )
+                .getter(
+                        "algorithm",
+                        (RipperArg<Action> arg) -> {
+                            String algorithm = arg.getDomain().getAlgorithm();
+                            return doCommonHandling(arg, algorithm);
                         }
                 )
                 .build();
