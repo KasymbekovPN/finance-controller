@@ -35,7 +35,7 @@ import java.util.Set;
 @Scope("prototype")
 @Route(value = "byTagStatistic", layout = MainLayout.class)
 @PermitAll
-public class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
+public final class ByTagStatistic extends VerticalLayout implements HasDynamicTitle {
 
     private final MultiSelectListBox<Tag> tags = createMultiSelectListBox(this::callOnMultiSelectListBoxValueChanging);
     private final DatePicker beginTime = createDatePicker(this::callOnStartDatePickerStateChanging);
