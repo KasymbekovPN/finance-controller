@@ -143,13 +143,6 @@ public class DomainRipperConfig {
                             return doCommonHandling(arg, description);
                         }
                 )
-                .getter(
-                        "algorithm",
-                        (RipperArg<Action> arg) -> {
-                            String algorithm = arg.getDomain().getAlgorithm();
-                            return doCommonHandling(arg, algorithm);
-                        }
-                )
                 .build();
     }
     private Ripper<Seller> createSellerRipper() {

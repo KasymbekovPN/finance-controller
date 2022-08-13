@@ -34,6 +34,7 @@ final public class MainLayout extends AppLayout {
             CityView.class,
             RegionView.class,
             CountryView.class,
+            ActionView.class,
             ByTagStatistic.class
     );
 

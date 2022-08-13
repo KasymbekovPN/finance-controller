@@ -47,6 +47,7 @@ public abstract class EventBindingBPP<D extends Domain<Long>> implements BeanPos
         form = null;
     }
 
+    // TODO: 13.08.2022 rename: without suffix 1
     protected Function<Object, Boolean> createNotificationServiceChainLink1(Class<? extends NotificationService> type) {
         return  (Object bean) -> {
             if (bean.getClass().equals(type)){
@@ -57,6 +58,7 @@ public abstract class EventBindingBPP<D extends Domain<Long>> implements BeanPos
         };
     }
 
+    // TODO: 13.08.2022 rename: without suffix 1
     protected Function<Object, Boolean> createViewControllerChainLink1(Class<? extends ViewController<D>> type) {
         return  (Object bean) -> {
             if (bean.getClass().equals(type)){
@@ -67,6 +69,7 @@ public abstract class EventBindingBPP<D extends Domain<Long>> implements BeanPos
         };
     }
 
+    // TODO: 13.08.2022 rename: without suffix 1
     protected Function<Object, Boolean> createFormChainLink1(Class<? extends Form<D>> type) {
         return  (Object bean) -> {
             if (bean.getClass().equals(type)){
@@ -77,6 +80,7 @@ public abstract class EventBindingBPP<D extends Domain<Long>> implements BeanPos
         };
     }
 
+    // TODO: 13.08.2022 rename: without suffix 1
     protected Function<Object, Boolean> createGridViewChainLink1(Class<? extends GridView<D>> type) {
         return  (Object bean) -> {
             if (bean.getClass().equals(type)){
