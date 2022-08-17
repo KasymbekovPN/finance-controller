@@ -37,9 +37,9 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
     @Autowired
     private Service<Long, D, Predicate, Result<List<D>>> service;
     @Autowired
-    private Form<D> form;
+    protected Form<D> form;
 
-    private Grid<D> grid;
+    protected Grid<D> grid;
 
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
@@ -60,14 +60,14 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         removeClassName("editing");
     }
 
-    private void configureGrid() {
+    protected void configureGrid() {
         grid = createGrid();
         grid.setSizeFull();
         configureGridColumns(getConfigList());
         grid.asSingleSelect().addValueChangeListener(e -> editFormValue(e.getValue()));
     }
 
-    private void configureGridColumns(List<ColumnConfig> configList){
+    protected void configureGridColumns(List<ColumnConfig> configList){
         grid.setColumns();
         for (ColumnConfig config : configList) {
             grid
@@ -89,7 +89,8 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         return toolbar;
     }
 
-    private Component getContent() {
+    // TODO: 15.08.2022 ???
+    protected Component getContent() {
         HorizontalLayout content = new HorizontalLayout(grid, form);
         content.addClassName("content");
         content.setFlexGrow(2, grid);
@@ -121,7 +122,7 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         addClassName("editing");
     }
 
-    private void editFormValue(D value){
+    protected void editFormValue(D value){
         if (value == null){
             closeForm(true);
         } else {
@@ -151,7 +152,8 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         }
     }
 
-    private void processAddButtonClick(){
+    // TODO: 15.08.2022 ???
+    protected void processAddButtonClick(){
         grid.asSingleSelect().clear();
         addFormValue(createDomain());
     }

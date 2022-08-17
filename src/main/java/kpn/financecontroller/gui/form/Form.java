@@ -48,6 +48,9 @@ public abstract class Form<D extends Domain<Long>> extends FormLayout {
         setVisible(false);
     }
 
+    // TODO: 15.08.2022 ???
+    public void resize(){}
+
     protected Component createButtonsLayout() {
         customizeSaveButton();
         customizeDeleteButton();
