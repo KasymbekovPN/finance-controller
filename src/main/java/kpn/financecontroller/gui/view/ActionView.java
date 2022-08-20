@@ -74,8 +74,12 @@ public final class ActionView extends GridView<Action> {
         HorizontalLayout content = new HorizontalLayout(grid, form, display);
         content.addClassName("content");
         // TODO: 15.08.2022 ???
-//        content.setFlexGrow(1, grid);
-//        content.setFlexGrow(1, form);
+        content.setFlexGrow(1, grid);
+        content.setFlexGrow(2, form);
+        content.setFlexGrow(2, display);
+
+        content.setSpacing(true);
+
         content.setSizeFull();
         return content;
     }

@@ -44,7 +44,7 @@ public final class ActionForm extends Form<Action> {
         add(layout);
 
         setWidth(49, Unit.PERCENTAGE);
-//        setSizeFull(); // TODO: 20.08.2022 ??? 
+//        setSizeFull(); // TODO: 20.08.2022 ???
         close(true);
     }
 
