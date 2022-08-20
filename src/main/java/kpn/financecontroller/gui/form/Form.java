@@ -15,7 +15,7 @@ import kpn.lib.domain.Domain;
 
 public abstract class Form<D extends Domain<Long>> extends FormLayout {
 
-    private final Button save = new Button();
+    protected final Button save = new Button();
     private final Button delete = new Button();
     private final Button cancel = new Button();
     protected final Binder<D> binder;
@@ -48,9 +48,6 @@ public abstract class Form<D extends Domain<Long>> extends FormLayout {
         setVisible(false);
     }
 
-    // TODO: 15.08.2022 ???
-    public void resize(){}
-
     protected Component createButtonsLayout() {
         customizeSaveButton();
         customizeDeleteButton();
@@ -58,7 +55,7 @@ public abstract class Form<D extends Domain<Long>> extends FormLayout {
         return new HorizontalLayout(save, delete, cancel);
     }
 
-    private void customizeSaveButton() {
+    protected void customizeSaveButton() {
         save.setText(getTranslation("gui.button.save"));
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickShortcut(Key.ENTER);
@@ -79,7 +76,7 @@ public abstract class Form<D extends Domain<Long>> extends FormLayout {
         cancel.addClickListener(event -> fireEvent(createCancelButtonOnClickEvent()));
     }
 
-    private void processSaveButtonClick() {
+    protected void processSaveButtonClick() {
         try{
            binder.writeBean(value);
            fireEvent(createSaveButtonOnClickEvent());

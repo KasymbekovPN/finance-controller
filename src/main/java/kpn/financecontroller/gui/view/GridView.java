@@ -158,7 +158,6 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         addFormValue(createDomain());
     }
 
-
     protected abstract Grid<D> createGrid();
     protected abstract ComponentEvent<?> createNotificationEvent(String text);
     protected abstract D createDomain();

@@ -2,7 +2,7 @@ package kpn.financecontroller.gui.form;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -44,18 +44,16 @@ public final class ActionForm extends Form<Action> {
         add(layout);
 
         setWidth(49, Unit.PERCENTAGE);
-//        setSizeFull();
+//        setSizeFull(); // TODO: 20.08.2022 ??? 
         close(true);
     }
 
-    // TODO: 15.08.2022 ???
     @Override
-    public void resize() {
-//        layout.setHeightFull();
-//        layout.setWidthFull();
-//
-//        algorithm.setHeightFull();
-//        algorithm.setWidthFull();
+    protected void customizeSaveButton() {
+        save.setText(getTranslation("gui.button.save"));
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        save.addClickListener(event -> processSaveButtonClick());
+        binder.addStatusChangeListener(event -> save.setEnabled(binder.isValid()));
     }
 
     @Override
