@@ -29,9 +29,9 @@ public final class CountryEventBindingBPP extends EventBindingBPP<Country> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(CountryViewController.class))
-                .addNext(createFormChainLink1(CountryForm.class))
-                .addNext(createGridViewChainLink1(CountryView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(CountryViewController.class))
+                .addNext(createFormChainLink(CountryForm.class))
+                .addNext(createGridViewChainLink(CountryView.class));
     }
 }

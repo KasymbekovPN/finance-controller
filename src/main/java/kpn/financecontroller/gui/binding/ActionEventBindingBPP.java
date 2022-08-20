@@ -29,9 +29,9 @@ public final class ActionEventBindingBPP extends EventBindingBPP<Action> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(ActionViewController.class))
-                .addNext(createFormChainLink1(ActionForm.class))
-                .addNext(createGridViewChainLink1(ActionView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(ActionViewController.class))
+                .addNext(createFormChainLink(ActionForm.class))
+                .addNext(createGridViewChainLink(ActionView.class));
     }
 }

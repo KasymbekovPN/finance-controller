@@ -29,9 +29,9 @@ public final class RegionEventBindingBPP extends EventBindingBPP<Region> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(RegionViewController.class))
-                .addNext(createFormChainLink1(RegionForm.class))
-                .addNext(createGridViewChainLink1(RegionView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(RegionViewController.class))
+                .addNext(createFormChainLink(RegionForm.class))
+                .addNext(createGridViewChainLink(RegionView.class));
     }
 }

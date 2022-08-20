@@ -29,9 +29,9 @@ public final class StreetEventBindingBPP extends EventBindingBPP<Street> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(StreetViewController.class))
-                .addNext(createFormChainLink1(StreetForm.class))
-                .addNext(createGridViewChainLink1(StreetView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(StreetViewController.class))
+                .addNext(createFormChainLink(StreetForm.class))
+                .addNext(createGridViewChainLink(StreetView.class));
     }
 }

@@ -30,9 +30,9 @@ public final class TagEventBindingBPP extends EventBindingBPP<Tag> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(TagViewController.class))
-                .addNext(createFormChainLink1(TagForm.class))
-                .addNext(createGridViewChainLink1(TagView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(TagViewController.class))
+                .addNext(createFormChainLink(TagForm.class))
+                .addNext(createGridViewChainLink(TagView.class));
     }
 }

@@ -29,9 +29,9 @@ public final class PaymentEventBindingBPP extends EventBindingBPP<Payment> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(PaymentViewController.class))
-                .addNext(createFormChainLink1(PaymentForm.class))
-                .addNext(createGridViewChainLink1(PaymentView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(PaymentViewController.class))
+                .addNext(createFormChainLink(PaymentForm.class))
+                .addNext(createGridViewChainLink(PaymentView.class));
     }
 }

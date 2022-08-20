@@ -29,9 +29,9 @@ public final class AddressEventBindingBPP extends EventBindingBPP<Address> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(AddressViewController.class))
-                .addNext(createFormChainLink1(AddressForm.class))
-                .addNext(createGridViewChainLink1(AddressView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(AddressViewController.class))
+                .addNext(createFormChainLink(AddressForm.class))
+                .addNext(createGridViewChainLink(AddressView.class));
     }
 }

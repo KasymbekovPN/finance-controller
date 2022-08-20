@@ -29,9 +29,9 @@ public final class CityEventBindingBPP extends EventBindingBPP<City> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(CityViewController.class))
-                .addNext(createFormChainLink1(CityForm.class))
-                .addNext(createGridViewChainLink1(CityView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(CityViewController.class))
+                .addNext(createFormChainLink(CityForm.class))
+                .addNext(createGridViewChainLink(CityView.class));
     }
 }

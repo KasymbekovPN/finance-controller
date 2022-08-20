@@ -29,9 +29,9 @@ public final class SellerEventBindingBPP extends EventBindingBPP<Seller> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink1(NotificationServiceImpl.class))
-                .addNext(createViewControllerChainLink1(SellerViewController.class))
-                .addNext(createFormChainLink1(SellerForm.class))
-                .addNext(createGridViewChainLink1(SellerView.class));
+        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+                .addNext(createViewControllerChainLink(SellerViewController.class))
+                .addNext(createFormChainLink(SellerForm.class))
+                .addNext(createGridViewChainLink(SellerView.class));
     }
 }
