@@ -32,6 +32,17 @@ class ServiceStorageImplTest {
     }
 
     @Test
+    void shouldCheckUnregistration() {
+        TestService service = new TestService();
+        ServiceStorageImpl storage = new ServiceStorageImpl();
+        storage.register(service);
+        storage.unregister(TestService.class);
+
+        TestService registered = storage.get(TestService.class);
+        assertThat(registered).isNull();
+    }
+
+    @Test
     void shouldCheckGetting_ifAbsent() {
         ServiceStorageImpl storage = new ServiceStorageImpl();
 

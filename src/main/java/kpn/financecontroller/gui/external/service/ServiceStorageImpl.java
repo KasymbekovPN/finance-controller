@@ -12,8 +12,13 @@ final class ServiceStorageImpl implements ServiceStorage {
     }
 
     @Override
+    public void unregister(Class<?> type) {
+        services.remove(type);
+    }
+
+    @Override
     public <T> T get(Class<T> type) {
-        return services.containsKey(type)
+        return type != null && services.containsKey(type)
                 ? type.cast(services.get(type))
                 : null;
     }

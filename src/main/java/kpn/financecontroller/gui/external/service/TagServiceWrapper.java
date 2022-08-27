@@ -2,24 +2,17 @@ package kpn.financecontroller.gui.external.service;
 
 import com.querydsl.core.types.Predicate;
 import kpn.financecontroller.data.domain.Tag;
-import kpn.lib.result.ImmutableResult;
+import kpn.financecontroller.data.services.dto.service.TagDtoDecorator;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
 
 import java.util.List;
 
 public final class TagServiceWrapper extends BaseServiceWrapper<Tag> {
-    public static Service<Long, Tag, Predicate, Result<List<Tag>>> SERVICE;
-
-    // TODO: 27.08.2022 ???
-    @Override
-    protected Service<Long, Tag, Predicate, Result<List<Tag>>> getService() {
-        return null;
-//        return SERVICE;
-    }
+    private static final Class<? extends Service<Long, Tag, Predicate, Result<List<Tag>>>> KEY = TagDtoDecorator.class;
 
     @Override
-    protected Result<List<Tag>> createFailResult() {
-        return ImmutableResult.<List<Tag>>fail("service.tag.null");
+    protected Class<? extends Service<Long, Tag, Predicate, Result<List<Tag>>>> getKey() {
+        return KEY;
     }
 }
