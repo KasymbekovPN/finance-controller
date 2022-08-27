@@ -19,44 +19,44 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TagServiceWrapperTest {
 
-    @Test
-    void shouldCheckFinding_ServiceNull() {
-        ImmutableResult<List<Tag>> expectedResult = ImmutableResult.<List<Tag>>fail("service.tag.null");
-
-        TagServiceWrapper.SERVICE = null;
-        Result<List<Tag>> result = new TagServiceWrapper().find(null);
-
-        assertThat(result).isEqualTo(expectedResult);
-    }
-
-    @Test
-    void shouldCheckFinding() throws DTOException {
-        ImmutableResult<List<Tag>> expectedResult = ImmutableResult.<List<Tag>>ok(List.of(createDomain()));
-
-        TagServiceWrapper.SERVICE = createService();
-        Result<List<Tag>> result = new TagServiceWrapper().find(null);
-
-        assertThat(result).isEqualTo(expectedResult);
-    }
-
-    private Service<Long, Tag, Predicate, Result<List<Tag>>> createService() throws DTOException {
-        TagExecutor executor = Mockito.mock(TagExecutor.class);
-        Mockito
-                .when(executor.execute(Mockito.anyObject()))
-                .thenReturn(new DefaultExecutorResult<>(createDomain()));
-
-        return new ServiceBuider<Long, Tag, Predicate, Result<List<Tag>>>(new FromAspectConverter<>())
-                .predicateAspectBuidler()
-                .executor(executor)
-                .and().build();
-    }
-
-    private Tag createDomain() {
-        Tag tag = new Tag();
-        tag.setId(123L);
-        tag.setName("tag name");
-        return tag;
-    }
-
-    private abstract static class TagExecutor implements PredicateExecutor<Predicate, Tag> {}
+//    @Test
+//    void shouldCheckFinding_ServiceNull() {
+//        ImmutableResult<List<Tag>> expectedResult = ImmutableResult.<List<Tag>>fail("service.tag.null");
+//
+//        TagServiceWrapper.SERVICE = null;
+//        Result<List<Tag>> result = new TagServiceWrapper().find(null);
+//
+//        assertThat(result).isEqualTo(expectedResult);
+//    }
+//
+//    @Test
+//    void shouldCheckFinding() throws DTOException {
+//        ImmutableResult<List<Tag>> expectedResult = ImmutableResult.<List<Tag>>ok(List.of(createDomain()));
+//
+//        TagServiceWrapper.SERVICE = createService();
+//        Result<List<Tag>> result = new TagServiceWrapper().find(null);
+//
+//        assertThat(result).isEqualTo(expectedResult);
+//    }
+//
+//    private Service<Long, Tag, Predicate, Result<List<Tag>>> createService() throws DTOException {
+//        TagExecutor executor = Mockito.mock(TagExecutor.class);
+//        Mockito
+//                .when(executor.execute(Mockito.anyObject()))
+//                .thenReturn(new DefaultExecutorResult<>(createDomain()));
+//
+//        return new ServiceBuider<Long, Tag, Predicate, Result<List<Tag>>>(new FromAspectConverter<>())
+//                .predicateAspectBuidler()
+//                .executor(executor)
+//                .and().build();
+//    }
+//
+//    private Tag createDomain() {
+//        Tag tag = new Tag();
+//        tag.setId(123L);
+//        tag.setName("tag name");
+//        return tag;
+//    }
+//
+//    private abstract static class TagExecutor implements PredicateExecutor<Predicate, Tag> {}
 }

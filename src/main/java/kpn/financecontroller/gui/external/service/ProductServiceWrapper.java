@@ -8,16 +8,16 @@ import kpn.lib.service.Service;
 
 import java.util.List;
 
-public final class ProductServiceWrapper extends BaseServiceWrapper<Product> {
-    public static Service<Long, Product, Predicate, Result<List<Product>>> SERVICE;
-
-    @Override
-    protected Result<List<Product>> createFailResult() {
-        return ImmutableResult.<List<Product>>fail("service.product.null");
-    }
-
-    @Override
-    protected Service<Long, Product, Predicate, Result<List<Product>>> getService() {
-        return SERVICE;
-    }
-}
+//public final class ProductServiceWrapper extends BaseServiceWrapper<Product> {
+//    public static Service<Long, Product, Predicate, Result<List<Product>>> SERVICE;
+//
+//    @Override
+//    protected Result<List<Product>> createFailResult() {
+//        return ImmutableResult.<List<Product>>fail("service.product.null");
+//    }
+//
+//    @Override
+//    protected Service<Long, Product, Predicate, Result<List<Product>>> getService() {
+//        return SERVICE;
+//    }
+//}
