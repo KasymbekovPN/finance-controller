@@ -11,6 +11,7 @@ import kpn.financecontroller.data.services.dto.executor.PredicateExecutorImpl;
 import kpn.financecontroller.data.services.dto.loader.ByIdLoadingExecutorImpl;
 import kpn.financecontroller.data.services.dto.loader.CompletelyLoadingExecutorImpl;
 import kpn.financecontroller.data.services.dto.saver.SavingExecutorImpl;
+import kpn.financecontroller.data.services.dto.service.*;
 import kpn.lib.buider.ServiceBuider;
 import kpn.lib.domain.Domain;
 import kpn.lib.entity.Entity;
@@ -29,47 +30,47 @@ public class DTOServiceConfig {
 
     @Bean
     public Service<Long, Country, Predicate, Result<List<Country>>> countryService(CountryRepo repo){
-        return createService("country", repo, repo, Country::new, CountryEntity::new);
+        return new CountryDtoDecorator(createService("country", repo, repo, Country::new, CountryEntity::new));
     }
 
     @Bean
     public Service<Long, Region, Predicate, Result<List<Region>>> regionService(RegionRepo repo){
-        return createService("region", repo, repo, Region::new, RegionEntity::new);
+        return new RegionDtoDecorator(createService("region", repo, repo, Region::new, RegionEntity::new));
     }
 
     @Bean
     public Service<Long, City, Predicate, Result<List<City>>> cityService(CityRepo repo){
-        return createService("city", repo, repo, City::new, CityEntity::new);
+        return new CityDtoDecorator(createService("city", repo, repo, City::new, CityEntity::new));
     }
 
     @Bean
     public Service<Long, Street, Predicate, Result<List<Street>>> streetService(StreetRepo repo){
-        return createService("street", repo, repo, Street::new, StreetEntity::new);
+        return new StreetDtoDecorator(createService("street", repo, repo, Street::new, StreetEntity::new));
     }
 
     @Bean
     public Service<Long, Address, Predicate, Result<List<Address>>> addressService(AddressRepo repo){
-        return createService("address", repo, repo, Address::new, AddressEntity::new);
+        return new AddressDtoDecorator(createService("address", repo, repo, Address::new, AddressEntity::new));
     }
 
     @Bean
     public Service<Long, Seller, Predicate, Result<List<Seller>>> sellerService(SellerRepo repo){
-        return createService("seller", repo, repo, Seller::new, SellerEntity::new);
+        return new SellerDtoDecorator(createService("seller", repo, repo, Seller::new, SellerEntity::new));
     }
 
     @Bean
     public Service<Long, Tag, Predicate, Result<List<Tag>>> tagService(TagRepo repo){
-        return createService("tag", repo, repo, Tag::new, TagEntity::new);
+        return new TagDtoDecorator(createService("tag", repo, repo, Tag::new, TagEntity::new));
     }
 
     @Bean
     public Service<Long, Product, Predicate, Result<List<Product>>> productService(ProductRepo repo){
-        return createService("product", repo, repo, Product::new, ProductEntity::new);
+        return new ProductDtoDecorator(createService("product", repo, repo, Product::new, ProductEntity::new));
     }
 
     @Bean
     public Service<Long, Payment, Predicate, Result<List<Payment>>> paymentService(PaymentRepo repo){
-        return createService("payment", repo, repo, Payment::new, PaymentEntity::new);
+        return new PaymentDtoDecorator(createService("payment", repo, repo, Payment::new, PaymentEntity::new));
     }
 
     @Bean
