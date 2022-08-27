@@ -8,7 +8,7 @@ import kpn.lib.service.Service;
 
 import java.util.List;
 
-public class TagServiceWrapper extends BaseServiceWrapper<Tag> {
+public final class TagServiceWrapper extends BaseServiceWrapper<Tag> {
     public static Service<Long, Tag, Predicate, Result<List<Tag>>> SERVICE;
 
     @Override

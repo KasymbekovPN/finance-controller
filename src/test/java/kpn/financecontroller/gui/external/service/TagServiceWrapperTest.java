@@ -22,6 +22,8 @@ class TagServiceWrapperTest {
     @Test
     void shouldCheckFinding_ServiceNull() {
         ImmutableResult<List<Tag>> expectedResult = ImmutableResult.<List<Tag>>fail("service.tag.null");
+
+        TagServiceWrapper.SERVICE = null;
         Result<List<Tag>> result = new TagServiceWrapper().find(null);
 
         assertThat(result).isEqualTo(expectedResult);
