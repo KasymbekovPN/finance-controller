@@ -11,9 +11,11 @@ import java.util.List;
 public final class TagServiceWrapper extends BaseServiceWrapper<Tag> {
     public static Service<Long, Tag, Predicate, Result<List<Tag>>> SERVICE;
 
+    // TODO: 27.08.2022 ???
     @Override
     protected Service<Long, Tag, Predicate, Result<List<Tag>>> getService() {
-        return SERVICE;
+        return null;
+//        return SERVICE;
     }
 
     @Override

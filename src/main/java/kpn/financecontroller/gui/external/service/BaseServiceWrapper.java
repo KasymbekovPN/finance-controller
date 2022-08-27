@@ -5,16 +5,17 @@ import kpn.lib.domain.Domain;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class BaseServiceWrapper<D extends Domain<Long>> implements ServiceWrapper<D> {
-    // TODO: 27.08.2022 !!!
-//    private static final ServiceStorage SERVICE_STORAGE = new ServiceStorage();
-//
-//    public static void registerService(Service<Long, ?, Predicate, Result<List<?>>> service){
+    private static final ServiceStorage SERVICE_STORAGE = new ServiceStorageImpl();
+
+//    public static void registerService(Object service){
 //        SERVICE_STORAGE.register(service);
+//    }
+//
+//    protected static <T> T get(Class<T> type){
+//        return SERVICE_STORAGE.get(type);
 //    }
 
     @Override
@@ -28,12 +29,4 @@ public abstract class BaseServiceWrapper<D extends Domain<Long>> implements Serv
     protected abstract Result<List<D>> createFailResult();
     protected abstract Service<Long,D, Predicate, Result<List<D>>> getService();
 
-    // TODO: 27.08.2022 !!!
-//    private static class ServiceStorage {
-//        private final Map<Class<?>, Service<Long, ?, Predicate, Result<List<?>>>> services = new HashMap<>();
-//
-//        public void register(Service<Long, ?, Predicate, Result<List<?>>> service) {
-//            services.put(service.getClass(), service);
-//        }
-//    }
 }
