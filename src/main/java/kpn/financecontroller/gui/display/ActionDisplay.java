@@ -7,8 +7,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
-import kpn.financecontroller.gui.event.action.display.ActionClearButtonOnClickEvent;
-import kpn.financecontroller.gui.event.action.display.ActionRunButtonOnClickEvent;
+import kpn.financecontroller.gui.event.action.display.ActionStartForFormEvent;
+import kpn.financecontroller.gui.event.action.service.NewDisplayComponentEvent;
 import org.springframework.context.annotation.Scope;
 
 @org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ public final class ActionDisplay extends Div {
     private final Button run = new Button();
     private final Button clear = new Button();
 
-    private Component currentContent;
+    private Div currentContent;
 
     public ActionDisplay() {
         addClassName("action-display");
@@ -40,12 +40,12 @@ public final class ActionDisplay extends Div {
         return new HorizontalLayout(run, clear);
     }
 
-    private Component createDefaultContent() {
+    private Div createDefaultContent() {
         TextArea textArea = new TextArea();
         textArea.setValue(getTranslation("gui.text.nothing"));
         textArea.setReadOnly(true);
         setComponentWidth(textArea);
-        return textArea;
+        return new Div(textArea);
     }
 
     // TODO: 20.08.2022 remake
@@ -56,29 +56,31 @@ public final class ActionDisplay extends Div {
     private void customizeRunButton() {
         run.setText(getTranslation("gui.button.run"));
         run.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        run.addClickListener(event -> fireEvent(new ActionRunButtonOnClickEvent(this)));
+        run.addClickListener(event -> handleRunPushing());
     }
 
     private void customizeClearButton() {
         clear.setText(getTranslation("gui.button.clear"));
         clear.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        clear.addClickListener(event -> fireEvent(new ActionClearButtonOnClickEvent(this)));
+        clear.addClickListener(event -> handleClearPushing());
     }
 
-    public void handleRunEvent(ActionRunButtonOnClickEvent event) {
-        System.out.println("handleRunEvent: " + event); // TODO: 20.08.2022 ???
-        remove(currentContent);
-        Div div = new Div(new TextArea("RUN"));
-        setComponentWidth(div);
-        currentContent = div;
-        add(currentContent);
+    private void handleRunPushing() {
+        fireEvent(new ActionStartForFormEvent(this));
     }
 
-    public void handleClearEvent(ActionClearButtonOnClickEvent event){
-        System.out.println("handleClearEvent: " + event); // TODO: 20.08.2022 ???
+    private void handleClearPushing() {
         remove(currentContent);
         currentContent = createDefaultContent();
         add(currentContent);
+    }
 
+    public void handleNewDisplayEvent(NewDisplayComponentEvent event) {
+        HasSize newComponent = event.getComponent();
+        setComponentWidth(newComponent);
+        remove(currentContent);
+        currentContent = new Div();
+        currentContent.add((Component) newComponent);
+        add(currentContent);
     }
 }

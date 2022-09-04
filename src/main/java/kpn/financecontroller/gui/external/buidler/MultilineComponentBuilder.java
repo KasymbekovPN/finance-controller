@@ -1,10 +1,9 @@
 package kpn.financecontroller.gui.external.buidler;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.textfield.TextArea;
 
-public final class MultilineComponentBuilder implements ComponentBuilder {
+public final class MultilineComponentBuilder implements ComponentBuilder<HasSize> {
     private final StringBuilder buffer = new StringBuilder();
 
     private String delimiter = "";
@@ -16,13 +15,7 @@ public final class MultilineComponentBuilder implements ComponentBuilder {
     }
 
     @Override
-    public Component build() {
-        Div div = new Div();
-        div.add(createTextArea());
-        return div;
-    }
-
-    private Component createTextArea() {
+    public HasSize build() {
         TextArea area = new TextArea();
         area.setReadOnly(true);
         area.setValue(buffer.toString());
