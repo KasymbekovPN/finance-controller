@@ -1,7 +1,7 @@
 package kpn.financecontroller.gui.binding;
 
 import kpn.financecontroller.data.domain.Action;
-import kpn.financecontroller.data.services.ActionProcessingService;
+import kpn.financecontroller.data.services.action.ActionProcessingService;
 import kpn.financecontroller.gui.controller.ActionViewController;
 import kpn.financecontroller.gui.display.ActionDisplay;
 import kpn.financecontroller.gui.event.action.controller.ActionAfterDeletingEvent;

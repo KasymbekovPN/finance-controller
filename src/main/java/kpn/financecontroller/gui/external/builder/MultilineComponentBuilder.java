@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.external.buidler;
+package kpn.financecontroller.gui.external.builder;
 
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.textfield.TextArea;

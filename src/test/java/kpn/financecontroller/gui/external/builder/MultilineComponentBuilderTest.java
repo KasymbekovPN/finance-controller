@@ -1,7 +1,6 @@
-package kpn.financecontroller.gui.external.buidler;
+package kpn.financecontroller.gui.external.builder;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.textfield.TextArea;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +12,11 @@ class MultilineComponentBuilderTest {
 
     @Test
     void shouldCheckBuilding_withoutText() {
-        Component component = new MultilineComponentBuilder().build();
+        HasSize component = new MultilineComponentBuilder().build();
         assertThat(component).isNotNull();
-        assertThat(component.getClass()).isEqualTo(Div.class);
+        assertThat(component.getClass()).isEqualTo(TextArea.class);
 
-        Component child = ((Div) component).getComponentAt(0);
-        assertThat(child.getClass()).isEqualTo(TextArea.class);
-
-        String value = ((TextArea) child).getValue();
+        String value = ((TextArea) component).getValue();
         assertThat(value).isEmpty();
     }
 
@@ -38,15 +34,12 @@ class MultilineComponentBuilderTest {
             delimiter = "\n";
         }
 
-        Component component = builder.build();
+        HasSize component = builder.build();
 
         assertThat(component).isNotNull();
-        assertThat(component.getClass()).isEqualTo(Div.class);
+        assertThat(component.getClass()).isEqualTo(TextArea.class);
 
-        Component child = ((Div) component).getComponentAt(0);
-        assertThat(child.getClass()).isEqualTo(TextArea.class);
-
-        String value = ((TextArea) child).getValue();
+        String value = ((TextArea) component).getValue();
         assertThat(value).isEqualTo(expectedValue.toString());
     }
 }

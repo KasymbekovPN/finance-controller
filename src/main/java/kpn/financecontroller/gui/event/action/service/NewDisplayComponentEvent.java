@@ -2,7 +2,7 @@ package kpn.financecontroller.gui.event.action.service;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.HasSize;
-import kpn.financecontroller.data.services.ActionProcessingService;
+import kpn.financecontroller.data.services.action.ActionProcessingService;
 import lombok.Getter;
 
 public final class NewDisplayComponentEvent extends ComponentEvent<ActionProcessingService> {
