@@ -3,7 +3,9 @@ package kpn.financecontroller.gui.external.buidler;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextArea;
+import kpn.financecontroller.annotation.External;
 
+@External
 public final class MultilineComponentBuilder implements ComponentBuilder {
     private final StringBuilder buffer = new StringBuilder();
 
