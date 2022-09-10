@@ -31,3 +31,5 @@ initial.entities:
 
 generators.alias.class:
   prefix: "gui.alias.class."
+
+external.packageName: kpn/financecontroller/gui/external

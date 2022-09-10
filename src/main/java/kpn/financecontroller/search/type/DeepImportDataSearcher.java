@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class DeepImportDataSearcher implements Searcher<String, String> {
+public final class DeepImportDataSearcher implements Searcher<String, String> {
     private final Searcher<String, List<Class<?>>> classSearcher;
 
     @Override

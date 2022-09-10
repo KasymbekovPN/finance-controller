@@ -61,6 +61,7 @@ dependencies {
 	implementation 'com.github.KasymbekovPN:result-lib:1.7.0'
 	implementation 'com.github.KasymbekovPN:dto-service-lib:0.1.5'
 
+	implementation 'org.apache.groovy:groovy:4.0.4'
 	testImplementation 'org.apache.groovy:groovy-yaml:4.0.4'
 }
 
