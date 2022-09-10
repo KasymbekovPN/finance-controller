@@ -6,17 +6,18 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public final class DeepClassSearcherByExternalAnnotation implements Searcher<String, Set<Class<?>>> {
+public final class DeepClassSearcherByExternalAnnotation implements Searcher<String, List<Class<?>>> {
     private final Class<? extends Annotation> annotation;
 
     @Override
-    public Set<Class<?>> search(String arg) {
-        Set<Class<?>> result = new HashSet<>();
+    public List<Class<?>> search(String arg) {
+        List<Class<?>> result = new ArrayList<>();
 
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(arg);
         if (is != null){
