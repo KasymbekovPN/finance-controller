@@ -2,6 +2,7 @@ package kpn.financecontroller.gui.external.builder;
 
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.textfield.TextArea;
+import kpn.financecontroller.annotation.External;
 
 public final class MultilineComponentBuilder implements ComponentBuilder<HasSize> {
     private final StringBuilder buffer = new StringBuilder();
