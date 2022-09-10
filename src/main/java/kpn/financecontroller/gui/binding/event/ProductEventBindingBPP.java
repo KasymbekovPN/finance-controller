@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.binding;
+package kpn.financecontroller.gui.binding.event;
 
 import kpn.financecontroller.data.domain.Product;
 import kpn.financecontroller.gui.controller.ProductViewController;

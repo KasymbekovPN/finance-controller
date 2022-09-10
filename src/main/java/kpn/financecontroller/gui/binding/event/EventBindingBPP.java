@@ -1,4 +1,4 @@
-package kpn.financecontroller.gui.binding;
+package kpn.financecontroller.gui.binding.event;
 
 import kpn.financecontroller.gui.controller.ViewController;
 import kpn.financecontroller.gui.form.Form;
