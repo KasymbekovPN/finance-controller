@@ -4,7 +4,7 @@ import groovy.lang.GroovyShell;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ActionWorkerImpl implements ActionWorker {
+public final class ActionWorkerImpl implements ActionWorker {
     private final GroovyShell shell = new GroovyShell();
     private final String header;
 
