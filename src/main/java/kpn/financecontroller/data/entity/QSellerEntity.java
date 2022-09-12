@@ -6,9 +6,11 @@ import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathInits;
 import com.querydsl.core.types.dsl.StringPath;
+import kpn.financecontroller.annotation.External;
 
 import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
+@External
 public class QSellerEntity extends EntityPathBase<SellerEntity> {
 
     private static final PathInits INITS = PathInits.DIRECT2;

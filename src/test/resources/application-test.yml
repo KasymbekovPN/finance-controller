@@ -32,4 +32,10 @@ initial.entities:
 generators.alias.class:
     prefix: "gui.alias.class."
 
-external.packageName: kpn/financecontroller/gui/external
+script.header:
+  manualNames:
+    - com.vaadin.flow.component.HasSize
+    - com.querydsl.core.types.Predicate
+  annotationPackages:
+    - kpn.financecontroller.gui.external
+    - kpn.financecontroller.data.entity

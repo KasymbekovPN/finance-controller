@@ -5,9 +5,11 @@ import com.querydsl.core.types.PathMetadata;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
+import kpn.financecontroller.annotation.External;
 
 import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
+@External
 public class QCountryEntity extends EntityPathBase<CountryEntity> {
 
     public static final QCountryEntity countryEntity = new QCountryEntity("countryEntity");

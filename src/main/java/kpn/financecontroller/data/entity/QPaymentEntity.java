@@ -3,6 +3,7 @@ package kpn.financecontroller.data.entity;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.PathMetadata;
 import com.querydsl.core.types.dsl.*;
+import kpn.financecontroller.annotation.External;
 import kpn.financecontroller.data.domain.auxi.Currency;
 import kpn.financecontroller.data.domain.auxi.Measure;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 
 import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
+@External
 public class QPaymentEntity extends EntityPathBase<PaymentEntity> {
 
     private static final PathInits INITS = PathInits.DIRECT2;
