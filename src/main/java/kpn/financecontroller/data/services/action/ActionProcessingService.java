@@ -6,6 +6,7 @@ import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.gui.event.action.display.ActionStartForProcessorEvent;
 import kpn.financecontroller.gui.event.action.service.NewDisplayComponentEvent;
 import kpn.financecontroller.gui.external.builder.MultilineComponentBuilder;
+import kpn.lib.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,16 +38,23 @@ public final class ActionProcessingService extends Component {
     }
 
     private HasSize createComponent(String algorithm) {
-        Object execResult = worker.execute(algorithm);
-        List<Class<?>> interfaces = List.of(execResult.getClass().getInterfaces());
-        return interfaces.contains(HasSize.class)
-                ? (HasSize) execResult
-                : createDefaultComponent("gui.text.algorithm.invalid");
+        Result<Object> executionResult = worker.execute(algorithm);
+        if (executionResult.isSuccess()){
+            Object value = executionResult.getValue();
+            if (value != null){
+                List<Class<?>> interfaces = List.of(value.getClass().getInterfaces());
+                return interfaces.contains(HasSize.class)
+                        ? (HasSize) value
+                        : createDefaultComponent("gui.text.algorithm.returned.invalidType", value.getClass().getSimpleName());
+            }
+            return createDefaultComponent("gui.text.algorithm.returned.null");
+        }
+        return createDefaultComponent(executionResult.getSeed().getCode(), executionResult.getSeed().getArgs());
     }
 
-    private HasSize createDefaultComponent(String code) {
+    private HasSize createDefaultComponent(String code, Object... args) {
         return new MultilineComponentBuilder()
-                .append(getTranslation(code))
+                .append(getTranslation(code, args))
                 .build();
     }
 }

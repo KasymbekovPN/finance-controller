@@ -89,7 +89,6 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         return toolbar;
     }
 
-    // TODO: 15.08.2022 ???
     protected Component getContent() {
         HorizontalLayout content = new HorizontalLayout(grid, form);
         content.addClassName("content");
@@ -152,7 +151,6 @@ public abstract class GridView<D extends Domain<Long>> extends VerticalLayout im
         }
     }
 
-    // TODO: 15.08.2022 ???
     protected void processAddButtonClick(){
         grid.asSingleSelect().clear();
         addFormValue(createDomain());

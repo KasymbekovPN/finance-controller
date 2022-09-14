@@ -34,12 +34,9 @@ public final class ActionView extends GridView<Action> {
     @Override
     protected void configureGrid() {
         grid = createGrid();
-//        grid.setSizeFull(); // TODO: 15.08.2022 ???
         grid.setWidth(49, Unit.PERCENTAGE);
         grid.setHeight(100, Unit.PERCENTAGE);
         configureGridColumns(getConfigList());
-        // TODO: 20.08.2022 del
-//        grid.asSingleSelect().addValueChangeListener(e -> editFormValue(e.getValue()));
         grid.asSingleSelect().addValueChangeListener(e -> {
            editFormValue(e.getValue());
            changeDisplayVisibility(e.getValue());
@@ -73,7 +70,6 @@ public final class ActionView extends GridView<Action> {
     protected Component getContent() {
         HorizontalLayout content = new HorizontalLayout(grid, form, display);
         content.addClassName("content");
-        // TODO: 15.08.2022 ???
         content.setFlexGrow(1, grid);
         content.setFlexGrow(2, form);
         content.setFlexGrow(2, display);

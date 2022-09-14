@@ -48,7 +48,6 @@ public final class ActionDisplay extends Div {
         return new Div(textArea);
     }
 
-    // TODO: 20.08.2022 remake
     private void setComponentWidth(HasSize component) {
         component.setWidth(25, Unit.EM);
     }

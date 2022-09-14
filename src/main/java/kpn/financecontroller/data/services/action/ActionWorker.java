@@ -1,5 +1,7 @@
 package kpn.financecontroller.data.services.action;
 
+import kpn.lib.result.Result;
+
 public interface ActionWorker {
-    Object execute(String algorithm);
+    Result<Object> execute(String algorithm);
 }

@@ -23,7 +23,6 @@ public final class ActionForm extends Form<Action> {
     private final TextField description = new TextField();
     private final TextArea algorithm = new TextArea();
 
-    // TODO: 15.08.2022 del
     private final VerticalLayout layout = new VerticalLayout();
 
     public ActionForm() {
@@ -46,7 +45,6 @@ public final class ActionForm extends Form<Action> {
         add(layout);
 
         setWidth(49, Unit.PERCENTAGE);
-//        setSizeFull(); // TODO: 20.08.2022 ???
         close(true);
     }
 

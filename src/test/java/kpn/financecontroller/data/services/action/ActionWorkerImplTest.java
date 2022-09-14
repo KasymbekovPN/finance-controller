@@ -1,9 +1,10 @@
 package kpn.financecontroller.data.services.action;
 
-import kpn.financecontroller.search.type.Searcher;
-import org.assertj.core.api.Assertions;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ActionWorkerImplTest {
     private static final String HEADER = """
@@ -16,20 +17,22 @@ class ActionWorkerImplTest {
             """;
 
     @Test
+    void shouldCheckExecution_ifCompilationFail() {
+        Result<Object> result = new ActionWorkerImpl("").execute("123 / 0;");
+
+        ImmutableResult<Object> expectedResult = ImmutableResult.<Object>bFail("gui.text.algorithm.execution.fail")
+                .arg("ArithmeticException")
+                .arg("Division by zero")
+                .build();
+        assertThat(result).isEqualTo(expectedResult);
+    }
+
+    @Test
     void shouldCheckExecution() {
         ActionWorkerImpl worker = new ActionWorkerImpl(HEADER);
         Object result = worker.execute(ALGORITHM);
 
-        Assertions.assertThat(result).isEqualTo(123 + 234);
+        ImmutableResult<Object> expectedResult = ImmutableResult.<Object>ok(123 + 234);
+        assertThat(result).isEqualTo(expectedResult);
     }
-
-    private TestSearcher createSearcher(){
-        TestSearcher searcher = Mockito.mock(TestSearcher.class);
-        Mockito
-                .when(searcher.search(Mockito.anyString()))
-                .thenReturn(HEADER);
-        return searcher;
-    }
-
-    private abstract static class TestSearcher implements Searcher<String, String> {}
 }
