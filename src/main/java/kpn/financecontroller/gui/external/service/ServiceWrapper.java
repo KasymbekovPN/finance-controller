@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ServiceWrapper<D extends Domain<Long>>{
     Result<List<D>> find(Predicate predicate);
+    Result<List<D>> findAll();
 }

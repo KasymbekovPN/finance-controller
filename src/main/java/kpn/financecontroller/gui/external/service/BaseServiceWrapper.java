@@ -7,6 +7,7 @@ import kpn.lib.result.Result;
 import kpn.lib.service.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseServiceWrapper<D extends Domain<Long>> implements ServiceWrapper<D> {
     private static final ServiceStorage SERVICE_STORAGE = new ServiceStorageImpl();
@@ -21,11 +22,24 @@ public abstract class BaseServiceWrapper<D extends Domain<Long>> implements Serv
 
     @Override
     public Result<List<D>> find(Predicate predicate) {
-        Class<? extends Service<Long, D, Predicate, Result<List<D>>>> key = getKey();
-        Service<Long, D, Predicate, Result<List<D>>> service = SERVICE_STORAGE.get(key);
-        return service != null
-                ? service.executor().execute(predicate)
+        Optional<Service<Long, D, Predicate, Result<List<D>>>> maybeService = getService();
+        return maybeService.isPresent()
+                ? maybeService.get().executor().execute(predicate)
                 : createFailResult();
+    }
+
+    @Override
+    public Result<List<D>> findAll() {
+        Optional<Service<Long, D, Predicate, Result<List<D>>>> maybeService = getService();
+        return maybeService.isPresent()
+                ? maybeService.get().loader().all()
+                : createFailResult();
+    }
+
+    private Optional<Service<Long, D, Predicate, Result<List<D>>>> getService(){
+        return Optional.ofNullable(
+                SERVICE_STORAGE.get(getKey())
+        );
     }
 
     protected Result<List<D>> createFailResult(){

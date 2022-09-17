@@ -7,6 +7,7 @@ import kpn.financecontroller.data.services.dto.service.RegionDtoDecorator;
 import kpn.lib.buider.ServiceBuider;
 import kpn.lib.exception.DTOException;
 import kpn.lib.executor.DefaultExecutorResult;
+import kpn.lib.executor.loading.CompletelyLoadingExecutor;
 import kpn.lib.executor.predicate.PredicateExecutor;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
@@ -40,16 +41,47 @@ class RegionServiceWrapperTest {
         assertThat(result).isEqualTo(expectedResult);
     }
 
+    @Test
+    void shouldCheckFindingAll_ServiceNull() {
+        ImmutableResult<List<Region>> expectedResult
+                = ImmutableResult.<List<Region>>fail("wrapper."+ RegionServiceWrapper.class.getSimpleName() + ".service.null");
+
+        RegionServiceWrapper.unregisterService(RegionDtoDecorator.class);
+        Result<List<Region>> result = new RegionServiceWrapper().findAll();
+
+        assertThat(result).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void shouldCheckFindingAll() throws DTOException {
+        ImmutableResult<List<Region>> expectedResult = ImmutableResult.<List<Region>>ok(List.of(createDomain()));
+
+        RegionServiceWrapper.registerService(new RegionDtoDecorator(createService()));
+        Result<List<Region>> result = new RegionServiceWrapper().findAll();
+
+        assertThat(result).isEqualTo(expectedResult);
+    }
+
     private Service<Long, Region, Predicate, Result<List<Region>>> createService() throws DTOException {
-        RegionExecutor executor = Mockito.mock(RegionExecutor.class);
+        RegionPredicateExecutor executor = Mockito.mock(RegionPredicateExecutor.class);
+        DefaultExecutorResult<Region> result = new DefaultExecutorResult<>(createDomain());
         Mockito
                 .when(executor.execute(Mockito.anyObject()))
-                .thenReturn(new DefaultExecutorResult<>(createDomain()));
+                .thenReturn(result);
+
+        RegionLoadingExecutor loader = Mockito.mock(RegionLoadingExecutor.class);
+        Mockito
+                .when(loader.load())
+                .thenReturn(result);
 
         return new ServiceBuider<Long, Region, Predicate, Result<List<Region>>>(new FromAspectConverter<>())
                 .predicateAspectBuidler()
                 .executor(executor)
-                .and().build();
+                .and()
+                .loadingAspectBuilder()
+                .executorAll(loader)
+                .and()
+                .build();
     }
 
     private Region createDomain() {
@@ -59,5 +91,6 @@ class RegionServiceWrapperTest {
         return domain;
     }
 
-    private abstract static class RegionExecutor implements PredicateExecutor<Predicate, Region> {}
+    private abstract static class RegionPredicateExecutor implements PredicateExecutor<Predicate, Region> {}
+    private abstract static class RegionLoadingExecutor implements CompletelyLoadingExecutor<Region> {}
 }

@@ -7,6 +7,7 @@ import kpn.financecontroller.data.services.dto.service.CountryDtoDecorator;
 import kpn.lib.buider.ServiceBuider;
 import kpn.lib.exception.DTOException;
 import kpn.lib.executor.DefaultExecutorResult;
+import kpn.lib.executor.loading.CompletelyLoadingExecutor;
 import kpn.lib.executor.predicate.PredicateExecutor;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
@@ -41,16 +42,47 @@ class CountryServiceWrapperTest {
         assertThat(result).isEqualTo(expectedResult);
     }
 
+    @Test
+    void shouldCheckFindingAll_ServiceNull() {
+        ImmutableResult<List<Country>> expectedResult
+                = ImmutableResult.<List<Country>>fail("wrapper."+ CountryServiceWrapper.class.getSimpleName() + ".service.null");
+
+        CountryServiceWrapper.unregisterService(CountryDtoDecorator.class);
+        Result<List<Country>> result = new CountryServiceWrapper().findAll();
+
+        assertThat(result).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void shouldCheckFindingAll() throws DTOException {
+        ImmutableResult<List<Country>> expectedResult = ImmutableResult.<List<Country>>ok(List.of(createDomain()));
+
+        CountryServiceWrapper.registerService(new CountryDtoDecorator(createService()));
+        Result<List<Country>> result = new CountryServiceWrapper().findAll();
+
+        assertThat(result).isEqualTo(expectedResult);
+    }
+
     private Service<Long, Country, Predicate, Result<List<Country>>> createService() throws DTOException {
-        CountryExecutor executor = Mockito.mock(CountryExecutor.class);
+        CountryPredicateExecutor executor = Mockito.mock(CountryPredicateExecutor.class);
+        DefaultExecutorResult<Country> result = new DefaultExecutorResult<>(createDomain());
         Mockito
                 .when(executor.execute(Mockito.anyObject()))
-                .thenReturn(new DefaultExecutorResult<>(createDomain()));
+                .thenReturn(result);
+
+        CountryLoadingExecutor loader = Mockito.mock(CountryLoadingExecutor.class);
+        Mockito
+                .when(loader.load())
+                .thenReturn(result);
 
         return new ServiceBuider<Long, Country, Predicate, Result<List<Country>>>(new FromAspectConverter<>())
                 .predicateAspectBuidler()
                 .executor(executor)
-                .and().build();
+                .and()
+                .loadingAspectBuilder()
+                .executorAll(loader)
+                .and()
+                .build();
     }
 
     private Country createDomain() {
@@ -60,5 +92,6 @@ class CountryServiceWrapperTest {
         return domain;
     }
 
-    private abstract static class CountryExecutor implements PredicateExecutor<Predicate, Country> {}
+    private abstract static class CountryPredicateExecutor implements PredicateExecutor<Predicate, Country> {}
+    private abstract static class CountryLoadingExecutor implements CompletelyLoadingExecutor<Country> {}
 }
