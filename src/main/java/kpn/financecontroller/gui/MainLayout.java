@@ -53,6 +53,9 @@ final public class MainLayout extends AppLayout {
 
     @Autowired
     public MainLayout(SecurityService securityService, ClassAliasGenerator classAliasGenerator) {
+        // TODO: 19.09.2022 del
+        System.out.println("MainLayout constructor");
+
         this.securityService = securityService;
         this.classAliasGenerator = classAliasGenerator;
         setPrimarySection(Section.DRAWER);
