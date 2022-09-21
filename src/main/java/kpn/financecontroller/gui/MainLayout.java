@@ -9,7 +9,10 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.router.RouteParameters;
+import com.vaadin.flow.router.Router;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.view.*;
 import kpn.financecontroller.gui.view.ByTagStatistic;
@@ -35,7 +38,8 @@ final public class MainLayout extends AppLayout {
             RegionView.class,
             CountryView.class,
             ActionView.class,
-            ByTagStatistic.class
+            ByTagStatistic.class,
+            ActionEditor.class
     );
 
     @Setter
@@ -55,6 +59,8 @@ final public class MainLayout extends AppLayout {
     public MainLayout(SecurityService securityService, ClassAliasGenerator classAliasGenerator) {
         // TODO: 19.09.2022 del
         System.out.println("MainLayout constructor");
+        VaadinSession session = VaadinSession.getCurrent();
+        System.out.println(session);
 
         this.securityService = securityService;
         this.classAliasGenerator = classAliasGenerator;
@@ -140,14 +146,28 @@ final public class MainLayout extends AppLayout {
     }
 
     private MenuItemInfo createMenuItemInfo(Class<? extends Component> type) {
+//        System.out.println("type: " + type);// TODO: 21.09.2022 del
         String text = classAliasGenerator.generate(type);
+//        System.out.println("text: " + text); // TODO: 21.09.2022 del
         return new MenuItemInfo(text, "la la-globe", type);
     }
 
     private RouterLink createLink(MenuItemInfo menuItemInfo) {
         RouterLink link = new RouterLink();
         link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
-        link.setRoute(menuItemInfo.getView());
+
+        // TODO: 21.09.2022 del
+//        link.setRoute(menuItemInfo.getView());
+
+        if (menuItemInfo.getView() != ActionEditor.class){
+            link.setRoute(menuItemInfo.getView());
+        } else {
+            // TODO: 21.09.2022 random edition session 
+            link = new RouterLink("editor", menuItemInfo.getView(), new RouteParameters("ID", "123"));
+            link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
+//            Router router = new Router();
+//            link.setRoute(router, menuItemInfo.getView());
+        }
 
         Span icon = new Span();
         icon.addClassNames("me-s", "text-l");

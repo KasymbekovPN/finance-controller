@@ -6,24 +6,37 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
+import java.util.Optional;
 
-@Scope("editor")
-@Route(value = "editor")
+@Scope("prototype")
+//@Route(value = "editor") // TODO: 21.09.2022 del
+@Route(value = "editor/:ID?")
 @PermitAll
-public final class ActionEditor extends VerticalLayout implements HasUrlParameter<String> {
+public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver {
+
+    // TODO: 21.09.2022 del
+//    @Override
+//    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+//        // TODO: 19.09.2022 tmp
+//        System.out.println("parameter : " + parameter);
+//    }
+
 
     @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        // TODO: 19.09.2022 tmp
-        System.out.println("parameter : " + parameter);
+    public void beforeEnter(BeforeEnterEvent event) {
+        // TODO: 21.09.2022 ???
+        Optional<String> id = event.getRouteParameters().get("ID");
+        System.out.println("id: " + id);
+    }
+
+    @Override
+    public void beforeLeave(BeforeLeaveEvent event) {
+        System.out.println("leaveing");
     }
 
     @PostConstruct
