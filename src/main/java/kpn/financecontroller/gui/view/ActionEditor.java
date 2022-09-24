@@ -13,30 +13,22 @@ import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import java.util.Optional;
 
+// TODO: 24.09.2022 add disconnect button which disconnect connection between algorithm and uuid
 @Scope("prototype")
-//@Route(value = "editor") // TODO: 21.09.2022 del
-@Route(value = "editor/:ID?")
+@Route(value = "editor/:UUID?")
 @PermitAll
 public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver {
-
-    // TODO: 21.09.2022 del
-//    @Override
-//    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-//        // TODO: 19.09.2022 tmp
-//        System.out.println("parameter : " + parameter);
-//    }
-
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         // TODO: 21.09.2022 ???
-        Optional<String> id = event.getRouteParameters().get("ID");
+        Optional<String> id = event.getRouteParameters().get("UUID");
         System.out.println("id: " + id);
     }
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
-        System.out.println("leaveing");
+        System.out.println("leaving");
     }
 
     @PostConstruct

@@ -9,11 +9,10 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.RouteParameters;
-import com.vaadin.flow.router.Router;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
+import kpn.financecontroller.gui.generators.RouterLinkGenerator;
 import kpn.financecontroller.gui.view.*;
 import kpn.financecontroller.gui.view.ByTagStatistic;
 import kpn.financecontroller.security.SecurityService;
@@ -47,23 +46,19 @@ final public class MainLayout extends AppLayout {
     @AllArgsConstructor
     public static class MenuItemInfo {
         private String text;
-        private String iconClass;
         private Class<? extends Component> view;
     }
 
     private final H1 viewTitle = new H1();
     private final SecurityService securityService;
     private final ClassAliasGenerator classAliasGenerator;
+    private final RouterLinkGenerator<Class<? extends Component>> routerLinkGenerator;
 
     @Autowired
-    public MainLayout(SecurityService securityService, ClassAliasGenerator classAliasGenerator) {
-        // TODO: 19.09.2022 del
-        System.out.println("MainLayout constructor");
-        VaadinSession session = VaadinSession.getCurrent();
-        System.out.println(session);
-
+    public MainLayout(SecurityService securityService, ClassAliasGenerator classAliasGenerator, RouterLinkGenerator<Class<? extends Component>> routerLinkGenerator) {
         this.securityService = securityService;
         this.classAliasGenerator = classAliasGenerator;
+        this.routerLinkGenerator = routerLinkGenerator;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerComponent());
@@ -146,40 +141,12 @@ final public class MainLayout extends AppLayout {
     }
 
     private MenuItemInfo createMenuItemInfo(Class<? extends Component> type) {
-//        System.out.println("type: " + type);// TODO: 21.09.2022 del
         String text = classAliasGenerator.generate(type);
-//        System.out.println("text: " + text); // TODO: 21.09.2022 del
-        return new MenuItemInfo(text, "la la-globe", type);
+        return new MenuItemInfo(text, type);
     }
 
     private RouterLink createLink(MenuItemInfo menuItemInfo) {
-        RouterLink link = new RouterLink();
-        link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
-
-        // TODO: 21.09.2022 del
-//        link.setRoute(menuItemInfo.getView());
-
-        if (menuItemInfo.getView() != ActionEditor.class){
-            link.setRoute(menuItemInfo.getView());
-        } else {
-            // TODO: 21.09.2022 random edition session 
-            link = new RouterLink("editor", menuItemInfo.getView(), new RouteParameters("ID", "123"));
-            link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
-//            Router router = new Router();
-//            link.setRoute(router, menuItemInfo.getView());
-        }
-
-        Span icon = new Span();
-        icon.addClassNames("me-s", "text-l");
-        if (!menuItemInfo.getIconClass().isEmpty()) {
-            icon.addClassNames(menuItemInfo.getIconClass());
-        }
-
-        Span text = new Span(getTranslation(menuItemInfo.getText()));
-        text.addClassNames("font-medium", "text-s");
-
-        link.add(icon, text);
-        return link;
+        return routerLinkGenerator.generate(menuItemInfo.getView());
     }
 
     private Component createFooter() {
