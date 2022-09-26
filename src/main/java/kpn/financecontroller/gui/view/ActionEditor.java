@@ -1,5 +1,6 @@
 package kpn.financecontroller.gui.view;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @Route(value = "editor/:UUID?")
 @PermitAll
 public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver {
+    private final Button homeButton = new Button(getTranslation("gui.button.home"));
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -48,7 +50,6 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         openButton.addClickListener(e -> processRunButtonClick());
         Button disconnectButton = new Button(getTranslation("gui.button.disconnect"));
         disconnectButton.addClickListener(e -> processDisconnectButtonClick());
-        Button homeButton = new Button(getTranslation("gui.button.home"));
         homeButton.addClickListener(e -> processHomeButtonClick());
 
         HorizontalLayout toolbar = new HorizontalLayout(
@@ -93,6 +94,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processHomeButtonClick() {
-        // TODO: 26.09.2022 impl
+        homeButton.getUI().ifPresent(ui -> {
+            ui.navigate(PaymentView.class);
+        });
     }
 }
