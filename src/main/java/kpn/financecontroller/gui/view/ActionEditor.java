@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import java.util.Optional;
 
-// TODO: 24.09.2022 add disconnect button which disconnect connection between algorithm and uuid
 @Scope("prototype")
 @Route(value = "editor/:UUID?")
 @PermitAll
@@ -28,6 +27,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
+        // TODO: 26.09.2022 del
         System.out.println("leaving");
     }
 
@@ -46,12 +46,18 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         openButton.addClickListener(e -> processSaveAsButtonClick());
         Button runButton = new Button(getTranslation("gui.button.run"));
         openButton.addClickListener(e -> processRunButtonClick());
+        Button disconnectButton = new Button(getTranslation("gui.button.disconnect"));
+        disconnectButton.addClickListener(e -> processDisconnectButtonClick());
+        Button homeButton = new Button(getTranslation("gui.button.home"));
+        homeButton.addClickListener(e -> processHomeButtonClick());
 
         HorizontalLayout toolbar = new HorizontalLayout(
+                homeButton,
                 openButton,
                 saveButton,
                 saveAsButton,
-                runButton
+                runButton,
+                disconnectButton
         );
         toolbar.addClassName("toolbar");
 
@@ -80,5 +86,13 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     private void processRunButtonClick() {
         // TODO: 19.09.2022 impl
+    }
+
+    private void processDisconnectButtonClick() {
+        // TODO: 26.09.2022 impl
+    }
+
+    private void processHomeButtonClick() {
+        // TODO: 26.09.2022 impl
     }
 }
