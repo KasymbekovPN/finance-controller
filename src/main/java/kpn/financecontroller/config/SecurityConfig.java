@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+// TODO: 27.09.2022 use not deprecated
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {

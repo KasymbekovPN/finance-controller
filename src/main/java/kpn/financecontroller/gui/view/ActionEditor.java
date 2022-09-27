@@ -1,12 +1,15 @@
 package kpn.financecontroller.gui.view;
 
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import org.springframework.context.annotation.Scope;
 
@@ -74,7 +77,21 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processOpenButtonClick() {
-        // TODO: 19.09.2022 impl
+        // TODO: 19.09.2022 del
+        System.out.println("click open");
+
+        Dialog dialog = new Dialog();
+        dialog.setCloseOnEsc(true);
+        dialog.setCloseOnOutsideClick(true);
+
+//        dialog.setHeaderTitle("Choose algorithm...");
+
+//        VerticalLayout body = new VerticalLayout();
+        TextField filter = new TextField("Filter", "Type filter...");
+//        body.add(filter, new Hr());
+
+        dialog.add(filter);
+        dialog.open();
     }
 
     private void processSaveButtonClick() {
