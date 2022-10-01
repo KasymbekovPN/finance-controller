@@ -54,29 +54,4 @@ public class OpenActionDialog extends Dialog {
     public void addListValueChangeListener(HasValue.ValueChangeListener<? super AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action>> listener){
         list.addValueChangeListener(listener);
     }
-
-
-    // TODO: 28.09.2022 del
-//        openDialog.setCloseOnOutsideClick(true);
-//        openDialog.setCloseOnEsc(true);
-//
-//        openDialog.setHeaderTitle(getTranslation("gui.title.choose-action"));
-//
-//        TextField filter = new TextField(getTranslation("gui.label.filter"), getTranslation("gui.placeHolder.type-filter"));
-//        openDialogList.setItemLabelGenerator(new ItemLabelGenerator<Action>() {
-//            @Override
-//            public String apply(Action item) {
-//                return item.getDescription();
-//            }
-//        });
-//
-//        openDialog.add(filter, openDialogList);
-//
-//        Button cancelButton = new Button(getTranslation("gui.button.cancel"), e -> openDialog.close());
-//        cancelButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
-//
-//        // TODO: 28.09.2022 add handler
-//        Button openButton = new Button(getTranslation("gui.button.open"), e -> processOpenDialogOpenButton());
-//
-//        openDialog.getFooter().add(cancelButton, openButton);
 }
