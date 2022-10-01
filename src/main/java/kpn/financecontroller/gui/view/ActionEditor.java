@@ -3,9 +3,6 @@ package kpn.financecontroller.gui.view;
 import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,27 +10,28 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import kpn.financecontroller.data.domain.Action;
+import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: 28.09.2022 add handling of filter string
+@Slf4j
 @Scope("prototype")
 @Route(value = "editor/:UUID?")
 @PermitAll
 public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver {
+    private final OpenDialogHandler openDialogHandler = new OpenDialogHandler();
+
     private final Button homeButton = new Button(getTranslation("gui.button.home"));
 
-    // TODO: 28.09.2022 to special class
-    private final Dialog openDialog = new Dialog();
-    private final ListBox<Action> openDialogList = new ListBox<>();
+    private final OpenActionDialog openDialog = new OpenActionDialog();
 
     @Autowired
     private Service<Long, Action, Predicate, Result<List<Action>>> actionService;
@@ -96,37 +94,20 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void configOpenDialog() {
-        openDialog.setCloseOnOutsideClick(true);
-        openDialog.setCloseOnEsc(true);
-
-        openDialog.setHeaderTitle(getTranslation("gui.title.choose-action"));
-
-        TextField filter = new TextField(getTranslation("gui.label.filter"), getTranslation("gui.placeHolder.type-filter"));
-        openDialogList.setItemLabelGenerator(new ItemLabelGenerator<Action>() {
-            @Override
-            public String apply(Action item) {
-                return item.getDescription();
-            }
-        });
-
-        openDialog.add(filter, openDialogList);
-
-        Button cancelButton = new Button(getTranslation("gui.button.cancel"), e -> openDialog.close());
-        cancelButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
-
-        // TODO: 28.09.2022 add handler
-        Button openButton = new Button(getTranslation("gui.button.open"), e -> processOpenDialogOpenButton());
-
-        openDialog.getFooter().add(cancelButton, openButton);
+        openDialog.addCancelButtonClickListener(openDialogHandler::handleClosing);
+        openDialog.addOpenButtonClickListener(openDialogHandler::handleOpening);
+        openDialog.addFilterValueChangeListener(openDialogHandler::handleFilterChanging);
+        openDialog.addListValueChangeListener(openDialogHandler::handleListChanging);
     }
 
     private void processOpenButtonClick() {
         // TODO: 19.09.2022 del
         System.out.println("click open");
 
+        // TODO: 28.09.2022 del
         Result<List<Action>> result = actionService.loader().all();
         if (result.isSuccess()){
-            openDialogList.setItems(result.getValue());
+            openDialog.setItems(result.getValue());
             openDialog.open();
         } else {
             // TODO: 28.09.2022 notice about error
@@ -156,10 +137,28 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         });
     }
 
-    private void processOpenDialogOpenButton() {
-        // TODO: 28.09.2022 del
-        System.out.println("processOpenDialogOpenButton");
+    private class OpenDialogHandler {
+        public void handleClosing(ClickEvent<Button> buttonClickEvent) {
+            log.info("closing"); // TODO: 01.10.2022 ???
+            openDialog.close();
+        }
 
-        // TODO: 28.09.2022 impl
+        public void handleOpening(ClickEvent<Button> buttonClickEvent) {
+            log.info("opening"); // TODO: 01.10.2022  ???
+
+            // TODO: 01.10.2022 impl
+        }
+
+        public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+            log.info("filter changing {} -> {}", event.getOldValue(), event.getValue()); // TODO: 01.10.2022 ???
+
+            // TODO: 01.10.2022 impl
+        }
+
+        public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {
+            log.info("list value changing {} -> {}", event.getOldValue(), event.getValue());
+
+            // TODO: 01.10.2022 impl
+        }
     }
 }
