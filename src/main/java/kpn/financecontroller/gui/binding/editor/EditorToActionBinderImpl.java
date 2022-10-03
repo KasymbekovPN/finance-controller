@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public final class EditorToActionBinderImpl implements EditorToActionBinder<String, Integer> {
+public final class EditorToActionBinderImpl implements EditorToActionBinder<String, Long> {
     private final Map<String, Item> binding = new HashMap<>();
-    private final Map<Integer, String> byE = new HashMap<>();
+    private final Map<Long, String> byE = new HashMap<>();
 
     @Override
     public synchronized void registerKey(String key) {
@@ -34,16 +34,17 @@ public final class EditorToActionBinderImpl implements EditorToActionBinder<Stri
     }
 
     @Override
-    public synchronized boolean bind(String key, Integer e) {
+    public synchronized boolean bind(String key, Long e) {
         if (binding.containsKey(key) && binding.get(key).isEmpty() && !byE.containsKey(e)){
             binding.put(key, new Item(e));
+            byE.put(e, key);
             return true;
         }
         return false;
     }
 
     @Override
-    public synchronized void unbind(Integer e) {
+    public synchronized void unbind(Long e) {
         if (byE.containsKey(e)){
             String key = byE.get(e);
             binding.remove(key);
@@ -52,7 +53,7 @@ public final class EditorToActionBinderImpl implements EditorToActionBinder<Stri
     }
 
     @Override
-    public synchronized boolean checkBinding(Integer e) {
+    public synchronized boolean checkBinding(Long e) {
         return byE.containsKey(e);
     }
 
@@ -60,7 +61,7 @@ public final class EditorToActionBinderImpl implements EditorToActionBinder<Stri
     @EqualsAndHashCode
     private static final class Item {
         @Getter
-        private final Integer value;
+        private final Long value;
 
         boolean isEmpty(){
             return value == null;

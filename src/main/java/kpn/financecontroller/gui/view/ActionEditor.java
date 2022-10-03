@@ -33,14 +33,16 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     private final Button homeButton = new Button(getTranslation("gui.button.home"));
 
     private final OpenActionDialog openDialog = new OpenActionDialog();
+    private final TextArea editor = new TextArea();
 
     @Autowired
     private Service<Long, Action, Predicate, Result<List<Action>>> actionService;
     @Autowired
-    private EditorToActionBinder<String, Integer> binder;
+    private EditorToActionBinder<String, Long> binder;
 
     private String id;
     private boolean toHome;
+    private Action selectedAction;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -48,13 +50,12 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         log.info("UUID: {}", maybeId);
 
         if (maybeId.isEmpty() || binder.checkKey(maybeId.get())){
-            log.warn("Key {} is registered or empty", maybeId); // TODO: 01.10.2022 ???
+            log.warn("Key {} is registered or empty", maybeId);
             toHome = true;
         } else {
             id = maybeId.get();
             binder.registerKey(id);
-
-            log.info("Key {} is set", id); // TODO: 01.10.2022 ???
+            log.info("Key {} is set", id);
         }
     }
 
@@ -70,7 +71,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
-        log.info("Leaving..."); // TODO: 03.10.2022 ???
+        log.info("Leaving...");
         binder.unregister(id);
     }
 
@@ -108,11 +109,10 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private Component getTextArea() {
-        TextArea textArea = new TextArea();
-        textArea.setReadOnly(false);
-        textArea.setHeight(90.0f, Unit.PERCENTAGE);
-        textArea.setWidthFull();
-        return textArea;
+        editor.setReadOnly(false);
+        editor.setHeight(90.0f, Unit.PERCENTAGE);
+        editor.setWidthFull();
+        return editor;
     }
 
     private void configOpenDialog() {
@@ -123,15 +123,15 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processOpenButtonClick() {
-        log.info("Open button is pressed"); // TODO: 03.10.2022 ???
+        log.info("Open button is pressed");
 
         Result<List<Action>> result = actionService.loader().all();
         if (result.isSuccess()){
             openDialog.setItems(result.getValue());
             openDialog.open();
         } else {
+            log.warn("{}", result.getSeed());
             // TODO: 28.09.2022 notification
-            System.out.println(result.getSeed());
         }
     }
 
@@ -152,7 +152,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processHomeButtonClick() {
-        log.info("Home button is pressed"); // TODO: 03.10.2022 ???
+        log.info("Home button is pressed");
         homeButton.getUI().ifPresent(ui -> {
             ui.navigate(PaymentView.class);
         });
@@ -160,26 +160,35 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     private class OpenDialogHandler {
         public void handleClosing(ClickEvent<Button> buttonClickEvent) {
-            log.info("closing"); // TODO: 01.10.2022 ???
+            log.info("closing");
             openDialog.close();
         }
 
         public void handleOpening(ClickEvent<Button> buttonClickEvent) {
-            log.info("opening"); // TODO: 01.10.2022  ???
-
-            // TODO: 01.10.2022 impl
+            log.info("opening");
+            if (selectedAction != null){
+                if (!binder.checkBinding(selectedAction.getId())){
+                    binder.bind(id, selectedAction.getId());
+                    editor.setValue(selectedAction.getAlgorithm());
+                } else {
+                    log.info("Action is already being edited");
+                    // TODO: 03.10.2022 notification
+                }
+            } else {
+                log.warn("Action is not selected");
+                // TODO: 03.10.2022 notification
+            }
+            openDialog.close();
         }
 
         public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
-            log.info("filter changing {} -> {}", event.getOldValue(), event.getValue()); // TODO: 01.10.2022 ???
-
+            log.info("filter changing {} -> {}", event.getOldValue(), event.getValue());
             // TODO: 01.10.2022 impl
         }
 
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {
             log.info("list value changing {} -> {}", event.getOldValue(), event.getValue());
-
-            // TODO: 01.10.2022 impl
+            selectedAction = event.getValue();
         }
     }
 }

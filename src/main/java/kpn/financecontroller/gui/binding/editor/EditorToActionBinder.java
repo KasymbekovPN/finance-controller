@@ -1,5 +1,6 @@
 package kpn.financecontroller.gui.binding.editor;
 
+// TODO: 03.10.2022 if refactoring - method must be atomic
 public interface EditorToActionBinder<K, E> {
     void registerKey(K key);
     void unregister(K key);

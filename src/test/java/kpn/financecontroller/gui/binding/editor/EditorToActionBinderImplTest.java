@@ -39,14 +39,14 @@ class EditorToActionBinderImplTest {
     void shouldCheckBindingWithoutBinding() {
         EditorToActionBinderImpl binder = new EditorToActionBinderImpl();
 
-        int e = new Random().nextInt();
+        long e = (long) new Random().nextInt();
         assertThat(binder.checkBinding(e)).isFalse();
     }
 
     @Test
     void shouldCheckBinding() {
         EditorToActionBinderImpl binder = new EditorToActionBinderImpl();
-        int e = new Random().nextInt();
+        long e = (long) new Random().nextInt();
         binder.registerKey(KEY);
 
         assertThat(binder.bind(KEY, e)).isTrue();
@@ -55,7 +55,7 @@ class EditorToActionBinderImplTest {
     @Test
     void shouldCheckBindingIfKeyAbsent() {
         EditorToActionBinderImpl binder = new EditorToActionBinderImpl();
-        int e = new Random().nextInt();
+        long e = (long) new Random().nextInt();
 
         assertThat(binder.bind(KEY, e)).isFalse();
     }
@@ -64,8 +64,8 @@ class EditorToActionBinderImplTest {
     void shouldCheckBindingIfKeyBusy() {
         EditorToActionBinderImpl binder = new EditorToActionBinderImpl();
         binder.registerKey(KEY);
-        binder.bind(KEY, new Random().nextInt());
-        int e = new Random().nextInt();
+        binder.bind(KEY, (long) new Random().nextInt());
+        long e = (long) new Random().nextInt();
 
         assertThat(binder.bind(KEY, e)).isFalse();
     }
@@ -74,7 +74,7 @@ class EditorToActionBinderImplTest {
     void shouldCheckAfterUnbinding() {
         EditorToActionBinderImpl binder = new EditorToActionBinderImpl();
         binder.registerKey(KEY);
-        int e = new Random().nextInt();
+        long e = (long) new Random().nextInt();
         binder.bind(KEY, e);
         binder.unbind(e);
 
