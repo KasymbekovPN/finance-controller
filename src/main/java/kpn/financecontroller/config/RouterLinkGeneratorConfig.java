@@ -3,6 +3,8 @@ package kpn.financecontroller.config;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.router.RouterLink;
+import kpn.financecontroller.gui.binding.editor.EditorToActionBinder;
+import kpn.financecontroller.gui.binding.editor.EditorToActionBinderImpl;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.generators.RouterLinkGeneratorImpl;
 import kpn.financecontroller.gui.view.ActionEditor;
@@ -32,7 +34,8 @@ public class RouterLinkGeneratorConfig {
     private static class ActionEditorCreator implements Function<Class<? extends Component>, RouterLink> {
         @Override
         public RouterLink apply(Class<? extends Component> aClass) {
-            return new RouterLink("", aClass, new RouteParameters("UUID", String.valueOf(UUID.randomUUID())));
+            String key = String.valueOf(UUID.randomUUID());
+            return new RouterLink("", aClass, new RouteParameters("UUID", key));
         }
     }
 }

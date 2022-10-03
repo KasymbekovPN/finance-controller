@@ -10,6 +10,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import kpn.financecontroller.data.domain.Action;
+import kpn.financecontroller.gui.binding.editor.EditorToActionBinder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
@@ -26,7 +27,7 @@ import java.util.Optional;
 @Scope("prototype")
 @Route(value = "editor/:UUID?")
 @PermitAll
-public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver {
+public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver, AfterNavigationObserver {
     private final OpenDialogHandler openDialogHandler = new OpenDialogHandler();
 
     private final Button homeButton = new Button(getTranslation("gui.button.home"));
@@ -35,21 +36,42 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     @Autowired
     private Service<Long, Action, Predicate, Result<List<Action>>> actionService;
+    @Autowired
+    private EditorToActionBinder<String, Integer> binder;
 
+    private String id;
+    private boolean toHome;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        // TODO: 21.09.2022 ???
-        Optional<String> id = event.getRouteParameters().get("UUID");
-        System.out.println("id: " + id);
+        Optional<String> maybeId = event.getRouteParameters().get("UUID");
+        log.info("UUID: {}", maybeId);
 
-        // TODO: 28.09.2022 if id is empty then navigate to Route("")
+        if (maybeId.isEmpty() || binder.checkKey(maybeId.get())){
+            log.warn("Key {} is registered or empty", maybeId); // TODO: 01.10.2022 ???
+            toHome = true;
+        } else {
+            id = maybeId.get();
+            binder.registerKey(id);
+
+            log.info("Key {} is set", id); // TODO: 01.10.2022 ???
+        }
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+        if (toHome){
+            log.info("Navigate to home...");
+            getUI().ifPresent(ui -> {ui.navigate(PaymentView.class);});
+
+            // TODO: 03.10.2022 notification
+        }
     }
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
-        // TODO: 26.09.2022 del
-        System.out.println("leaving");
+        log.info("Leaving..."); // TODO: 03.10.2022 ???
+        binder.unregister(id);
     }
 
     @PostConstruct
@@ -101,16 +123,14 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processOpenButtonClick() {
-        // TODO: 19.09.2022 del
-        System.out.println("click open");
+        log.info("Open button is pressed"); // TODO: 03.10.2022 ???
 
-        // TODO: 28.09.2022 del
         Result<List<Action>> result = actionService.loader().all();
         if (result.isSuccess()){
             openDialog.setItems(result.getValue());
             openDialog.open();
         } else {
-            // TODO: 28.09.2022 notice about error
+            // TODO: 28.09.2022 notification
             System.out.println(result.getSeed());
         }
     }
@@ -132,6 +152,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processHomeButtonClick() {
+        log.info("Home button is pressed"); // TODO: 03.10.2022 ???
         homeButton.getUI().ifPresent(ui -> {
             ui.navigate(PaymentView.class);
         });
