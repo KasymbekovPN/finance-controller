@@ -7,6 +7,7 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 05.10.2022 del
 class EditorToActionBinderImplTest {
     private static final String KEY = "key";
 

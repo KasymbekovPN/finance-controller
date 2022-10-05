@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: 05.10.2022 del
 @Component
 public final class EditorToActionBinderImpl implements EditorToActionBinder<String, Long> {
     private final Map<String, Item> binding = new HashMap<>();
