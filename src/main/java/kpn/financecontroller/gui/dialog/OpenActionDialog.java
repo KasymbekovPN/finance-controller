@@ -10,7 +10,7 @@ import kpn.financecontroller.data.domain.Action;
 
 import java.util.Collection;
 
-public class OpenActionDialog extends Dialog {
+public final class OpenActionDialog extends Dialog {
     private final ListBox<Action> list = new ListBox<>();
     private final Button cancelButton = new Button(getTranslation("gui.button.cancel"));
     private final Button openButton = new Button(getTranslation("gui.button.open"));

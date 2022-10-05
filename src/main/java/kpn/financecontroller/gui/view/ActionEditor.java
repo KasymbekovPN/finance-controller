@@ -12,6 +12,7 @@ import com.vaadin.flow.router.*;
 import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.gui.binding.editor.EditorToActionBinder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
+import kpn.financecontroller.gui.dialog.SaveActionDialog;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +30,12 @@ import java.util.Optional;
 @PermitAll
 public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver, AfterNavigationObserver {
     private final OpenDialogHandler openDialogHandler = new OpenDialogHandler();
+    private final SaveDialogHandler saveDialogHandler = new SaveDialogHandler();
 
     private final Button homeButton = new Button(getTranslation("gui.button.home"));
 
     private final OpenActionDialog openDialog = new OpenActionDialog();
+    private final SaveActionDialog saveDialog = new SaveActionDialog();
     private final TextArea editor = new TextArea();
 
     @Autowired
@@ -80,17 +83,18 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         setSizeFull();
         add(getToolBar(), getTextArea());
         configOpenDialog();
+        configSaveDialog();
     }
 
     private Component getToolBar() {
         Button openButton = new Button(getTranslation("gui.button.open"));
         openButton.addClickListener(e -> processOpenButtonClick());
         Button saveButton = new Button(getTranslation("gui.button.save"));
-        openButton.addClickListener(e -> processSaveButtonClick());
+        saveButton.addClickListener(e -> processSaveButtonClick());
         Button saveAsButton = new Button(getTranslation("gui.button.saveAs"));
-        openButton.addClickListener(e -> processSaveAsButtonClick());
+        saveAsButton.addClickListener(e -> processSaveAsButtonClick());
         Button runButton = new Button(getTranslation("gui.button.run"));
-        openButton.addClickListener(e -> processRunButtonClick());
+        runButton.addClickListener(e -> processRunButtonClick());
         Button disconnectButton = new Button(getTranslation("gui.button.disconnect"));
         disconnectButton.addClickListener(e -> processDisconnectButtonClick());
         homeButton.addClickListener(e -> processHomeButtonClick());
@@ -122,6 +126,11 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         openDialog.addListValueChangeListener(openDialogHandler::handleListChanging);
     }
 
+    private void configSaveDialog() {
+        saveDialog.addCancelButtonClickListener(saveDialogHandler::handleClosing);
+        saveDialog.addSaveButtonClickListener(saveDialogHandler::handleSaving);
+    }
+
     private void processOpenButtonClick() {
         log.info("Open button is pressed");
 
@@ -136,7 +145,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processSaveButtonClick() {
-        // TODO: 19.09.2022 impl
+        log.info("Save button is pressed");
+        saveDialog.open();
     }
 
     private void processSaveAsButtonClick() {
@@ -189,6 +199,26 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {
             log.info("list value changing {} -> {}", event.getOldValue(), event.getValue());
             selectedAction = event.getValue();
+        }
+    }
+
+    private class SaveDialogHandler {
+
+        public void handleClosing(ClickEvent<Button> buttonClickEvent) {
+            log.info("Closing");
+            closeAndUnbind();
+        }
+
+        public void handleSaving(ClickEvent<Button> buttonClickEvent) {
+            log.info("Saving");
+            selectedAction.setAlgorithm(editor.getValue());
+            actionService.saver().save(selectedAction);
+            closeAndUnbind();
+        }
+
+        private void closeAndUnbind() {
+            binder.unbind(selectedAction.getId());
+            saveDialog.close();
         }
     }
 }
