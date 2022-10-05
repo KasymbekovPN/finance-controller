@@ -10,13 +10,14 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import kpn.financecontroller.data.domain.Action;
-import kpn.financecontroller.gui.binding.editor.EditorToActionBinder;
+import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.dialog.SaveActionDialog;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
@@ -41,7 +42,11 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     @Autowired
     private Service<Long, Action, Predicate, Result<List<Action>>> actionService;
     @Autowired
-    private EditorToActionBinder<String, Long> binder;
+    @Qualifier("uuidToEditorBinder")
+    private Binder<String, Integer> uuidToEditorBinder;
+    @Autowired
+    @Qualifier("actionIdToUuidBinder")
+    private Binder<Long, String> actionIdToUuidBinder;
 
     private String id;
     private boolean toHome;
@@ -52,12 +57,11 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         Optional<String> maybeId = event.getRouteParameters().get("UUID");
         log.info("UUID: {}", maybeId);
 
-        if (maybeId.isEmpty() || binder.checkKey(maybeId.get())){
+        if (maybeId.isEmpty() || !uuidToEditorBinder.bind(maybeId.get(), this.hashCode())){
             log.warn("Key {} is registered or empty", maybeId);
             toHome = true;
         } else {
             id = maybeId.get();
-            binder.registerKey(id);
             log.info("Key {} is set", id);
         }
     }
@@ -75,7 +79,10 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
         log.info("Leaving...");
-        binder.unregister(id);
+        uuidToEditorBinder.unbind(id);
+        if (selectedAction != null){
+            actionIdToUuidBinder.unbind(selectedAction.getId());
+        }
     }
 
     @PostConstruct
@@ -177,8 +184,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         public void handleOpening(ClickEvent<Button> buttonClickEvent) {
             log.info("opening");
             if (selectedAction != null){
-                if (!binder.checkBinding(selectedAction.getId())){
-                    binder.bind(id, selectedAction.getId());
+                if (actionIdToUuidBinder.bind(selectedAction.getId(), id)){
                     editor.setValue(selectedAction.getAlgorithm());
                 } else {
                     log.info("Action is already being edited");
@@ -198,6 +204,9 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {
             log.info("list value changing {} -> {}", event.getOldValue(), event.getValue());
+            if (selectedAction != null){
+                actionIdToUuidBinder.unbind(selectedAction.getId());
+            }
             selectedAction = event.getValue();
         }
     }
@@ -206,18 +215,17 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleClosing(ClickEvent<Button> buttonClickEvent) {
             log.info("Closing");
-            closeAndUnbind();
+            closeDialog();
         }
 
         public void handleSaving(ClickEvent<Button> buttonClickEvent) {
             log.info("Saving");
             selectedAction.setAlgorithm(editor.getValue());
             actionService.saver().save(selectedAction);
-            closeAndUnbind();
+            closeDialog();
         }
 
-        private void closeAndUnbind() {
-            binder.unbind(selectedAction.getId());
+        private void closeDialog() {
             saveDialog.close();
         }
     }
