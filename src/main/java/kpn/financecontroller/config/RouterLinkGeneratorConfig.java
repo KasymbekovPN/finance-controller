@@ -3,8 +3,6 @@ package kpn.financecontroller.config;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.router.RouterLink;
-import kpn.financecontroller.gui.binding.editor.EditorToActionBinder;
-import kpn.financecontroller.gui.binding.editor.EditorToActionBinderImpl;
 import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.generators.RouterLinkGeneratorImpl;
 import kpn.financecontroller.gui.view.ActionEditor;

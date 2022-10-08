@@ -108,13 +108,14 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         HorizontalLayout toolbar = new HorizontalLayout(
                 homeButton,
+                disconnectButton,
                 openButton,
                 saveButton,
                 saveAsButton,
-                runButton,
-                disconnectButton
+                runButton
         );
         toolbar.addClassName("toolbar");
+        toolbar.setWidthFull();
 
         return toolbar;
     }
@@ -165,7 +166,12 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processDisconnectButtonClick() {
-        // TODO: 26.09.2022 impl
+        log.info("Disconnection");
+        editor.setValue("");
+        if (selectedAction != null){
+            actionIdToUuidBinder.unbind(selectedAction.getId());
+            selectedAction = null;
+        }
     }
 
     private void processHomeButtonClick() {
