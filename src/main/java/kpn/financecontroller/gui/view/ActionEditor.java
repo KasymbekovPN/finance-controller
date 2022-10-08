@@ -3,6 +3,7 @@ package kpn.financecontroller.gui.view;
 import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,6 +14,7 @@ import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.dialog.SaveActionDialog;
+import kpn.financecontroller.gui.dialog.SaveAsActionDialog;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +34,13 @@ import java.util.Optional;
 public final class ActionEditor extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver, AfterNavigationObserver {
     private final OpenDialogHandler openDialogHandler = new OpenDialogHandler();
     private final SaveDialogHandler saveDialogHandler = new SaveDialogHandler();
+    private final SaveAsDialogHandler saveAsDialogHandler = new SaveAsDialogHandler();
 
     private final Button homeButton = new Button(getTranslation("gui.button.home"));
 
     private final OpenActionDialog openDialog = new OpenActionDialog();
     private final SaveActionDialog saveDialog = new SaveActionDialog();
+    private final SaveAsActionDialog saveAsDialog = new SaveAsActionDialog();
     private final TextArea editor = new TextArea();
 
     @Autowired
@@ -91,6 +95,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         add(getToolBar(), getTextArea());
         configOpenDialog();
         configSaveDialog();
+        configSaveAsDialog();
     }
 
     private Component getToolBar() {
@@ -128,15 +133,22 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void configOpenDialog() {
-        openDialog.addCancelButtonClickListener(openDialogHandler::handleClosing);
-        openDialog.addOpenButtonClickListener(openDialogHandler::handleOpening);
+        openDialog.addCancelButtonClickListener(openDialogHandler::handleCloseButtonClick);
+        openDialog.addOpenButtonClickListener(openDialogHandler::handleOpenButtonClick);
         openDialog.addFilterValueChangeListener(openDialogHandler::handleFilterChanging);
         openDialog.addListValueChangeListener(openDialogHandler::handleListChanging);
     }
 
     private void configSaveDialog() {
-        saveDialog.addCancelButtonClickListener(saveDialogHandler::handleClosing);
-        saveDialog.addSaveButtonClickListener(saveDialogHandler::handleSaving);
+        saveDialog.addCancelButtonClickListener(saveDialogHandler::handleCloseButtonClick);
+        saveDialog.addSaveButtonClickListener(saveDialogHandler::handleSaveButtonClick);
+    }
+
+    private void configSaveAsDialog() {
+        saveAsDialog.addCancelButtonClickListener(saveAsDialogHandler::handleCloseButtonClick);
+        saveAsDialog.addSaveButtonClickListener(saveAsDialogHandler::handleSaveButtonClick);
+        saveAsDialog.addDescriptionValueChangeListener(saveAsDialogHandler::handleDescriptionChanging);
+        saveAsDialog.addDialogCloseActionListener(saveAsDialogHandler::handleClosing);
     }
 
     private void processOpenButtonClick() {
@@ -158,7 +170,13 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private void processSaveAsButtonClick() {
-        // TODO: 19.09.2022 impl
+        log.info("Save as button is pressed");
+        if (selectedAction != null){
+            saveAsDialog.open();
+        } else {
+            // TODO: 08.10.2022 notification
+            log.warn("Action is not selected");
+        }
     }
 
     private void processRunButtonClick() {
@@ -182,12 +200,13 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private class OpenDialogHandler {
-        public void handleClosing(ClickEvent<Button> buttonClickEvent) {
+
+        public void handleCloseButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("closing");
             openDialog.close();
         }
 
-        public void handleOpening(ClickEvent<Button> buttonClickEvent) {
+        public void handleOpenButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("opening");
             if (selectedAction != null){
                 if (actionIdToUuidBinder.bind(selectedAction.getId(), id)){
@@ -219,20 +238,78 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     private class SaveDialogHandler {
 
-        public void handleClosing(ClickEvent<Button> buttonClickEvent) {
+        public void handleCloseButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("Closing");
             closeDialog();
         }
 
-        public void handleSaving(ClickEvent<Button> buttonClickEvent) {
+        public void handleSaveButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("Saving");
-            selectedAction.setAlgorithm(editor.getValue());
-            actionService.saver().save(selectedAction);
+            if (selectedAction != null){
+                selectedAction.setAlgorithm(editor.getValue());
+                actionService.saver().save(selectedAction);
+            } else {
+                log.warn("Action is not selected");
+                // TODO: 08.10.2022 notification
+            }
             closeDialog();
         }
 
         private void closeDialog() {
             saveDialog.close();
+        }
+    }
+
+    private class SaveAsDialogHandler {
+        private String description;
+
+        public void handleCloseButtonClick(ClickEvent<Button> buttonClickEvent) {
+            log.info("Close button is pressed");
+            handleOnClosing();
+        }
+
+        public void handleSaveButtonClick(ClickEvent<Button> buttonClickEvent) {
+            log.info("Save button is pressed");
+            if (selectedAction != null){
+                if (description != null && !description.isEmpty()){
+                    Action newAction = new Action();
+                    newAction.setDescription(description);
+                    newAction.setAlgorithm(editor.getValue());
+
+                    Result<List<Action>> result = actionService.saver().save(newAction);
+                    if (result.isSuccess()){
+                        // TODO: 08.10.2022 use changeBinding-method
+                        actionIdToUuidBinder.unbind(selectedAction.getId());
+                        selectedAction = result.getValue().get(0);
+                        actionIdToUuidBinder.bind(selectedAction.getId(), id);
+                    } else {
+                        log.warn("Failure attempt of saving: {}", result.getSeed().getCode());
+                        // TODO: 08.10.2022 notification
+                    }
+                } else {
+                    log.warn("Description is empty");
+                    // TODO: 08.10.2022 notification
+                }
+            } else {
+                log.warn("Action is not selected");
+                // TODO: 08.10.2022 notification
+            }
+            handleOnClosing();
+        }
+
+        public void handleDescriptionChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+            log.info("Description changing: {} -> {}", event.getOldValue(), event.getValue());
+            description = event.getValue();
+        }
+
+        public void handleClosing(Dialog.DialogCloseActionEvent dialogCloseActionEvent) {
+            log.info("Closing");
+            handleOnClosing();
+        }
+
+        private void handleOnClosing() {
+            description = null;
+            saveAsDialog.close();
         }
     }
 }
