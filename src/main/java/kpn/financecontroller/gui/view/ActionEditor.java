@@ -278,10 +278,9 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
                     Result<List<Action>> result = actionService.saver().save(newAction);
                     if (result.isSuccess()){
-                        // TODO: 08.10.2022 use changeBinding-method
-                        actionIdToUuidBinder.unbind(selectedAction.getId());
-                        selectedAction = result.getValue().get(0);
-                        actionIdToUuidBinder.bind(selectedAction.getId(), id);
+                        Action savedAction = result.getValue().get(0);
+                        actionIdToUuidBinder.changeBinding(savedAction.getId(), id);
+                        selectedAction = savedAction;
                     } else {
                         log.warn("Failure attempt of saving: {}", result.getSeed().getCode());
                         // TODO: 08.10.2022 notification

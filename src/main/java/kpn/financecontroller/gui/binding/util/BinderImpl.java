@@ -25,7 +25,20 @@ public class BinderImpl<K, V> implements Binder<K, V> {
     }
 
     @Override
+    public synchronized void changeBinding(K k, V v) {
+        if (map.containsKey(k)){
+            unbind(k);
+        }
+        bind(k, v);
+    }
+
+    @Override
     public synchronized boolean isBound(K k) {
         return map.containsKey(k);
+    }
+
+    @Override
+    public boolean isBound(K k, V v) {
+        return isBound(k) && map.get(k).equals(v);
     }
 }
