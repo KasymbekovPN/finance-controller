@@ -11,6 +11,13 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.util.function.Function;
 
+// TODO: 10.10.2022 change hierarchy
+/*
+* EventBindingBPP
+** with notification
+*+* for domain
+*** ActionEvent
+ */
 public abstract class EventBindingBPP<D extends Domain<Long>> implements BeanPostProcessor {
     protected NotificationService notificationService;
     protected ViewController<D> viewController;

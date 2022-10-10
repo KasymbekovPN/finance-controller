@@ -10,11 +10,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.dialog.SaveActionDialog;
 import kpn.financecontroller.gui.dialog.SaveAsActionDialog;
+import kpn.financecontroller.gui.event.action.editor.ActionEditorNotificationEvent;
+import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -75,8 +79,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         if (toHome){
             log.info("Navigate to home...");
             getUI().ifPresent(ui -> {ui.navigate(PaymentView.class);});
-
-            // TODO: 03.10.2022 notification
+            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.uuid.not-unique", NotificationType.ERROR));
         }
     }
 
@@ -96,6 +99,11 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         configOpenDialog();
         configSaveDialog();
         configSaveAsDialog();
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 
     private Component getToolBar() {
@@ -159,14 +167,18 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
             openDialog.setItems(result.getValue());
             openDialog.open();
         } else {
-            log.warn("{}", result.getSeed());
-            // TODO: 28.09.2022 notification
+            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.click-open-button.fail", NotificationType.ERROR));
+            fireEvent(new ActionEditorNotificationEvent(this, result.getSeed().getCode(), NotificationType.ERROR));
         }
     }
 
     private void processSaveButtonClick() {
         log.info("Save button is pressed");
-        saveDialog.open();
+        if (selectedAction != null){
+            saveDialog.open();
+        } else {
+            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.click-save-button.selected-null", NotificationType.ERROR));
+        }
     }
 
     private void processSaveAsButtonClick() {
@@ -174,8 +186,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         if (selectedAction != null){
             saveAsDialog.open();
         } else {
-            // TODO: 08.10.2022 notification
-            log.warn("Action is not selected");
+            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.click-save-as-button.selected-null", NotificationType.ERROR));
         }
     }
 
@@ -208,16 +219,16 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleOpenButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("opening");
-            if (selectedAction != null){
-                if (actionIdToUuidBinder.bind(selectedAction.getId(), id)){
-                    editor.setValue(selectedAction.getAlgorithm());
-                } else {
-                    log.info("Action is already being edited");
-                    // TODO: 03.10.2022 notification
-                }
+            if (actionIdToUuidBinder.bind(selectedAction.getId(), id)){
+                editor.setValue(selectedAction.getAlgorithm());
             } else {
-                log.warn("Action is not selected");
-                // TODO: 03.10.2022 notification
+                fireEvent(
+                        new ActionEditorNotificationEvent(
+                                ActionEditor.this,
+                                "action-editor.open-dialog.action-busy",
+                                NotificationType.ERROR
+                        )
+                );
             }
             openDialog.close();
         }
@@ -245,12 +256,21 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleSaveButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("Saving");
-            if (selectedAction != null){
-                selectedAction.setAlgorithm(editor.getValue());
-                actionService.saver().save(selectedAction);
-            } else {
-                log.warn("Action is not selected");
-                // TODO: 08.10.2022 notification
+            selectedAction.setAlgorithm(editor.getValue());
+            Result<List<Action>> result = actionService.saver().save(selectedAction);
+            if (!result.isSuccess()){
+                fireEvent(
+                        new ActionEditorNotificationEvent(
+                                ActionEditor.this,
+                                "action-editor.save-dialog.saving-fail",
+                                NotificationType.ERROR)
+                );
+                fireEvent(
+                        new ActionEditorNotificationEvent(
+                                ActionEditor.this,
+                                result.getSeed().getCode(),
+                                NotificationType.ERROR)
+                );
             }
             closeDialog();
         }
@@ -270,28 +290,37 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleSaveButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("Save button is pressed");
-            if (selectedAction != null){
-                if (description != null && !description.isEmpty()){
-                    Action newAction = new Action();
-                    newAction.setDescription(description);
-                    newAction.setAlgorithm(editor.getValue());
+            if (description != null && !description.isEmpty()){
+                Action newAction = new Action();
+                newAction.setDescription(description);
+                newAction.setAlgorithm(editor.getValue());
 
-                    Result<List<Action>> result = actionService.saver().save(newAction);
-                    if (result.isSuccess()){
-                        Action savedAction = result.getValue().get(0);
-                        actionIdToUuidBinder.changeBinding(savedAction.getId(), id);
-                        selectedAction = savedAction;
-                    } else {
-                        log.warn("Failure attempt of saving: {}", result.getSeed().getCode());
-                        // TODO: 08.10.2022 notification
-                    }
+                Result<List<Action>> result = actionService.saver().save(newAction);
+                if (result.isSuccess()){
+                    Action savedAction = result.getValue().get(0);
+                    actionIdToUuidBinder.changeBinding(savedAction.getId(), id);
+                    selectedAction = savedAction;
                 } else {
-                    log.warn("Description is empty");
-                    // TODO: 08.10.2022 notification
+                    fireEvent(
+                            new ActionEditorNotificationEvent(
+                                    ActionEditor.this,
+                                    "action-editor.save-as-dialog.saving-fail",
+                                    NotificationType.ERROR)
+                    );
+                    fireEvent(
+                            new ActionEditorNotificationEvent(
+                                    ActionEditor.this,
+                                    result.getSeed().getCode(),
+                                    NotificationType.ERROR)
+                    );
                 }
             } else {
-                log.warn("Action is not selected");
-                // TODO: 08.10.2022 notification
+                fireEvent(
+                        new ActionEditorNotificationEvent(
+                                ActionEditor.this,
+                                "action-editor.save-as-dialog.description-empty",
+                                NotificationType.ERROR)
+                );
             }
             handleOnClosing();
         }
