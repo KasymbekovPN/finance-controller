@@ -9,23 +9,15 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.VaadinSession;
-import kpn.financecontroller.gui.generators.ClassAliasGenerator;
 import kpn.financecontroller.gui.generators.RouterLinkGenerator;
 import kpn.financecontroller.gui.view.*;
 import kpn.financecontroller.gui.view.ByTagStatistic;
 import kpn.financecontroller.security.SecurityService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
-final public class MainLayout extends AppLayout {
-
+public final class MainLayout extends AppLayout {
     private static final List<Class<? extends Component>> MENU_CLASSES = List.of(
             PaymentView.class,
             ProductView.class,
@@ -41,23 +33,13 @@ final public class MainLayout extends AppLayout {
             ActionEditor.class
     );
 
-    @Setter
-    @Getter
-    @AllArgsConstructor
-    public static class MenuItemInfo {
-        private String text;
-        private Class<? extends Component> view;
-    }
-
     private final H1 viewTitle = new H1();
     private final SecurityService securityService;
-    private final ClassAliasGenerator classAliasGenerator;
     private final RouterLinkGenerator<Class<? extends Component>> routerLinkGenerator;
 
     @Autowired
-    public MainLayout(SecurityService securityService, ClassAliasGenerator classAliasGenerator, RouterLinkGenerator<Class<? extends Component>> routerLinkGenerator) {
+    public MainLayout(SecurityService securityService, RouterLinkGenerator<Class<? extends Component>> routerLinkGenerator) {
         this.securityService = securityService;
-        this.classAliasGenerator = classAliasGenerator;
         this.routerLinkGenerator = routerLinkGenerator;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
@@ -66,94 +48,47 @@ final public class MainLayout extends AppLayout {
 
     private Component createHeaderContent() {
         DrawerToggle toggle = createAndCustomizeToggle();
-        customizeViewTitle();
         return createAndCustomizeHeader(toggle, viewTitle);
     }
 
     private Component createAndCustomizeHeader(DrawerToggle toggle, H1 viewTitle) {
-
         Button logout = new Button(getTranslation("gui.login.logout"), e -> securityService.logout());
 
         HorizontalLayout header = new HorizontalLayout(toggle, viewTitle, logout);
-        header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
-                "w-full");
-
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(viewTitle);
         header.setWidth("100%");
-        header.addClassNames("py-0", "px-m");
 
         return header;
     }
 
-    private void customizeViewTitle() {
-        viewTitle.addClassNames("m-0", "text-l");
-    }
-
     private DrawerToggle createAndCustomizeToggle() {
         DrawerToggle toggle = new DrawerToggle();
-        toggle.addClassName("text-secondary");
         toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         toggle.getElement().setAttribute("aria-label", "Menu toggle");
         return toggle;
     }
 
     private Component createDrawerComponent() {
-        H2 appName = createAndCustomizeAppName();
-        return createAndCustomizeSection(appName);
-    }
-
-    private H2 createAndCustomizeAppName() {
         H2 appName = new H2("FC");
-        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
-        return appName;
-    }
-    private com.vaadin.flow.component.html.Section createAndCustomizeSection(H2 appName) {
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
-                createNavigation(), createFooter());
-        section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
-        return section;
+        return new com.vaadin.flow.component.html.Section(appName, createNavigation(), new Footer());
     }
 
     private Component createNavigation() {
         Nav nav = new Nav();
-        nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
 
         UnorderedList list = new UnorderedList();
-        list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
 
-        for (RouterLink link : createLinks()) {
-            ListItem item = new ListItem(link);
-            list.add(item);
+        for (Class<? extends Component> menuClass : MENU_CLASSES) {
+            list.add(
+                    new ListItem(
+                            routerLinkGenerator.generate(menuClass)
+                    )
+            );
         }
         return nav;
-    }
-
-    private List<RouterLink> createLinks() {
-        List<RouterLink> links = new ArrayList<>();
-        for (Class<? extends Component> menuClass : MENU_CLASSES) {
-            MenuItemInfo menuItemInfo = createMenuItemInfo(menuClass);
-            links.add(createLink(menuItemInfo));
-        }
-        return links;
-    }
-
-    private MenuItemInfo createMenuItemInfo(Class<? extends Component> type) {
-        String text = classAliasGenerator.generate(type);
-        return new MenuItemInfo(text, type);
-    }
-
-    private RouterLink createLink(MenuItemInfo menuItemInfo) {
-        return routerLinkGenerator.generate(menuItemInfo.getView());
-    }
-
-    private Component createFooter() {
-        Footer layout = new Footer();
-        layout.addClassNames("flex", "items-center", "my-s", "px-m", "py-xs");
-
-        return layout;
     }
 
     @Override
