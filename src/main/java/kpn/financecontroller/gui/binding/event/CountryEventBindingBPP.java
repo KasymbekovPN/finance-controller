@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.country.form.CountryDeleteButtonOnClickEv
 import kpn.financecontroller.gui.event.country.form.CountrySaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.country.view.CountryViewNotificationEvent;
 import kpn.financecontroller.gui.form.CountryForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.CountryView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class CountryEventBindingBPP extends EventBindingBPP<Country> {
+public final class CountryEventBindingBPP extends DomainEventBindingBPP<Country> {
     @Override
     protected void doBinding() {
         form.addListener(CountrySaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -29,7 +28,7 @@ public final class CountryEventBindingBPP extends EventBindingBPP<Country> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(CountryViewController.class))
                 .addNext(createFormChainLink(CountryForm.class))
                 .addNext(createGridViewChainLink(CountryView.class));

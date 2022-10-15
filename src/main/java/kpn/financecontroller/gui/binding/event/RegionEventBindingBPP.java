@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.region.form.RegionDeleteButtonOnClickEven
 import kpn.financecontroller.gui.event.region.form.RegionSaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.region.view.RegionViewNotificationEvent;
 import kpn.financecontroller.gui.form.RegionForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.RegionView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class RegionEventBindingBPP extends EventBindingBPP<Region> {
+public final class RegionEventBindingBPP extends DomainEventBindingBPP<Region> {
     @Override
     protected void doBinding() {
         form.addListener(RegionSaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -29,7 +28,7 @@ public final class RegionEventBindingBPP extends EventBindingBPP<Region> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(RegionViewController.class))
                 .addNext(createFormChainLink(RegionForm.class))
                 .addNext(createGridViewChainLink(RegionView.class));

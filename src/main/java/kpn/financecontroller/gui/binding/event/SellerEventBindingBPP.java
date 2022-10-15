@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.seller.form.SellerDeleteButtonOnClickEven
 import kpn.financecontroller.gui.event.seller.form.SellerSaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.seller.view.SellerViewNotificationEvent;
 import kpn.financecontroller.gui.form.SellerForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.SellerView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SellerEventBindingBPP extends EventBindingBPP<Seller> {
+public final class SellerEventBindingBPP extends DomainEventBindingBPP<Seller> {
     @Override
     protected void doBinding() {
         form.addListener(SellerSaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -29,7 +28,7 @@ public final class SellerEventBindingBPP extends EventBindingBPP<Seller> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(SellerViewController.class))
                 .addNext(createFormChainLink(SellerForm.class))
                 .addNext(createGridViewChainLink(SellerView.class));

@@ -15,14 +15,13 @@ import kpn.financecontroller.gui.event.action.form.ActionSaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.action.service.NewDisplayComponentEvent;
 import kpn.financecontroller.gui.event.action.view.ActionViewNotificationEvent;
 import kpn.financecontroller.gui.form.ActionForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.ActionView;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
 @Component
-public final class ActionEventBindingBPP extends EventBindingBPP<Action> {
+public final class ActionEventBindingBPP extends DomainEventBindingBPP<Action> {
     private ActionDisplay display;
     private ActionProcessingService actionService;
     private ActionForm actionForm;
@@ -43,7 +42,7 @@ public final class ActionEventBindingBPP extends EventBindingBPP<Action> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(ActionViewController.class))
                 .addNext(createGridViewChainLink(ActionView.class))
                 .addNext(createDisplayChainLink())

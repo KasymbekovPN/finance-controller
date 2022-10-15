@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.tag.form.TagDeleteButtonOnClickEvent;
 import kpn.financecontroller.gui.event.tag.form.TagSaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.tag.view.TagViewNotificationEvent;
 import kpn.financecontroller.gui.form.TagForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.TagView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class TagEventBindingBPP extends EventBindingBPP<Tag> {
+public final class TagEventBindingBPP extends DomainEventBindingBPP<Tag> {
 
     @Override
     protected void doBinding() {
@@ -30,7 +29,7 @@ public final class TagEventBindingBPP extends EventBindingBPP<Tag> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(TagViewController.class))
                 .addNext(createFormChainLink(TagForm.class))
                 .addNext(createGridViewChainLink(TagView.class));

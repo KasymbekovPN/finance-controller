@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.payment.form.PaymentDeleteButtonOnClickEv
 import kpn.financecontroller.gui.event.payment.form.PaymentSaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.payment.view.PaymentViewNotificationEvent;
 import kpn.financecontroller.gui.form.PaymentForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.PaymentView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class PaymentEventBindingBPP extends EventBindingBPP<Payment> {
+public final class PaymentEventBindingBPP extends DomainEventBindingBPP<Payment> {
     @Override
     protected void doBinding() {
         form.addListener(PaymentSaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -29,7 +28,7 @@ public final class PaymentEventBindingBPP extends EventBindingBPP<Payment> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(PaymentViewController.class))
                 .addNext(createFormChainLink(PaymentForm.class))
                 .addNext(createGridViewChainLink(PaymentView.class));

@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.address.form.AddressDeleteButtonOnClickEv
 import kpn.financecontroller.gui.event.address.form.AddressSaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.address.view.AddressViewNotificationEvent;
 import kpn.financecontroller.gui.form.AddressForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.AddressView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class AddressEventBindingBPP extends EventBindingBPP<Address> {
+public final class AddressEventBindingBPP extends DomainEventBindingBPP<Address> {
     @Override
     protected void doBinding() {
         form.addListener(AddressSaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -29,7 +28,7 @@ public final class AddressEventBindingBPP extends EventBindingBPP<Address> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(AddressViewController.class))
                 .addNext(createFormChainLink(AddressForm.class))
                 .addNext(createGridViewChainLink(AddressView.class));

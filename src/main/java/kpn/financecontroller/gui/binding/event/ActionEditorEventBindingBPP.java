@@ -1,37 +1,37 @@
 package kpn.financecontroller.gui.binding.event;
 
-import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.gui.event.action.editor.ActionEditorNotificationEvent;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.ActionEditor;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
 @Component
-public final class ActionEditorEventBindingBPP extends EventBindingBPP<Action> {
+public final class ActionEditorEventBindingBPP extends NotificationEventBindingBPP {
     private ActionEditor actionEditor;
 
     @Override
-    protected void doBinding() {
-        actionEditor.addListener(ActionEditorNotificationEvent.class, notificationService::notify);
+    protected ChainLink createChainLink() {
+        return super.createChainLink()
+                .addNext(createActionEditorChainLink());
     }
 
     @Override
-    protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
-                .addNext(createActionEditorChainLink());
+    protected boolean checkBindingCondition() {
+        return super.checkBindingCondition() &&
+                actionEditor != null;
+    }
+
+    @Override
+    protected void doBinding() {
+        super.doBinding();
+        actionEditor.addListener(ActionEditorNotificationEvent.class, notificationService::notify);
     }
 
     @Override
     protected void reset() {
         super.reset();
         actionEditor = null;
-    }
-
-    @Override
-    protected boolean checkBindingCondition() {
-        return notificationService != null && actionEditor != null;
     }
 
     private Function<Object, Boolean> createActionEditorChainLink() {

@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.city.form.CityDeleteButtonOnClickEvent;
 import kpn.financecontroller.gui.event.city.form.CitySaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.city.view.CityViewNotificationEvent;
 import kpn.financecontroller.gui.form.CityForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.CityView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class CityEventBindingBPP extends EventBindingBPP<City> {
+public final class CityEventBindingBPP extends DomainEventBindingBPP<City> {
     @Override
     protected void doBinding() {
         form.addListener(CitySaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -29,7 +28,7 @@ public final class CityEventBindingBPP extends EventBindingBPP<City> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(CityViewController.class))
                 .addNext(createFormChainLink(CityForm.class))
                 .addNext(createGridViewChainLink(CityView.class));

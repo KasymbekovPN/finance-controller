@@ -10,12 +10,11 @@ import kpn.financecontroller.gui.event.street.form.StreetDeleteButtonOnClickEven
 import kpn.financecontroller.gui.event.street.form.StreetSaveButtonOnClickEvent;
 import kpn.financecontroller.gui.event.street.view.StreetViewNotificationEvent;
 import kpn.financecontroller.gui.form.StreetForm;
-import kpn.financecontroller.gui.notifications.NotificationServiceImpl;
 import kpn.financecontroller.gui.view.StreetView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class StreetEventBindingBPP extends EventBindingBPP<Street> {
+public final class StreetEventBindingBPP extends DomainEventBindingBPP<Street> {
     @Override
     protected void doBinding() {
         form.addListener(StreetSaveButtonOnClickEvent.class, viewController::handleSavingEvent);
@@ -29,7 +28,7 @@ public final class StreetEventBindingBPP extends EventBindingBPP<Street> {
 
     @Override
     protected ChainLink createChainLink() {
-        return new ChainLink(createNotificationServiceChainLink(NotificationServiceImpl.class))
+        return super.createChainLink()
                 .addNext(createViewControllerChainLink(StreetViewController.class))
                 .addNext(createFormChainLink(StreetForm.class))
                 .addNext(createGridViewChainLink(StreetView.class));
