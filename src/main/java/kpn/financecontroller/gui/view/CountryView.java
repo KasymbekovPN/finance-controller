@@ -7,6 +7,7 @@ import kpn.financecontroller.data.domain.Country;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.country.view.CountryViewNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -30,7 +31,11 @@ public final class CountryView extends GridView<Country> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new CountryViewNotificationEvent(this, text, NotificationType.ERROR);
+        return new CountryViewNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(text).build(),
+                NotificationType.ERROR
+        );
     }
 
     @Override

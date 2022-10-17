@@ -26,7 +26,6 @@ public final class PaymentViewController extends ViewController<Payment> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new PaymentControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new PaymentControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

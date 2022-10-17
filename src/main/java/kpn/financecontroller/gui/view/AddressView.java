@@ -7,6 +7,7 @@ import kpn.financecontroller.data.domain.Address;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.address.view.AddressViewNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -34,7 +35,11 @@ public final class AddressView extends GridView<Address>{
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new AddressViewNotificationEvent(this, text, NotificationType.ERROR);
+        return new AddressViewNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(text).build(),
+                NotificationType.ERROR
+        );
     }
 
     @Override

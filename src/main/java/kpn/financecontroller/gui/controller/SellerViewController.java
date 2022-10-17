@@ -25,7 +25,6 @@ public final class SellerViewController extends ViewController<Seller> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new SellerControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new SellerControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

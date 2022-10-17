@@ -7,6 +7,7 @@ import kpn.financecontroller.data.domain.Payment;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.payment.view.PaymentViewNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -36,7 +37,11 @@ public final class PaymentView extends GridView<Payment> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new PaymentViewNotificationEvent(this, text, NotificationType.ERROR);
+        return new PaymentViewNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(text).build(),
+                NotificationType.ERROR
+        );
     }
 
     @Override

@@ -24,7 +24,6 @@ public final class AddressViewController extends ViewController<Address> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new AddressControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new AddressControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

@@ -18,8 +18,9 @@ import kpn.financecontroller.gui.dialog.SaveActionDialog;
 import kpn.financecontroller.gui.dialog.SaveAsActionDialog;
 import kpn.financecontroller.gui.event.action.editor.ActionEditorNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
-import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
+import kpn.lib.seed.ImmutableSeed;
+import kpn.lib.seed.Seed;
 import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         if (toHome){
             log.info("Navigate to home...");
             getUI().ifPresent(ui -> {ui.navigate(PaymentView.class);});
-            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.uuid.not-unique", NotificationType.ERROR));
+            fireEvent(createNotificationEvent("action-editor.uuid.not-unique"));
         }
     }
 
@@ -167,8 +168,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
             openDialog.setItems(result.getValue());
             openDialog.open();
         } else {
-            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.click-open-button.fail", NotificationType.ERROR));
-            fireEvent(new ActionEditorNotificationEvent(this, result.getSeed().getCode(), NotificationType.ERROR));
+            fireEvent(createNotificationEvent("action-editor.click-open-button.fail"));
+            fireEvent(createNotificationEvent(result.getSeed()));
         }
     }
 
@@ -177,7 +178,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         if (selectedAction != null){
             saveDialog.open();
         } else {
-            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.click-save-button.selected-null", NotificationType.ERROR));
+            fireEvent(createNotificationEvent("action-editor.click-save-button.selected-null"));
         }
     }
 
@@ -186,7 +187,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         if (selectedAction != null){
             saveAsDialog.open();
         } else {
-            fireEvent(new ActionEditorNotificationEvent(this, "action-editor.click-save-as-button.selected-null", NotificationType.ERROR));
+            fireEvent(createNotificationEvent("action-editor.click-save-as-button.selected-null"));
         }
     }
 
@@ -210,6 +211,18 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         });
     }
 
+    private ActionEditorNotificationEvent createNotificationEvent(String code){
+        return new ActionEditorNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(code).build(),
+                NotificationType.ERROR
+        );
+    }
+
+    private ActionEditorNotificationEvent createNotificationEvent(Seed seed){
+        return new ActionEditorNotificationEvent(this, seed, NotificationType.ERROR);
+    }
+
     private class OpenDialogHandler {
 
         public void handleCloseButtonClick(ClickEvent<Button> buttonClickEvent) {
@@ -222,13 +235,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
             if (actionIdToUuidBinder.bind(selectedAction.getId(), id)){
                 editor.setValue(selectedAction.getAlgorithm());
             } else {
-                fireEvent(
-                        new ActionEditorNotificationEvent(
-                                ActionEditor.this,
-                                "action-editor.open-dialog.action-busy",
-                                NotificationType.ERROR
-                        )
-                );
+                fireEvent(createNotificationEvent("action-editor.open-dialog.action-busy"));
             }
             openDialog.close();
         }
@@ -259,18 +266,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
             selectedAction.setAlgorithm(editor.getValue());
             Result<List<Action>> result = actionService.saver().save(selectedAction);
             if (!result.isSuccess()){
-                fireEvent(
-                        new ActionEditorNotificationEvent(
-                                ActionEditor.this,
-                                "action-editor.save-dialog.saving-fail",
-                                NotificationType.ERROR)
-                );
-                fireEvent(
-                        new ActionEditorNotificationEvent(
-                                ActionEditor.this,
-                                result.getSeed().getCode(),
-                                NotificationType.ERROR)
-                );
+                fireEvent(createNotificationEvent("action-editor.save-dialog.saving-fail"));
+                fireEvent(createNotificationEvent(result.getSeed()));
             }
             closeDialog();
         }
@@ -301,26 +298,11 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
                     actionIdToUuidBinder.changeBinding(savedAction.getId(), id);
                     selectedAction = savedAction;
                 } else {
-                    fireEvent(
-                            new ActionEditorNotificationEvent(
-                                    ActionEditor.this,
-                                    "action-editor.save-as-dialog.saving-fail",
-                                    NotificationType.ERROR)
-                    );
-                    fireEvent(
-                            new ActionEditorNotificationEvent(
-                                    ActionEditor.this,
-                                    result.getSeed().getCode(),
-                                    NotificationType.ERROR)
-                    );
+                    fireEvent(createNotificationEvent("action-editor.save-as-dialog.saving-fail"));
+                    fireEvent(createNotificationEvent(result.getSeed()));
                 }
             } else {
-                fireEvent(
-                        new ActionEditorNotificationEvent(
-                                ActionEditor.this,
-                                "action-editor.save-as-dialog.description-empty",
-                                NotificationType.ERROR)
-                );
+                fireEvent(createNotificationEvent("action-editor.save-as-dialog.description-empty"));
             }
             handleOnClosing();
         }

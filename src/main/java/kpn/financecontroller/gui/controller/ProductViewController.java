@@ -25,7 +25,6 @@ public final class ProductViewController extends ViewController<Product> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new ProductControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new ProductControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

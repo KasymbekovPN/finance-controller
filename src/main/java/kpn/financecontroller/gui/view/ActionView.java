@@ -13,6 +13,7 @@ import kpn.financecontroller.gui.event.CancelEvent;
 import kpn.financecontroller.gui.event.action.view.ActionViewNotificationEvent;
 import kpn.financecontroller.gui.form.Form;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
@@ -53,7 +54,11 @@ public final class ActionView extends GridView<Action> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new ActionViewNotificationEvent(this, text, NotificationType.ERROR);
+        return new ActionViewNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(text).build(),
+                NotificationType.ERROR
+        );
     }
 
     @Override

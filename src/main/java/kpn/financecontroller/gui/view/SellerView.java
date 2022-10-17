@@ -7,6 +7,7 @@ import kpn.financecontroller.data.domain.Seller;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.seller.view.SellerViewNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -33,7 +34,11 @@ public final class SellerView extends GridView<Seller> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new SellerViewNotificationEvent(this, text, NotificationType.ERROR);
+        return new SellerViewNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(text).build(),
+                NotificationType.ERROR
+        );
     }
 
     @Override

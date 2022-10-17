@@ -25,7 +25,6 @@ public final class StreetViewController extends ViewController<Street> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new StreetControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new StreetControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

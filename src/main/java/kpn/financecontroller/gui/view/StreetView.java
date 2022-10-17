@@ -7,6 +7,7 @@ import kpn.financecontroller.data.domain.Street;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.street.view.StreetViewNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -33,7 +34,11 @@ public final class StreetView extends GridView<Street> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new StreetViewNotificationEvent(this, text, NotificationType.ERROR);
+        return new StreetViewNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(text).build(),
+                NotificationType.ERROR
+        );
     }
 
     @Override

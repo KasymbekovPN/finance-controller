@@ -25,7 +25,6 @@ public final class RegionViewController extends ViewController<Region>{
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new RegionControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new RegionControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

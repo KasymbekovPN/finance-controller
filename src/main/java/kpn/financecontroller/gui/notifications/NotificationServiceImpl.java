@@ -49,7 +49,7 @@ public final class NotificationServiceImpl extends Component implements Notifica
     @Override
     public void notify(NotificationEvent<?> event) {
         NotificationBuilder builder = new NotificationBuilderImpl(event.getType())
-                .text(getTranslation(event.getValue()));
+                .text(getTranslation(event.getValue().getCode(), event.getValue().getArgs()));
         synchronized (lock){
             checkOrCreateConfigUnsafe();
             builder

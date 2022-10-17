@@ -25,7 +25,6 @@ public final class ActionViewController extends ViewController<Action> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new ActionControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new ActionControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

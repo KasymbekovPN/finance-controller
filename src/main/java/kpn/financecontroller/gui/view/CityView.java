@@ -7,6 +7,7 @@ import kpn.financecontroller.data.domain.City;
 import kpn.financecontroller.gui.MainLayout;
 import kpn.financecontroller.gui.event.city.view.CityViewNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -32,7 +33,11 @@ public final class CityView extends GridView<City> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(String text) {
-        return new CityViewNotificationEvent(this, text, NotificationType.ERROR);
+        return new CityViewNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(text).build(),
+                NotificationType.ERROR
+        );
     }
 
     @Override

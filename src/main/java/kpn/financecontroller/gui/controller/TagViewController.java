@@ -24,7 +24,6 @@ public final class TagViewController extends ViewController<Tag> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new TagControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new TagControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

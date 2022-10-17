@@ -25,7 +25,6 @@ public final class CountryViewController extends ViewController<Country> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new CountryControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new CountryControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

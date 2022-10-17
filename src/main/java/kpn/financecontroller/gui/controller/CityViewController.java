@@ -25,7 +25,6 @@ public final class CityViewController extends ViewController<City> {
 
     @Override
     protected ComponentEvent<?> createNotificationEvent(Seed seed) {
-        String text = getTranslation(seed.getCode(), seed.getArgs());
-        return new CityControllerNotificationEvent(this, text, NotificationType.ERROR);
+        return new CityControllerNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }
