@@ -31,6 +31,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Scope("prototype")
@@ -114,8 +115,9 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         saveButton.addClickListener(e -> processSaveButtonClick());
         Button saveAsButton = new Button(getTranslation("gui.button.saveAs"));
         saveAsButton.addClickListener(e -> processSaveAsButtonClick());
-        Button runButton = new Button(getTranslation("gui.button.run"));
-        runButton.addClickListener(e -> processRunButtonClick());
+        // TODO: 19.10.2022 run to display
+        Button displayButton = new Button(getTranslation("gui.button.display"));
+        displayButton.addClickListener(e -> processDisplayButtonClick());
         Button disconnectButton = new Button(getTranslation("gui.button.disconnect"));
         disconnectButton.addClickListener(e -> processDisconnectButtonClick());
         homeButton.addClickListener(e -> processHomeButtonClick());
@@ -126,7 +128,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
                 openButton,
                 saveButton,
                 saveAsButton,
-                runButton
+                displayButton
         );
         toolbar.addClassName("toolbar");
         toolbar.setWidthFull();
@@ -191,8 +193,18 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         }
     }
 
-    private void processRunButtonClick() {
-        // TODO: 19.09.2022 impl
+    private void processDisplayButtonClick() {
+        log.info("Display button is clicked");
+        getUI().ifPresentOrElse(
+                ui -> {
+                    String routeValue = ActionDisplay.class.getAnnotation(Route.class).value();
+                    String url = routeValue.replace(":UUID?", String.valueOf(UUID.randomUUID()));
+                    ui.getPage().open(url, "_blank");
+                },
+                () -> {
+                    log.warn("UI is not present");
+                }
+        );
     }
 
     private void processDisconnectButtonClick() {
