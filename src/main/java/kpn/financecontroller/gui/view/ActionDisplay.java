@@ -62,7 +62,9 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
+        log.info("leaving...");
         displayIdToActionIdBinder.unbind(id);
+        // TODO: 22.10.2022 action to null 
     }
 
     @Override

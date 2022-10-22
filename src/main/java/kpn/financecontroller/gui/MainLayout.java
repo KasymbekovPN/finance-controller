@@ -30,7 +30,8 @@ public final class MainLayout extends AppLayout {
             CountryView.class,
             ActionView.class,
             ByTagStatistic.class,
-            ActionEditor.class
+            ActionEditor.class,
+            ActionDisplay.class
     );
 
     private final H1 viewTitle = new H1();
