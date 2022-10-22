@@ -245,20 +245,24 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private class OpenDialogHandler {
+        private Action action;
 
         public void handleCloseButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("closing");
-            openDialog.close();
+            handleClosing();
         }
 
         public void handleOpenButtonClick(ClickEvent<Button> buttonClickEvent) {
             log.info("opening");
-            if (actionIdToUuidBinder.bind(selectedAction.getId(), id)){
-                editor.setValue(selectedAction.getAlgorithm());
-            } else {
-                fireEvent(createNotificationEvent("action-editor.open-dialog.action-busy"));
+            if (action != null){
+                if (actionIdToUuidBinder.bind(action.getId(), id)){
+                    selectedAction = action;
+                    editor.setValue(selectedAction.getAlgorithm());
+                } else {
+                    fireEvent(createNotificationEvent("action-editor.open-dialog.action-busy"));
+                }
+                handleClosing();
             }
-            openDialog.close();
         }
 
         public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
@@ -268,10 +272,12 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {
             log.info("list value changing {} -> {}", event.getOldValue(), event.getValue());
-            if (selectedAction != null){
-                actionIdToUuidBinder.unbind(selectedAction.getId());
-            }
-            selectedAction = event.getValue();
+            action = event.getValue();
+        }
+
+        private void handleClosing() {
+            action = null;
+            openDialog.close();
         }
     }
 

@@ -1,20 +1,26 @@
 package kpn.financecontroller.gui.view;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
+import com.querydsl.core.types.Predicate;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.Registration;
+import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.gui.binding.util.Binder;
+import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.event.action.display.ActionDisplayNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import kpn.lib.seed.ImmutableSeed;
 import kpn.lib.seed.Seed;
+import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +28,7 @@ import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -30,12 +37,20 @@ import java.util.Optional;
 @PermitAll
 public final class ActionDisplay extends VerticalLayout implements BeforeEnterObserver, AfterNavigationObserver, BeforeLeaveObserver {
 
+    private final OpenDialogHandler openDialogHandler = new OpenDialogHandler();
+
+    private final OpenActionDialog openDialog = new OpenActionDialog();
+
+    @Autowired
+    private Service<Long, Action, Predicate, Result<List<Action>>> actionService;
     @Autowired
     @Qualifier("displayIdToActionIdBinder")
     private Binder<String, Long> displayIdToActionIdBinder;
 
     private String id;
     private boolean toHome;
+    private Action selectedAction;
+    private TextArea descriptionArea;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -45,6 +60,8 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
         if (maybeId.isPresent()){
             id = maybeId.get();
             log.info("Key {} is set", id);
+
+            // TODO: 22.10.2022 try find selected action
         } else {
             log.warn("[{}] key is empty", maybeId);
             toHome = true;
@@ -64,7 +81,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     public void beforeLeave(BeforeLeaveEvent event) {
         log.info("leaving...");
         displayIdToActionIdBinder.unbind(id);
-        // TODO: 22.10.2022 action to null 
+        selectedAction = null;
     }
 
     @Override
@@ -76,6 +93,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     private void init(){
         setSizeFull();
         add(getToolBarArea(), getDescriptionArea(), getContentArea());
+        configOpenDialog();
     }
 
     private Component getToolBarArea() {
@@ -97,11 +115,11 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     }
 
     private Component getDescriptionArea() {
-        TextArea textArea = new TextArea();
-        textArea.setReadOnly(true);
-        textArea.setWidthFull();
+        descriptionArea = new TextArea();
+        descriptionArea.setReadOnly(true);
+        descriptionArea.setWidthFull();
 
-        return textArea;
+        return descriptionArea;
     }
 
     private Component getContentArea() {
@@ -109,14 +127,35 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
         return new Div();
     }
 
+    private void setDescription(Action action){
+        if (action != null && action.getDescription() != null){
+            descriptionArea.setValue(action.getDescription());
+        }
+    }
+
+    private void configOpenDialog() {
+        openDialog.addCancelButtonClickListener(openDialogHandler::handleCloseButtonClick);
+        openDialog.addOpenButtonClickListener(openDialogHandler::handleOpenButtonClick);
+        openDialog.addFilterValueChangeListener(openDialogHandler::handleFilterChanging);
+        openDialog.addListValueChangeListener(openDialogHandler::handleListChanging);
+    }
+
     private void processHomeButtonClick() {
         log.info("Button home is clicked");
         getUI().ifPresent(ui -> ui.navigate(PaymentView.class));
+        displayIdToActionIdBinder.unbind(id);
     }
 
     private void processOpenButtonClick() {
         log.info("Button open is clicked");
-        // TODO: 19.10.2022 impl
+        Result<List<Action>> result = actionService.loader().all();
+        if (result.isSuccess()){
+            openDialog.setItems(result.getValue());
+            openDialog.open();
+        } else {
+            fireEvent(createNotificationEvent("action-display.click-open-button.fail"));
+            fireEvent(createNotificationEvent(result.getSeed()));
+        }
     }
 
     private void processClearButtonClick() {
@@ -135,5 +174,39 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
     private ActionDisplayNotificationEvent createNotificationEvent(Seed seed){
         return new ActionDisplayNotificationEvent(this, seed, NotificationType.ERROR);
+    }
+
+    private class OpenDialogHandler {
+        private Action action;
+
+        public void handleCloseButtonClick(ClickEvent<Button> event) {
+            log.info("closing");
+            handleClosing();
+        }
+
+        public void handleOpenButtonClick(ClickEvent<Button> event) {
+            log.info("opening");
+            if (action != null){
+                selectedAction = action;
+                displayIdToActionIdBinder.bind(ActionDisplay.this.id, selectedAction.getId());
+                setDescription(selectedAction);
+                handleClosing();
+            }
+        }
+
+        public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+            log.info("filter changing {} -> {}", event.getOldValue(), event.getValue());
+            // TODO: 01.10.2022 impl
+        }
+
+        public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {
+            log.info("list value changing {} -> {}", event.getOldValue(), event.getValue());
+            action = event.getValue();
+        }
+
+        private void handleClosing(){
+            action = null;
+            openDialog.close();
+        }
     }
 }

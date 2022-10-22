@@ -2,7 +2,9 @@ package kpn.financecontroller.gui.binding.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+// TODO: 22.10.2022 change monitor - not this but Object with name lock
 public class BinderImpl<K, V> implements Binder<K, V> {
     private final Map<K, V> map = new HashMap<>();
 
@@ -38,7 +40,14 @@ public class BinderImpl<K, V> implements Binder<K, V> {
     }
 
     @Override
-    public boolean isBound(K k, V v) {
+    public synchronized boolean isBound(K k, V v) {
         return isBound(k) && map.get(k).equals(v);
+    }
+
+    // TODO: 22.10.2022 add test 
+    @Override
+    public synchronized Optional<V> get(K k) {
+        // TODO: 22.10.2022 impl
+        return Optional.empty();
     }
 }
