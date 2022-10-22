@@ -11,6 +11,10 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.gui.binding.util.Binder;
+import kpn.financecontroller.gui.event.action.display.ActionDisplayNotificationEvent;
+import kpn.financecontroller.gui.notifications.NotificationType;
+import kpn.lib.seed.ImmutableSeed;
+import kpn.lib.seed.Seed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,8 +56,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
         if (toHome){
             log.info("Navigate to home...");
             getUI().ifPresent(ui -> ui.navigate(PaymentView.class));
-            // TODO: 22.10.2022 impl
-//            fireEvent(createNotificationEvent("action-editor.uuid.not-unique"));
+            fireEvent(createNotificationEvent("action-display.uuid.empty"));
         }
     }
 
@@ -63,7 +66,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     }
 
     @Override
-    protected <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
+    public  <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
 
@@ -122,5 +125,13 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     private void processRunButtonClick() {
         log.info("Button run is clicked");
         // TODO: 19.10.2022 impl
+    }
+
+    private ComponentEvent<?> createNotificationEvent(String code) {
+        return new ActionDisplayNotificationEvent(this, ImmutableSeed.builder().code(code).build(), NotificationType.ERROR);
+    }
+
+    private ActionDisplayNotificationEvent createNotificationEvent(Seed seed){
+        return new ActionDisplayNotificationEvent(this, seed, NotificationType.ERROR);
     }
 }

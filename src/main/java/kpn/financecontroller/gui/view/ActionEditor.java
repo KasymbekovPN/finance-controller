@@ -201,11 +201,11 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         if (selectedAction != null){
             getUI().ifPresentOrElse(
                     ui -> {
-                    String routeValue = ActionDisplay.class.getAnnotation(Route.class).value();
-                    String displayId = String.valueOf(UUID.randomUUID());
-                    displayIdToActionIdBinder.bind(displayId, selectedAction.getId());
-                    String url = routeValue.replace(":UUID?", displayId);
-                    ui.getPage().open(url, "_blank");
+                        String routeValue = ActionDisplay.class.getAnnotation(Route.class).value();
+                        String displayId = String.valueOf(UUID.randomUUID());
+                        displayIdToActionIdBinder.bind(displayId, selectedAction.getId());
+                        String url = routeValue.replace(":UUID?", displayId);
+                        ui.getPage().open(url, "_blank");
                     },
                     () -> {
                         log.warn("UI is not present");
