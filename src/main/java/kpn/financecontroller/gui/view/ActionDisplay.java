@@ -8,25 +8,58 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.Registration;
+import kpn.financecontroller.gui.binding.util.Binder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
+import java.util.Optional;
 
 @Slf4j
 @Scope("prototype")
 @Route(value = "display/:UUID?")
 @PermitAll
-public final class ActionDisplay extends VerticalLayout implements BeforeEnterObserver {
+public final class ActionDisplay extends VerticalLayout implements BeforeEnterObserver, AfterNavigationObserver, BeforeLeaveObserver {
+
+    @Autowired
+    @Qualifier("displayIdToActionIdBinder")
+    private Binder<String, Long> displayIdToActionIdBinder;
+
+    private String id;
+    private boolean toHome;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        // TODO: 17.10.2022 impl
+        Optional<String> maybeId = event.getRouteParameters().get("UUID");
+        log.info("maybe id: {}", maybeId);
+
+        if (maybeId.isPresent()){
+            id = maybeId.get();
+            log.info("Key {} is set", id);
+        } else {
+            log.warn("[{}] key is empty", maybeId);
+            toHome = true;
+        }
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+        if (toHome){
+            log.info("Navigate to home...");
+            getUI().ifPresent(ui -> ui.navigate(PaymentView.class));
+            // TODO: 22.10.2022 impl
+//            fireEvent(createNotificationEvent("action-editor.uuid.not-unique"));
+        }
+    }
+
+    @Override
+    public void beforeLeave(BeforeLeaveEvent event) {
+        displayIdToActionIdBinder.unbind(id);
     }
 
     @Override
@@ -43,7 +76,6 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     private Component getToolBarArea() {
         Button homeButton = new Button(getTranslation("gui.button.home"));
         homeButton.addClickListener(e -> processHomeButtonClick());
-        // TODO: 19.10.2022 add button to action editor
         Button openButton = new Button(getTranslation("gui.button.open"));
         openButton.addClickListener(e -> processOpenButtonClick());
         Button clearButton = new Button(getTranslation("gui.button.clear"));
@@ -74,7 +106,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
     private void processHomeButtonClick() {
         log.info("Button home is clicked");
-        // TODO: 19.10.2022 impl
+        getUI().ifPresent(ui -> ui.navigate(PaymentView.class));
     }
 
     private void processOpenButtonClick() {

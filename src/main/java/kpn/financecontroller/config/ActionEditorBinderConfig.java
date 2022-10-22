@@ -17,4 +17,9 @@ public class ActionEditorBinderConfig {
     public Binder<Long, String> actionIdToUuidBinder(){
         return new BinderImpl<>();
     }
+
+    @Bean
+    public  Binder<String, Long> displayIdToActionIdBinder(){
+        return new BinderImpl<>();
+    }
 }

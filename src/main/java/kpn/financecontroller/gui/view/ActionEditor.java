@@ -58,6 +58,10 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     @Qualifier("actionIdToUuidBinder")
     private Binder<Long, String> actionIdToUuidBinder;
 
+    @Autowired
+    @Qualifier("displayIdToActionIdBinder")
+    private Binder<String, Long> displayIdToActionIdBinder;
+
     private String id;
     private boolean toHome;
     private Action selectedAction;
@@ -115,7 +119,6 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         saveButton.addClickListener(e -> processSaveButtonClick());
         Button saveAsButton = new Button(getTranslation("gui.button.saveAs"));
         saveAsButton.addClickListener(e -> processSaveAsButtonClick());
-        // TODO: 19.10.2022 run to display
         Button displayButton = new Button(getTranslation("gui.button.display"));
         displayButton.addClickListener(e -> processDisplayButtonClick());
         Button disconnectButton = new Button(getTranslation("gui.button.disconnect"));
@@ -195,16 +198,22 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     private void processDisplayButtonClick() {
         log.info("Display button is clicked");
-        getUI().ifPresentOrElse(
-                ui -> {
+        if (selectedAction != null){
+            getUI().ifPresentOrElse(
+                    ui -> {
                     String routeValue = ActionDisplay.class.getAnnotation(Route.class).value();
-                    String url = routeValue.replace(":UUID?", String.valueOf(UUID.randomUUID()));
+                    String displayId = String.valueOf(UUID.randomUUID());
+                    displayIdToActionIdBinder.bind(displayId, selectedAction.getId());
+                    String url = routeValue.replace(":UUID?", displayId);
                     ui.getPage().open(url, "_blank");
-                },
-                () -> {
-                    log.warn("UI is not present");
-                }
-        );
+                    },
+                    () -> {
+                        log.warn("UI is not present");
+                    }
+            );
+        } else {
+            fireEvent(createNotificationEvent("action-editor.display-button.selected-null"));
+        }
     }
 
     private void processDisconnectButtonClick() {
