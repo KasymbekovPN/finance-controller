@@ -50,6 +50,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     private boolean toHome;
     private Action selectedAction;
     private TextArea descriptionArea;
+    private Component contentArea;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -100,7 +101,8 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     @PostConstruct
     private void init(){
         setSizeFull();
-        add(getToolBarArea(), getDescriptionArea(), getContentArea());
+        contentArea = createEmptyContent();
+        add(getToolBarArea(), getDescriptionArea(), contentArea);
         configOpenDialog();
     }
 
@@ -128,11 +130,6 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
         descriptionArea.setWidthFull();
 
         return descriptionArea;
-    }
-
-    private Component getContentArea() {
-        // TODO: 19.10.2022 impl it
-        return new Div();
     }
 
     private void setSelectedAction(Action action) {
@@ -174,12 +171,37 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
     private void processClearButtonClick() {
         log.info("Button clear is clicked");
-        // TODO: 19.10.2022 impl
+        changeContent(createEmptyContent());
     }
 
     private void processRunButtonClick() {
         log.info("Button run is clicked");
         // TODO: 19.10.2022 impl
+        // TODO: 26.10.2022 it is temp
+        TextArea text = new TextArea();
+        text.setValue("some text");
+        text.setReadOnly(true);
+        text.setSizeFull();
+        Div content = new Div(text);
+        content.setSizeFull();
+
+        changeContent(content);
+    }
+
+    private void changeContent(Div content) {
+        remove(contentArea);
+        contentArea = content;
+        add(contentArea);
+    }
+
+    private Div createEmptyContent() {
+        TextArea text = new TextArea();
+        text.setValue(getTranslation("gui.text.nothing"));
+        text.setReadOnly(true);
+        text.setSizeFull();
+        Div content = new Div(text);
+        content.setSizeFull();
+        return content;
     }
 
     private ComponentEvent<?> createNotificationEvent(String code) {
