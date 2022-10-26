@@ -267,7 +267,6 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
             log.info("filter changing {} -> {}", event.getOldValue(), event.getValue());
-            // TODO: 01.10.2022 impl
         }
 
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {

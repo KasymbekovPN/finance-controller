@@ -16,7 +16,6 @@ import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.event.action.display.ActionDisplayNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
-import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import kpn.lib.seed.ImmutableSeed;
 import kpn.lib.seed.Seed;
@@ -61,7 +60,16 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
             id = maybeId.get();
             log.info("Key {} is set", id);
 
-            // TODO: 22.10.2022 try find selected action
+            Optional<Long> maybeActionId = displayIdToActionIdBinder.get(id);
+            maybeActionId.ifPresent(id -> {
+                Result<List<Action>> result = actionService.loader().byId(id);
+                if (result.isSuccess()) {
+                    setSelectedAction(result.getValue().get(0));
+                } else {
+                    fireEvent(createNotificationEvent("action-display.action.transferred-bad-id"));
+                    fireEvent(createNotificationEvent(result.getSeed()));
+                }
+            });
         } else {
             log.warn("[{}] key is empty", maybeId);
             toHome = true;
@@ -71,7 +79,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
         if (toHome){
-            log.info("Navigate to home...");
+            log.warn("Navigate to home...");
             getUI().ifPresent(ui -> ui.navigate(PaymentView.class));
             fireEvent(createNotificationEvent("action-display.uuid.empty"));
         }
@@ -125,6 +133,12 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     private Component getContentArea() {
         // TODO: 19.10.2022 impl it
         return new Div();
+    }
+
+    private void setSelectedAction(Action action) {
+        selectedAction = action;
+        displayIdToActionIdBinder.changeBinding(ActionDisplay.this.id, selectedAction.getId());
+        setDescription(selectedAction);
     }
 
     private void setDescription(Action action){
@@ -187,16 +201,13 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
         public void handleOpenButtonClick(ClickEvent<Button> event) {
             log.info("opening");
             if (action != null){
-                selectedAction = action;
-                displayIdToActionIdBinder.bind(ActionDisplay.this.id, selectedAction.getId());
-                setDescription(selectedAction);
+                setSelectedAction(action);
                 handleClosing();
             }
         }
 
         public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
             log.info("filter changing {} -> {}", event.getOldValue(), event.getValue());
-            // TODO: 01.10.2022 impl
         }
 
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {

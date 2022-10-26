@@ -2,6 +2,7 @@ package kpn.financecontroller.gui.binding.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,5 +88,26 @@ class BinderImplTest {
         int value1 = generateValue();
         binder.changeBinding(key, value1);
         assertThat(binder.isBound(key, value1)).isTrue();
+    }
+
+    @Test
+    void shouldCheckGetting_ifAbsent() {
+        BinderImpl<String, Integer> binder = new BinderImpl<>();
+
+        Optional<Integer> maybeValue = binder.get(generateKey());
+        assertThat(maybeValue).isEmpty();
+    }
+
+    @Test
+    void shouldCheckGetting() {
+        BinderImpl<String, Integer> binder = new BinderImpl<>();
+
+        String key = generateKey();
+        int expectedValue = generateValue();
+        binder.bind(key, expectedValue);
+
+        Optional<Integer> maybeValue = binder.get(key);
+        assertThat(maybeValue).isPresent();
+        assertThat(maybeValue.get()).isEqualTo(expectedValue);
     }
 }

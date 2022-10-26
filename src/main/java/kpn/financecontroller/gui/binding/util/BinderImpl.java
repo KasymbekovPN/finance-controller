@@ -44,10 +44,10 @@ public class BinderImpl<K, V> implements Binder<K, V> {
         return isBound(k) && map.get(k).equals(v);
     }
 
-    // TODO: 22.10.2022 add test 
     @Override
     public synchronized Optional<V> get(K k) {
-        // TODO: 22.10.2022 impl
-        return Optional.empty();
+        return map.containsKey(k)
+                ? Optional.of(map.get(k))
+                : Optional.empty();
     }
 }
