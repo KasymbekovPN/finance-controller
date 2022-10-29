@@ -1,7 +1,7 @@
 package kpn.financecontroller.gui.binding.event;
 
 import kpn.financecontroller.data.domain.Action;
-import kpn.financecontroller.data.services.action.ActionProcessingService;
+import kpn.financecontroller.data.services.action.ActionProcessingServiceOld;
 import kpn.financecontroller.gui.controller.ActionViewController;
 import kpn.financecontroller.gui.display.ActionDisplay;
 import kpn.financecontroller.gui.event.action.controller.ActionAfterDeletingEvent;
@@ -23,7 +23,7 @@ import java.util.function.Function;
 @Component
 public final class ActionEventBindingBPP extends DomainEventBindingBPP<Action> {
     private ActionDisplay display;
-    private ActionProcessingService actionService;
+    private ActionProcessingServiceOld actionService;
     private ActionForm actionForm;
 
     @Override
@@ -79,8 +79,8 @@ public final class ActionEventBindingBPP extends DomainEventBindingBPP<Action> {
 
     private Function<Object, Boolean> createActionServiceChainLink() {
         return (Object bean) -> {
-            if (bean.getClass().equals(ActionProcessingService.class)){
-                actionService = (ActionProcessingService) bean;
+            if (bean.getClass().equals(ActionProcessingServiceOld.class)){
+                actionService = (ActionProcessingServiceOld) bean;
                 return true;
             }
             return false;

@@ -1,8 +1,8 @@
 package kpn.financecontroller.config;
 
 import kpn.financecontroller.annotation.External;
-import kpn.financecontroller.data.services.action.ActionWorker;
-import kpn.financecontroller.data.services.action.ActionWorkerImpl;
+import kpn.financecontroller.data.services.action.ActionWorkerOld;
+import kpn.financecontroller.data.services.action.ActionWorkerOldImpl;
 import kpn.financecontroller.search.type.DeepClassSearcherByExternalAnnotation;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +24,12 @@ public class ActionWorkerConfig {
     private List<String> annotationPackages;
 
     @Bean
-    public ActionWorker actionWorker(){
+    public ActionWorkerOld actionWorker(){
         Set<String> fullNames = createFromManualNames();
         fullNames.addAll(createFromFromAnnotationPackages());
         String header = createHeader(fullNames);
         log.info("header:\n{}", header);
-        return new ActionWorkerImpl(header);
+        return new ActionWorkerOldImpl(header);
     }
 
     private Set<String> createFromManualNames() {

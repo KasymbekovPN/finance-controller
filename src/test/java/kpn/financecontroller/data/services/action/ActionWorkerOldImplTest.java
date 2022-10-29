@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ActionWorkerImplTest {
+class ActionWorkerOldImplTest {
     private static final String HEADER = """
             int x = 123;
             int y = 234;
@@ -18,7 +18,7 @@ class ActionWorkerImplTest {
 
     @Test
     void shouldCheckExecution_ifCompilationFail() {
-        Result<Object> result = new ActionWorkerImpl("").execute("123 / 0;");
+        Result<Object> result = new ActionWorkerOldImpl("").execute("123 / 0;");
 
         ImmutableResult<Object> expectedResult = ImmutableResult.<Object>bFail("gui.text.algorithm.execution.fail")
                 .arg("ArithmeticException")
@@ -29,7 +29,7 @@ class ActionWorkerImplTest {
 
     @Test
     void shouldCheckExecution() {
-        ActionWorkerImpl worker = new ActionWorkerImpl(HEADER);
+        ActionWorkerOldImpl worker = new ActionWorkerOldImpl(HEADER);
         Object result = worker.execute(ALGORITHM);
 
         ImmutableResult<Object> expectedResult = ImmutableResult.<Object>ok(123 + 234);

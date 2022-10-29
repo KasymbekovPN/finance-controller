@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// TODO: 29.10.2022 del
 @Service
 @Tag(Tag.OBJECT)
 @RequiredArgsConstructor
-public final class ActionProcessingService extends Component {
+public final class ActionProcessingServiceOld extends Component {
     @Autowired
-    private final ActionWorker worker;
+    private final ActionWorkerOld worker;
 
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {

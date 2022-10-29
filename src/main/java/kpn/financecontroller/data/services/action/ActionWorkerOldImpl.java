@@ -5,8 +5,9 @@ import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import lombok.RequiredArgsConstructor;
 
+// TODO: 29.10.2022 del
 @RequiredArgsConstructor
-public final class ActionWorkerImpl implements ActionWorker {
+public final class ActionWorkerOldImpl implements ActionWorkerOld {
     private final GroovyShell shell = new GroovyShell();
     private final String header;
 
