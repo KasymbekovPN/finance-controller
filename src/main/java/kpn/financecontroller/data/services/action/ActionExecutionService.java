@@ -3,6 +3,7 @@ package kpn.financecontroller.data.services.action;
 import com.vaadin.flow.component.Component;
 import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.data.services.FutureInterfaceService;
+import kpn.lib.result.Result;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutorService;
@@ -10,11 +11,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Service
-public final class ActionExecutionService implements FutureInterfaceService<Action, Component> {
+public final class ActionExecutionService implements FutureInterfaceService<Action, Result<Component>> {
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
     @Override
-    public Future<Component> calculate(Action input) {
+    public Future<Result<Component>> calculate(Action action) {
         return null;
     }
 
