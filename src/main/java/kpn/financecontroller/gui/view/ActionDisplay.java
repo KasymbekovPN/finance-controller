@@ -12,6 +12,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domain.Action;
+import kpn.financecontroller.data.services.FutureInterfaceService;
 import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.event.action.display.ActionDisplayNotificationEvent;
@@ -29,6 +30,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @Scope("prototype")
@@ -46,11 +51,14 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     @Qualifier("displayIdToActionIdBinder")
     private Binder<String, Long> displayIdToActionIdBinder;
 
+    @Autowired
+    private FutureInterfaceService<Action, Result<Component>> actionExecutionService;
+
     private String id;
     private boolean toHome;
     private Action selectedAction;
     private TextArea descriptionArea;
-    private Component contentArea;
+    private Div contentArea;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -101,7 +109,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     @PostConstruct
     private void init(){
         setSizeFull();
-        contentArea = createEmptyContent();
+        changeContent(createEmptyContent());
         add(getToolBarArea(), getDescriptionArea(), contentArea);
         configOpenDialog();
     }
@@ -176,32 +184,45 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
     private void processRunButtonClick() {
         log.info("Button run is clicked");
-        // TODO: 19.10.2022 impl
-        // TODO: 26.10.2022 it is temp
-        TextArea text = new TextArea();
-        text.setValue("some text");
-        text.setReadOnly(true);
-        text.setSizeFull();
-        Div content = new Div(text);
-        content.setSizeFull();
-
-        changeContent(content);
+        Future<Result<Component>> future = actionExecutionService.calculate(selectedAction);
+        try {
+            // TODO: 31.10.2022 move time to somewhere
+            Result<Component> result = future.get(10, TimeUnit.SECONDS);
+            if (result.isSuccess()){
+                changeContent(result.getValue());
+            } else {
+                changeContent(createContentBySeed(result.getSeed()));
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            changeContent(createContentByCode("action-display.execution.exception"));
+        } catch (TimeoutException e) {
+            changeContent(createContentByCode("action-display.execution.timeout"));
+        }
     }
 
-    private void changeContent(Div content) {
-        remove(contentArea);
-        contentArea = content;
+    private void changeContent(Component content) {
+        if (contentArea != null){
+            remove(contentArea);
+        }
+        contentArea = new Div(content);
+        contentArea.setSizeFull();
         add(contentArea);
     }
 
-    private Div createEmptyContent() {
+    private Component createEmptyContent() {
+        return createContentByCode("gui.text.nothing");
+    }
+
+    private Component createContentBySeed(Seed seed){
+        return createContentByCode(seed.getCode(), seed.getArgs());
+    }
+
+    private Component createContentByCode(String code, Object... params){
         TextArea text = new TextArea();
-        text.setValue(getTranslation("gui.text.nothing"));
+        text.setValue(getTranslation(code, params));
         text.setReadOnly(true);
         text.setSizeFull();
-        Div content = new Div(text);
-        content.setSizeFull();
-        return content;
+        return text;
     }
 
     private ComponentEvent<?> createNotificationEvent(String code) {

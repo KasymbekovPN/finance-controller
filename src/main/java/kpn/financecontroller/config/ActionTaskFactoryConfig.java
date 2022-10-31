@@ -1,9 +1,11 @@
 package kpn.financecontroller.config;
 
+import com.vaadin.flow.component.Component;
 import kpn.financecontroller.annotation.External;
 import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.data.services.action.ActionTask;
 import kpn.financecontroller.search.type.DeepClassSearcherByExternalAnnotation;
+import kpn.lib.result.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +16,13 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 @Slf4j
 @Configuration
 @ConfigurationProperties(prefix = "script.header")
-public final class ActionTaskFactoryConfig {
+public class ActionTaskFactoryConfig {
 
     @Setter
     private List<String> manualNames;
@@ -27,7 +30,7 @@ public final class ActionTaskFactoryConfig {
     private List<String> annotationPackages;
 
     @Bean
-    public Function<Action, ActionTask> actionTaskFactory(){
+    public Function<Action, Callable<Result<Component>>> actionTaskFactory(){
         Set<String> fullNames = createFromManualNames();
         fullNames.addAll(createFromFromAnnotationPackages());
         String header = createHeader(fullNames);
@@ -63,11 +66,11 @@ public final class ActionTaskFactoryConfig {
     }
 
     @RequiredArgsConstructor
-    public static final class Factory implements Function<Action, ActionTask>{
+    public static final class Factory implements Function<Action, Callable<Result<Component>>>{
         private final String header;
 
         @Override
-        public ActionTask apply(Action action) {
+        public Callable<Result<Component>> apply(Action action) {
             return new ActionTask(header, action);
         }
     }
