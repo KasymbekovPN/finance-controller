@@ -20,9 +20,11 @@ import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.result.Result;
 import kpn.lib.seed.ImmutableSeed;
 import kpn.lib.seed.Seed;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
@@ -38,11 +40,15 @@ import java.util.concurrent.TimeoutException;
 @Scope("prototype")
 @Route(value = "display/:UUID?")
 @PermitAll
+@ConfigurationProperties(prefix = "action.display.execution")
 public final class ActionDisplay extends VerticalLayout implements BeforeEnterObserver, AfterNavigationObserver, BeforeLeaveObserver {
 
     private final OpenDialogHandler openDialogHandler = new OpenDialogHandler();
 
     private final OpenActionDialog openDialog = new OpenActionDialog();
+
+    @Setter
+    private ExecutionTimeoutParam timeoutParams = new ExecutionTimeoutParam();
 
     @Autowired
     private ActionDtoDecorator actionService;
@@ -187,8 +193,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
         if (loadingResult.isSuccess()){
             Future<Result<Component>> future = actionExecutionService.calculate(loadingResult.getValue().get(0));
             try {
-                // TODO: 31.10.2022 move time to somewhere
-                Result<Component> calculationResult = future.get(10, TimeUnit.SECONDS);
+                Result<Component> calculationResult = future.get(timeoutParams.getTimeout(), timeoutParams.getUnit());
                 if (calculationResult.isSuccess()){
                     changeContent(calculationResult.getValue());
                 } else {
@@ -267,6 +272,51 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
         private void handleClosing(){
             action = null;
             openDialog.close();
+        }
+    }
+
+    @Setter
+    private static class ExecutionTimeoutParam {
+        private static final long DEFAULT_TIMEOUT = 10;
+        private static final TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;
+
+        private Long timeout;
+        private String unit;
+        private boolean isValid;
+        private TimeUnit timeUnit;
+
+        public Long getTimeout() {
+            if (!isValid){
+                validate();
+            }
+            return timeout;
+        }
+
+        public TimeUnit getUnit() {
+            if (!isValid){
+                validate();
+            }
+            return timeUnit;
+        }
+
+        private void validate() {
+            if (timeout == null){
+                applyDefaultValues();
+            } else if (unit == null){
+                applyDefaultValues();
+            } else {
+                try {
+                    timeUnit = TimeUnit.valueOf(unit);
+                } catch (IllegalArgumentException ignored){
+                    applyDefaultValues();
+                }
+            }
+            isValid = true;
+        }
+
+        private void applyDefaultValues() {
+            timeout = DEFAULT_TIMEOUT;
+            timeUnit = DEFAULT_TIME_UNIT;
         }
     }
 }
