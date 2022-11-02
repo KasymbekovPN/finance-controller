@@ -55,7 +55,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
     private String id;
     private boolean toHome;
-    private Action selectedAction;
+    private Long selectedActionId = null;
     private TextArea descriptionArea;
     private Div contentArea;
 
@@ -97,7 +97,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     public void beforeLeave(BeforeLeaveEvent event) {
         log.info("leaving...");
         displayIdToActionIdBinder.unbind(id);
-        selectedAction = null;
+        selectedActionId = null;
     }
 
     @Override
@@ -140,9 +140,9 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     }
 
     private void setSelectedAction(Action action) {
-        selectedAction = action;
-        displayIdToActionIdBinder.changeBinding(ActionDisplay.this.id, selectedAction.getId());
-        setDescription(selectedAction);
+        selectedActionId = action.getId();
+        displayIdToActionIdBinder.changeBinding(ActionDisplay.this.id, selectedActionId);
+        setDescription(action);
     }
 
     private void setDescription(Action action){
@@ -183,19 +183,24 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
     private void processRunButtonClick() {
         log.info("Button run is clicked");
-        Future<Result<Component>> future = actionExecutionService.calculate(selectedAction);
-        try {
-            // TODO: 31.10.2022 move time to somewhere
-            Result<Component> result = future.get(10, TimeUnit.SECONDS);
-            if (result.isSuccess()){
-                changeContent(result.getValue());
-            } else {
-                changeContent(createContentBySeed(result.getSeed()));
+        Result<List<Action>> loadingResult = actionService.loader().byId(selectedActionId);
+        if (loadingResult.isSuccess()){
+            Future<Result<Component>> future = actionExecutionService.calculate(loadingResult.getValue().get(0));
+            try {
+                // TODO: 31.10.2022 move time to somewhere
+                Result<Component> calculationResult = future.get(10, TimeUnit.SECONDS);
+                if (calculationResult.isSuccess()){
+                    changeContent(calculationResult.getValue());
+                } else {
+                    changeContent(createContentBySeed(calculationResult.getSeed()));
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                changeContent(createContentByCode("action-display.execution.exception"));
+            } catch (TimeoutException e) {
+                changeContent(createContentByCode("action-display.execution.timeout"));
             }
-        } catch (InterruptedException | ExecutionException e) {
-            changeContent(createContentByCode("action-display.execution.exception"));
-        } catch (TimeoutException e) {
-            changeContent(createContentByCode("action-display.execution.timeout"));
+        } else {
+            changeContent(createContentByCode("action-display.execution.action-absent"));
         }
     }
 
