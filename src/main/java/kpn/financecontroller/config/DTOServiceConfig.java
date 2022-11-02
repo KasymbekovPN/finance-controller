@@ -75,7 +75,7 @@ public class DTOServiceConfig {
 
     @Bean
     public Service<Long, Action, Predicate, Result<List<Action>>> actionService(ActionRepo repo){
-        return createService("action", repo, repo, Action::new, ActionEntity::new);
+        return new ActionDtoDecorator(createService("action", repo, repo, Action::new, ActionEntity::new));
     }
 
     private <D extends Domain<Long>, E extends Entity<Long>> Service<Long, D, Predicate, Result<List<D>>> createService(

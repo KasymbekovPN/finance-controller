@@ -1,6 +1,5 @@
 package kpn.financecontroller.gui.view;
 
-import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -12,6 +11,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domain.Action;
+import kpn.financecontroller.data.services.dto.service.ActionDtoDecorator;
 import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.dialog.SaveActionDialog;
@@ -21,7 +21,6 @@ import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.result.Result;
 import kpn.lib.seed.ImmutableSeed;
 import kpn.lib.seed.Seed;
-import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -50,7 +49,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     private final TextArea editor = new TextArea();
 
     @Autowired
-    private Service<Long, Action, Predicate, Result<List<Action>>> actionService;
+    private ActionDtoDecorator actionService;
     @Autowired
     @Qualifier("uuidToEditorBinder")
     private Binder<String, Integer> uuidToEditorBinder;
@@ -267,6 +266,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
         public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
             log.info("filter changing {} -> {}", event.getOldValue(), event.getValue());
+            Result<List<Action>> result = actionService.findByDescriptionSubstring(event.getValue());
+            openDialog.setItems(result.isSuccess() ? result.getValue() : List.of());
         }
 
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {

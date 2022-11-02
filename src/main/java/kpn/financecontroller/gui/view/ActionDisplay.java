@@ -1,6 +1,5 @@
 package kpn.financecontroller.gui.view;
 
-import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -13,6 +12,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.Registration;
 import kpn.financecontroller.data.domain.Action;
 import kpn.financecontroller.data.services.FutureInterfaceService;
+import kpn.financecontroller.data.services.dto.service.ActionDtoDecorator;
 import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.event.action.display.ActionDisplayNotificationEvent;
@@ -20,7 +20,6 @@ import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.result.Result;
 import kpn.lib.seed.ImmutableSeed;
 import kpn.lib.seed.Seed;
-import kpn.lib.service.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,7 +45,7 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
     private final OpenActionDialog openDialog = new OpenActionDialog();
 
     @Autowired
-    private Service<Long, Action, Predicate, Result<List<Action>>> actionService;
+    private ActionDtoDecorator actionService;
     @Autowired
     @Qualifier("displayIdToActionIdBinder")
     private Binder<String, Long> displayIdToActionIdBinder;
@@ -251,6 +250,8 @@ public final class ActionDisplay extends VerticalLayout implements BeforeEnterOb
 
         public void handleFilterChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
             log.info("filter changing {} -> {}", event.getOldValue(), event.getValue());
+            Result<List<Action>> result = actionService.findByDescriptionSubstring(event.getValue());
+            openDialog.setItems(result.isSuccess() ? result.getValue() : List.of());
         }
 
         public void handleListChanging(AbstractField.ComponentValueChangeEvent<ListBox<Action>, Action> event) {

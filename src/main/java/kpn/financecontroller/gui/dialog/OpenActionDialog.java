@@ -35,6 +35,12 @@ public final class OpenActionDialog extends Dialog {
         getFooter().add(cancelButton, openButton);
     }
 
+    @Override
+    public void open() {
+        filter.clear();
+        super.open();
+    }
+
     public void setItems(Collection<Action> value) {
         list.setItems(value);
     }
