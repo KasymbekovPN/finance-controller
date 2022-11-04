@@ -26,7 +26,6 @@ public final class ActionEntity extends AbstractEntity<Long> {
     @NotEmpty
     private String description;
 
-    @NotEmpty
     @Type(type="org.hibernate.type.TextType")
     private String algorithm;
 

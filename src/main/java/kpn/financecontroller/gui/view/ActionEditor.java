@@ -15,7 +15,7 @@ import kpn.financecontroller.data.services.dto.service.ActionDtoDecorator;
 import kpn.financecontroller.gui.binding.util.Binder;
 import kpn.financecontroller.gui.dialog.OpenActionDialog;
 import kpn.financecontroller.gui.dialog.SaveActionDialog;
-import kpn.financecontroller.gui.dialog.SaveAsActionDialog;
+import kpn.financecontroller.gui.dialog.SaveActionWithDescriptionDialog;
 import kpn.financecontroller.gui.event.action.editor.ActionEditorNotificationEvent;
 import kpn.financecontroller.gui.notifications.NotificationType;
 import kpn.lib.result.Result;
@@ -40,12 +40,14 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     private final OpenDialogHandler openDialogHandler = new OpenDialogHandler();
     private final SaveDialogHandler saveDialogHandler = new SaveDialogHandler();
     private final SaveAsDialogHandler saveAsDialogHandler = new SaveAsDialogHandler();
+    private final NewDialogHandler newDialogHandler = new NewDialogHandler();
 
     private final Button homeButton = new Button(getTranslation("gui.button.home"));
 
     private final OpenActionDialog openDialog = new OpenActionDialog();
     private final SaveActionDialog saveDialog = new SaveActionDialog();
-    private final SaveAsActionDialog saveAsDialog = new SaveAsActionDialog();
+    private final SaveActionWithDescriptionDialog saveAsDialog = new SaveActionWithDescriptionDialog("gui.title.saveAs?");
+    private final SaveActionWithDescriptionDialog newDialog = new SaveActionWithDescriptionDialog("gui.title.create-new?");
     private final TextArea editor = new TextArea();
 
     @Autowired
@@ -63,7 +65,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     private String id;
     private boolean toHome;
-    private Action selectedAction;
+    private Action selectedAction; // TODO: 04.11.2022 use atomic
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -104,6 +106,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         configOpenDialog();
         configSaveDialog();
         configSaveAsDialog();
+        configNewDialog();
     }
 
     @Override
@@ -112,6 +115,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     }
 
     private Component getToolBar() {
+        Button newButton = new Button(getTranslation("gui.button.new"));
+        newButton.addClickListener(e -> processNewButtonClick());
         Button openButton = new Button(getTranslation("gui.button.open"));
         openButton.addClickListener(e -> processOpenButtonClick());
         Button saveButton = new Button(getTranslation("gui.button.save"));
@@ -120,14 +125,15 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         saveAsButton.addClickListener(e -> processSaveAsButtonClick());
         Button displayButton = new Button(getTranslation("gui.button.display"));
         displayButton.addClickListener(e -> processDisplayButtonClick());
-        Button disconnectButton = new Button(getTranslation("gui.button.disconnect"));
-        disconnectButton.addClickListener(e -> processDisconnectButtonClick());
+        Button closeButton = new Button(getTranslation("gui.button.close"));
+        closeButton.addClickListener(e -> processCloseButtonClick());
         homeButton.addClickListener(e -> processHomeButtonClick());
 
         HorizontalLayout toolbar = new HorizontalLayout(
                 homeButton,
-                disconnectButton,
+                newButton,
                 openButton,
+                closeButton,
                 saveButton,
                 saveAsButton,
                 displayButton
@@ -162,6 +168,22 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         saveAsDialog.addSaveButtonClickListener(saveAsDialogHandler::handleSaveButtonClick);
         saveAsDialog.addDescriptionValueChangeListener(saveAsDialogHandler::handleDescriptionChanging);
         saveAsDialog.addDialogCloseActionListener(saveAsDialogHandler::handleClosing);
+    }
+
+    private void configNewDialog() {
+        newDialog.addCancelButtonClickListener(newDialogHandler::handleCloseButtonClick);
+        newDialog.addSaveButtonClickListener(newDialogHandler::handleSaveButtonClick);
+        newDialog.addDescriptionValueChangeListener(newDialogHandler::handleDescriptionChanging);
+        newDialog.addDialogCloseActionListener(newDialogHandler::handleClosing);
+    }
+
+    private void processNewButtonClick() {
+        log.info("New button is pressed");
+        if (selectedAction == null){
+            newDialog.open();
+        } else {
+            fireEvent(createNotificationEvent("action-editor.click-new-button.action-selected"));
+        }
     }
 
     private void processOpenButtonClick() {
@@ -215,8 +237,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         }
     }
 
-    private void processDisconnectButtonClick() {
-        log.info("Disconnection");
+    private void processCloseButtonClick() {
+        log.info("Close");
         editor.setValue("");
         if (selectedAction != null){
             actionIdToUuidBinder.unbind(selectedAction.getId());
@@ -229,6 +251,14 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         homeButton.getUI().ifPresent(ui -> {
             ui.navigate(PaymentView.class);
         });
+    }
+
+    private ActionEditorNotificationEvent createNotificationEvent(String code, NotificationType type){
+        return new ActionEditorNotificationEvent(
+                this,
+                ImmutableSeed.builder().code(code).build(),
+                type
+        );
     }
 
     private ActionEditorNotificationEvent createNotificationEvent(String code){
@@ -347,6 +377,57 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         private void handleOnClosing() {
             description = null;
             saveAsDialog.close();
+        }
+    }
+
+    private class NewDialogHandler {
+        private String description;
+
+        public void handleCloseButtonClick(ClickEvent<Button> event) {
+            log.info("Close button is pressed");
+            handleOnClosing();
+        }
+
+        public void handleSaveButtonClick(ClickEvent<Button> event) {
+            log.info("Close button is pressed");
+            Optional<Seed> maybeSeed = checkDescription();
+            if (maybeSeed.isEmpty()){
+                Action newAction = new Action();
+                newAction.setDescription(description);
+                newAction.setAlgorithm(editor.getValue());
+                Result<List<Action>> result = actionService.saver().save(newAction);
+                if (result.isSuccess()){
+                    selectedAction = result.getValue().get(0);
+                    fireEvent(createNotificationEvent("action-editor.new-dialog.saved", NotificationType.INFO));
+                } else {
+                    fireEvent(createNotificationEvent("action-editor.new-dialog.saving-fail"));
+                    fireEvent(createNotificationEvent(result.getSeed()));
+                }
+            } else {
+                fireEvent(createNotificationEvent(maybeSeed.get()));
+            }
+            handleOnClosing();
+        }
+
+        public void handleDescriptionChanging(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+            log.info("Description changing: {} -> {}", event.getOldValue(), event.getValue());
+            description = event.getValue();
+        }
+
+        public void handleClosing(Dialog.DialogCloseActionEvent event) {
+            log.info("Closing");
+            handleOnClosing();
+        }
+
+        private void handleOnClosing() {
+            description = null;
+            newDialog.close();
+        }
+
+        private Optional<Seed> checkDescription() {
+            return description == null || description.isBlank()
+                    ? Optional.of(ImmutableSeed.builder().code("action-editor.new-dialog.empty-description").build())
+                    : Optional.empty();
         }
     }
 }
