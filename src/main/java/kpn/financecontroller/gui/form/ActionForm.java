@@ -8,8 +8,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import kpn.financecontroller.data.domain.Action;
-import kpn.financecontroller.gui.event.action.display.ActionStartForFormEvent;
-import kpn.financecontroller.gui.event.action.display.ActionStartForProcessorEvent;
 import kpn.financecontroller.gui.event.action.form.ActionCancelButtonOnClickEvent;
 import kpn.financecontroller.gui.event.action.form.ActionDeleteButtonOnClickEvent;
 import kpn.financecontroller.gui.event.action.form.ActionSaveButtonOnClickEvent;
@@ -69,9 +67,5 @@ public final class ActionForm extends Form<Action> {
     @Override
     protected ComponentEvent<?> createDeleteButtonOnClickEvent() {
         return new ActionDeleteButtonOnClickEvent(this, value);
-    }
-
-    public void handleActionStart(ActionStartForFormEvent event) {
-        fireEvent(new ActionStartForProcessorEvent(this, value));
     }
 }
