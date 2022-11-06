@@ -63,9 +63,10 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     @Qualifier("displayIdToActionIdBinder")
     private Binder<String, Long> displayIdToActionIdBinder;
 
+    private TextArea descriptionArea;
     private String id;
     private boolean toHome;
-    private Action selectedAction; // TODO: 04.11.2022 use atomic
+    private Action selectedAction;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -102,7 +103,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
     @PostConstruct
     private void init(){
         setSizeFull();
-        add(getToolBar(), getTextArea());
+        add(getToolBar(), getDescriptionArea(), getTextArea());
         configOpenDialog();
         configSaveDialog();
         configSaveAsDialog();
@@ -144,6 +145,14 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         return toolbar;
     }
 
+    private Component getDescriptionArea() {
+        descriptionArea = new TextArea();
+        descriptionArea.setReadOnly(true);
+        descriptionArea.setWidthFull();
+
+        return descriptionArea;
+    }
+
     private Component getTextArea() {
         editor.setReadOnly(false);
         editor.setHeight(90.0f, Unit.PERCENTAGE);
@@ -175,6 +184,12 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
         newDialog.addSaveButtonClickListener(newDialogHandler::handleSaveButtonClick);
         newDialog.addDescriptionValueChangeListener(newDialogHandler::handleDescriptionChanging);
         newDialog.addDialogCloseActionListener(newDialogHandler::handleClosing);
+    }
+
+    private void setSelectedAction(Action action) {
+        selectedAction = action;
+        editor.setValue(action.getAlgorithm());
+        descriptionArea.setValue(action.getDescription());
     }
 
     private void processNewButtonClick() {
@@ -239,7 +254,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
 
     private void processCloseButtonClick() {
         log.info("Close");
-        editor.setValue("");
+        editor.clear();
+        descriptionArea.clear();
         if (selectedAction != null){
             actionIdToUuidBinder.unbind(selectedAction.getId());
             selectedAction = null;
@@ -285,8 +301,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
             log.info("opening");
             if (action != null){
                 if (actionIdToUuidBinder.bind(action.getId(), id)){
-                    selectedAction = action;
-                    editor.setValue(selectedAction.getAlgorithm());
+                    setSelectedAction(action);
                 } else {
                     fireEvent(createNotificationEvent("action-editor.open-dialog.action-busy"));
                 }
@@ -352,8 +367,8 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
                 Result<List<Action>> result = actionService.saver().save(newAction);
                 if (result.isSuccess()){
                     Action savedAction = result.getValue().get(0);
+                    setSelectedAction(savedAction);
                     actionIdToUuidBinder.changeBinding(savedAction.getId(), id);
-                    selectedAction = savedAction;
                 } else {
                     fireEvent(createNotificationEvent("action-editor.save-as-dialog.saving-fail"));
                     fireEvent(createNotificationEvent(result.getSeed()));
@@ -397,7 +412,7 @@ public final class ActionEditor extends VerticalLayout implements BeforeEnterObs
                 newAction.setAlgorithm(editor.getValue());
                 Result<List<Action>> result = actionService.saver().save(newAction);
                 if (result.isSuccess()){
-                    selectedAction = result.getValue().get(0);
+                    setSelectedAction(result.getValue().get(0));
                     fireEvent(createNotificationEvent("action-editor.new-dialog.saved", NotificationType.INFO));
                 } else {
                     fireEvent(createNotificationEvent("action-editor.new-dialog.saving-fail"));
