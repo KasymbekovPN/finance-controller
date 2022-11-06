@@ -34,7 +34,6 @@ public class ActionTaskFactoryConfig {
         Set<String> fullNames = createFromManualNames();
         fullNames.addAll(createFromFromAnnotationPackages());
         String header = createHeader(fullNames);
-        log.info("header:\n{}", header);
 
         return new Factory(header);
     }
@@ -59,7 +58,8 @@ public class ActionTaskFactoryConfig {
     private String createHeader(Set<String> fullNames) {
         StringBuilder sb = new StringBuilder();
         fullNames.forEach(p -> {
-                sb.append("import ").append(p).append(";\n");
+            log.info("SCRIPT IMPORT: {}", p);
+            sb.append("import ").append(p).append(";\n");
         });
 
         return sb.toString();
