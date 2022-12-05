@@ -9,5 +9,4 @@ public class CtrlfApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CtrlfApplication.class, args);
 	}
-
 }
