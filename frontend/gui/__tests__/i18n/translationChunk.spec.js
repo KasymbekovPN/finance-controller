@@ -8,7 +8,7 @@ const code = 'tr.code';
 
 describe('translationChunk.js', () => {
 	test('should check wrong attempt of creation', () => {
-		const expectedError = new TypeError('Cannot set property code of #<TraslationChuck> which has only a getter');
+		const expectedError = new TypeError('Cannot set property code of #<TraslationChuck>');
 
 		const f = () => {new TraslationChuck()};
 		expect(f).toThrow(expectedError);

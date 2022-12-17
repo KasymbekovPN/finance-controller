@@ -7,7 +7,7 @@ class TraslationChuck{
 			this._code = code;
 			this._translations = new Map();
 		} else {
-			throw new TypeError('Cannot set property code of #<TraslationChuck> which has only a getter');
+			throw new TypeError('Cannot set property code of #<TraslationChuck>');
 		}
 	}
 
