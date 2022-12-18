@@ -2,63 +2,64 @@
  * @jest-environment jsdom
  */
 
-import { toNumber } from "@vue/shared";
-import I18n from "../../src/i18n/i18n";
-import TranslationChuck from "../../src/i18n/trTemplates.js";
+import { I18nBuilder, I18n } from "../../src/i18n/i18n";
+import { TrTemplatesBuilder } from "../../src/i18n/trTemplates.js";
 
 const code = 'tr.code';
+const ansentCode = 'absent.code';
 
 describe('i18n.js', () => {
 
-	test('should check wrong attempt of creation', () => {
-		const expectedError = new TypeError('Cannot set property locale of #<I18n>');
+	test('should check building if locale is undefined', () => {
+		const expectedError = new TypeError('#<I18nBuilder> Cannot build #<I18n> because locale is not string');
 
-		const f = () => {new I18n()};
+		const f = () => {new I18nBuilder().build();};
 		expect(f).toThrow(expectedError);
 	});
 
-	test('should check enrichment if chuck-arg has wrong type', () => {
-		const expectedError = new TypeError('Cannot enrich #<I18n>');
+	test('should check building if locale is not string', () => {
+		const expectedError = new TypeError('#<I18nBuilder> Cannot build #<I18n> because locale is not string');
 
-		const i18n = new I18n('en');
-		const f = () => {i18n.enrich()};
+		const f = () => {
+			new I18nBuilder()
+				.locale(123)
+				.build();
+		};
 		expect(f).toThrow(expectedError);
 	});
 
-	test('should check translation if code-arg has wrong type', () => {
-		const expectedError = new TypeError('Cannot translate #<I18n> - code has wrong type');
+	test('should check building if template is not TrTemplates', () => {
+		const expectedError = new TypeError('#<I18nBuilder> Cannot build #<I18n> because template is not #<TrTemplates>');
 
-		const i18n = new I18n('en');
-		const f = () => {i18n.translate()};
+		const f = () => {
+			new I18nBuilder()
+				.locale('en')
+				.template(123)
+				.build();
+		};
 		expect(f).toThrow(expectedError);
 	});
 
-	test('should check translation if code-arg is absent', () => {
-		const i18n = new I18n('en');
+	test('should check translation if template absent', () => {
+		const i18n = new I18nBuilder()
+			.locale('en')
+			.build();
 
-		expect(i18n.translate(code)).toBe(code);
-	});
-
-	test('should check translation if default locale is used', () => {
-		const trChuck = new TranslationChuck(code)
-			.enrich('en', 'tr-en')
-			.enrich('ru', 'tr-ru');
-
-		const i18n = new I18n('en')
-			.enrich(trChuck);
-
-		expect(i18n.translate(code)).toBe('tr-en');
+		const result = i18n.translate(123);
+		expect(result).toBe('123');
 	});
 
 	test('should check translation', () => {
-		const trChuck = new TranslationChuck(code)
-			.enrich('en', 'tr-en')
-			.enrich('ru', 'tr-ru');
+		const trTemp = new TrTemplatesBuilder()
+			.code(code)
+			.template('ru', 'tr-ru')
+			.build();
+		const i18n = new I18nBuilder()
+			.locale('en')
+			.template(trTemp)
+			.build();
 
-		const i18n = new I18n('en')
-			.enrich(trChuck);
-
-		expect(i18n.translate(code, 'en')).toBe('tr-en');
-		expect(i18n.translate(code, 'ru')).toBe('tr-ru');
+		const result = i18n.translate(code, 'ru');
+		expect(result).toBe('tr-ru');
 	});
 });

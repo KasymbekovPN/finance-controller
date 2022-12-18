@@ -3,36 +3,68 @@ import { TrTemplates } from "./trTemplates";
 
 class I18n {
 
-	constructor(locale){
-		if (isString(locale)){
-			this._locale = locale;
-			this._chunks = new Map();
-		} else {
-			throw new TypeError('Cannot set property locale of #<I18n>');
-		}
-	}
-
-	enrich(chuck){
-		if (chuck instanceof TrTemplates){
-			this._chunks.set(chuck.code, chuck);
-		} else {
-			throw new TypeError('Cannot enrich #<I18n>');
-		}
-
-		return this;
+	constructor(locale, templates){
+		this._locale = locale;
+		this._templates = templates;
 	}
 
 	translate(code, locale){
 		if (isString(code)){
-			if (this._chunks.has(code)){
+			if (this._templates.has(code)){
 				const l = isString(locale) ? locale : this._locale;
-				return this._chunks.get(code).translate(l);
-			} else {
-				return code;
+				const template = this._templates.get(code).getTemplate(l);
+				if (template != undefined){
+					return template;
+				}
 			}
 		}
-		throw new TypeError('Cannot translate #<I18n> - code has wrong type');
+		return '' + code;
 	}
 }
 
-export default I18n;
+class I18nBuilder {
+
+	constructor() {
+		this._templates = [];
+	}
+
+	locale(locale) {
+		this._locale = locale;
+		return this;
+	}
+
+	template(template){
+		this._templates.push(template);
+		return this;
+	}
+
+	build() {
+		checkLocale(this._locale);
+		const preparedTemplates = prepareAndCheckTemplates(this._templates);
+		return new I18n(this._locale, preparedTemplates);
+	}
+}
+
+function checkLocale(locale){
+	if (!isString(locale)){
+		throw new TypeError('#<I18nBuilder> Cannot build #<I18n> because locale is not string');
+	}
+}
+
+function prepareAndCheckTemplates(list){
+	const map = new Map();
+	list.forEach(value => {
+		if (value instanceof TrTemplates){
+			map.set(value.code, value);
+		} else {
+			throw new TypeError('#<I18nBuilder> Cannot build #<I18n> because template is not #<TrTemplates>');
+		}
+	});
+
+	return map;
+}
+
+export {
+	I18n,
+	I18nBuilder
+};
