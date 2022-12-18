@@ -1,5 +1,5 @@
 import { isString } from "../utils/isString";
-import TraslationChuck from "./translationChuck";
+import { TrTemplates } from "./trTemplates";
 
 class I18n {
 
@@ -13,7 +13,7 @@ class I18n {
 	}
 
 	enrich(chuck){
-		if (chuck instanceof TraslationChuck){
+		if (chuck instanceof TrTemplates){
 			this._chunks.set(chuck.code, chuck);
 		} else {
 			throw new TypeError('Cannot enrich #<I18n>');

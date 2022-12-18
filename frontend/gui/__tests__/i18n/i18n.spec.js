@@ -4,7 +4,7 @@
 
 import { toNumber } from "@vue/shared";
 import I18n from "../../src/i18n/i18n";
-import TraslationChuck from "../../src/i18n/translationChuck.js";
+import TranslationChuck from "../../src/i18n/trTemplates.js";
 
 const code = 'tr.code';
 
@@ -40,7 +40,7 @@ describe('i18n.js', () => {
 	});
 
 	test('should check translation if default locale is used', () => {
-		const trChuck = new TraslationChuck(code)
+		const trChuck = new TranslationChuck(code)
 			.enrich('en', 'tr-en')
 			.enrich('ru', 'tr-ru');
 
@@ -51,7 +51,7 @@ describe('i18n.js', () => {
 	});
 
 	test('should check translation', () => {
-		const trChuck = new TraslationChuck(code)
+		const trChuck = new TranslationChuck(code)
 			.enrich('en', 'tr-en')
 			.enrich('ru', 'tr-ru');
 
