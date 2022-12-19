@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { I18nBuilder, I18n } from "../../src/i18n/i18n";
+import { I18nBuilder } from "../../src/i18n/i18n";
 import { TrTemplatesBuilder } from "../../src/i18n/trTemplates.js";
 
 const code = 'tr.code';
