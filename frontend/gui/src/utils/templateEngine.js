@@ -9,22 +9,10 @@ class Borders {
 		this._begin = begin;
 		this._end = end;
 
-		//< add isInt.js
-		// function isInt(value) {
-		// 	return !isNaN(value) &&
-		// 		   parseInt(Number(value)) == value &&
-		// 		   !isNaN(parseInt(value, 10));
-		//   }
-
-		// this._isValid = true &
-		// this._begin >= 0 & this._end > this._begin;
-		//<
-		if (begin < 0){
-			this._isValid = false;
-		}
-		if (end <= begin){
-			this._isValid = false;
-		}
+		this._isValid = Number.isInteger(this._begin) &&
+						Number.isInteger(this._end) &&
+						this._begin >= 0 &&
+						this._end > this._begin;
 	}
 
 	get begin(){
@@ -41,7 +29,13 @@ class Borders {
 }
 
 function extractArgumentBorders(regexp, line){
+	let result = [];
+	let match;
+	while((match = regexp.exec(line)) !== null){
+		result.push(new Borders(match.index, match.index + match[0].length));
+	}
 
+	return result;
 }
 
 export {

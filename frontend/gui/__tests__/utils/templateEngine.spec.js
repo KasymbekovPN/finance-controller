@@ -1,4 +1,9 @@
-import { Borders } from "../../src/utils/templateEngine";
+import {
+	Borders,
+	extractArgumentBorders
+} from "../../src/utils/templateEngine";
+
+const reg = /ax/g;
 
 describe('templateEngine.js', () => {
 
@@ -19,5 +24,22 @@ describe('templateEngine.js', () => {
 		expect(borders.isValid).toBe(true);
 		expect(borders.begin).toBe(begin);
 		expect(borders.end).toBe(end);
+	});
+
+	test('should check argument extraction if subscring occurrencein string is absent', () => {
+		const line = 'b b b b b';
+		const result = extractArgumentBorders(reg, line);
+		expect(result).toStrictEqual([]);
+	});
+
+	test('should check argument extraction', () => {
+		const expectedResult = [
+			new Borders(0,2),
+			new Borders(5,7)
+		];
+
+		const line = 'axbabaxb';
+		const result = extractArgumentBorders(reg, line);
+		expect(result).toStrictEqual(expectedResult);
 	});
 })
