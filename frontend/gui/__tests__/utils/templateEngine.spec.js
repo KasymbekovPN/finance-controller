@@ -1,6 +1,7 @@
 import {
 	Substr,
-	extractArgumentSubstrs
+	extractArgumentSubstrs,
+	filterArgumentName
 } from "../../src/utils/templateEngine";
 
 const reg = /ax/g;
@@ -55,5 +56,19 @@ describe('templateEngine.js', () => {
 		const line = 'axbabaxb';
 		const result = extractArgumentSubstrs(reg, line);
 		expect(result).toStrictEqual(expectedResult);
+	});
+
+	test('should check filtration if string does not contain disallowed chars' , () => {
+		const rawValue = 'abc';
+		const expectedValue = 'abc';
+		const value = filterArgumentName(rawValue);
+		expect(value).toBe(expectedValue);
+	});
+
+	test('should check filtration if string contains disallowed chars' , () => {
+		const rawValue = '{   abc    }';
+		const expectedValue = 'abc';
+		const value = filterArgumentName(rawValue);
+		expect(value).toBe(expectedValue);
 	});
 })

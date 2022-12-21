@@ -50,8 +50,16 @@ function extractArgumentSubstrs(regexp, line){
 	return result;
 }
 
+function filterArgumentName(rawArgumentName){
+	return rawArgumentName
+		.replace('{', '')
+		.replace('}', '')
+		.trim();
+}
+
 export {
 	TemplateEngine,
 	Substr,
-	extractArgumentSubstrs
+	extractArgumentSubstrs,
+	filterArgumentName
 };
