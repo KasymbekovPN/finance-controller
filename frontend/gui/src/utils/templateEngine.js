@@ -1,18 +1,30 @@
+import { isString } from "./isString";
 
+//< add builder 1. regexp, 2. etractor == extractArgumentBorders, 3. filter : substring to param name
 class TemplateEngine {
 
+	//<
+	// constructor(extractor, regexp){
+	// 	this._extractor = extractor !== undefined ? extractor : extractArgumentBorders;
+	// 	this._regexp = regexp !== undefined ? regexp : /{(\s*|[A-Za-z_])\w*\s*}/;
+	// }
 }
 
-class Borders {
+class Substr {
 
-	constructor(begin, end) {
-		this._begin = begin;
-		this._end = end;
+	constructor(value, begin) {
+		if (isString(value) && value.length > 0 && Number.isInteger(begin) && begin >= 0){
+			this._value = value;
+			this._begin = begin;
+			this._end = begin + value.length;
+			this._valid = true;
+		} else {
+			this._valid = false;
+		}
+	}
 
-		this._isValid = Number.isInteger(this._begin) &&
-						Number.isInteger(this._end) &&
-						this._begin >= 0 &&
-						this._end > this._begin;
+	get value(){
+		return this._value;
 	}
 
 	get begin(){
@@ -23,16 +35,16 @@ class Borders {
 		return this._end;
 	}
 
-	get isValid() {
-		return this._isValid;
+	get valid() {
+		return this._valid;
 	}
 }
 
-function extractArgumentBorders(regexp, line){
+function extractArgumentSubstrs(regexp, line){
 	let result = [];
 	let match;
 	while((match = regexp.exec(line)) !== null){
-		result.push(new Borders(match.index, match.index + match[0].length));
+		result.push(new Substr(match[0], match.index));
 	}
 
 	return result;
@@ -40,6 +52,6 @@ function extractArgumentBorders(regexp, line){
 
 export {
 	TemplateEngine,
-	Borders,
-	extractArgumentBorders
+	Substr,
+	extractArgumentSubstrs
 };

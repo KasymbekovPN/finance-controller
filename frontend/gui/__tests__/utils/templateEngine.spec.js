@@ -1,45 +1,59 @@
 import {
-	Borders,
-	extractArgumentBorders
+	Substr,
+	extractArgumentSubstrs
 } from "../../src/utils/templateEngine";
 
 const reg = /ax/g;
 
 describe('templateEngine.js', () => {
 
-	test('should check Borders if init begin < 0', () => {
-		const borders = new Borders(-1, 0);
-		expect(borders.isValid).toBe(false);
+	test('should check Substr if value is not string', () => {
+		const substr = new Substr();
+		expect(substr.valid).toBe(false);
 	});
 
-	test('should check Borders if init end <= begin', () => {
-		const borders = new Borders(10, 1);
-		expect(borders.isValid).toBe(false);
+	test('should check Substr if value is empty', () => {
+		const substr = new Substr('');
+		expect(substr.valid).toBe(false);
 	});
 
-	test('should check Borders', () => {
-		const begin = 3;
-		const end = 10;
-		const borders = new Borders(begin, end);
-		expect(borders.isValid).toBe(true);
-		expect(borders.begin).toBe(begin);
-		expect(borders.end).toBe(end);
+	test('should check Substr if begin is not integer', () => {
+		const substr = new Substr('value');
+		expect(substr.valid).toBe(false);
 	});
 
-	test('should check argument extraction if subscring occurrencein string is absent', () => {
+	test('should check Substr if begin less zero', () => {
+		const substr = new Substr('value', -1);
+		expect(substr.valid).toBe(false);
+	});
+
+	test('should check Substr', () => {
+		const expectedValue = 'value';
+		const expectedBegin = 10;
+		const expectedEnd = expectedBegin + expectedValue.length;
+
+		const substr = new Substr(expectedValue, expectedBegin);
+		expect(substr.valid).toBe(true);
+		expect(substr.value).toBe(expectedValue);
+		expect(substr.begin).toBe(expectedBegin);
+		expect(substr.end).toBe(expectedEnd);
+	});
+
+
+	test('should check argument extraction if substring occurrence in string is absent', () => {
 		const line = 'b b b b b';
-		const result = extractArgumentBorders(reg, line);
+		const result = extractArgumentSubstrs(reg, line);
 		expect(result).toStrictEqual([]);
 	});
 
 	test('should check argument extraction', () => {
 		const expectedResult = [
-			new Borders(0,2),
-			new Borders(5,7)
+			new Substr('ax', 0),
+			new Substr('ax', 5)
 		];
 
 		const line = 'axbabaxb';
-		const result = extractArgumentBorders(reg, line);
+		const result = extractArgumentSubstrs(reg, line);
 		expect(result).toStrictEqual(expectedResult);
 	});
 })
