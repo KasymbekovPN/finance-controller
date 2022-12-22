@@ -1,13 +1,40 @@
 import { isString } from "./isString";
 
-//< add builder 1. regexp, 2. etractor == extractArgumentBorders, 3. filter : substring to param name
 class TemplateEngine {
 
-	//<
-	// constructor(extractor, regexp){
-	// 	this._extractor = extractor !== undefined ? extractor : extractArgumentBorders;
-	// 	this._regexp = regexp !== undefined ? regexp : /{(\s*|[A-Za-z_])\w*\s*}/;
-	// }
+	constructor(regexp, extractor, filter){
+		this._regexp = regexp !== undefined ? regexp : /{(\s*|[A-Za-z_])\w*\s*}/g;
+		this._extractor = extractor !== undefined ? extractor : extractArgumentSubstrs;
+		this._filter = filter !== undefined ? filter : filterArgumentName;
+	}
+
+	execute(template, args){
+		const substrs = this._extractor(this._regexp, template);
+		const replacingData = new Map();
+		for (const substr of substrs){
+			if (substr.valid){
+				const name = this._filter(substr.value);
+				if (!replacingData.has(name)){
+					replacingData.set(name, new Set());
+				}
+				replacingData.get(name).add(substr);
+			}
+		}
+
+		let result = template;
+		replacingData.forEach((value, key) => {
+			if (args.has(key)){
+				const arg = args.get(key);
+				for (const substr of value)	{
+					if (substr.valid){
+						result = result.replace(substr.value, arg);
+					}
+				}
+			}
+		});
+
+		return result;
+	}
 }
 
 class Substr {
