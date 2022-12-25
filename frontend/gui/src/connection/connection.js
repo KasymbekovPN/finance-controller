@@ -19,17 +19,17 @@ class Connection {
 	connect() {
 		this._client.connect(
 			this._headers,
-			frame => {
+			(/*frame*/) => {
 				this._connected = true;
 				this._subscription.forEach((value, key) => {
 					this._client.subscribe(key, value);
 				});
 			},
-			error => {
-				this.disconnect();
+			(/*error*/) => {
+				this._connected = false;
 			},
-			closeEvent => {
-				this.disconnect();
+			(/*closeEvent*/) => {
+				this._connected = false;
 			}
 		);
 	}

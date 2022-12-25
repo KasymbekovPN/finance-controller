@@ -3,65 +3,25 @@
 </template>
 
 <script>
+	import { Stomp } from "@stomp/stompjs";
+	import { CONNECTION_CREATE } from "./store/actions/connection";
+	import { v4 as uuidv4 } from 'uuid';
+
 	export default {
 		name: 'App',
 		components: {},
-		//<
-		// beforeCreate() {
-		// 	//<
-		// 	console.log('beforeCreate');
-		// },
-		// created() {
-		// 	//<
-		// 	console.log('created');
-		// },
-		// beforeMount(){
-		// 	//<
-		// 	console.log('beforeMount');
-		// },
-		//<
 		mounted(){
-			//<
-			// console.log('mount');
 			this.$nextTick(() => {
-				//<
-				// console.log('mount in');
+				const clientCreator = () => {
+					const client = Stomp.over(() => {return new WebSocket('ws://localhost:8080/greetingRequest')});
+					client.reconnect_delay = 5_000;
+					return client;
+				};
+				const connectionHeaders = {};
+				const sessionId = uuidv4();
+				this.$store.dispatch(CONNECTION_CREATE, {clientCreator, connectionHeaders, sessionId});
 			});
-		},
-		//<
-		// beforeUpdate() {
-		// 	//<
-		// 	console.log('beforeUpdate');
-		// },
-		// updated() {
-		// 	//<
-		// 	console.log('updated');
-		// 	// this.$nextTick(function () {
-		// },
-		// activated() {
-		// 	//<
-		// 	console.log('activated');
-		// },
-		// deactivated() {
-		// 	//<
-		// 	console.log('deactivated');
-		// },
-		// beforeUnmount() {
-		// 	//<
-		// 	console.log('beforeUnmount');
-		// },
-		// unmounted() {
-		// 	//<
-		// 	console.log('unmounted');
-		// },
-		// errorCaptured(err, instance, info) {
-		// 	//<
-		// 	console.log('errorCaptured', err, instance, info);
-		// },
-		// renderTracked({ key, target, type }) {
-		// 	//<
-		// 	console.log('renderTracked', key, target, type);
-		// }
+		}
 	}
 </script>
 
