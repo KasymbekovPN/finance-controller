@@ -1,4 +1,4 @@
-package kpn.ctrlf.client.greeting;
+package kpn.ctrlf.client.conversation.greeting;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -9,10 +9,10 @@ public class GreetingController {
 
 	@MessageMapping("/greetingRequest")
 	@SendTo("/topic/greetingResponse")
-	public GreetingResponse greetingResponse(GreetingRequest request){
-		return new GreetingResponse();
+	public Response greetingResponse(Request request){
+		return new Response();
 	}
 
-	public static class GreetingRequest {}
-	public static class GreetingResponse {}
+	public static class Request {}
+	public static class Response {}
 }

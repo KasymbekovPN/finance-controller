@@ -48,6 +48,8 @@ dependencies {
 	//<
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	testImplementation "org.mockito:mockito-all:$mockitoVersion"
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	//<

@@ -13,7 +13,8 @@
 		mounted(){
 			this.$nextTick(() => {
 				const clientCreator = () => {
-					const client = Stomp.over(() => {return new WebSocket('ws://localhost:8080/greetingRequest')});
+					//< move path to config file
+					const client = Stomp.over(() => {return new WebSocket('ws://localhost:8081/greetingRequest')});
 					client.reconnect_delay = 5_000;
 					return client;
 				};
