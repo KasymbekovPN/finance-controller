@@ -1,5 +1,5 @@
 <template>
-  <p>Temp. text</p>
+  <p class="p0">Temp. text</p>
 </template>
 
 <script>
@@ -25,7 +25,11 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	.p0 {
+		color: $tmp_color
+	}
+
 	#app {
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
