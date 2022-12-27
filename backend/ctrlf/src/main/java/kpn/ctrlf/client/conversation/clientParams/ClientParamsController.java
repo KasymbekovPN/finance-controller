@@ -17,6 +17,11 @@ public class ClientParamsController {
 	@SendTo("/topic/clientParamsResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId,
 							 Request request){
+		// TODO: 27.12.2022 del 
+		//<
+//		System.out.println("sessionId : " + sessionId);
+//		System.out.println("request : " + request);
+		//<
 		return new Response(clientParams.getLocale());
 	}
 

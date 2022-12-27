@@ -1,3 +1,8 @@
+import { loadParams } from "@/loadManager/loadManager";
+// import { CONNECTION_SEND } from "@/store/actions/connection";
+//<
+import store from "@/store/store";
+
 class Connection {
 
 	constructor(clientCreator, headers){
@@ -24,6 +29,15 @@ class Connection {
 				this._subscription.forEach((value, key) => {
 					this._client.subscribe(key, value);
 				});
+
+				loadParams(store);
+
+				//<
+				// store.dispatch(CONNECTION_SEND, {
+				// 	destination: '/clientParamsRequest',
+				// 	headers: {},
+				// 	body: {}
+				// });
 			},
 			(/*error*/) => {
 				this._connected = false;

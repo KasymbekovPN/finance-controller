@@ -15,6 +15,8 @@
 				const clientCreator = () => {
 					//< move path to config file
 					const client = Stomp.over(() => {return new WebSocket('ws://localhost:8081/greetingRequest')});
+					//<
+					// const client = Stomp.over(() => {return new WebSocket('ws://localhost:8081/hello')});
 					client.reconnect_delay = 5_000;
 					return client;
 				};

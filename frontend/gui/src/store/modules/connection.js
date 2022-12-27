@@ -4,7 +4,8 @@ import {
 	CONNECTION_CONNECT,
 	//<
 	// CONNECTION_DISCONNECT,
-	// CONNECTION_SEND
+	//<
+	CONNECTION_SEND
 } from "../actions/connection";
 
 const state = {
@@ -24,10 +25,11 @@ const actions = {
 		console.log(`action: [${CONNECTION_CREATE}]\ncommit: ${commit}\ndispatch: ${dispatch}\nclientCreator: ${clientCreator}\nconnectionHeaders: ${connectionHeaders}\nsessionId: ${sessionId}`)
 		//<
 		const connection = new Connection(clientCreator, connectionHeaders);
-		//<
-		// connection.addSubscription('/topic/????', response => {
-		// 	console.log(`-------- greeting response: ${response}`);
-		// });
+		//< move functions to file
+		connection
+			.addSubscription(`/topic/clientParamsResponse/${sessionId}`, response => {
+				console.log('+++clientParamsResponse: ', response);
+			});
 
 		commit(CONNECTION_CREATE, {connection, sessionId});
 
@@ -42,8 +44,12 @@ const actions = {
 	//<
 	// [CONNECTION_DISCONNECT]: ({commit, dispatch}) => {
 	// },
-	// [CONNECTION_SEND]: ({commit, dispatch}) => {
-	// }
+	[CONNECTION_SEND]: ({commit, dispatch}, {destination, headers, body}) => {
+		//<
+		console.log(`action: [${CONNECTION_CONNECT}]\ncommit: ${commit}\ndispatch: ${dispatch}\ndestination: ${destination}\nheaders: ${headers}\nbody: ${body}`);
+		//<
+		commit(CONNECTION_SEND, {destination, headers, body});
+	}
 };
 
 const mutations = {
@@ -63,8 +69,16 @@ const mutations = {
 	//<
 	// [CONNECTION_DISCONNECT]: state => {
 	// },
-	// [CONNECTION_SEND]: state => {
-	// }
+	[CONNECTION_SEND]: (state, {destination, headers, body}) => {
+		//<
+		console.log(`mutation: [${CONNECTION_CONNECT}]\ndestination: ${destination}\nheaders: ${headers}\nbody: ${body}`);
+
+		state.connection.send(
+			`/app${destination}/${state.sessionId}`,
+			headers,
+			JSON.stringify(body)
+		);
+	}
 };
 
 export default {
