@@ -10,9 +10,6 @@ public class GreetingController {
 	@MessageMapping("/greetingRequest")
 	@SendTo("/topic/greetingResponse")
 	public Response greetingResponse(Request request){
-		//<
-		System.out.println("------------ greeting request: " + request);
-		//<
 		return new Response();
 	}
 

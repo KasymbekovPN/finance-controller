@@ -1,6 +1,4 @@
 import { loadParams } from "@/loadManager/loadManager";
-// import { CONNECTION_SEND } from "@/store/actions/connection";
-//<
 import store from "@/store/store";
 
 class Connection {
@@ -31,13 +29,6 @@ class Connection {
 				});
 
 				loadParams(store);
-
-				//<
-				// store.dispatch(CONNECTION_SEND, {
-				// 	destination: '/clientParamsRequest',
-				// 	headers: {},
-				// 	body: {}
-				// });
 			},
 			(/*error*/) => {
 				this._connected = false;
