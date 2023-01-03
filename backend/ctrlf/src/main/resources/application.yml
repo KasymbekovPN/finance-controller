@@ -3,9 +3,10 @@ server.port: 8081
 client.locale: en
 
 i18n:
-  baseName: i18n_
-  extension: properties
-  locales:
-    - ru
-    - en
-    - ge
+  params:
+    baseName: i18n_
+    extension: properties
+    locales:
+      - ru
+      - en
+      - ge
