@@ -1,5 +1,6 @@
-package kpn.ctrlf.client.i18n;
+package kpn.ctrlf.client.i18n.params;
 
+import kpn.ctrlf.client.i18n.params.I18nParams;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import lombok.Setter;

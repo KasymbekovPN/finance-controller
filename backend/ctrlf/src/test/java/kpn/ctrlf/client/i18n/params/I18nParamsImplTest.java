@@ -1,5 +1,6 @@
-package kpn.ctrlf.client.i18n;
+package kpn.ctrlf.client.i18n.params;
 
+import kpn.ctrlf.client.i18n.params.I18nParamsImpl;
 import kpn.lib.result.ImmutableResult;
 import kpn.lib.result.Result;
 import org.junit.jupiter.api.Test;
