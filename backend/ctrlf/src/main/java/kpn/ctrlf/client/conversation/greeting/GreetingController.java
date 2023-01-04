@@ -5,7 +5,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class GreetingController {
+public final class GreetingController {
 
 	@MessageMapping("/greetingRequest")
 	@SendTo("/topic/greetingResponse")
