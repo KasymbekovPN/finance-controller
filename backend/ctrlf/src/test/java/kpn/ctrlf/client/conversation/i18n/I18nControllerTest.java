@@ -10,13 +10,16 @@ class I18nControllerTest {
 
 	@Test
 	void shouldCheckResponseMethod() {
-		Map<String, Map<String, String>> templates = Map.of(
+		Map<String, Map<String, String>> init = Map.of(
 			"en", Map.of("arg", "value")
 		);
+		Map<String, Map<String, String>> expected = Map.of(
+			"arg", Map.of("en", "value")
+		);
 
-		I18nSource source = new I18nSource(templates);
+		I18nSource source = I18nSource.create(init);
 		I18nController.Response response = new I18nController(source).response("", new I18nController.Request());
 
-		Assertions.assertThat(response.getTemplates()).isEqualTo(templates);
+		Assertions.assertThat(response.getTemplates()).isEqualTo(expected);
 	}
 }

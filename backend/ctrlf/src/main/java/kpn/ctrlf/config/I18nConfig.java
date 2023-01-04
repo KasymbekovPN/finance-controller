@@ -49,6 +49,6 @@ public class I18nConfig {
 			log.error("{}", pathResult.getSeed().getCode());
 		}
 
-		return new I18nSource(templates);
+		return I18nSource.create(templates);
 	}
 }
