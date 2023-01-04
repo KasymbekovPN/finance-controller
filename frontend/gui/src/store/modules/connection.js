@@ -1,4 +1,5 @@
 import { Connection } from "@/connection/connection";
+import { loadI18n } from "@/loadManager/loadManager";
 import { CLIENT_PARAMS_SET } from "../actions/clientParams";
 import {
 	CONNECTION_CREATE,
@@ -6,6 +7,8 @@ import {
 	CONNECTION_DISCONNECT,
 	CONNECTION_SEND
 } from "../actions/connection";
+import { I18N_SET } from "../actions/i18n";
+import store from "../store";
 
 const state = {
 	connection: undefined,
@@ -25,6 +28,17 @@ const actions = {
 			.addSubscription(`/topic/clientParamsResponse/${sessionId}`, response => {
 				const clientParams = JSON.parse(response.body);
 				dispatch(CLIENT_PARAMS_SET, {clientParams});
+
+				loadI18n(store);
+			})
+			.addSubscription(`/topic/i18nResponse/${sessionId}`, response => {
+				const i18n = JSON.parse(response.body);
+				dispatch(I18N_SET, {i18n});
+
+				// console.log('------------');
+				// console.log(i18n);
+				//< del
+				// dispatch(CLIENT_PARAMS_SET, {clientParams});
 			});
 
 		commit(CONNECTION_CREATE, {connection, sessionId});
