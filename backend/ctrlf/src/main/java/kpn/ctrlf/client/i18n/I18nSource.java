@@ -1,11 +1,18 @@
 package kpn.ctrlf.client.i18n;
 
-import java.util.HashMap;
-import java.util.Locale;
+import lombok.RequiredArgsConstructor;
+
+import java.util.Collections;
 import java.util.Map;
 
-// TODO: 28.12.2022 del
+@RequiredArgsConstructor
 public final class I18nSource {
 
-	private final Map<Locale, Map<String, String>> templates = new HashMap<>();
+	private final Map<String, Map<String, String>> templates;
+
+	public Map<String, Map<String, String>> get() {
+		return templates == null
+			? Map.of()
+			: Collections.unmodifiableMap(templates);
+	}
 }

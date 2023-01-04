@@ -14,9 +14,7 @@ public final class ResourceFileReader implements Function<String, Result<String>
 	public Result<String> apply(String path) {
 		try {
 			File file = new ClassPathResource(path).getFile();
-			return ImmutableResult.<String>ok(
-				new String(Files.readAllBytes(file.toPath()))
-			);
+			return ImmutableResult.<String>ok(Files.readString(file.toPath()));
 		} catch (Throwable e) {
 			return ImmutableResult.<String>bFail("resource-file-reader.exception")
 				.arg(e.getMessage())
