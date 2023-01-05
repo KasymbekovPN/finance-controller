@@ -1,5 +1,6 @@
 import { CONNECTION_SEND } from "../store/actions/connection";
 
+//< del
 function loadParams(store){
 	store.dispatch(CONNECTION_SEND, {
 		destination: '/clientParamsRequest',
@@ -8,6 +9,7 @@ function loadParams(store){
 	});
 }
 
+//< del
 function loadI18n(store){
 	store.dispatch(CONNECTION_SEND, {
 		destination: '/i18nRequest',

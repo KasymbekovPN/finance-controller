@@ -1,14 +1,11 @@
 import { Connection } from "@/connection/connection";
-import { loadI18n } from "@/loadManager/loadManager";
-import { CLIENT_PARAMS_SET } from "../actions/clientParams";
 import {
 	CONNECTION_CREATE,
 	CONNECTION_CONNECT,
 	CONNECTION_DISCONNECT,
 	CONNECTION_SEND
 } from "../actions/connection";
-import { I18N_INIT } from "../actions/i18n";
-import store from "../store";
+import { SUBSCRIPTIONS } from "../actions/subscription";
 
 const state = {
 	connection: undefined,
@@ -24,18 +21,12 @@ const getters = {
 const actions = {
 	[CONNECTION_CREATE]: ({commit, dispatch}, {clientCreator, connectionHeaders, sessionId}) => {
 		const connection = new Connection(clientCreator, connectionHeaders);
-		connection
-			.addSubscription(`/topic/clientParamsResponse/${sessionId}`, response => {
-				const clientParams = JSON.parse(response.body);
-				dispatch(CLIENT_PARAMS_SET, {clientParams});
 
-				loadI18n(store);
-			})
-			.addSubscription(`/topic/i18nResponse/${sessionId}`, response => {
-				const data = JSON.parse(response.body);
-				dispatch(I18N_INIT, {data});
+		for (const action in SUBSCRIPTIONS){
+			connection.addSubscription(`${SUBSCRIPTIONS[action]}${sessionId}`, response => {
+				dispatch(action, response);
 			});
-
+		}
 		commit(CONNECTION_CREATE, {connection, sessionId});
 		dispatch(CONNECTION_CONNECT);
 	},
