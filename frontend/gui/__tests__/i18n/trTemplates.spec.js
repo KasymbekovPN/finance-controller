@@ -1,117 +1,85 @@
-/**
- * @jest-environment jsdom
- */
-
-import { TrTemplatesBuilder } from "../../src/i18n/trTemplates.js";
+import {
+	TrTemplates,
+	createTrTemplates
+} from "../../src/i18n/trTemplates.js";
 
 const code = 'tr.code';
+const ruLocale = 'ru';
+const enLocale = 'en';
+const wrongLocale = 'wrong';
+const ruTranslation = 'ru translation';
+const enTranslation = 'en translation';
+const templates = {
+	[ruLocale]: ruTranslation,
+	[enLocale]: enTranslation
+};
 
 describe('templateChunk.js', () => {
 
-	test('should check building if code is undefined', () => {
-		const expectedError = new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because code is not string');
-
-		const f = () => {new TrTemplatesBuilder().build();};
-		expect(f).toThrow(expectedError);
+	test('should check TrTemplate code getting', () => {
+		const trTemplates = new TrTemplates(code, {});
+		expect(trTemplates.code).toBe(code);
 	});
 
-	test('should check building if code is not string', () => {
-		const expectedError = new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because code is not string');
-
-		const f = () => {
-			new TrTemplatesBuilder()
-				.code(123)
-				.build();
-		};
-		expect(f).toThrow(expectedError);
+	test('should check TrTemplate translation', () => {
+		const trTemplates = new TrTemplates(code, templates);
+		expect(trTemplates.translate(ruLocale)).toBe(templates[ruLocale]);
+		expect(trTemplates.translate(enLocale)).toBe(templates[enLocale]);
+		expect(trTemplates.translate(wrongLocale)).toBeUndefined();
 	});
 
-	test('should check building if templates is empty', () => {
-		const expectedError = new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because templates is empty');
+	test('should check TrTemplate creation if code-arg is undefined', () => {
+		const expectedResult = {success: false, code: 'tr-templates.creation.code.not-string'};
 
-		const f = () => {
-			new TrTemplatesBuilder()
-				.code(code)
-				.build();
-		};
-		expect(f).toThrow(expectedError);
+		const result = createTrTemplates();
+		expect(result).toStrictEqual(expectedResult);
 	});
 
-	test('should check building if locale is undefined', () => {
-		const expectedError = new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because locale is not string');
+	test('should check TrTemplate creation if code-arg is not string', () => {
+		const expectedResult = {success: false, code: 'tr-templates.creation.code.not-string'};
 
-		const f = () => {
-			new TrTemplatesBuilder()
-				.code(code)
-				.template(undefined)
-				.template(undefined)
-				.build();
-		};
-		expect(f).toThrow(expectedError);
+		const result = createTrTemplates(123);
+		expect(result).toStrictEqual(expectedResult);
 	});
 
-	test('should check building if locale is not string', () => {
-		const expectedError = new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because locale is not string');
+	test('should check TrTemplate creation if templates-arg is not object', () => {
+		const expectedResult = {success: false, code: 'tr-templates.creation.templates.not-object'};
 
-		const f = () => {
-			new TrTemplatesBuilder()
-				.code(code)
-				.template(123)
-				.template(456)
-				.build();
-		};
-		expect(f).toThrow(expectedError);
+		const result = createTrTemplates(code);
+		expect(result).toStrictEqual(expectedResult);
 	});
 
-	test('should check building if template is undefined', () => {
-		const expectedError = new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because template is not string');
+	test('should check TrTemplate creation if templates-arg is empty', () => {
+		const expectedResult = {success: false, code: 'tr-templates.creation.templates.empty'};
 
-		const f = () => {
-			new TrTemplatesBuilder()
-				.code(code)
-				.template('ru')
-				.template('en')
-				.build();
-		};
-		expect(f).toThrow(expectedError);
+		const result = createTrTemplates(code, {});
+		expect(result).toStrictEqual(expectedResult);
 	});
 
-	test('should check building if template is not string', () => {
-		const expectedError = new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because template is not string');
+	test('should check TrTemplate creation if templates-arg contains non-string fields only', () => {
+		const expectedResult = {success: false, code: 'tr-templates.creation.templates.empty'};
 
-		const f = () => {
-			new TrTemplatesBuilder()
-				.code(code)
-				.template('ru', 123)
-				.template('en', 456)
-				.build();
-		};
-		expect(f).toThrow(expectedError);
+		const result = createTrTemplates(code, {
+			[ruLocale]: 1,
+			[enLocale]: 2
+		});
+		expect(result).toStrictEqual(expectedResult);
 	});
 
-	test('should check code getting', () => {
-		const trChuck = new TrTemplatesBuilder()
-			.code(code)
-			.template('ru', 'tr-ru')
-			.template('en', 'tr-en')
-			.build();
-		expect(trChuck.code).toBe(code);
+	test('should check TrTemplate creation if templates-arg contains non-string fields', () => {
+		const expectedResult = {success: true, value: {[ruLocale]: ruTranslation}};
+
+		const result = createTrTemplates(code, {
+			[ruLocale]: ruTranslation,
+			[enLocale]: 2
+		});
+		expect(result).toStrictEqual(expectedResult);
 	});
 
-	test('should check template getting if it is not enriched', () => {
-		const trChuck = new TrTemplatesBuilder()
-			.code(code)
-			.template('ru', 'tr-ru')
-			.build();
-		expect(trChuck.getTemplate('en')).toBe(undefined);
-	});
+	test('should check TrTemplate creation if templates-arg contains string fields only', () => {
+		const expectedResult = {success: true, value: templates};
 
-	test('should check template getting', () => {
-		const trChuck = new TrTemplatesBuilder()
-			.code(code)
-			.template('ru', 'tr-ru')
-			.template('en', 'tr-en')
-			.build();
-		expect(trChuck.getTemplate('en')).toBe('tr-en');
+		const result = createTrTemplates(code, templates);
+		expect(result).toStrictEqual(expectedResult);
 	});
 });

@@ -11,56 +11,34 @@ class TrTemplates {
 		return this._code;
 	}
 
-	getTemplate(locale){
-		return this._templates.has(locale) ? this._templates.get(locale) : undefined;
+	translate(locale){
+		return this._templates[locale];
 	}
 }
 
-class TrTemplatesBuilder {
+function createTrTemplates(code, templates){
+	const createFailResult = code => {return {success: false, code: `tr-templates.creation.${code}`}};
+	const createResult = templates => {return {success: true,  value: templates}};
 
-	constructor(){
-		this._templates = new Map();
-	}
-
-	code(code){
-		this._code = code;
-		return this;
-	}
-
-	template(locale, template){
-		this._templates.set(locale, template);
-		return this;
-	}
-
-	build() {
-		checkCode(this._code);
-		checkTemplates(this._templates);
-		return new TrTemplates(this._code, this._templates);
-	}
-}
-
-function checkCode(code){
 	if (!isString(code)){
-		throw new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because code is not string');
-	}
-}
-
-function checkTemplates(templates){
-	if (templates.size == 0){
-		throw new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because templates is empty');
+		return createFailResult('code.not-string');
 	}
 
-	templates.forEach((value, key) => {
-		if (!isString(key)){
-			throw new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because locale is not string');
+	if (typeof templates !== 'object'){
+		return createFailResult('templates.not-object');
+	}
+
+	let ts = {};
+	for (const key in templates){
+		if (isString(templates[key])){
+			ts[key] = templates[key];
 		}
-		if (!isString(value)){
-			throw new TypeError('#<TrTemplatesBuilder> Cannot build #<TrTemplates> because template is not string');
-		}
-	});
+	}
+
+	return Object.keys(ts).length === 0 ? createFailResult('templates.empty') : createResult(ts);
 }
 
 export {
 	TrTemplates,
-	TrTemplatesBuilder
+	createTrTemplates
 };
