@@ -18,7 +18,7 @@ class TrTemplates {
 
 function createTrTemplates(code, templates){
 	const createFailResult = code => {return {success: false, code: `tr-templates.creation.${code}`}};
-	const createResult = templates => {return {success: true,  value: templates}};
+	const createResult = (code, templates) => {return {success: true,  value: new TrTemplates(code, templates)}};
 
 	if (!isString(code)){
 		return createFailResult('code.not-string');
@@ -35,7 +35,7 @@ function createTrTemplates(code, templates){
 		}
 	}
 
-	return Object.keys(ts).length === 0 ? createFailResult('templates.empty') : createResult(ts);
+	return Object.keys(ts).length === 0 ? createFailResult('templates.empty') : createResult(code, ts);
 }
 
 export {

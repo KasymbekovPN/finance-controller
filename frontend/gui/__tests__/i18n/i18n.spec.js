@@ -1,65 +1,64 @@
-/**
- * @jest-environment jsdom
- */
-
-import { I18nBuilder } from "../../src/i18n/i18n";
-import { TrTemplatesBuilder } from "../../src/i18n/trTemplates.js";
+import { TrTemplates } from "../../src/i18n/trTemplates";
+import I18n from "../../src/i18n/i18n";
 
 const code = 'tr.code';
-const ansentCode = 'absent.code';
 
 describe('i18n.js', () => {
 
-	test('should check building if locale is undefined', () => {
-		const expectedError = new TypeError('#<I18nBuilder> Cannot build #<I18n> because locale is not string');
+	test('should check template addition if some one is not TrTemplates', () => {
+		const tr0 = new TrTemplates('code0', {ru: 'ru0'});
+		const expected = new Map();
+		expected.set(tr0.code, tr0);
 
-		const f = () => {new I18nBuilder().build();};
-		expect(f).toThrow(expectedError);
+		const i18n = new I18n()
+			.addTemplate(tr0)
+			.addTemplate("wrong arg");
+
+		expect(i18n._templates).toStrictEqual(expected);
 	});
 
-	test('should check building if locale is not string', () => {
-		const expectedError = new TypeError('#<I18nBuilder> Cannot build #<I18n> because locale is not string');
+	test('should check template addition', () => {
+		const tr0 = new TrTemplates('code0', {ru: 'ru0'});
+		const tr1 = new TrTemplates('code1', {ru: 'ru1'});
+		const expected = new Map();
+		expected.set(tr0.code, tr0);
+		expected.set(tr1.code, tr1);
 
-		const f = () => {
-			new I18nBuilder()
-				.locale(123)
-				.build();
-		};
-		expect(f).toThrow(expectedError);
+		const i18n = new I18n()
+			.addTemplate(tr0)
+			.addTemplate(tr1);
+
+		expect(i18n._templates).toStrictEqual(expected);
 	});
 
-	test('should check building if template is not TrTemplates', () => {
-		const expectedError = new TypeError('#<I18nBuilder> Cannot build #<I18n> because template is not #<TrTemplates>');
-
-		const f = () => {
-			new I18nBuilder()
-				.locale('en')
-				.template(123)
-				.build();
-		};
-		expect(f).toThrow(expectedError);
-	});
-
-	test('should check translation if template absent', () => {
-		const i18n = new I18nBuilder()
-			.locale('en')
-			.build();
-
-		const result = i18n.translate(123);
+	test('should check translation is code is not string', () => {
+		const result = new I18n().getTemplate(123);
 		expect(result).toBe('123');
 	});
 
-	test('should check translation', () => {
-		const trTemp = new TrTemplatesBuilder()
-			.code(code)
-			.template('ru', 'tr-ru')
-			.build();
-		const i18n = new I18nBuilder()
-			.locale('en')
-			.template(trTemp)
-			.build();
+	test('should check translation is locale is not string', () => {
+		const result = new I18n().getTemplate(code, 123);
+		expect(result).toBe(code);
+	});
 
-		const result = i18n.translate(code, 'ru');
-		expect(result).toBe('tr-ru');
+	test('should check translation is templates by code is absent', () => {
+		const result = new I18n().getTemplate(code);
+		expect(result).toBe(code);
+	});
+
+	test('should check translation is templates by code does not contain locale', () => {
+		const i18n = new I18n();
+		i18n.addTemplate(new TrTemplates(code, {ru: 'ru translation'}));
+
+		const result = i18n.getTemplate(code, 'en');
+		expect(result).toBe(code);
+	});
+
+	test('should check translation', () => {
+		const i18n = new I18n();
+		i18n.addTemplate(new TrTemplates(code, {ru: 'ru translation', en: 'en translation'}));
+
+		const result = i18n.getTemplate(code, 'en');
+		expect(result).toBe('en translation');
 	});
 });

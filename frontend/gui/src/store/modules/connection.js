@@ -7,7 +7,7 @@ import {
 	CONNECTION_DISCONNECT,
 	CONNECTION_SEND
 } from "../actions/connection";
-import { I18N_SET } from "../actions/i18n";
+import { I18N_INIT } from "../actions/i18n";
 import store from "../store";
 
 const state = {
@@ -32,13 +32,8 @@ const actions = {
 				loadI18n(store);
 			})
 			.addSubscription(`/topic/i18nResponse/${sessionId}`, response => {
-				const i18n = JSON.parse(response.body);
-				dispatch(I18N_SET, {i18n});
-
-				// console.log('------------');
-				// console.log(i18n);
-				//< del
-				// dispatch(CLIENT_PARAMS_SET, {clientParams});
+				const data = JSON.parse(response.body);
+				dispatch(I18N_INIT, {data});
 			});
 
 		commit(CONNECTION_CREATE, {connection, sessionId});

@@ -1,1 +1,1 @@
-export const I18N_SET = "I18N_SET";
+export const I18N_INIT = "I18N_INIT";

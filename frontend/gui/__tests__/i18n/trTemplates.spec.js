@@ -77,7 +77,7 @@ describe('templateChunk.js', () => {
 	});
 
 	test('should check TrTemplate creation if templates-arg contains string fields only', () => {
-		const expectedResult = {success: true, value: templates};
+		const expectedResult = {success: true, value: new TrTemplates(code, templates)};
 
 		const result = createTrTemplates(code, templates);
 		expect(result).toStrictEqual(expectedResult);
