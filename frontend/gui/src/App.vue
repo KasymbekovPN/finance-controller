@@ -1,5 +1,5 @@
 <template>
-  <p class="p0">Temp. text</p>
+  <v-main-container></v-main-container>
 </template>
 
 <script>
@@ -8,9 +8,13 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import config from '../config.js';
 
+	import vMainContainer from './components/v-main-container';
+
 	export default {
 		name: 'App',
-		components: {},
+		components: {
+			vMainContainer
+		},
 		mounted(){
 			this.$nextTick(() => {
 				const clientCreator = () => {
@@ -27,16 +31,27 @@
 </script>
 
 <style lang="scss">
-	.p0 {
-		color: $tmp_color
+	html, body, div {
+		height: 100%;
+		margin: 0;
 	}
 
+	.app {
+		font-family: Avenir, Helvetica, Arial, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-align: center;
+	}
+</style>
+
+<!-- del -->
+<!-- <style lang="scss">
 	#app {
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		text-align: center;
 		color: #2c3e50;
-		margin-top: 60px;
+		margin-top: 160px;
 	}
-</style>
+</style> -->
