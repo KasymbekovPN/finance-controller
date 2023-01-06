@@ -6,6 +6,7 @@
 	import { Stomp } from "@stomp/stompjs";
 	import { CONNECTION_CREATE } from "./store/actions/connection";
 	import { v4 as uuidv4 } from 'uuid';
+	import config from '../config.js';
 
 	export default {
 		name: 'App',
@@ -13,9 +14,8 @@
 		mounted(){
 			this.$nextTick(() => {
 				const clientCreator = () => {
-					//< move path to config file
-					const client = Stomp.over(() => {return new WebSocket('ws://localhost:8081/greetingRequest')});
-					client.reconnect_delay = 5_000;
+					const client = Stomp.over(() => {return new WebSocket(config.webSocket.url)});
+					client.reconnect_delay = config.webSocket.client.reconnectDelay;
 					return client;
 				};
 				const connectionHeaders = {};
