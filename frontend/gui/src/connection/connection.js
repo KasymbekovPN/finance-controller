@@ -1,6 +1,3 @@
-import { loadParams } from "@/loadManager/loadManager";
-import store from "@/store/store";
-
 class Connection {
 
 	constructor(clientCreator, headers){
@@ -8,6 +5,18 @@ class Connection {
 		this._subscription = new Map();
 		this._client = clientCreator();
 		this._headers = headers;
+	}
+
+	set openCallback(f){
+		this._openCallback = f;
+	}
+
+	set errorCallback(f){
+		this._errorCallback = f;
+	}
+
+	set closeCallback(f){
+		this._closeCallback = f;
 	}
 
 	get connected(){
@@ -20,6 +29,12 @@ class Connection {
 	}
 
 	connect() {
+		const runCallback = (callback) => {
+			if (callback !== undefined){
+				callback();
+			}
+		};
+
 		this._client.connect(
 			this._headers,
 			(/*frame*/) => {
@@ -27,14 +42,15 @@ class Connection {
 				this._subscription.forEach((value, key) => {
 					this._client.subscribe(key, value);
 				});
-
-				loadParams(store);
+				runCallback(this._openCallback);
 			},
 			(/*error*/) => {
 				this._connected = false;
+				runCallback(this._errorCallback);
 			},
 			(/*closeEvent*/) => {
 				this._connected = false;
+				runCallback(this._closeCallback);
 			}
 		);
 	}

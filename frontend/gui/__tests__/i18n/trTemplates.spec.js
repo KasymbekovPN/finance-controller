@@ -67,7 +67,7 @@ describe('templateChunk.js', () => {
 	});
 
 	test('should check TrTemplate creation if templates-arg contains non-string fields', () => {
-		const expectedResult = {success: true, value: {[ruLocale]: ruTranslation}};
+		const expectedResult = {success: true, value: new TrTemplates(code, {[ruLocale]: ruTranslation})};
 
 		const result = createTrTemplates(code, {
 			[ruLocale]: ruTranslation,

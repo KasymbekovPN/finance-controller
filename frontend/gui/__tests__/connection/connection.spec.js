@@ -60,32 +60,42 @@ describe('connection.js', () => {
 		const client = new HeadersCheckingClient();
 		const creator = () => {return client;};
 
-		 new Connection(creator, expectedHeaders).connect();
+		new Connection(creator, expectedHeaders).connect();
 		expect(client.headers).toStrictEqual(expectedHeaders);
 	});
 
 	test('should check openCallback usage', () => {
+		let externalCallbackState = false;
 		const creator = () => {return new OpenCallbakcCheckingClient();};
 
 		const connection = new Connection(creator, {});
+		connection.openCallback = () => {externalCallbackState = true;};
+
 		connection.connect();
 		expect(connection.connected).toBe(true);
+		expect(externalCallbackState).toBe(true);
 	});
 
 	test('should check errorCallback usage', () => {
+		let externalCallbackState = false;
 		const creator = () => {return new ErrorCallbakcCheckingClient();};
 
 		const connection = new Connection(creator, {});
+		connection.errorCallback = () => {externalCallbackState = true;};
 		connection.connect();
 		expect(connection.connected).toBe(false);
+		expect(externalCallbackState).toBe(true);
 	});
 
 	test('should check closeCallback usage', () => {
+		let externalCallbackState = false;
 		const creator = () => {return new CloseCallbakcCheckingClient();};
 
 		const connection = new Connection(creator, {});
+		connection.closeCallback = () => {externalCallbackState = true;};
 		connection.connect();
 		expect(connection.connected).toBe(false);
+		expect(externalCallbackState).toBe(true);
 	});
 
 	test('should check disconnection', () => {

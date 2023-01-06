@@ -21,6 +21,13 @@ const getters = {
 const actions = {
 	[CONNECTION_CREATE]: ({commit, dispatch}, {clientCreator, connectionHeaders, sessionId}) => {
 		const connection = new Connection(clientCreator, connectionHeaders);
+		connection.openCallback = () => {
+			dispatch(CONNECTION_SEND, {
+				destination: '/i18nRequest',
+				headers: {},
+				body: {}
+			})
+		};
 
 		for (const action in SUBSCRIPTIONS){
 			connection.addSubscription(`${SUBSCRIPTIONS[action]}${sessionId}`, response => {
