@@ -4,19 +4,19 @@
 			<p>CONNECTED</p>
 		</div>
 		<div v-if="!isConnected" class="v-main-container__disconnected">
-			<v-disconnection-element></v-disconnection-element>
+			<v-disconnection-page></v-disconnection-page>
 		</div>
 	</div>
 </template>
 
 <script>
 	import { mapGetters } from 'vuex';
-	import vDisconnectionElement from './v-disconnection-element';
+	import vDisconnectionPage from './v-disconnection-page';
 
 	export default {
 		name: 'v-main-container',
 		components: {
-			vDisconnectionElement
+			vDisconnectionPage
 		},
 		props: {},
 		data() {

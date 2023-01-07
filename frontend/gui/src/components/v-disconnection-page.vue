@@ -1,5 +1,5 @@
 <template>
-	<div class="v-disconnection-element">
+	<div class="v-disconnection-page">
 		<svg
 			version="1.1"
 			xmlns="http://www.w3.org/2000/svg"
@@ -27,13 +27,13 @@
 				/>
 			</path>
 		</svg>
-		<p class="v-disconnection-element__label">NO CONNECTION</p>
+		<p class="v-disconnection-page__label">NO CONNECTION</p>
 	</div>
 </template>
 
 <script>
 	export default {
-		name: 'v-disconnection-element',
+		name: 'v-disconnection-page',
 		data() {
 			return {}
 		}
@@ -41,7 +41,7 @@
 </script>
 
 <style lang="scss">
-	.v-disconnection-element {
+	.v-disconnection-page {
 		text-align: center;
 		display: block;
 
