@@ -55,20 +55,3 @@
 		fill: $disconnectionColor;
 	}
 </style>
-
-<!-- del -->
-<!-- <style>
-	.v-disconnection-element {
-		height: 100px;
-		width: 100%;
-		text-align: center;
-		padding: 1em;
-		margin: 0 auto 1em;
-		display: inline-block;
-		vertical-align: top;
-	}
-
-	svg path {
-		fill: #ffa035;
-	}
-</style> -->
