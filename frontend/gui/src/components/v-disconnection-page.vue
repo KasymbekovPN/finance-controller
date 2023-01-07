@@ -46,7 +46,7 @@
 		display: block;
 
 		&__label {
-			font-family: "Roboto", sans-serif;
+			font-family: $commonFontFamily;
 			color: $disconnectionColor;
 		}
 	}

@@ -1,7 +1,7 @@
 <template>
 	<div class="v-main-container">
 		<div v-if="isConnected" class="v-main-container__connected">
-			<p>CONNECTED</p>
+			<v-login-page></v-login-page>
 		</div>
 		<div v-if="!isConnected" class="v-main-container__disconnected">
 			<v-disconnection-page></v-disconnection-page>
@@ -12,11 +12,13 @@
 <script>
 	import { mapGetters } from 'vuex';
 	import vDisconnectionPage from './v-disconnection-page';
+	import vLoginPage from './v-login-page';
 
 	export default {
 		name: 'v-main-container',
 		components: {
-			vDisconnectionPage
+			vDisconnectionPage,
+			vLoginPage
 		},
 		props: {},
 		data() {
@@ -37,6 +39,11 @@
 <style lang="scss">
 	.v-main-container {
 		text-align: center;
+
+		&__connected {
+			background: $connectionBackground;
+		}
+
 		&__disconnected {
 			background: $disconnectionBackground;
 		}
