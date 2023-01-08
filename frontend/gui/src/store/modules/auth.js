@@ -1,5 +1,16 @@
-import { AUTH_LOGIN_REQUEST } from "../actions/auth";
+import {
+	AUTH_LOGIN_ERROR,
+	AUTH_LOGIN_REQUEST,
+	AUTH_LOGIN_RESPONSE,
+	AUTH_LOGIN_SUCCESS
+} from "../actions/auth";
 import { CONNECTION_SEND } from "../actions/connection";
+import { USER_PROFILE_SET } from "../actions/userProfile";
+import {
+	AUTH_STATUS_ERROR,
+	AUTH_STATUS_LOADING,
+	AUTH_STATUS_SUCCESS
+} from "../status/auth";
 
 const state = {
 	token: localStorage.getItem('user-token') || '',
@@ -13,63 +24,36 @@ const getters = {
 };
 
 const actions = {
-	[AUTH_LOGIN_REQUEST]: ({dispatch}, {user}) => {
+	[AUTH_LOGIN_REQUEST]: ({commit, dispatch}, user) => {
+		commit(AUTH_LOGIN_REQUEST);
 		dispatch(CONNECTION_SEND, {
 			destination: '/authRequest',
 			headers: {},
 			body: user
 		});
+	},
+	[AUTH_LOGIN_RESPONSE]: ({commit, dispatch}, response) => {
+		commit(response.success ? AUTH_LOGIN_SUCCESS : AUTH_LOGIN_ERROR, response);
+		dispatch(USER_PROFILE_SET, response);
 	}
-	//<
-//     [AUTH_REQUEST]: ({ commit, dispatch }, user) => {
-//         return new Promise((resolve, reject) => {
-//             commit(AUTH_REQUEST);
-//             apiCall({ url: "auth", data: user, method: "POST"})
-//                 .then(resp => {
-// 					console.log('auth | actions | AUTH_REQUEST: then');
-//                     localStorage.setItem('user-token', resp.token);
-//                     commit(AUTH_SUCCESS, resp);
-//                     dispatch(USER_REQUEST);
-//                     resolve(resp);
-//                 })
-//                 .catch(err => {
-// 					console.log('auth | actions | AUTH_REQUEST: catch');
-//                     commit(AUTH_ERROR, err);
-//                     localStorage.removeItem("user-token");
-//                     reject(err);
-//                 });
-//         });
-//     },
-//     [AUTH_LOGOUT]: ({ commit }) => {
-//         return new Promise(resolve => {
-// 			console.log('auth | actions | AUTH_LOGOUT');
-//             commit(AUTH_LOGOUT);
-//             localStorage.removeItem("user-token");
-//             resolve();
-//         });
-//     }
 };
 
 const mutations = {
-//     [AUTH_REQUEST]: state => {
-// 		console.log('auth | mutations | AUTH_REQUEST');
-//         state.status = "loading";
-//     },
-//     [AUTH_SUCCESS]: (state, resp) => {
-// 		console.log('auth | mutations | AUTH_SUCCESS');
-//         state.status = "success";
-//         state.token = resp.token;
-//         state.hasLoadedOnce = true;
-//     },
-//     [AUTH_ERROR]: state => {
-// 		console.log('auth | mutations | AUTH_ERROR');
-//         state.status = "error";
-//         state.hasLoadedOnce = true;
-//     },
-//     [AUTH_LOGOUT]: state => {
-// 		console.log('auth | mutations | AUTH_LOGOUT');
-//         state.token = "";
-//     }
+	[AUTH_LOGIN_REQUEST]: state => {
+		state.status = AUTH_STATUS_LOADING;
+	},
+	[AUTH_LOGIN_SUCCESS]: (state, response) => {
+		localStorage.setItem('user-token', response.token);
+		state.status = AUTH_STATUS_SUCCESS;
+		state.token = response.token;
+		state.hasLoadedOnce = true;
+	},
+	[AUTH_LOGIN_ERROR]: (state, response) => {
+		localStorage.removeItem('user-token');
+		state.status = AUTH_STATUS_ERROR;
+		state.token = '';
+		state.hasLoadedOnce = true;
+	}
 };
 
 export default {
