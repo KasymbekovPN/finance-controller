@@ -1,3 +1,4 @@
+import router from "@/router/router";
 import {
 	AUTH_LOGIN_ERROR,
 	AUTH_LOGIN_REQUEST,
@@ -13,13 +14,14 @@ import {
 } from "../status/auth";
 
 const state = {
+	authenticated: false,
 	token: localStorage.getItem('user-token') || '',
 	status: '',
 	hasLoadedOnce: false
 };
 
 const getters = {
-	isAuthenticated: state => !!state.token,
+	isAuthenticated: state => state.authenticated,
 	authStatus: state => state.status
 };
 
@@ -32,13 +34,20 @@ const actions = {
 			body: user
 		});
 	},
+	//< test
 	[AUTH_LOGIN_RESPONSE]: ({commit, dispatch}, response) => {
+		//<
+		console.log('AUTH_LOGIN_RESPONSE response: ');
+		console.log(response);
+		console.log(router);
+		//<
 		if (response.success){
 			commit(AUTH_LOGIN_SUCCESS, response);
 		} else {
 			commit(AUTH_LOGIN_ERROR);
 		}
 		dispatch(USER_PROFILE_SET, response);
+		router.push('/');
 	}
 };
 
@@ -46,14 +55,18 @@ const mutations = {
 	[AUTH_LOGIN_REQUEST]: state => {
 		state.status = AUTH_STATUS_LOADING;
 	},
+	//< test
 	[AUTH_LOGIN_SUCCESS]: (state, response) => {
 		localStorage.setItem('user-token', response.token);
+		state.authenticated = true;
 		state.status = AUTH_STATUS_SUCCESS;
 		state.token = response.token;
 		state.hasLoadedOnce = true;
 	},
+	//< test
 	[AUTH_LOGIN_ERROR]: state => {
 		localStorage.removeItem('user-token');
+		state.authenticated = false;
 		state.status = AUTH_STATUS_ERROR;
 		state.token = '';
 		state.hasLoadedOnce = true;

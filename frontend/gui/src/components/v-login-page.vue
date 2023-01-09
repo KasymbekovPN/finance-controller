@@ -26,6 +26,7 @@
 <script>
 	import { mapState } from 'vuex';
 	import { TemplateEngine } from '../utils/templateEngine';
+	import { AUTH_LOGIN_REQUEST } from '../store/actions/auth';
 
 	//< tmp FC-000176
 	const translate = (state, code, args) => {
@@ -70,20 +71,9 @@
 		},
 		methods: {
 			login: function() {
-				const { username, password } = this;
-				console.log(`>> ${username} ${password}`);
+				const user = {username: this.username, password: this.password};
+				this.$store.dispatch(AUTH_LOGIN_REQUEST, user);
 			}
-			//<
-	// 		login: function(){
-	// 			const { username, password } = this;
-	// 			console.log('v-login | methods | login: ', username, password);
-	// 			this.$store.dispatch(AUTH_REQUEST, { username, password})
-	// 				.then(() => {
-	// 					console.log('v-login | methods | login | then');
-	// 					this.$router.push("/");
-	// 				});
-	// 		}
-
 		}
 	}
 </script>

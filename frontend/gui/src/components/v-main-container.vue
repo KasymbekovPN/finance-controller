@@ -1,8 +1,9 @@
 <template>
 	<div class="v-main-container">
 		<div v-if="isConnected" class="v-main-container__connected">
-			<v-login-page></v-login-page>
+			<!-- <v-login-page></v-login-page> -->
 			<!-- <v-home-page /> -->
+			<router-view />
 		</div>
 		<div v-if="!isConnected" class="v-main-container__disconnected">
 			<v-disconnection-page></v-disconnection-page>
@@ -13,7 +14,8 @@
 <script>
 	import { mapGetters } from 'vuex';
 	import vDisconnectionPage from './v-disconnection-page';
-	import vLoginPage from './v-login-page';
+	//<
+	// import vLoginPage from './v-login-page';
 	//<
 	// import vHomePage from './v-home-page';
 
@@ -21,7 +23,8 @@
 		name: 'v-main-container',
 		components: {
 			vDisconnectionPage,
-			vLoginPage,
+			//<
+			// vLoginPage,
 			// vHomePage
 		},
 		props: {},
