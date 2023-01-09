@@ -1,4 +1,4 @@
-package kpn.ctrlf.client.conversation.greeting;
+package kpn.ctrlf.client.conversation;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;

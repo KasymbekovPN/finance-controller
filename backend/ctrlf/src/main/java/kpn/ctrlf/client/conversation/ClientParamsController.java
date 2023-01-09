@@ -1,32 +1,33 @@
-package kpn.ctrlf.client.conversation.i18n;
+package kpn.ctrlf.client.conversation;
 
-import kpn.ctrlf.client.i18n.I18nSource;
-import lombok.Getter;
+import kpn.ctrlf.client.params.ClientParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-import java.util.Map;
-
 @Controller
 @RequiredArgsConstructor
-public final class I18nController {
+public final class ClientParamsController {
 
-	private final I18nSource i18nSource;
+	private final ClientParams clientParams;
 
-	@MessageMapping("/i18nRequest/{sessionId}")
-	@SendTo("/topic/i18nResponse/{sessionId}")
+	@MessageMapping("/clientParamsRequest/{sessionId}")
+	@SendTo("/topic/clientParamsResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId,
 							 Request request){
-		return new Response(i18nSource.get());
+		return new Response(clientParams.getLocale());
 	}
-	public static  class Request {}
+
+	public static class Request {}
 
 	@RequiredArgsConstructor
-	@Getter
 	public static class Response {
-		private final Map<String, Map<String, String>> templates;
+		private final String locale;
+
+		public String getLocale() {
+			return locale;
+		}
 	}
 }

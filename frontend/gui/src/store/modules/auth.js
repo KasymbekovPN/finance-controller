@@ -33,7 +33,11 @@ const actions = {
 		});
 	},
 	[AUTH_LOGIN_RESPONSE]: ({commit, dispatch}, response) => {
-		commit(response.success ? AUTH_LOGIN_SUCCESS : AUTH_LOGIN_ERROR, response);
+		if (response.success){
+			commit(AUTH_LOGIN_SUCCESS, response);
+		} else {
+			commit(AUTH_LOGIN_ERROR);
+		}
 		dispatch(USER_PROFILE_SET, response);
 	}
 };
@@ -48,7 +52,7 @@ const mutations = {
 		state.token = response.token;
 		state.hasLoadedOnce = true;
 	},
-	[AUTH_LOGIN_ERROR]: (state, response) => {
+	[AUTH_LOGIN_ERROR]: state => {
 		localStorage.removeItem('user-token');
 		state.status = AUTH_STATUS_ERROR;
 		state.token = '';

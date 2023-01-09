@@ -43,12 +43,12 @@ describe('auth.js', () => {
 		const { actions } = auth;
 
 		const response = {success: false};
-		const expectedCommitResult = { command: AUTH_LOGIN_ERROR, data: response };
+		const expectedCommitResult = { command: AUTH_LOGIN_ERROR};
 		const expectedDispatchResult = { command: USER_PROFILE_SET, data: response };
 
 		let commitResult;
-		const commit = (command, data) => {
-			commitResult = data !== undefined ? { command, data } : { command };
+		const commit = (command) => {
+			commitResult = { command };
 		};
 		let dispatchResult;
 		const dispatch = (command, data) => {
@@ -112,7 +112,6 @@ describe('auth.js', () => {
 
 	test('should check mutation AUTH_LOGIN_ERROR', () => {
 		const { mutations } = auth;
-		const response = {};
 		const expectedState = {
 			token: '',
 			status: AUTH_STATUS_ERROR,
@@ -120,7 +119,7 @@ describe('auth.js', () => {
 		};
 
 		let state = {};
-		mutations[AUTH_LOGIN_ERROR](state, response);
+		mutations[AUTH_LOGIN_ERROR](state);
 		expect(state).toStrictEqual(expectedState);
 
 		const userToken = localStorage.getItem('user-token');

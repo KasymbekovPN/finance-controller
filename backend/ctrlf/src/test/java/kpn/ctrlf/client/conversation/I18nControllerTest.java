@@ -1,4 +1,4 @@
-package kpn.ctrlf.client.conversation.i18n;
+package kpn.ctrlf.client.conversation;
 
 import kpn.ctrlf.client.i18n.I18nSource;
 import org.assertj.core.api.Assertions;

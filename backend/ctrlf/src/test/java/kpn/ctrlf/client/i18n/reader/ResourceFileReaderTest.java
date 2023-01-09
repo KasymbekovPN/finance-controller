@@ -32,7 +32,7 @@ class ResourceFileReaderTest {
 
 	@Test
 	void shouldCheckReading() {
-		ImmutableResult<String> expectedResult = ImmutableResult.<String>ok("content\n");
+		ImmutableResult<String> expectedResult = ImmutableResult.<String>ok("content\r\n");
 
 		String path = getCalculateFilePath("exist.txt");
 
