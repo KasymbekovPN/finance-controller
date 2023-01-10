@@ -1,25 +1,43 @@
 <template>
 	<div class="v-login-page">
-		<form
-			class="v-login-page__form"
-			@submit.prevent="login"
-		>
-			<h1 class="v-login-page__title">{{ title }}</h1>
-			<input
-				required
-				v-model="username"
-				type="text"
-				:placeholder="[[ usernamePlaceholder ]]"
-			/>
-			<input
-				required
-				v-model="password"
-				type="password"
-				:placeholder="[[ passwordPlaceholder ]]"
-			/>
-			<hr />
-			<button type="submit">{{ buttonText }}</button>
-			<p>{{ loginStatus }}</p>
+		<form @submit.prevent="login">
+			<div class="v-login-page__form">
+				<div>
+					<p class="v-login-page__form__title">{{ title }}</p>
+				</div>
+				<div>
+					<input
+						class="v-login-page__form__username"
+						required
+						v-model="username"
+						type="text"
+						:placeholder="[[ usernamePlaceholder ]]"
+					/>
+				</div>
+				<div>
+					<input
+						class="v-login-page__form__password"
+						required
+						v-model="password"
+						type="password"
+						:placeholder="[[ passwordPlaceholder ]]"
+					/>
+				</div>
+				<div>
+					<hr />
+				</div>
+				<div class="v-login-page__form__btn-div">
+					<button
+						class="v-login-page__form__btn-div__button"
+						type="submit"
+					>
+						{{ buttonText }}
+					</button>
+				</div>
+				<div>
+					<p>{{ loginStatus }}</p>
+				</div>
+			</div>
 		</form>
 	</div>
 </template>
@@ -85,9 +103,44 @@
 
 <style lang="scss">
 	.v-login-page {
-		display: flex;
-		flex-direction: column;
 		align-items: center;
 		font-family: $commonFontFamily;
+		padding-top: 100px;
+
+		&__form {
+			display: inline-block;
+			width: 400px;
+			padding-top: 0px;
+
+			&__title {
+				color: $connectionColor;
+				font-size: 30px;
+			}
+
+			&__username {
+				width: 400px;
+				height: 24px;
+				margin-bottom: 10px;
+				font-size: 20px;
+			}
+
+			&__password {
+				width: 400px;
+				height: 24px;
+				font-size: 20px;
+			}
+
+			&__btn-div {
+				display: flex;
+
+				&__button {
+					width: 150px;
+					height: 30px;
+					font-size: 20px;
+					background: #bacde4;
+					border-width: 0px;
+				}
+			}
+		}
 	}
 </style>
