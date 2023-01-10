@@ -1,4 +1,4 @@
-import { Connection } from "@/connection/connection";
+import { Connection } from "../../connection/connection";
 import {
 	CONNECTION_CREATE,
 	CONNECTION_CONNECT,

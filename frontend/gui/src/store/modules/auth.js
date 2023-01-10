@@ -1,4 +1,4 @@
-import router from "@/router/router";
+import router from "../../router/router";
 import {
 	AUTH_LOGIN_ERROR,
 	AUTH_LOGIN_REQUEST,
@@ -34,13 +34,7 @@ const actions = {
 			body: user
 		});
 	},
-	//< test
 	[AUTH_LOGIN_RESPONSE]: ({commit, dispatch}, response) => {
-		//<
-		console.log('AUTH_LOGIN_RESPONSE response: ');
-		console.log(response);
-		console.log(router);
-		//<
 		if (response.success){
 			commit(AUTH_LOGIN_SUCCESS, response);
 		} else {
@@ -55,7 +49,6 @@ const mutations = {
 	[AUTH_LOGIN_REQUEST]: state => {
 		state.status = AUTH_STATUS_LOADING;
 	},
-	//< test
 	[AUTH_LOGIN_SUCCESS]: (state, response) => {
 		localStorage.setItem('user-token', response.token);
 		state.authenticated = true;
@@ -63,7 +56,6 @@ const mutations = {
 		state.token = response.token;
 		state.hasLoadedOnce = true;
 	},
-	//< test
 	[AUTH_LOGIN_ERROR]: state => {
 		localStorage.removeItem('user-token');
 		state.authenticated = false;

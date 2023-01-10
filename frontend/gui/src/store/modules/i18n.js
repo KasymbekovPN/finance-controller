@@ -1,5 +1,5 @@
-import I18n from "@/i18n/i18n";
-import { createTrTemplates } from "@/i18n/trTemplates";
+import I18n from "../../i18n/i18n";
+import { createTrTemplates } from "../../i18n/trTemplates";
 import { I18N_INIT } from "../actions/i18n";
 
 const state = {

@@ -19,6 +19,7 @@
 			/>
 			<hr />
 			<button type="submit">{{ buttonText }}</button>
+			<p>{{ loginStatus }}</p>
 		</form>
 	</div>
 </template>
@@ -27,6 +28,7 @@
 	import { mapState } from 'vuex';
 	import { TemplateEngine } from '../utils/templateEngine';
 	import { AUTH_LOGIN_REQUEST } from '../store/actions/auth';
+	import { AUTH_STATUS_ERROR } from '../store/status/auth';
 
 	//< tmp FC-000176
 	const translate = (state, code, args) => {
@@ -66,6 +68,9 @@
 				},
 				passwordPlaceholder: state => {
 					return translate(state, 'login-page.input.password.placeholder');
+				},
+				loginStatus: state => {
+					return state.auth.status === AUTH_STATUS_ERROR ? translate(state, 'login-page.state.error') : '';
 				}
 			})
 		},
