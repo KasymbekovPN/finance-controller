@@ -23,8 +23,8 @@ class TemplateEngine {
 
 		let result = template;
 		replacingData.forEach((value, key) => {
-			if (args.has(key)){
-				const arg = args.get(key);
+			const arg = args[key];
+			if (arg !== undefined) {
 				for (const substr of value)	{
 					if (substr.valid){
 						result = result.replace(substr.value, arg);

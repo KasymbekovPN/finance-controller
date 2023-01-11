@@ -78,9 +78,7 @@ describe('templateEngine.js', () => {
 
 		const engine = new TemplateEngine();
 		const template = '_{  arg0 }_{arg1  }_{arg0}_{arg2}';
-		const args = new Map();
-		args.set('arg0', 'value0');
-		args.set('arg2', 'value2');
+		const args = {arg0: 'value0', arg2: 'value2'};
 		const result = engine.execute(template, args);
 
 		expect(result).toBe(expected);
@@ -91,10 +89,7 @@ describe('templateEngine.js', () => {
 
 		const engine = new TemplateEngine();
 		const template = '_{  arg0 }_{arg1  }_{arg0}_{arg2}';
-		const args = new Map();
-		args.set('arg0', 'value0');
-		args.set('arg1', 'value1');
-		args.set('arg2', 'value2');
+		const args = {arg0: 'value0', arg1: 'value1', arg2: 'value2'};
 		const result = engine.execute(template, args);
 
 		expect(result).toBe(expected);

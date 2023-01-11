@@ -3,7 +3,7 @@
 		<form @submit.prevent="login">
 			<div class="v-login-page__form">
 				<div>
-					<p class="v-login-page__form__title">{{ title }}</p>
+					<p class="v-login-page__form__title">{{ translate('login-page.title') }}</p>
 				</div>
 				<div>
 					<input
@@ -11,7 +11,7 @@
 						required
 						v-model="username"
 						type="text"
-						:placeholder="[[ usernamePlaceholder ]]"
+						:placeholder="[[ translate('login-page.input.username.placeholder') ]]"
 					/>
 				</div>
 				<div>
@@ -20,7 +20,7 @@
 						required
 						v-model="password"
 						type="password"
-						:placeholder="[[ passwordPlaceholder ]]"
+						:placeholder="[[ translate('login-page.input.password.placeholder') ]]"
 					/>
 				</div>
 				<div>
@@ -31,7 +31,7 @@
 						class="v-login-page__form__btn-div__button"
 						type="submit"
 					>
-						{{ buttonText }}
+						{{ translate('login-page.button.login') }}
 					</button>
 				</div>
 				<div>
@@ -43,27 +43,9 @@
 </template>
 
 <script>
-	import { mapState } from 'vuex';
-	import { TemplateEngine } from '../utils/templateEngine';
+	import { mapGetters } from 'vuex';
 	import { AUTH_LOGIN_REQUEST } from '../store/actions/auth';
 	import { AUTH_STATUS_ERROR } from '../store/status/auth';
-
-	//< tmp FC-000176
-	const translate = (state, code, args) => {
-		if (args === undefined){
-			args= new Map();
-		}
-
-		const locale = state.clientParams.locale;
-		const i18n = state.i18n.i18n;
-
-		if (locale != undefined && i18n !== undefined){
-			const template = i18n.getTemplate(code, locale);
-			return new TemplateEngine().execute(template, args);
-		}
-
-		return code;
-	};
 
 	export default {
 		name: 'v-login-page',
@@ -74,23 +56,13 @@
 			}
 		},
 		computed: {
-			...mapState({
-				title: state => {
-					return translate(state, 'login-page.title');
-				},
-				buttonText: state => {
-					return translate(state, 'login-page.button.login');
-				},
-				usernamePlaceholder: state => {
-					return translate(state, 'login-page.input.username.placeholder');
-				},
-				passwordPlaceholder: state => {
-					return translate(state, 'login-page.input.password.placeholder');
-				},
-				loginStatus: state => {
-					return state.auth.status === AUTH_STATUS_ERROR ? translate(state, 'login-page.state.error') : '';
-				}
-			})
+			...mapGetters([
+				'translate',
+				'authStatus'
+			]),
+			loginStatus: function(){
+				return this.authStatus === AUTH_STATUS_ERROR ? this.translate('login-page.state.error') : '';
+			}
 		},
 		methods: {
 			login: function() {
