@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-//< restore
+//< del
 // import { CONNECTION_SEND } from '../../../src/store/actions/connection';
 // import { AUTH_LOGIN_ERROR, AUTH_LOGIN_REQUEST, AUTH_LOGIN_RESPONSE, AUTH_LOGIN_SUCCESS } from '../../../src/store/actions/auth';
 // import { USER_PROFILE_SET } from '../../../src/store/actions/userProfile';

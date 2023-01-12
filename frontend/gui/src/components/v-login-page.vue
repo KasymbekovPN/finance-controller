@@ -44,8 +44,7 @@
 
 <script>
 	import { mapGetters } from 'vuex';
-	import { AUTH_LOGIN_REQUEST } from '../store/actions/auth';
-	import { AUTH_STATUS_ERROR } from '../store/status/auth';
+	import { AUTH_LOGIN_REQUEST, AUTH_STATUS_ERROR } from '../store/sconst/auth';
 
 	export default {
 		name: 'v-login-page',

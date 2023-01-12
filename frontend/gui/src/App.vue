@@ -4,7 +4,7 @@
 
 <script>
 	import { Stomp } from "@stomp/stompjs";
-	import { CONNECTION_CREATE } from "./store/actions/connection";
+	import { CONNECTION_CREATE } from "./store/sconst/connection";
 	import { v4 as uuidv4 } from 'uuid';
 	import config from '../config.js';
 

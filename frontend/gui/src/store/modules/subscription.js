@@ -1,11 +1,11 @@
-import { AUTH_LOGIN_RESPONSE } from "../actions/auth";
-import { CONNECTION_SEND } from "../actions/connection";
-import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../actions/i18n";
+import { AUTH_LOGIN_RESPONSE } from "../sconst/auth";
+import { CONNECTION_SEND } from "../sconst/connection";
+import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../sconst/i18n";
 import {
 	SUBSCRIPTION_CLIENT_PARAMS,
 	SUBSCRIPTION_I18N,
 	SUBSCRIPTION_AUTH_REQUEST
-} from "../actions/subscription";
+} from "../sconst/subscription";
 
 const state = {};
 

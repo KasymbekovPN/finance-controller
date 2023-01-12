@@ -1,7 +1,7 @@
 import { TemplateEngine } from "../../utils/templateEngine";
 import I18n from "../../i18n/i18n";
 import { createTrTemplates,  } from "../../i18n/trTemplates";
-import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../actions/i18n";
+import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../sconst/i18n";
 
 const state = {
 	i18n: undefined,

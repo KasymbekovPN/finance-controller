@@ -3,15 +3,13 @@ import {
 	AUTH_LOGIN_ERROR,
 	AUTH_LOGIN_REQUEST,
 	AUTH_LOGIN_RESPONSE,
-	AUTH_LOGIN_SUCCESS
-} from "../actions/auth";
-import { CONNECTION_SEND } from "../actions/connection";
-import { USER_PROFILE_SET } from "../actions/userProfile";
-import {
+	AUTH_LOGIN_SUCCESS,
 	AUTH_STATUS_ERROR,
 	AUTH_STATUS_LOADING,
 	AUTH_STATUS_SUCCESS
-} from "../status/auth";
+} from "../sconst/auth";
+import { CONNECTION_SEND } from "../sconst/connection";
+import { USER_PROFILE_SET } from "../sconst/userProfile";
 
 const state = {
 	authenticated: false,

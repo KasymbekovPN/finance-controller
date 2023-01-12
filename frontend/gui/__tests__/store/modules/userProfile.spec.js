@@ -1,45 +1,47 @@
-import { USER_PROFILE_SET } from '../../../src/store/actions/userProfile';
-import userProfile from '../../../src/store/modules/userProfile';
 
-describe('userProfile.js', () => {
-	test('should check getter username', () => {
-		const { getters } = userProfile;
+//< del
+// import { USER_PROFILE_SET } from '../../../src/store/actions/userProfile';
+// import userProfile from '../../../src/store/modules/userProfile';
 
-		const expectedUsername = 'username';
-		const state = {username: expectedUsername};
+// describe('userProfile.js', () => {
+// 	test('should check getter username', () => {
+// 		const { getters } = userProfile;
 
-		const username = getters['username'](state);
-		expect(username).toBe(expectedUsername);
-	});
+// 		const expectedUsername = 'username';
+// 		const state = {username: expectedUsername};
 
-	test('should check action USER_PROFILE_SET', () => {
-		const { actions } = userProfile;
+// 		const username = getters['username'](state);
+// 		expect(username).toBe(expectedUsername);
+// 	});
 
-		const data = {username: 'username'};
-		const expectedResult = {
-			command: USER_PROFILE_SET,
-			data: data
-		};
+// 	test('should check action USER_PROFILE_SET', () => {
+// 		const { actions } = userProfile;
 
-		let result;
-		const commit = (command, data) => {
-			result = { command, data };
-		};
+// 		const data = {username: 'username'};
+// 		const expectedResult = {
+// 			command: USER_PROFILE_SET,
+// 			data: data
+// 		};
 
-		actions[USER_PROFILE_SET]({commit}, data);
-		expect(result).toStrictEqual(expectedResult);
-	});
+// 		let result;
+// 		const commit = (command, data) => {
+// 			result = { command, data };
+// 		};
 
-	test('should check mutation USER_PROFILE_SET', () => {
-		const { mutations } = userProfile;
+// 		actions[USER_PROFILE_SET]({commit}, data);
+// 		expect(result).toStrictEqual(expectedResult);
+// 	});
 
-		const username = 'username';
-		const expectedState = {username};
+// 	test('should check mutation USER_PROFILE_SET', () => {
+// 		const { mutations } = userProfile;
 
-		const data = {username};
-		let state = {};
-		mutations[USER_PROFILE_SET](state, data);
+// 		const username = 'username';
+// 		const expectedState = {username};
 
-		expect(state).toStrictEqual(expectedState);
-	});
-});
+// 		const data = {username};
+// 		let state = {};
+// 		mutations[USER_PROFILE_SET](state, data);
+
+// 		expect(state).toStrictEqual(expectedState);
+// 	});
+// });

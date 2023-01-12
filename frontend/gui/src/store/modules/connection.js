@@ -4,8 +4,8 @@ import {
 	CONNECTION_CONNECT,
 	CONNECTION_DISCONNECT,
 	CONNECTION_SEND
-} from "../actions/connection";
-import { SUBSCRIPTIONS } from "../actions/subscription";
+} from "../sconst/connection";
+import { SUBSCRIPTIONS } from "../sconst/subscription";
 
 const state = {
 	connection: undefined,

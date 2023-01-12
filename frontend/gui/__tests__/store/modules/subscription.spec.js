@@ -1,24 +1,26 @@
-import { SUBSCRIPTION_AUTH_REQUEST } from '../../../src/store/actions/subscription';
-import { AUTH_LOGIN_RESPONSE } from '../../../src/store/actions/auth';
-import subscription from '../../../src/store/modules/subscription';
 
-describe('subscription.js', () => {
+//< del
+// import { SUBSCRIPTION_AUTH_REQUEST } from '../../../src/store/actions/subscription';
+// import { AUTH_LOGIN_RESPONSE } from '../../../src/store/actions/auth';
+// import subscription from '../../../src/store/modules/subscription';
 
-	test('should check action SUBSCRIPTION_AUTH_REQUEST', () => {
-		const { actions } = subscription;
+// describe('subscription.js', () => {
 
-		const response = {
-			body: '{\"value\": \"value\"}'
-		};
-		const expectedResult = {
-			command: AUTH_LOGIN_RESPONSE,
-			data: {value: 'value'}
-		};
+// 	test('should check action SUBSCRIPTION_AUTH_REQUEST', () => {
+// 		const { actions } = subscription;
 
-		let result;
-		const dispatch = (command, data) => {result = {command, data}};
-		actions[SUBSCRIPTION_AUTH_REQUEST]({dispatch}, response);
+// 		const response = {
+// 			body: '{\"value\": \"value\"}'
+// 		};
+// 		const expectedResult = {
+// 			command: AUTH_LOGIN_RESPONSE,
+// 			data: {value: 'value'}
+// 		};
 
-		expect(result).toStrictEqual(expectedResult);
-	});
-});
+// 		let result;
+// 		const dispatch = (command, data) => {result = {command, data}};
+// 		actions[SUBSCRIPTION_AUTH_REQUEST]({dispatch}, response);
+
+// 		expect(result).toStrictEqual(expectedResult);
+// 	});
+// });

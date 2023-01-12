@@ -1,4 +1,4 @@
-import { USER_PROFILE_SET } from "../actions/userProfile";
+import { USER_PROFILE_SET } from "../sconst/userProfile";
 
 const state = {
 	username: ''
