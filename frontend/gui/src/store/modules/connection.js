@@ -23,7 +23,7 @@ const actions = {
 		const connection = new Connection(clientCreator, connectionHeaders);
 		connection.openCallback = () => {
 			dispatch(CONNECTION_SEND, {
-				destination: '/i18nRequest',
+				destination: '/clientParamsRequest',
 				headers: {},
 				body: {}
 			})

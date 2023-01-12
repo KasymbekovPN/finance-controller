@@ -1,11 +1,10 @@
 import { TemplateEngine } from "../../utils/templateEngine";
 import I18n from "../../i18n/i18n";
 import { createTrTemplates,  } from "../../i18n/trTemplates";
-import { I18N_INIT } from "../actions/i18n";
+import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../actions/i18n";
 
 const state = {
 	i18n: undefined,
-	//< FC-000180
 	locale: 'en'
 };
 
@@ -20,13 +19,19 @@ const getters = {
 };
 
 const actions = {
-	[I18N_INIT]: ({commit}, {data}) => {
-		commit(I18N_INIT, data);
+	[I18N_SET_LOCALE]: ({commit}, locale) => {
+		commit(I18N_SET_LOCALE, locale);
+	},
+	[I18N_SET_TEMPLATES]: ({commit}, data) => {
+		commit(I18N_SET_TEMPLATES, data);
 	}
 };
 
 const mutations = {
-	[I18N_INIT]: (state, data) => {
+	[I18N_SET_LOCALE]: (state, locale) => {
+		state.locale = locale;
+	},
+	[I18N_SET_TEMPLATES]: (state, data) => {
 		const i18n = new I18n();
 		for(const code in data.templates){
 			const result = createTrTemplates(code, data.templates[code]);
