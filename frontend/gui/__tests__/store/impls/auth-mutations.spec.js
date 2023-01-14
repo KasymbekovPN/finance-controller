@@ -1,9 +1,8 @@
+import { LS_KEYS } from "../../../src/sconst/l-storage";
 import { mutateOnLoginError, mutateOnLoginRequest, mutateOnLoginSuccess } from "../../../src/store/imps/auth-mutations";
 import { AUTH_STATUS_ERROR, AUTH_STATUS_LOADING, AUTH_STATUS_SUCCESS } from "../../../src/store/sconst/auth";
 
 describe('auth-mutations.js', () => {
-
-	const TOKEN_KEY = 'user-token';
 	const TOKEN = 'some token';
 
 	class LStorage {
@@ -39,7 +38,7 @@ describe('auth-mutations.js', () => {
 		let state = {};
 		mutateOnLoginSuccess(state, ls, response);
 		expect(state).toStrictEqual(exprectedState);
-		expect(ls.setKey).toBe(TOKEN_KEY);
+		expect(ls.setKey).toBe(LS_KEYS.userToken);
 		expect(ls.setValue).toBe(TOKEN);
 	});
 
@@ -55,6 +54,6 @@ describe('auth-mutations.js', () => {
 		let state = {};
 		mutateOnLoginError(state, ls);
 		expect(state).toStrictEqual(exprectedState);
-		expect(ls.removedKey).toBe(TOKEN_KEY);
+		expect(ls.removedKey).toBe(LS_KEYS.userToken);
 	});
 });

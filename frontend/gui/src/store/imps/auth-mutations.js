@@ -1,3 +1,4 @@
+import { LS_KEYS } from "../../sconst/l-storage";
 import { AUTH_STATUS_ERROR, AUTH_STATUS_LOADING, AUTH_STATUS_SUCCESS } from "../sconst/auth";
 
 const mutateOnLoginRequest = state => {
@@ -5,7 +6,7 @@ const mutateOnLoginRequest = state => {
 };
 
 const mutateOnLoginSuccess = (state, ls, response) => {
-	ls.setItem('user-token', response.token);
+	ls.setItem(LS_KEYS.userToken, response.token);
 	state.authenticated = true;
 	state.authStatus = AUTH_STATUS_SUCCESS;
 	state.token = response.token;
@@ -13,7 +14,7 @@ const mutateOnLoginSuccess = (state, ls, response) => {
 };
 
 const mutateOnLoginError = (state, ls) => {
-	ls.removeItem('user-token');
+	ls.removeItem(LS_KEYS.userToken);
 	state.authenticated = false;
 	state.authStatus = AUTH_STATUS_ERROR;
 	state.token = '';
