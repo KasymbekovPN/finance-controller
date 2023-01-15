@@ -11,7 +11,7 @@ describe('userProfile-actions.js', () => {
 		const data = {value: 'value'};
 		const expectedResult = {command: USER_PROFILE_SET, data};
 
-		setUserProfile(commit, data);
+		setUserProfile({commit}, data);
 		expect(commitResult).toStrictEqual(expectedResult);
 	});
 });
