@@ -1,3 +1,5 @@
+
 export const DESTINATIONS = {
-	auth: '/authRequest'
+	auth: '/authRequest',
+	i18n: '/i18nRequest'
 };
