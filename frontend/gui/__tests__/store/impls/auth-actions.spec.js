@@ -5,7 +5,7 @@ import { CONNECTION_CONNECT } from "../../../src/store/sconst/connection";
 import { USER_PROFILE_SET } from "../../../src/store/sconst/userProfile";
 import { PATHS } from "../../../src/sconst/path";
 
-describe('auth-getters.js', () => {
+describe('auth-actions.js', () => {
 
 	let commitResult;
 	const commit = (command, data) => {
