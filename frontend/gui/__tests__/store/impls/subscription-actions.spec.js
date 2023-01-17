@@ -3,7 +3,7 @@ import {
 	processClientParamsSubscription,
 	processI18nSubscription
 } from "../../../src/store/imps/subscription-actions";
-import { DESTINATIONS } from "../../../src/sconst/destinationas";
+import { DESTINATIONS } from "../../../src/sconst/destinations";
 import { CONNECTION_SEND } from "../../../src/store/sconst/connection";
 import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../../../src/store/sconst/i18n";
 import { AUTH_LOGIN_RESPONSE } from "../../../src/store/sconst/auth";

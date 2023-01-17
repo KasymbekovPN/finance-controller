@@ -1,4 +1,4 @@
-import { DESTINATIONS } from "../../sconst/destinationas";
+import { DESTINATIONS } from "../../sconst/destinations";
 import { AUTH_LOGIN_RESPONSE } from "../sconst/auth";
 import { CONNECTION_SEND } from "../sconst/connection";
 import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../sconst/i18n";

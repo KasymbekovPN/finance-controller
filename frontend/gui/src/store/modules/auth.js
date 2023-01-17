@@ -1,14 +1,18 @@
 import { LS_KEYS } from "../../sconst/l-storage";
 import router from "../../router/router";
-import { requestLogin, responseLogin } from "../imps/auth-actions";
-import { isAuthenticated } from "../imps/auth-getters";
 import {
 	AUTH_LOGIN_ERROR,
 	AUTH_LOGIN_REQUEST,
 	AUTH_LOGIN_RESPONSE,
 	AUTH_LOGIN_SUCCESS
 } from "../sconst/auth";
-
+import { requestLogin, responseLogin } from "../imps/auth-actions";
+import { getStatus, isAuthenticated } from "../imps/auth-getters";
+import {
+	mutateOnLoginRequest,
+	mutateOnLoginSuccess,
+	mutateOnLoginError
+} from "../imps/auth-mutations";
 
 const state = {
 	authenticated: false,
@@ -23,7 +27,9 @@ const getters = {
 };
 
 const actions = {
-	[AUTH_LOGIN_REQUEST]: ({commit, dispatch}, user) => { requestLogin({commit, dispatch}, user); },
+	[AUTH_LOGIN_REQUEST]: ({commit, dispatch}, user) => {
+		requestLogin({commit, dispatch}, user);
+	},
 	[AUTH_LOGIN_RESPONSE]: ({commit, dispatch}, response) => { responseLogin({commit, dispatch, router}, response); }
 };
 

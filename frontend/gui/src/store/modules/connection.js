@@ -1,4 +1,6 @@
+import { DESTINATIONS } from "../../sconst/destinations";
 import { Connection } from "../../connection/connection";
+import { isConnected } from "../imps/connection-getters";
 import {
 	CONNECTION_CREATE,
 	CONNECTION_CONNECT,
@@ -6,6 +8,18 @@ import {
 	CONNECTION_SEND
 } from "../sconst/connection";
 import { SUBSCRIPTIONS } from "../sconst/subscription";
+import {
+	doOnConnection,
+	doOnDisconnection,
+	doOnSending,
+	initializeAfterCreation
+} from "../imps/connection-actions";
+import {
+	mutateOnConnectionCreation,
+	mutateOnConnection,
+	mutateOnDisconnection,
+	mutateOnSending
+} from "../imps/connection-mutations";
 
 const state = {
 	connection: undefined,
@@ -13,59 +27,51 @@ const state = {
 };
 
 const getters = {
-	isConnected: state => {
-		return state.connection !== undefined && state.connection.connected;
-	}
+	isConnected: isConnected
 };
 
 const actions = {
 	[CONNECTION_CREATE]: ({commit, dispatch}, {clientCreator, connectionHeaders, sessionId}) => {
-		const connection = new Connection(clientCreator, connectionHeaders);
-		connection.openCallback = () => {
-			dispatch(CONNECTION_SEND, {
-				destination: '/clientParamsRequest',
-				headers: {},
-				body: {}
-			})
-		};
 
-		for (const action in SUBSCRIPTIONS){
-			connection.addSubscription(`${SUBSCRIPTIONS[action]}${sessionId}`, response => {
-				dispatch(action, response);
-			});
-		}
-		commit(CONNECTION_CREATE, {connection, sessionId});
-		dispatch(CONNECTION_CONNECT);
+		//< FC-000181 - begin
+		const connection = new Connection(clientCreator, connectionHeaders);
+		const setOpenCallback = connection => {
+			connection.openCallback = () => {
+				dispatch(CONNECTION_SEND, {
+					destination: DESTINATIONS.clientParams,
+					headers: {},
+					body: {}
+				})
+			};
+		};
+		const addSubscriptions = connection => {
+			for (const action in SUBSCRIPTIONS){
+				connection.addSubscription(`${SUBSCRIPTIONS[action]}${sessionId}`, response => {
+					dispatch(action, response);
+				});
+			}
+		};
+		//< FC-000181 - end
+
+		initializeAfterCreation(
+			commit,
+			dispatch,
+			connection,
+			sessionId,
+			setOpenCallback,
+			addSubscriptions
+		);
 	},
-	[CONNECTION_CONNECT]: ({commit}) => {
-		commit(CONNECTION_CONNECT);
-	},
-	[CONNECTION_DISCONNECT]: ({commit}) => {
-		commit(CONNECTION_DISCONNECT);
-	},
-	[CONNECTION_SEND]: ({commit}, {destination, headers, body}) => {
-		commit(CONNECTION_SEND, {destination, headers, body});
-	}
+	[CONNECTION_CONNECT]: doOnConnection,
+	[CONNECTION_DISCONNECT]: doOnDisconnection,
+	[CONNECTION_SEND]: doOnSending
 };
 
 const mutations = {
-	[CONNECTION_CREATE]: (state, {connection, sessionId}) => {
-		state.connection = connection;
-		state.sessionId = sessionId;
-	},
-	[CONNECTION_CONNECT]: state => {
-		state.connection.connect();
-	},
-	[CONNECTION_DISCONNECT]: state => {
-		state.connection.disconnect();
-	},
-	[CONNECTION_SEND]: (state, {destination, headers, body}) => {
-		state.connection.send(
-			`/app${destination}/${state.sessionId}`,
-			headers,
-			JSON.stringify(body)
-		);
-	}
+	[CONNECTION_CREATE]: mutateOnConnectionCreation,
+	[CONNECTION_CONNECT]: mutateOnConnection,
+	[CONNECTION_DISCONNECT]: mutateOnDisconnection,
+	[CONNECTION_SEND]: mutateOnSending
 };
 
 export default {

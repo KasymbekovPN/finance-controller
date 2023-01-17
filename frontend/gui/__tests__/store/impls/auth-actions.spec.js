@@ -1,7 +1,7 @@
 import { requestLogin, responseLogin } from "../../../src/store/imps/auth-actions";
-import { DESTINATIONS } from "../../../src/sconst/destinationas";
+import { DESTINATIONS } from "../../../src/sconst/destinations";
 import { AUTH_LOGIN_ERROR, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS } from "../../../src/store/sconst/auth";
-import { CONNECTION_CONNECT } from "../../../src/store/sconst/connection";
+import { CONNECTION_SEND } from "../../../src/store/sconst/connection";
 import { USER_PROFILE_SET } from "../../../src/store/sconst/userProfile";
 import { PATHS } from "../../../src/sconst/path";
 
@@ -30,7 +30,7 @@ describe('auth-actions.js', () => {
 		const user = {data: 'user'};
 		const expectedCommitResult = {command: AUTH_LOGIN_REQUEST};
 		const expectedDispatchResult = {
-			command: CONNECTION_CONNECT,
+			command: CONNECTION_SEND,
 			data: {
 				destination: DESTINATIONS.auth,
 				headers: {},

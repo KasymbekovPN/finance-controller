@@ -9,7 +9,7 @@ const state = {
 };
 
 const getters = {
-	translate: state => (code, args) => { getTranslation(state, code, args); }
+	translate: state => (code, args) => { return getTranslation(state, code, args); }
 };
 
 const actions = {
