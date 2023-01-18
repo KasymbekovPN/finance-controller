@@ -3,10 +3,12 @@
 </template>
 
 <script>
-	import { Stomp } from "@stomp/stompjs";
+	// import { Stomp } from "@stomp/stompjs";
+	//<
 	import { CONNECTION_CREATE } from "./store/sconst/connection";
-	import { v4 as uuidv4 } from 'uuid';
-	import config from '../config.js';
+	//<
+	// import { v4 as uuidv4 } from 'uuid';
+	// import config from '../config.js';
 
 	import vMainContainer from './components/v-main-container';
 
@@ -17,14 +19,16 @@
 		},
 		mounted(){
 			this.$nextTick(() => {
-				const clientCreator = () => {
-					const client = Stomp.over(() => {return new WebSocket(config.webSocket.url)});
-					client.reconnect_delay = config.webSocket.client.reconnectDelay;
-					return client;
-				};
-				const connectionHeaders = {};
-				const sessionId = uuidv4();
-				this.$store.dispatch(CONNECTION_CREATE, {clientCreator, connectionHeaders, sessionId});
+				// const clientCreator = () => {
+				// 	const client = Stomp.over(() => {return new WebSocket(config.webSocket.url)});
+				// 	client.reconnect_delay = config.webSocket.client.reconnectDelay;
+				// 	return client;
+				// };
+				// const connectionHeaders = {};
+				// const sessionId = uuidv4();
+				// this.$store.dispatch(CONNECTION_CREATE, {clientCreator, connectionHeaders, sessionId});
+				//<
+				this.$store.dispatch(CONNECTION_CREATE);
 			});
 		}
 	}

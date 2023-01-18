@@ -5,6 +5,7 @@ import {
 	CONNECTION_SEND
 } from "../sconst/connection";
 
+//< del
 const initializeAfterCreation = (commit, dispatch, connection, sessionId, setOpenCallback, addSubscriptions) => {
 	setOpenCallback(connection);
 	addSubscriptions(connection);
