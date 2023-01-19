@@ -12,7 +12,7 @@ import {
 	doOnConnection,
 	doOnDisconnection,
 	doOnSending,
-	initializeAfterCreation
+	actOnConnectionCreation
 } from "../imps/connection-actions";
 import {
 	mutateOnConnectionCreation,
@@ -39,67 +39,26 @@ const actions = {
 		const client = Stomp.over(() => {return new WebSocket(config.webSocket.url)});
 		client.reconnect_delay = config.webSocket.client.reconnectDelay;
 
-		//< FC-000181 - begin
-		const connection = new Connection(client, {});
-		const setOpenCallback = connection => {
-			connection.openCallback = () => {
-				dispatch(CONNECTION_SEND, {
-					destination: DESTINATIONS.clientParams,
-					headers: {},
-					body: {}
-				})
-			};
+		const connection = new Connection(client);
+		connection.subscriptions = SUBSCRIPTIONS;
+		connection.subscriptionCallback = action => response => {
+			dispatch(action, response);
 		};
-		const addSubscriptions = connection => {
-			for (const action in SUBSCRIPTIONS){
-				connection.addSubscription(`${SUBSCRIPTIONS[action]}${sessionId}`, response => {
-					dispatch(action, response);
-				});
-			}
+		connection.openCallback = () => {
+			dispatch(CONNECTION_SEND, {
+				destination: DESTINATIONS.clientParams,
+				headers: {},
+				body: {}
+			})
 		};
-		// //< FC-000181 - end
 
-		initializeAfterCreation(
+		actOnConnectionCreation(
 			commit,
 			dispatch,
 			connection,
-			sessionId,
-			setOpenCallback,
-			addSubscriptions
+			sessionId
 		);
 	},
-	//<
-	// [CONNECTION_CREATE]: ({commit, dispatch}, {clientCreator, connectionHeaders, sessionId}) => {
-
-	// 	//< FC-000181 - begin
-	// 	const connection = new Connection(clientCreator, connectionHeaders);
-	// 	const setOpenCallback = connection => {
-	// 		connection.openCallback = () => {
-	// 			dispatch(CONNECTION_SEND, {
-	// 				destination: DESTINATIONS.clientParams,
-	// 				headers: {},
-	// 				body: {}
-	// 			})
-	// 		};
-	// 	};
-	// 	const addSubscriptions = connection => {
-	// 		for (const action in SUBSCRIPTIONS){
-	// 			connection.addSubscription(`${SUBSCRIPTIONS[action]}${sessionId}`, response => {
-	// 				dispatch(action, response);
-	// 			});
-	// 		}
-	// 	};
-	// 	//< FC-000181 - end
-
-	// 	initializeAfterCreation(
-	// 		commit,
-	// 		dispatch,
-	// 		connection,
-	// 		sessionId,
-	// 		setOpenCallback,
-	// 		addSubscriptions
-	// 	);
-	// },
 	[CONNECTION_CONNECT]: doOnConnection,
 	[CONNECTION_DISCONNECT]: doOnDisconnection,
 	[CONNECTION_SEND]: doOnSending

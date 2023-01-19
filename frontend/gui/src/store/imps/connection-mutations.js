@@ -5,8 +5,7 @@ const mutateOnConnectionCreation = (state, {connection, sessionId}) => {
 };
 
 const mutateOnConnection = state => {
-	//< adjust args
-	state.connection.connect();
+	state.connection.connect(state.sessionId);
 };
 
 const mutateOnDisconnection = state => {

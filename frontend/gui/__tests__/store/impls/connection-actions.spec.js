@@ -2,7 +2,7 @@ import {
 	doOnConnection,
 	doOnDisconnection,
 	doOnSending,
-	initializeAfterCreation
+	actOnConnectionCreation
 } from "../../../src/store/imps/connection-actions";
 import {
 	CONNECTION_CONNECT,
@@ -28,20 +28,16 @@ describe('connection-actions.js', () => {
 
 	class TestConnection {}
 
-	test('should check initializeAfterCreation-actions', () => {
+	test('should check actOnConnectionCreation-actions', () => {
 		const sessionId = 'sessionId';
 		const connection = new TestConnection();
-		const setOpenCallback = (connection) => { connection.openCallbackSet = true; };
-		const addSubscriptions = (connection) => { connection.subscriptionsAdded = true; };
 		const expectedCommitResult = {
 			command: CONNECTION_CREATE,
 			data: {connection, sessionId}
 		};
 		const expectedDispatchResult = {command: CONNECTION_CONNECT};
 
-		initializeAfterCreation(commit, dispatch, connection, sessionId, setOpenCallback, addSubscriptions);
-		expect(connection.openCallbackSet).toBe(true);
-		expect(connection.subscriptionsAdded).toBe(true);
+		actOnConnectionCreation(commit, dispatch, connection, sessionId);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();

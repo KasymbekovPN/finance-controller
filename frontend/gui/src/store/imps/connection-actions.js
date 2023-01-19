@@ -5,10 +5,7 @@ import {
 	CONNECTION_SEND
 } from "../sconst/connection";
 
-//< del
-const initializeAfterCreation = (commit, dispatch, connection, sessionId, setOpenCallback, addSubscriptions) => {
-	setOpenCallback(connection);
-	addSubscriptions(connection);
+const actOnConnectionCreation = (commit, dispatch, connection, sessionId) => {
 	commit(CONNECTION_CREATE, {connection, sessionId});
 	dispatch(CONNECTION_CONNECT);
 };
@@ -26,7 +23,7 @@ const doOnSending = ({commit}, {destination, headers, body}) => {
 };
 
 export {
-	initializeAfterCreation,
+	actOnConnectionCreation,
 	doOnConnection,
 	doOnDisconnection,
 	doOnSending

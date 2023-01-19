@@ -51,10 +51,10 @@ describe('connection.js', () => {
 
 	test('should check connect-method if open with subscriptionCallback', () => {
 		const client = new TestSuccessClient();
-		const subscriptionCallback = response => {};
+		const expectedCallback = response => {};
+		const subscriptionCallback = action => expectedCallback;
 		const subscriptions = {action: 'dest/in/ation/'};
 		const expectedDestination = `${subscriptions['action']}${sessionId}`;
-		const expectedCallback = subscriptionCallback;
 
 		const connection = new Connection(client);
 		connection.subscriptions = subscriptions;
@@ -83,10 +83,10 @@ describe('connection.js', () => {
 		const client = new TestSuccessClient();
 		let callbackCalled = false;
 		const callback = () => { callbackCalled = true; };
-		const subscriptionCallback = response => {};
+		const expectedCallback = response => {};
+		const subscriptionCallback = action => expectedCallback;
 		const subscriptions = {action: 'dest/in/ation/'};
 		const expectedDestination = `${subscriptions['action']}${sessionId}`;
-		const expectedCallback = subscriptionCallback;
 
 		const connection = new Connection(client);
 		connection.subscriptions = subscriptions;

@@ -41,7 +41,7 @@ class Connection {
 					for (const action in this._subscriptions) {
 						this._client.subscribe(
 							`${this._subscriptions[action]}${sessionId}`,
-							this._subscriptionCallback
+							this._subscriptionCallback(action)
 						);
 					}
 				}
