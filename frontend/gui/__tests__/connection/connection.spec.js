@@ -1,58 +1,5 @@
 import { Connection } from "../../src/connection/connection.js";
 
-//< del ???
-// class HeadersCheckingClient {
-// 	connect(headers, openCallback, errorCallback, closeCallback){
-// 		this.headers = headers;
-// 	}
-// 	disconnect(){}
-// 	send (destination, headers, body){}
-// }
-
-// class OpenCallbakcCheckingClient {
-// 	connect(headers, openCallback, errorCallback, closeCallback){
-// 		openCallback();
-// 	}
-// 	disconnect(){}
-// 	send (destination, headers, body){}
-// }
-
-// class ErrorCallbakcCheckingClient {
-// 	connect(headers, openCallback, errorCallback, closeCallback){
-// 		errorCallback();
-// 	}
-// 	disconnect(){}
-// 	send (destination, headers, body){}
-// }
-
-// class CloseCallbakcCheckingClient {
-// 	connect(headers, openCallback, errorCallback, closeCallback){
-// 		closeCallback();
-// 	}
-// 	disconnect(){}
-// 	send (destination, headers, body){}
-// }
-
-// class DisconnectionCheckingClient{
-// 	connect(headers, openCallback, errorCallback, closeCallback){}
-// 	disconnect(){
-// 		this.disconnected = true;
-// 	}
-// 	send (destination, headers, body){}
-// }
-
-// class SendCheckingClient{
-// 	connect(headers, openCallback, errorCallback, closeCallback){
-// 		openCallback();
-// 	}
-// 	disconnect(){}
-// 	send (destination, headers, body){
-// 		this.destination = destination;
-// 		this.headers = headers;
-// 		this.body = body;
-// 	}
-// }
-
 describe('connection.js', () => {
 
 	const sessionId = 'sessionId';
@@ -80,6 +27,21 @@ describe('connection.js', () => {
 		}
 	}
 
+	class TestDisconnectionClient{
+		disconnect(){
+			this.disconnected = true;
+		}
+	}
+
+	class TestSendClient{
+		connect(headers, successCallback, errorCallback, closeCallback){
+			successCallback();
+		}
+		send (destination, headers, body){
+			this.data = {destination, headers, body};
+		}
+	}
+
 	test('should check connect-method if open without callbacks', () => {
 		const connection = new Connection(new TestSuccessClient());
 		connection.connect(sessionId);
@@ -87,110 +49,134 @@ describe('connection.js', () => {
 		expect(connection.connected).toBe(true);
 	});
 
-	test('shpould check connect-method if open with subscriptionCallback', () => {
+	test('should check connect-method if open with subscriptionCallback', () => {
 		const client = new TestSuccessClient();
+		const subscriptionCallback = response => {};
+		const subscriptions = {action: 'dest/in/ation/'};
+		const expectedDestination = `${subscriptions['action']}${sessionId}`;
+		const expectedCallback = subscriptionCallback;
+
 		const connection = new Connection(client);
+		connection.subscriptions = subscriptions;
+		connection.subscriptionCallback = subscriptionCallback;
+		connection.connect(sessionId);
+
+		expect(connection.connected).toBe(true);
+		expect(client.destination).toBe(expectedDestination);
+		expect(client.callback).toBe(expectedCallback);
 	});
 
-	test('shpould check connect-method if open with openCallback', () => {});
-	test('shpould check connect-method if open', () => {});
-	test('shpould check connect-method if error without callback', () => {});
-	test('shpould check connect-method if error', () => {});
-	test('shpould check connect-method if close without callback', () => {});
-	test('shpould check connect-method if close', () => {});
+	test('should check connect-method if open with openCallback', () => {
+		const client = new TestSuccessClient();
+		let callbackCalled = false;
+		const callback = () => { callbackCalled = true; };
 
-	//< restore
-	// test('should check headers usage', () => {
-	// 	//<
-	// 	// const expectedHeaders = {"arg": "value"};
+		const connection = new Connection(client);
+		connection.openCallback = callback;
+		connection.connect(sessionId);
 
-	// 	// const client = new HeadersCheckingClient();
-	// 	// const creator = () => {return client;};
+		expect(connection.connected).toBe(true);
+		expect(callbackCalled).toBe(true);
+	});
 
-	// 	// new Connection(creator, expectedHeaders).connect();
-	// 	// expect(client.headers).toStrictEqual(expectedHeaders);
-	// });
+	test('should check connect-method if open', () => {
+		const client = new TestSuccessClient();
+		let callbackCalled = false;
+		const callback = () => { callbackCalled = true; };
+		const subscriptionCallback = response => {};
+		const subscriptions = {action: 'dest/in/ation/'};
+		const expectedDestination = `${subscriptions['action']}${sessionId}`;
+		const expectedCallback = subscriptionCallback;
 
-	// test('should check openCallback usage', () => {
-	// 	//<
-	// 	// let externalCallbackState = false;
-	// 	// const creator = () => {return new OpenCallbakcCheckingClient();};
+		const connection = new Connection(client);
+		connection.subscriptions = subscriptions;
+		connection.subscriptionCallback = subscriptionCallback;
+		connection.openCallback = callback;
+		connection.connect(sessionId);
 
-	// 	// const connection = new Connection(creator, {});
-	// 	// connection.openCallback = () => {externalCallbackState = true;};
+		expect(connection.connected).toBe(true);
+		expect(client.destination).toBe(expectedDestination);
+		expect(client.callback).toBe(expectedCallback);
+		expect(callbackCalled).toBe(true);
+	});
 
-	// 	// connection.connect();
-	// 	// expect(connection.connected).toBe(true);
-	// 	// expect(externalCallbackState).toBe(true);
-	// });
+	test('should check connect-method if error without callback', () => {
+		const client = new TestErrorClient();
 
-	// test('should check errorCallback usage', () => {
-	// 	//<
-	// 	// let externalCallbackState = false;
-	// 	// const creator = () => {return new ErrorCallbakcCheckingClient();};
+		const connection = new Connection(client);
+		connection.connect(sessionId);
 
-	// 	// const connection = new Connection(creator, {});
-	// 	// connection.errorCallback = () => {externalCallbackState = true;};
-	// 	// connection.connect();
-	// 	// expect(connection.connected).toBe(false);
-	// 	// expect(externalCallbackState).toBe(true);
-	// });
+		expect(connection.connected).toBe(false);
+	});
 
-	// test('should check closeCallback usage', () => {
-	// 	//<
-	// 	// let externalCallbackState = false;
-	// 	// const creator = () => {return new CloseCallbakcCheckingClient();};
+	test('should check connect-method if error', () => {
+		const client = new TestErrorClient();
+		let callbackCalled = false;
+		const callback = () => { callbackCalled = true; };
 
-	// 	// const connection = new Connection(creator, {});
-	// 	// connection.closeCallback = () => {externalCallbackState = true;};
-	// 	// connection.connect();
-	// 	// expect(connection.connected).toBe(false);
-	// 	// expect(externalCallbackState).toBe(true);
-	// });
+		const connection = new Connection(client);
+		connection.errorCallback = callback;
+		connection.connect(sessionId);
+
+		expect(connection.connected).toBe(false);
+		expect(callbackCalled).toBe(true);
+	});
+
+	test('should check connect-method if close without callback', () => {
+		const client = new TestCloseClient();
+
+		const connection = new Connection(client);
+		connection.connect(sessionId);
+
+		expect(connection.connected).toBe(false);
+	});
+
+	test('should check connect-method if close', () => {
+		const client = new TestCloseClient();
+		let callbackCalled = false;
+		const callback = () => { callbackCalled = true; };
+
+		const connection = new Connection(client);
+		connection.closeCallback = callback;
+		connection.connect(sessionId);
+
+		expect(connection.connected).toBe(false);
+		expect(callbackCalled).toBe(true);
+	});
 
 	test('should check disconnection', () => {
-	// 	//<
-	// 	// const client = new DisconnectionCheckingClient();
-	// 	// const creator = () => {return client;};
+		const client = new TestDisconnectionClient();
 
-	// 	// const connection = new Connection(creator, {});
-	// 	// connection.disconnect();
-	// 	// expect(client.disconnected).toBe(true);
-	// 	// expect(connection.connected).toBe(false);
+		const connection = new Connection(client);
+		connection.disconnect();
+
+		expect(client.disconnected).toBe(true);
+		expect(connection.connected).toBe(false);
 	});
 
 	test('should check sending if disconnected', () => {
-	// 	//<
-	// 	// const expectedDestination = 'dest/ina/tion';
-	// 	// const expectedHeaders = {arg: 'value'}
-	// 	// const expectedBody = 'body';
+		const destination = 'dest/ina/tion';
+		const headers = {arg: 'value'}
+		const body = 'body';
+		const client = new TestSendClient();
 
-	// 	// const client = new SendCheckingClient();
-	// 	// const creator = () => {return client};
+		const connection = new Connection(client);
+		connection.send(destination, headers, body);
 
-	// 	// const connection = new Connection(creator, {});
-	// 	// connection.send(expectedDestination, expectedHeaders, expectedBody);
-
-	// 	// expect(client.destination).toBeUndefined();
-	// 	// expect(client.headers).toBeUndefined();
-	// 	// expect(client.body).toBeUndefined();
+		expect(client.data).toStrictEqual(undefined);
 	});
 
 	test('should check sending if connected', () => {
-	// 	//<
-	// 	// const expectedDestination = 'dest/ina/tion';
-	// 	// const expectedHeaders = {arg: 'value'}
-	// 	// const expectedBody = 'body';
+		const destination = 'dest/ina/tion';
+		const headers = {arg: 'value'}
+		const body = 'body';
+		const expectedData = {destination, headers, body};
+		const client = new TestSendClient();
 
-	// 	// const client = new SendCheckingClient();
-	// 	// const creator = () => {return client};
+		const connection = new Connection(client);
+		connection.connect(sessionId);
+		connection.send(destination, headers, body);
 
-	// 	// const connection = new Connection(creator, {});
-	// 	// connection.connect();
-	// 	// connection.send(expectedDestination, expectedHeaders, expectedBody);
-
-	// 	// expect(client.destination).toBe(expectedDestination);
-	// 	// expect(client.headers).toBe(expectedHeaders);
-	// 	// expect(client.body).toBe(expectedBody);
+		expect(client.data).toStrictEqual(expectedData);
 	});
 });
