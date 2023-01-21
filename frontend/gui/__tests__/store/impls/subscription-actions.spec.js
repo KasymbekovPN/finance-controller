@@ -1,12 +1,13 @@
 import {
 	processAuthRequestSubscription,
 	processClientParamsSubscription,
-	processI18nSubscription
+	processI18nSubscription,
+	processLogoutRequestSubscription
 } from "../../../src/store/imps/subscription-actions";
 import { DESTINATIONS } from "../../../src/sconst/destinations";
 import { CONNECTION_SEND } from "../../../src/store/sconst/connection";
 import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../../../src/store/sconst/i18n";
-import { AUTH_LOGIN_RESPONSE } from "../../../src/store/sconst/auth";
+import { AUTH_LOGIN_RESPONSE, AUTH_LOGOUT_RESPONSE } from "../../../src/store/sconst/auth";
 
 describe('subscription-actions.js', () => {
 
@@ -57,6 +58,17 @@ describe('subscription-actions.js', () => {
 		};
 
 		processAuthRequestSubscription({dispatch}, response);
+		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
+		reset();
+	});
+
+	test('should check logoutRequest subscription action ', () => {
+		const data = JSON.parse(response.body);
+		const expectedDispatchResult = {
+			[AUTH_LOGOUT_RESPONSE]: data
+		};
+
+		processLogoutRequestSubscription({dispatch}, response);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();
 	});

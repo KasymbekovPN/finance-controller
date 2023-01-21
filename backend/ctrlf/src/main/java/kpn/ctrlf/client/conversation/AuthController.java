@@ -18,10 +18,6 @@ public final class AuthController {
 	@SendTo("/topic/authResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId,
 							 Request request){
-		//<
-		System.out.println("AuthController " + request.getUsername() + " " + request.getPassword());
-		//<
-
 		// TODO: 09.01.2023 it is temp. solution (FC-178)
 		boolean success = request.getUsername().equals("admin") && request.getPassword().equals("admin");
 		return new Response(success, sessionId, request.getUsername());
