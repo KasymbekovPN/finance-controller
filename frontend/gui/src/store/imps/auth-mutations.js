@@ -1,5 +1,12 @@
 import { LS_KEYS } from "../../sconst/l-storage";
-import { AUTH_STATUS_ERROR, AUTH_STATUS_LOADING, AUTH_STATUS_SUCCESS } from "../sconst/auth";
+import {
+	AUTH_LOGOUT_ERROR,
+	AUTH_LOGOUT_SUCCESS,
+	AUTH_STATUS_ERROR,
+	AUTH_STATUS_LOADING,
+	AUTH_STATUS_LOGOUT,
+	AUTH_STATUS_SUCCESS
+} from "../sconst/auth";
 
 const mutateOnLoginRequest = state => {
 	state.authStatus = AUTH_STATUS_LOADING;
@@ -10,7 +17,6 @@ const mutateOnLoginSuccess = (state, ls, response) => {
 	state.authenticated = true;
 	state.authStatus = AUTH_STATUS_SUCCESS;
 	state.token = response.token;
-	state.hasLoadedOnce = true;
 };
 
 const mutateOnLoginError = (state, ls) => {
@@ -18,11 +24,31 @@ const mutateOnLoginError = (state, ls) => {
 	state.authenticated = false;
 	state.authStatus = AUTH_STATUS_ERROR;
 	state.token = '';
-	state.hasLoadedOnce = true;
+};
+
+const mutateOnLogoutRequest = state => {
+	state.authStatus = AUTH_STATUS_LOGOUT;
+};
+
+const mutateOnLogoutSuccess = (state, ls) => {
+	ls.removeItem(LS_KEYS.userToken);
+	state.authenticated = false;
+	state.authStatus = AUTH_LOGOUT_SUCCESS;
+	state.token = '';
+};
+
+const mutateOnLogoutError = (state, ls) => {
+	ls.removeItem(LS_KEYS.userToken);
+	state.authenticated = false;
+	state.authStatus = AUTH_LOGOUT_ERROR;
+	state.token = '';
 };
 
 export {
 	mutateOnLoginRequest,
 	mutateOnLoginSuccess,
-	mutateOnLoginError
+	mutateOnLoginError,
+	mutateOnLogoutRequest,
+	mutateOnLogoutSuccess,
+	mutateOnLogoutError
 };

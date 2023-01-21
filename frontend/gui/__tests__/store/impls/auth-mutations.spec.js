@@ -1,6 +1,20 @@
 import { LS_KEYS } from "../../../src/sconst/l-storage";
-import { mutateOnLoginError, mutateOnLoginRequest, mutateOnLoginSuccess } from "../../../src/store/imps/auth-mutations";
-import { AUTH_STATUS_ERROR, AUTH_STATUS_LOADING, AUTH_STATUS_SUCCESS } from "../../../src/store/sconst/auth";
+import {
+	mutateOnLoginError,
+	mutateOnLoginRequest,
+	mutateOnLoginSuccess,
+	mutateOnLogoutError,
+	mutateOnLogoutRequest,
+	mutateOnLogoutSuccess
+} from "../../../src/store/imps/auth-mutations";
+import {
+	AUTH_LOGOUT_ERROR,
+	AUTH_LOGOUT_SUCCESS,
+	AUTH_STATUS_ERROR,
+	AUTH_STATUS_LOADING,
+	AUTH_STATUS_LOGOUT,
+	AUTH_STATUS_SUCCESS
+} from "../../../src/store/sconst/auth";
 
 describe('auth-mutations.js', () => {
 	const TOKEN = 'some token';
@@ -30,8 +44,7 @@ describe('auth-mutations.js', () => {
 		const exprectedState = {
 			authenticated: true,
 			authStatus: AUTH_STATUS_SUCCESS,
-			token: TOKEN,
-			hasLoadedOnce: true
+			token: TOKEN
 		};
 
 		const ls = new LStorage();
@@ -46,13 +59,49 @@ describe('auth-mutations.js', () => {
 		const exprectedState = {
 			authenticated: false,
 			authStatus: AUTH_STATUS_ERROR,
-			token: '',
-			hasLoadedOnce: true
+			token: ''
 		};
 
 		const ls = new LStorage();
 		let state = {};
 		mutateOnLoginError(state, ls);
+		expect(state).toStrictEqual(exprectedState);
+		expect(ls.removedKey).toBe(LS_KEYS.userToken);
+	});
+
+
+	test('should check logout request mutation', () => {
+		const exprectedState = {authStatus: AUTH_STATUS_LOGOUT};
+
+		let state = {};
+		mutateOnLogoutRequest(state);
+		expect(state).toStrictEqual(exprectedState);
+	});
+
+	test('should check logout success mutation', () => {
+		const exprectedState = {
+			authenticated: false,
+			authStatus: AUTH_LOGOUT_SUCCESS,
+			token: ''
+		};
+
+		const ls = new LStorage();
+		let state = {};
+		mutateOnLogoutSuccess(state, ls);
+		expect(state).toStrictEqual(exprectedState);
+		expect(ls.removedKey).toBe(LS_KEYS.userToken);
+	});
+
+	test('should check logout error mutation', () => {
+		const exprectedState = {
+			authenticated: false,
+			authStatus: AUTH_LOGOUT_ERROR,
+			token: ''
+		};
+
+		const ls = new LStorage();
+		let state = {};
+		mutateOnLogoutError(state, ls);
 		expect(state).toStrictEqual(exprectedState);
 		expect(ls.removedKey).toBe(LS_KEYS.userToken);
 	});

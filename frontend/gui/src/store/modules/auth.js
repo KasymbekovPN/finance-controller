@@ -17,8 +17,7 @@ import {
 const state = {
 	authenticated: false,
 	token: localStorage.getItem(LS_KEYS.userToken) || '',
-	authStatus: '',
-	hasLoadedOnce: false
+	authStatus: ''
 };
 
 const getters = {
