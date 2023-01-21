@@ -1,10 +1,18 @@
 <template>
 	<div class="v-home-page">
 		<p>HOME</p>
+		<button
+			class="tmp-btn"
+			@click="logout"
+		>
+			LOGOUT
+		</button>
 	</div>
 </template>
 
 <script>
+	import { AUTH_LOGOUT_REQUEST } from '../store/sconst/auth';
+
 	export default {
 		name: 'v-home-page',
 		components: {},
@@ -13,7 +21,11 @@
 			return {}
 		},
 		computed: {},
-		methods: {}
+		methods: {
+			logout: function(){
+				this.$store.dispatch(AUTH_LOGOUT_REQUEST);
+			}
+		}
 	}
 </script>
 
