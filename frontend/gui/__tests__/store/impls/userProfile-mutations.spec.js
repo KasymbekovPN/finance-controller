@@ -1,4 +1,7 @@
-import { mutateOnSetUserProfile } from "../../../src/store/imps/userProfile-mutations";
+import {
+	mutateOnResetUserProfile,
+	mutateOnSetUserProfile
+} from "../../../src/store/imps/userProfile-mutations";
 
 describe('userProfile-mutations.js', () => {
 
@@ -9,6 +12,14 @@ describe('userProfile-mutations.js', () => {
 
 		let state = {};
 		mutateOnSetUserProfile(state, data);
+		expect(state).toStrictEqual(expectedState);
+	});
+
+	test('should check mutateOnResetUserProfile', () => {
+		const expectedState = {username: ''};
+
+		let state = {};
+		mutateOnResetUserProfile(state);
 		expect(state).toStrictEqual(expectedState);
 	});
 });
