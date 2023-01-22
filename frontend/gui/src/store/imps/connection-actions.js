@@ -1,25 +1,20 @@
-import {
-	CONNECTION_CONNECT,
-	CONNECTION_CREATE,
-	CONNECTION_DISCONNECT,
-	CONNECTION_SEND
-} from "../sconst/connection";
+import { CONNECTION } from "../../sconst/connection";
 
 const actOnConnectionCreation = (commit, dispatch, connection, sessionId) => {
-	commit(CONNECTION_CREATE, {connection, sessionId});
-	dispatch(CONNECTION_CONNECT);
+	commit(CONNECTION.CREATE, {connection, sessionId});
+	dispatch(CONNECTION.CONNECT);
 };
 
 const doOnConnection = ({commit}) => {
-	commit(CONNECTION_CONNECT);
+	commit(CONNECTION.CONNECT);
 };
 
 const doOnDisconnection = ({commit}) => {
-	commit(CONNECTION_DISCONNECT);
+	commit(CONNECTION.DISCONNECT);
 };
 
 const doOnSending = ({commit}, {destination, headers, body}) => {
-	commit(CONNECTION_SEND, {destination, headers, body});
+	commit(CONNECTION.SEND, {destination, headers, body});
 };
 
 export {

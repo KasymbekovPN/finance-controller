@@ -4,22 +4,17 @@ import {
 	processI18nSubscription,
 	processLogoutRequestSubscription
 } from "../imps/subscription-actions";
-import {
-	SUBSCRIPTION_CLIENT_PARAMS,
-	SUBSCRIPTION_I18N,
-	SUBSCRIPTION_AUTH_REQUEST,
-	SUBSCRIPTION_LOGOUT_REQUEST
-} from "../sconst/subscription";
+import { SUBSCRIPTION } from "../../sconst/subscription";
 
 const state = {};
 
 const getters = {};
 
 const actions = {
-	[SUBSCRIPTION_CLIENT_PARAMS]: processClientParamsSubscription,
-	[SUBSCRIPTION_I18N]: processI18nSubscription,
-	[SUBSCRIPTION_AUTH_REQUEST]: processAuthRequestSubscription,
-	[SUBSCRIPTION_LOGOUT_REQUEST]: processLogoutRequestSubscription
+	[SUBSCRIPTION.CLIENT_PARAMS]: processClientParamsSubscription,
+	[SUBSCRIPTION.I18N]: processI18nSubscription,
+	[SUBSCRIPTION.AUTH_REQUEST]: processAuthRequestSubscription,
+	[SUBSCRIPTION.LOGOUT_REQUEST]: processLogoutRequestSubscription
 };
 
 const mutations = {};

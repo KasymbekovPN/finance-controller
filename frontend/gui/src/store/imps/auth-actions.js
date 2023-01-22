@@ -1,13 +1,13 @@
-import { PATHS } from "../../sconst/path";
+import { PATHS } from "../../sconst/paths";
 import { DESTINATIONS } from "../../sconst/destinations";
-import { AUTH_LOGIN_ERROR, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT_ERROR, AUTH_LOGOUT_REQUEST, AUTH_LOGOUT_SUCCESS } from "../sconst/auth";
-import { CONNECTION_SEND } from "../sconst/connection";
-import { USER_PROFILE_RESET, USER_PROFILE_SET } from "../sconst/userProfile";
+import { AUTH } from "../../sconst/auth";
+import { CONNECTION } from "../../sconst/connection";
+import { USER } from "../../sconst/userProfile";
 
 const requestLogin = ({commit, dispatch}, user) => {
-	commit(AUTH_LOGIN_REQUEST);
-	dispatch(CONNECTION_SEND, {
-		destination: DESTINATIONS.auth,
+	commit(AUTH.LOGIN.REQUEST);
+	dispatch(CONNECTION.SEND, {
+		destination: DESTINATIONS.AUTH,
 		headers: {},
 		body: user
 	});
@@ -15,18 +15,18 @@ const requestLogin = ({commit, dispatch}, user) => {
 
 const responseLogin = ({commit, dispatch, router}, response) => {
 	if (response.success){
-		commit(AUTH_LOGIN_SUCCESS, response);
+		commit(AUTH.LOGIN.SUCCESS, response);
 	} else {
-		commit(AUTH_LOGIN_ERROR);
+		commit(AUTH.LOGIN.ERROR);
 	}
-	dispatch(USER_PROFILE_SET, response);
-	router.push(PATHS.home);
+	dispatch(USER.PROFILE.SET, response);
+	router.push(PATHS.HOME);
 };
 
 const requestLogout = ({commit, dispatch}) => {
-	commit(AUTH_LOGOUT_REQUEST);
-	dispatch(CONNECTION_SEND, {
-		destination: DESTINATIONS.logout,
+	commit(AUTH.LOGOUT.REQUEST);
+	dispatch(CONNECTION.SEND, {
+		destination: DESTINATIONS.LOGOUT,
 		headers: {},
 		body: {}
 	});
@@ -34,12 +34,12 @@ const requestLogout = ({commit, dispatch}) => {
 
 const responseLogout = ({commit, dispatch, router}, response) => {
 	if (response.success){
-		commit(AUTH_LOGOUT_SUCCESS, response);
+		commit(AUTH.LOGOUT.SUCCESS, response);
 	} else {
-		commit(AUTH_LOGOUT_ERROR);
+		commit(AUTH.LOGOUT.ERROR);
 	}
-	dispatch(USER_PROFILE_RESET, response);
-	router.push(PATHS.login);
+	dispatch(USER.PROFILE.RESET, response);
+	router.push(PATHS.LOGIN);
 };
 
 export {

@@ -1,14 +1,11 @@
-import {
-	USER_PROFILE_RESET,
-	USER_PROFILE_SET
-} from "../sconst/userProfile";
+import { USER } from "../../sconst/userProfile";
 
 const setUserProfile = ({commit}, data) => {
-	commit(USER_PROFILE_SET, data);
+	commit(USER.PROFILE.SET, data);
 };
 
 const resetUserProfile = ({commit}) => {
-	commit(USER_PROFILE_RESET);
+	commit(USER.PROFILE.RESET);
 };
 
 export {

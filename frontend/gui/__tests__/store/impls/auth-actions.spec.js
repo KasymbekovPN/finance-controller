@@ -1,9 +1,14 @@
-import { requestLogin, requestLogout, responseLogin, responseLogout } from "../../../src/store/imps/auth-actions";
+import {
+	requestLogin,
+	requestLogout,
+	responseLogin,
+	responseLogout
+} from "../../../src/store/imps/auth-actions";
 import { DESTINATIONS } from "../../../src/sconst/destinations";
-import { AUTH_LOGIN_ERROR, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT_ERROR, AUTH_LOGOUT_REQUEST, AUTH_LOGOUT_SUCCESS } from "../../../src/store/sconst/auth";
-import { CONNECTION_SEND } from "../../../src/store/sconst/connection";
-import { USER_PROFILE_RESET, USER_PROFILE_SET } from "../../../src/store/sconst/userProfile";
-import { PATHS } from "../../../src/sconst/path";
+import { AUTH } from "../../../src/sconst/auth";
+import { CONNECTION } from "../../../src/sconst/connection";
+import { USER } from "../../../src/sconst/userProfile";
+import { PATHS } from "../../../src/sconst/paths";
 
 describe('auth-actions.js', () => {
 
@@ -28,11 +33,11 @@ describe('auth-actions.js', () => {
 
 	test('should check requestLogin-actions', () => {
 		const user = {data: 'user'};
-		const expectedCommitResult = {command: AUTH_LOGIN_REQUEST};
+		const expectedCommitResult = {command: AUTH.LOGIN.REQUEST};
 		const expectedDispatchResult = {
-			command: CONNECTION_SEND,
+			command: CONNECTION.SEND,
 			data: {
-				destination: DESTINATIONS.auth,
+				destination: DESTINATIONS.AUTH,
 				headers: {},
 				body: user
 			}
@@ -46,9 +51,9 @@ describe('auth-actions.js', () => {
 
 	test('should check responseLogin-actions if response is fail', () => {
 		const response = {success: false};
-		const expectedCommitResult = {command: AUTH_LOGIN_ERROR};
+		const expectedCommitResult = {command: AUTH.LOGIN.ERROR};
 		const expectedDispatchResult = {
-			command: USER_PROFILE_SET,
+			command: USER.PROFILE.SET,
 			data: response
 		};
 		const router = new Router();
@@ -56,15 +61,15 @@ describe('auth-actions.js', () => {
 		responseLogin({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.home);
+		expect(router.path).toBe(PATHS.HOME);
 		reset();
 	});
 
 	test('should check responseLogin-actions', () => {
 		const response = {success: true};
-		const expectedCommitResult = {command: AUTH_LOGIN_SUCCESS, data: response};
+		const expectedCommitResult = {command: AUTH.LOGIN.SUCCESS, data: response};
 		const expectedDispatchResult = {
-			command: USER_PROFILE_SET,
+			command: USER.PROFILE.SET,
 			data: response
 		};
 		const router = new Router();
@@ -72,17 +77,17 @@ describe('auth-actions.js', () => {
 		responseLogin({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.home);
+		expect(router.path).toBe(PATHS.HOME);
 		reset();
 	});
 
 
 	test('should check requestLogout-actions', () => {
-		const expectedCommitResult = {command: AUTH_LOGOUT_REQUEST};
+		const expectedCommitResult = {command: AUTH.LOGOUT.REQUEST};
 		const expectedDispatchResult = {
-			command: CONNECTION_SEND,
+			command: CONNECTION.SEND,
 			data: {
-				destination: DESTINATIONS.logout,
+				destination: DESTINATIONS.LOGOUT,
 				headers: {},
 				body: {}
 			}
@@ -96,9 +101,9 @@ describe('auth-actions.js', () => {
 
 	test('should check responseLogout-actions if response is fail', () => {
 		const response = {success: false};
-		const expectedCommitResult = {command: AUTH_LOGOUT_ERROR};
+		const expectedCommitResult = {command: AUTH.LOGOUT.ERROR};
 		const expectedDispatchResult = {
-			command: USER_PROFILE_RESET,
+			command: USER.PROFILE.RESET,
 			data: response
 		};
 		const router = new Router();
@@ -106,15 +111,15 @@ describe('auth-actions.js', () => {
 		responseLogout({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.login);
+		expect(router.path).toBe(PATHS.LOGIN);
 		reset();
 	});
 
 	test('should check responseLogout-actions', () => {
 		const response = {success: true};
-		const expectedCommitResult = {command: AUTH_LOGOUT_SUCCESS, data: response};
+		const expectedCommitResult = {command: AUTH.LOGOUT.SUCCESS, data: response};
 		const expectedDispatchResult = {
-			command: USER_PROFILE_RESET,
+			command: USER.PROFILE.RESET,
 			data: response
 		};
 		const router = new Router();
@@ -122,7 +127,7 @@ describe('auth-actions.js', () => {
 		responseLogout({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.login);
+		expect(router.path).toBe(PATHS.LOGIN);
 		reset();
 	});
 });

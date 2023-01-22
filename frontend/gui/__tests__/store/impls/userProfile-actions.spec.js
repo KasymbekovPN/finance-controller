@@ -1,5 +1,5 @@
 import { resetUserProfile, setUserProfile } from "../../../src/store/imps/userProfile-actions";
-import { USER_PROFILE_RESET, USER_PROFILE_SET } from "../../../src/store/sconst/userProfile";
+import { USER } from "../../../src/sconst/userProfile";
 
 describe('userProfile-actions.js', () => {
 	let commitResult;
@@ -10,7 +10,7 @@ describe('userProfile-actions.js', () => {
 
 	test('should check setUserProfile-actions', () => {
 		const data = {value: 'value'};
-		const expectedResult = {command: USER_PROFILE_SET, data};
+		const expectedResult = {command: USER.PROFILE.SET, data};
 
 		setUserProfile({commit}, data);
 		expect(commitResult).toStrictEqual(expectedResult);
@@ -18,7 +18,7 @@ describe('userProfile-actions.js', () => {
 	});
 
 	test('should check resetUserProfile-actions', () => {
-		const expectedResult = {command: USER_PROFILE_RESET};
+		const expectedResult = {command: USER.PROFILE.RESET};
 
 		resetUserProfile({commit});
 		expect(commitResult).toStrictEqual(expectedResult);

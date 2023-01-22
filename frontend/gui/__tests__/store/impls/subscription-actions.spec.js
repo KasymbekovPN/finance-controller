@@ -5,9 +5,9 @@ import {
 	processLogoutRequestSubscription
 } from "../../../src/store/imps/subscription-actions";
 import { DESTINATIONS } from "../../../src/sconst/destinations";
-import { CONNECTION_SEND } from "../../../src/store/sconst/connection";
-import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../../../src/store/sconst/i18n";
-import { AUTH_LOGIN_RESPONSE, AUTH_LOGOUT_RESPONSE } from "../../../src/store/sconst/auth";
+import { CONNECTION } from "../../../src/sconst/connection";
+import { I18N } from "../../../src/sconst/i18n";
+import { AUTH } from "../../../src/sconst/auth";
 
 describe('subscription-actions.js', () => {
 
@@ -27,9 +27,9 @@ describe('subscription-actions.js', () => {
 	test('should check clientParams subscription action ', () => {
 		const clientParams = JSON.parse(response.body);
 		const expectedDispatchResult = {
-			[I18N_SET_LOCALE]: clientParams.locale,
-			[CONNECTION_SEND]: {
-				destination: DESTINATIONS.i18n,
+			[I18N.SET.LOCALE]: clientParams.locale,
+			[CONNECTION.SEND]: {
+				destination: DESTINATIONS.I18N,
 				headers: {},
 				body: {}
 			}
@@ -43,7 +43,7 @@ describe('subscription-actions.js', () => {
 	test('should check i18n subscription action ', () => {
 		const data = JSON.parse(response.body);
 		const expectedDispatchResult = {
-			[I18N_SET_TEMPLATES]: data
+			[I18N.SET.TEMPLATES]: data
 		};
 
 		processI18nSubscription({dispatch}, response);
@@ -54,7 +54,7 @@ describe('subscription-actions.js', () => {
 	test('should check authRequest subscription action ', () => {
 		const data = JSON.parse(response.body);
 		const expectedDispatchResult = {
-			[AUTH_LOGIN_RESPONSE]: data
+			[AUTH.LOGIN.RESPONSE]: data
 		};
 
 		processAuthRequestSubscription({dispatch}, response);
@@ -65,7 +65,7 @@ describe('subscription-actions.js', () => {
 	test('should check logoutRequest subscription action ', () => {
 		const data = JSON.parse(response.body);
 		const expectedDispatchResult = {
-			[AUTH_LOGOUT_RESPONSE]: data
+			[AUTH.LOGOUT.RESPONSE]: data
 		};
 
 		processLogoutRequestSubscription({dispatch}, response);

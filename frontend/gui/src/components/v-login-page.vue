@@ -44,7 +44,7 @@
 
 <script>
 	import { mapGetters } from 'vuex';
-	import { AUTH_LOGIN_REQUEST, AUTH_STATUS_ERROR } from '../store/sconst/auth';
+	import { AUTH } from '../sconst/auth';
 
 	export default {
 		name: 'v-login-page',
@@ -60,13 +60,13 @@
 				'authStatus'
 			]),
 			loginStatus: function(){
-				return this.authStatus === AUTH_STATUS_ERROR ? this.translate('login-page.state.error') : '';
+				return this.authStatus === AUTH.STATUS.ERROR ? this.translate('login-page.state.error') : '';
 			}
 		},
 		methods: {
 			login: function() {
 				const user = {username: this.username, password: this.password};
-				this.$store.dispatch(AUTH_LOGIN_REQUEST, user);
+				this.$store.dispatch(AUTH.LOGIN.REQUEST, user);
 			}
 		}
 	}

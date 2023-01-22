@@ -1,0 +1,6 @@
+export const USER = {
+	PROFILE: {
+		SET: 'USER_PROFILE_SET',
+		RESET: 'USER_PROFILE_RESET'
+	}
+};

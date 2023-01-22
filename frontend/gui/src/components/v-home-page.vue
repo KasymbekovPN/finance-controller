@@ -11,7 +11,7 @@
 </template>
 
 <script>
-	import { AUTH_LOGOUT_REQUEST } from '../store/sconst/auth';
+	import { AUTH } from '../sconst/auth';
 
 	export default {
 		name: 'v-home-page',
@@ -23,7 +23,7 @@
 		computed: {},
 		methods: {
 			logout: function(){
-				this.$store.dispatch(AUTH_LOGOUT_REQUEST);
+				this.$store.dispatch(AUTH.LOGOUT.REQUEST);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-import { LS_KEYS } from "../../../src/sconst/l-storage";
+import { LOCAL_STORAGE_KEYS } from "../../../src/sconst/localStorageKeys";
 import {
 	mutateOnLoginError,
 	mutateOnLoginRequest,
@@ -7,14 +7,7 @@ import {
 	mutateOnLogoutRequest,
 	mutateOnLogoutSuccess
 } from "../../../src/store/imps/auth-mutations";
-import {
-	AUTH_LOGOUT_ERROR,
-	AUTH_LOGOUT_SUCCESS,
-	AUTH_STATUS_ERROR,
-	AUTH_STATUS_LOADING,
-	AUTH_STATUS_LOGOUT,
-	AUTH_STATUS_SUCCESS
-} from "../../../src/store/sconst/auth";
+import { AUTH } from "../../../src/sconst/auth";
 
 describe('auth-mutations.js', () => {
 	const TOKEN = 'some token';
@@ -32,7 +25,7 @@ describe('auth-mutations.js', () => {
 	};
 
 	test('should check login request mutation', () => {
-		const exprectedState = {authStatus: AUTH_STATUS_LOADING};
+		const exprectedState = {authStatus: AUTH.STATUS.LOADING};
 
 		let state = {};
 		mutateOnLoginRequest(state);
@@ -43,7 +36,7 @@ describe('auth-mutations.js', () => {
 		const response = {token: TOKEN};
 		const exprectedState = {
 			authenticated: true,
-			authStatus: AUTH_STATUS_SUCCESS,
+			authStatus: AUTH.STATUS.SUCCESS,
 			token: TOKEN
 		};
 
@@ -51,14 +44,14 @@ describe('auth-mutations.js', () => {
 		let state = {};
 		mutateOnLoginSuccess(state, ls, response);
 		expect(state).toStrictEqual(exprectedState);
-		expect(ls.setKey).toBe(LS_KEYS.userToken);
+		expect(ls.setKey).toBe(LOCAL_STORAGE_KEYS.USER_TOKEN);
 		expect(ls.setValue).toBe(TOKEN);
 	});
 
 	test('should check login error mutation', () => {
 		const exprectedState = {
 			authenticated: false,
-			authStatus: AUTH_STATUS_ERROR,
+			authStatus: AUTH.STATUS.ERROR,
 			token: ''
 		};
 
@@ -66,12 +59,12 @@ describe('auth-mutations.js', () => {
 		let state = {};
 		mutateOnLoginError(state, ls);
 		expect(state).toStrictEqual(exprectedState);
-		expect(ls.removedKey).toBe(LS_KEYS.userToken);
+		expect(ls.removedKey).toBe(LOCAL_STORAGE_KEYS.USER_TOKEN);
 	});
 
 
 	test('should check logout request mutation', () => {
-		const exprectedState = {authStatus: AUTH_STATUS_LOGOUT};
+		const exprectedState = {authStatus: AUTH.STATUS.LOGOUT};
 
 		let state = {};
 		mutateOnLogoutRequest(state);
@@ -81,7 +74,7 @@ describe('auth-mutations.js', () => {
 	test('should check logout success mutation', () => {
 		const exprectedState = {
 			authenticated: false,
-			authStatus: AUTH_LOGOUT_SUCCESS,
+			authStatus: AUTH.LOGOUT.SUCCESS,
 			token: ''
 		};
 
@@ -89,13 +82,13 @@ describe('auth-mutations.js', () => {
 		let state = {};
 		mutateOnLogoutSuccess(state, ls);
 		expect(state).toStrictEqual(exprectedState);
-		expect(ls.removedKey).toBe(LS_KEYS.userToken);
+		expect(ls.removedKey).toBe(LOCAL_STORAGE_KEYS.USER_TOKEN);
 	});
 
 	test('should check logout error mutation', () => {
 		const exprectedState = {
 			authenticated: false,
-			authStatus: AUTH_LOGOUT_ERROR,
+			authStatus: AUTH.LOGOUT.ERROR,
 			token: ''
 		};
 
@@ -103,6 +96,6 @@ describe('auth-mutations.js', () => {
 		let state = {};
 		mutateOnLogoutError(state, ls);
 		expect(state).toStrictEqual(exprectedState);
-		expect(ls.removedKey).toBe(LS_KEYS.userToken);
+		expect(ls.removedKey).toBe(LOCAL_STORAGE_KEYS.USER_TOKEN);
 	});
 });

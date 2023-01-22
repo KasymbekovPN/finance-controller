@@ -1,4 +1,4 @@
-import { I18N_SET_LOCALE, I18N_SET_TEMPLATES } from "../../../src/store/sconst/i18n";
+import { I18N } from "../../../src/sconst/i18n";
 import { setI18nLocale, setI18nTemplates } from "../../../src/store/imps/i18n-actions";
 
 describe('i18n-actions.js', () => {
@@ -15,7 +15,7 @@ describe('i18n-actions.js', () => {
 	test('should check setI18nLocale-action', () => {
 		const locale = 'en';
 		const expectedResult = {
-			command: I18N_SET_LOCALE,
+			command: I18N.SET.LOCALE,
 			data: locale
 		};
 
@@ -26,7 +26,7 @@ describe('i18n-actions.js', () => {
 	test('should check setI18nTemplates-action', () => {
 		const data = {value: 'value'};
 		const expectedResult = {
-			command: I18N_SET_TEMPLATES,
+			command: I18N.SET.TEMPLATES,
 			data
 		};
 

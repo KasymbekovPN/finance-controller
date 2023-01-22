@@ -4,12 +4,7 @@ import {
 	doOnSending,
 	actOnConnectionCreation
 } from "../../../src/store/imps/connection-actions";
-import {
-	CONNECTION_CONNECT,
-	CONNECTION_CREATE,
-	CONNECTION_DISCONNECT,
-	CONNECTION_SEND
-} from "../../../src/store/sconst/connection";
+import { CONNECTION } from "../../../src/sconst/connection";
 
 describe('connection-actions.js', () => {
 
@@ -32,10 +27,10 @@ describe('connection-actions.js', () => {
 		const sessionId = 'sessionId';
 		const connection = new TestConnection();
 		const expectedCommitResult = {
-			command: CONNECTION_CREATE,
+			command: CONNECTION.CREATE,
 			data: {connection, sessionId}
 		};
-		const expectedDispatchResult = {command: CONNECTION_CONNECT};
+		const expectedDispatchResult = {command: CONNECTION.CONNECT};
 
 		actOnConnectionCreation(commit, dispatch, connection, sessionId);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
@@ -44,7 +39,7 @@ describe('connection-actions.js', () => {
 	});
 
 	test('should check doOnConnection-actions', () => {
-		const expectedCommitResult = {command: CONNECTION_CONNECT};
+		const expectedCommitResult = {command: CONNECTION.CONNECT};
 
 		doOnConnection({commit});
 		expect(commitResult).toStrictEqual(expectedCommitResult);
@@ -52,7 +47,7 @@ describe('connection-actions.js', () => {
 	});
 
 	test('should check doOnDisconnection-actions', () => {
-		const expectedCommitResult = {command: CONNECTION_DISCONNECT};
+		const expectedCommitResult = {command: CONNECTION.DISCONNECT};
 
 		doOnDisconnection({commit});
 		expect(commitResult).toStrictEqual(expectedCommitResult);
@@ -64,7 +59,7 @@ describe('connection-actions.js', () => {
 		const headers = {};
 		const body = {};
 		const expectedCommitResult = {
-			command: CONNECTION_SEND,
+			command: CONNECTION.SEND,
 			data: {destination, headers, body}
 		};
 

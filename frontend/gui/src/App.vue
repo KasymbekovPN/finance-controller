@@ -3,7 +3,7 @@
 </template>
 
 <script>
-	import { CONNECTION_CREATE } from "./store/sconst/connection";
+	import { CONNECTION } from "./sconst/connection";
 	import vMainContainer from './components/v-main-container';
 
 	export default {
@@ -13,7 +13,7 @@
 		},
 		mounted(){
 			this.$nextTick(() => {
-				this.$store.dispatch(CONNECTION_CREATE);
+				this.$store.dispatch(CONNECTION.CREATE);
 			});
 		}
 	}

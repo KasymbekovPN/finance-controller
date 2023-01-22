@@ -1,7 +1,6 @@
-
 export const DESTINATIONS = {
-	auth: '/authRequest',
-	i18n: '/i18nRequest',
-	clientParams: '/clientParamsRequest',
-	logout: '/logoutRequest'
+	AUTH: '/authRequest',
+	I18N: '/i18nRequest',
+	CLIENT_PARAMS: '/clientParamsRequest',
+	LOGOUT: '/logoutRequest'
 };
