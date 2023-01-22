@@ -12,10 +12,11 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-public final class I18nController {
+public final class I18nController implements RequestController<I18nController.Request, I18nController.Response> {
 
 	private final I18nSource i18nSource;
 
+	@Override
 	@MessageMapping("/i18nRequest/{sessionId}")
 	@SendTo("/topic/i18nResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId,

@@ -8,8 +8,9 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public final class LogoutController {
+public final class LogoutController implements RequestController<LogoutController.Request, LogoutController.Response> {
 
+	@Override
 	@MessageMapping("/logoutRequest/{sessionId}")
 	@SendTo("/topic/logoutResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId,

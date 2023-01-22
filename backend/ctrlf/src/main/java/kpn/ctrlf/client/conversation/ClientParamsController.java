@@ -9,10 +9,11 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public final class ClientParamsController {
+public final class ClientParamsController implements RequestController<ClientParamsController.Request, ClientParamsController.Response> {
 
 	private final ClientParams clientParams;
 
+	@Override
 	@MessageMapping("/clientParamsRequest/{sessionId}")
 	@SendTo("/topic/clientParamsResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId,
