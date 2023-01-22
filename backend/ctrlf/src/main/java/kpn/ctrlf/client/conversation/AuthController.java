@@ -1,5 +1,8 @@
 package kpn.ctrlf.client.conversation;
 
+import kpn.ctrlf.data.domain.User;
+import kpn.ctrlf.secure.UserSecureService;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -7,19 +10,20 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-// TODO: 09.01.2023 FC-000178 add test
+import java.util.function.Function;
+
 @Controller
 @RequiredArgsConstructor
 public final class AuthController implements RequestController<AuthController.Request, AuthController.Response>{
-	// TODO: 09.01.2023 FC-000178 add user-service
+	private final UserSecureService<User> userSecureService;
 
 	@Override
 	@MessageMapping("/authRequest/{sessionId}")
 	@SendTo("/topic/authResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId, Request request) {
-		// TODO: 09.01.2023 it is temp. solution (FC-178)
-		boolean success = request.getUsername().equals("admin") && request.getPassword().equals("admin");
-		return new Response(success, sessionId, request.getUsername());
+		User user = new Converter().apply(request);
+		boolean success = userSecureService.checkCredential(user);
+		return new Response(success, sessionId, user.getUsername());
 	}
 
 	@Getter
@@ -30,9 +34,17 @@ public final class AuthController implements RequestController<AuthController.Re
 
 	@RequiredArgsConstructor
 	@Getter
+	@EqualsAndHashCode
 	public final static class Response {
 		private final boolean success;
 		private final String token;
 		private final String username;
+	}
+
+	public final static class Converter implements Function<Request, User> {
+		@Override
+		public User apply(Request request) {
+			return new User(request.getUsername(), request.getPassword());
+		}
 	}
 }
