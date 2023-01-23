@@ -1,6 +1,7 @@
 <template>
 	<div class="v-main-container">
 		<div v-if="isConnected" class="v-main-container__connected">
+			<v-header v-if="isAuthenticated"/>
 			<router-view />
 		</div>
 		<div v-if="!isConnected" class="v-main-container__disconnected">
@@ -12,11 +13,13 @@
 <script>
 	import { mapGetters } from 'vuex';
 	import vDisconnectionPage from './v-disconnection-page';
+	import vHeader from './v-header';
 
 export default {
 		name: 'v-main-container',
 		components: {
-			vDisconnectionPage
+			vDisconnectionPage,
+			vHeader
 		},
 		props: {},
 		data() {
@@ -24,7 +27,8 @@ export default {
 		},
 		computed: {
 			...mapGetters([
-				"isConnected"
+				'isConnected',
+				'isAuthenticated'
 			])
 		},
 		methods: {}

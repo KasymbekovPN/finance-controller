@@ -76,12 +76,11 @@
 	.v-login-page {
 		align-items: center;
 		font-family: $commonFontFamily;
-		padding-top: 100px;
 
 		&__form {
 			display: inline-block;
 			width: 400px;
-			padding-top: 0px;
+			padding-top: 100px;
 
 			&__title {
 				color: $connectionColor;
@@ -106,10 +105,10 @@
 
 				&__button {
 					width: 150px;
-					height: 30px;
-					font-size: 20px;
-					background: #bacde4;
-					border-width: 0px;
+					height: $buttonHeight;
+					font-size: $buttonFontSize;
+					background: $buttonBackground;
+					border-width: $buttonBorderWisth;
 				}
 			}
 		}
