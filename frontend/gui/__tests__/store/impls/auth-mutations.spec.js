@@ -1,5 +1,6 @@
 import { LOCAL_STORAGE_KEYS } from "../../../src/sconst/localStorageKeys";
 import {
+	mutateAuthOnDisconnection,
 	mutateOnLoginError,
 	mutateOnLoginRequest,
 	mutateOnLoginSuccess,
@@ -74,7 +75,7 @@ describe('auth-mutations.js', () => {
 	test('should check logout success mutation', () => {
 		const exprectedState = {
 			authenticated: false,
-			authStatus: AUTH.LOGOUT.SUCCESS,
+			authStatus: AUTH.STATUS.SUCCESS,
 			token: ''
 		};
 
@@ -88,13 +89,27 @@ describe('auth-mutations.js', () => {
 	test('should check logout error mutation', () => {
 		const exprectedState = {
 			authenticated: false,
-			authStatus: AUTH.LOGOUT.ERROR,
+			authStatus: AUTH.STATUS.ERROR,
 			token: ''
 		};
 
 		const ls = new LStorage();
 		let state = {};
 		mutateOnLogoutError(state, ls);
+		expect(state).toStrictEqual(exprectedState);
+		expect(ls.removedKey).toBe(LOCAL_STORAGE_KEYS.USER_TOKEN);
+	});
+
+	test('should check disconnection mutation', () => {
+		const exprectedState = {
+			authenticated: false,
+			authStatus: AUTH.STATUS.DISCONNECTED,
+			token: ''
+		};
+
+		const ls = new LStorage();
+		let state = {};
+		mutateAuthOnDisconnection(state, ls);
 		expect(state).toStrictEqual(exprectedState);
 		expect(ls.removedKey).toBe(LOCAL_STORAGE_KEYS.USER_TOKEN);
 	});

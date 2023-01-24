@@ -2,6 +2,7 @@ import { LOCAL_STORAGE_KEYS } from "../../sconst/localStorageKeys";
 import router from "../../router/router";
 import { AUTH } from "../../sconst/auth";
 import {
+	actOnDisconnected,
 	requestLogin,
 	requestLogout,
 	responseLogin,
@@ -14,7 +15,8 @@ import {
 	mutateOnLoginError,
 	mutateOnLogoutRequest,
 	mutateOnLogoutSuccess,
-	mutateOnLogoutError
+	mutateOnLogoutError,
+	mutateAuthOnDisconnection
 
 } from "../imps/auth-mutations";
 
@@ -35,7 +37,8 @@ const actions = {
 	},
 	[AUTH.LOGIN.RESPONSE]: ({commit, dispatch}, response) => { responseLogin({commit, dispatch, router}, response); },
 	[AUTH.LOGOUT.REQUEST]: requestLogout,
-	[AUTH.LOGOUT.RESPONSE]: ({commit, dispatch}, response) => { responseLogout({commit, dispatch, router}, response); }
+	[AUTH.LOGOUT.RESPONSE]: ({commit, dispatch}, response) => { responseLogout({commit, dispatch, router}, response); },
+	[AUTH.ON.DISCONNECTED]: ({commit}) => { actOnDisconnected({commit, router}); }
 };
 
 const mutations = {
@@ -44,7 +47,8 @@ const mutations = {
 	[AUTH.LOGIN.ERROR]: state => { mutateOnLoginError(state, localStorage); },
 	[AUTH.LOGOUT.REQUEST]: mutateOnLogoutRequest,
 	[AUTH.LOGOUT.SUCCESS]: state => { mutateOnLogoutSuccess(state, localStorage); },
-	[AUTH.LOGOUT.ERROR]: state => { mutateOnLogoutError(state, localStorage); }
+	[AUTH.LOGOUT.ERROR]: state => { mutateOnLogoutError(state, localStorage); },
+	[AUTH.ON.DISCONNECTED]: state => { mutateAuthOnDisconnection(state, localStorage) }
 };
 
 export default {

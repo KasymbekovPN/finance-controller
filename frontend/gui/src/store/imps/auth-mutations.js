@@ -26,14 +26,21 @@ const mutateOnLogoutRequest = state => {
 const mutateOnLogoutSuccess = (state, ls) => {
 	ls.removeItem(LOCAL_STORAGE_KEYS.USER_TOKEN);
 	state.authenticated = false;
-	state.authStatus = AUTH.LOGOUT.SUCCESS;
+	state.authStatus = AUTH.STATUS.SUCCESS;
 	state.token = '';
 };
 
 const mutateOnLogoutError = (state, ls) => {
 	ls.removeItem(LOCAL_STORAGE_KEYS.USER_TOKEN);
 	state.authenticated = false;
-	state.authStatus = AUTH.LOGOUT.ERROR;
+	state.authStatus = AUTH.STATUS.ERROR;
+	state.token = '';
+};
+
+const mutateAuthOnDisconnection = (state, ls) => {
+	ls.removeItem(LOCAL_STORAGE_KEYS.USER_TOKEN);
+	state.authenticated = false;
+	state.authStatus = AUTH.STATUS.DISCONNECTED;
 	state.token = '';
 };
 
@@ -43,5 +50,6 @@ export {
 	mutateOnLoginError,
 	mutateOnLogoutRequest,
 	mutateOnLogoutSuccess,
-	mutateOnLogoutError
+	mutateOnLogoutError,
+	mutateAuthOnDisconnection
 };

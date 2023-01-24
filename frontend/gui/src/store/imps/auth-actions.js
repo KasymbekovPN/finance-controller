@@ -42,9 +42,15 @@ const responseLogout = ({commit, dispatch, router}, response) => {
 	router.push(PATHS.LOGIN);
 };
 
+const actOnDisconnected = ({commit, router}) => {
+	commit(AUTH.ON.DISCONNECTED);
+	router.push(PATHS.LOGIN);
+};
+
 export {
 	requestLogin,
 	responseLogin,
 	requestLogout,
-	responseLogout
+	responseLogout,
+	actOnDisconnected
 };

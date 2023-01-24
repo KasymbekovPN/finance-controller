@@ -1,4 +1,5 @@
 import {
+	actOnDisconnected,
 	requestLogin,
 	requestLogout,
 	responseLogin,
@@ -129,5 +130,14 @@ describe('auth-actions.js', () => {
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		expect(router.path).toBe(PATHS.LOGIN);
 		reset();
+	});
+
+	test('should check actOnDisconnection', () => {
+		const expectedCommitResult = { command: AUTH.ON.DISCONNECTED };
+
+		const router = new Router();
+		actOnDisconnected({commit, router});
+		expect(commitResult).toStrictEqual(expectedCommitResult);
+		expect(router.path).toBe(PATHS.LOGIN);
 	});
 });
