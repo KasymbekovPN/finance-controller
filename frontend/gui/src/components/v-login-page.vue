@@ -109,6 +109,7 @@
 					font-size: $buttonFontSize;
 					background: $buttonBackground;
 					border-width: $buttonBorderWisth;
+					cursor: $buttonCursor;
 				}
 			}
 		}

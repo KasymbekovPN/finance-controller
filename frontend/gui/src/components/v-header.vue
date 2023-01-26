@@ -40,6 +40,7 @@
         display: flex;
 		justify-content: space-between;
 		height: 40px;
+		background: $headerBackground;
 
 		&__logout {
 			padding: 5px;
@@ -50,6 +51,7 @@
 				font-size: $buttonFontSize;
 				background: $buttonBackground;
 				border-width: $buttonBorderWisth;
+				cursor: $buttonCursor;
 			}
 		}
 	}

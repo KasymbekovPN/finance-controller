@@ -6,9 +6,7 @@
 				<!-- //< one prop data -->
 				<v-menu-item
 					v-if="isAuthenticated"
-					:icon="item.icon"
-					:code="item.code"
-					:destination="item.destination"
+					:data="item"
 				/>
 				<div class="v-main-container__connected__main__router_view">
 					<router-view />
@@ -27,10 +25,12 @@
 	import { mapGetters } from 'vuex';
 	import vDisconnectionPage from './v-disconnection-page';
 	import vHeader from './v-header';
+	import config from "../../config";
+
 	//<
 	import vMenuItem from './v-menu-item';
 
-export default {
+	export default {
 		name: 'v-main-container',
 		components: {
 			vDisconnectionPage,
@@ -40,11 +40,14 @@ export default {
 		props: {},
 		data() {
 			return {
-				item : {
-					icon: 'tag.svg',
-					code: 'tags',
-					destination: 'tags'
-				}
+				//< tmp
+				item: config.menu.items[0]
+				//<
+				// item : {
+				// 	icon: 'tag.svg',
+				// 	code: 'tags',
+				// 	destination: 'tags'
+				// }
 			}
 		},
 		computed: {
