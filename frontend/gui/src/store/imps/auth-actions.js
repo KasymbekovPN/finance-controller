@@ -1,5 +1,4 @@
-import { PATHS } from "../../sconst/paths";
-import { DESTINATIONS } from "../../sconst/destinations";
+import config from "../../../config";
 import { AUTH } from "../../sconst/auth";
 import { CONNECTION } from "../../sconst/connection";
 import { USER } from "../../sconst/userProfile";
@@ -7,7 +6,7 @@ import { USER } from "../../sconst/userProfile";
 const requestLogin = ({commit, dispatch}, user) => {
 	commit(AUTH.LOGIN.REQUEST);
 	dispatch(CONNECTION.SEND, {
-		destination: DESTINATIONS.AUTH,
+		destination: config.requests.auth,
 		headers: {},
 		body: user
 	});
@@ -20,13 +19,13 @@ const responseLogin = ({commit, dispatch, router}, response) => {
 		commit(AUTH.LOGIN.ERROR);
 	}
 	dispatch(USER.PROFILE.SET, response);
-	router.push(PATHS.HOME);
+	router.push(config.paths.home);
 };
 
 const requestLogout = ({commit, dispatch}) => {
 	commit(AUTH.LOGOUT.REQUEST);
 	dispatch(CONNECTION.SEND, {
-		destination: DESTINATIONS.LOGOUT,
+		destination: config.requests.logout,
 		headers: {},
 		body: {}
 	});
@@ -39,12 +38,12 @@ const responseLogout = ({commit, dispatch, router}, response) => {
 		commit(AUTH.LOGOUT.ERROR);
 	}
 	dispatch(USER.PROFILE.RESET, response);
-	router.push(PATHS.LOGIN);
+	router.push(config.paths.login);
 };
 
 const actOnDisconnected = ({commit, router}) => {
 	commit(AUTH.ON.DISCONNECTED);
-	router.push(PATHS.LOGIN);
+	router.push(config.paths.login);
 };
 
 export {

@@ -1,10 +1,10 @@
+import config from "../../../config";
 import {
 	processAuthRequestSubscription,
 	processClientParamsSubscription,
 	processI18nSubscription,
 	processLogoutRequestSubscription
 } from "../../../src/store/imps/subscription-actions";
-import { DESTINATIONS } from "../../../src/sconst/destinations";
 import { CONNECTION } from "../../../src/sconst/connection";
 import { I18N } from "../../../src/sconst/i18n";
 import { AUTH } from "../../../src/sconst/auth";
@@ -29,7 +29,7 @@ describe('subscription-actions.js', () => {
 		const expectedDispatchResult = {
 			[I18N.SET.LOCALE]: clientParams.locale,
 			[CONNECTION.SEND]: {
-				destination: DESTINATIONS.I18N,
+				destination: config.requests.i18n,
 				headers: {},
 				body: {}
 			}

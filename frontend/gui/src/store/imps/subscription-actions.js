@@ -1,4 +1,4 @@
-import { DESTINATIONS } from "../../sconst/destinations";
+import config from "../../../config";
 import { AUTH } from "../../sconst/auth";
 import { CONNECTION } from "../../sconst/connection";
 import { I18N } from "../../sconst/i18n";
@@ -7,7 +7,7 @@ const processClientParamsSubscription = ({dispatch}, response) => {
 	const clientParams = JSON.parse(response.body);
 	dispatch(I18N.SET.LOCALE, clientParams.locale);
 	dispatch(CONNECTION.SEND, {
-		destination: DESTINATIONS.I18N,
+		destination: config.requests.i18n,
 		headers: {},
 		body: {}
 	});

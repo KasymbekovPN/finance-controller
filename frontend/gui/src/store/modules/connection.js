@@ -1,4 +1,4 @@
-import { DESTINATIONS } from "../../sconst/destinations";
+import config from '../../../config';
 import { Connection } from "../../connection/connection";
 import { isConnected } from "../imps/connection-getters";
 import { CONNECTION } from "../../sconst/connection";
@@ -16,7 +16,6 @@ import {
 } from "../imps/connection-mutations";
 import { Stomp } from "@stomp/stompjs";
 import { v4 as uuid } from "uuid";
-import config from "../../../config";
 import { SUBSCRIPTIONS } from "../subscriptions/subscriptions";
 import { AUTH } from "@/sconst/auth";
 
@@ -42,7 +41,7 @@ const actions = {
 		};
 		connection.openCallback = () => {
 			dispatch(CONNECTION.SEND, {
-				destination: DESTINATIONS.CLIENT_PARAMS,
+				destination: config.requests.clientParams,
 				headers: {},
 				body: {}
 			})

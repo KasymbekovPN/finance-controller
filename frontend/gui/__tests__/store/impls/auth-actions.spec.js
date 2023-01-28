@@ -1,3 +1,4 @@
+import config from "../../../config";
 import {
 	actOnDisconnected,
 	requestLogin,
@@ -5,11 +6,9 @@ import {
 	responseLogin,
 	responseLogout
 } from "../../../src/store/imps/auth-actions";
-import { DESTINATIONS } from "../../../src/sconst/destinations";
 import { AUTH } from "../../../src/sconst/auth";
 import { CONNECTION } from "../../../src/sconst/connection";
 import { USER } from "../../../src/sconst/userProfile";
-import { PATHS } from "../../../src/sconst/paths";
 
 describe('auth-actions.js', () => {
 
@@ -38,7 +37,7 @@ describe('auth-actions.js', () => {
 		const expectedDispatchResult = {
 			command: CONNECTION.SEND,
 			data: {
-				destination: DESTINATIONS.AUTH,
+				destination: config.requests.auth,
 				headers: {},
 				body: user
 			}
@@ -62,7 +61,7 @@ describe('auth-actions.js', () => {
 		responseLogin({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.HOME);
+		expect(router.path).toBe(config.paths.home);
 		reset();
 	});
 
@@ -78,7 +77,7 @@ describe('auth-actions.js', () => {
 		responseLogin({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.HOME);
+		expect(router.path).toBe(config.paths.home);
 		reset();
 	});
 
@@ -88,7 +87,7 @@ describe('auth-actions.js', () => {
 		const expectedDispatchResult = {
 			command: CONNECTION.SEND,
 			data: {
-				destination: DESTINATIONS.LOGOUT,
+				destination: config.requests.logout,
 				headers: {},
 				body: {}
 			}
@@ -112,7 +111,7 @@ describe('auth-actions.js', () => {
 		responseLogout({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.LOGIN);
+		expect(router.path).toBe(config.paths.login);
 		reset();
 	});
 
@@ -128,7 +127,7 @@ describe('auth-actions.js', () => {
 		responseLogout({commit, dispatch, router}, response);
 		expect(commitResult).toStrictEqual(expectedCommitResult);
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
-		expect(router.path).toBe(PATHS.LOGIN);
+		expect(router.path).toBe(config.paths.login);
 		reset();
 	});
 
@@ -138,6 +137,6 @@ describe('auth-actions.js', () => {
 		const router = new Router();
 		actOnDisconnected({commit, router});
 		expect(commitResult).toStrictEqual(expectedCommitResult);
-		expect(router.path).toBe(PATHS.LOGIN);
+		expect(router.path).toBe(config.paths.login);
 	});
 });

@@ -5,14 +5,14 @@ import {
 	createRouter,
 	createWebHashHistory
 } from "vue-router";
-import { PATHS } from '@/sconst/paths';
+import config from '../../config';
 
 const ifNotAuthenticated = (to, from, next) => {
 	if (!store.getters.isAuthenticated){
 		next();
 		return
 	}
-	next(PATHS.HOME);
+	next(config.paths.home);
 };
 
 const ifAuthenticated = (to, from, next) => {
@@ -20,20 +20,20 @@ const ifAuthenticated = (to, from, next) => {
 		next();
 		return;
 	}
-	next(PATHS.LOGIN);
+	next(config.paths.login);
 };
 
 export default createRouter({
 	history: createWebHashHistory(),
 	routes: [
 		{
-			path: PATHS.HOME,
+			path: config.paths.home,
 			name: 'Home',
 			component: vHomePage,
 			beforeEnter: ifAuthenticated
 		},
 		{
-			path: PATHS.LOGIN,
+			path: config.paths.login,
 			name: 'Login',
 			component: vLoginPage,
 			beforeEnter: ifNotAuthenticated
