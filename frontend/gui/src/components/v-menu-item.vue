@@ -18,8 +18,7 @@
 
 <script>
 	import { mapGetters } from 'vuex';
-	//<
-	// import router from '../router/router';
+	import router from '../router/router';
 
 	export default {
 		name: 'v-menu-item',
@@ -37,9 +36,7 @@
 		},
 		methods: {
 			onClick: function(){
-				console.log(`path: ${this.data.path}`);
-				//<
-				// router.push(this.data.destination);
+				router.push(this.data.path);
 			}
 		}
 	}
