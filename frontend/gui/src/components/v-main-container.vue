@@ -3,17 +3,14 @@
 		<div v-if="isConnected" class="v-main-container__connected">
 			<v-header v-if="isAuthenticated"/>
 			<div class="v-main-container__connected__main">
-				<!-- //< one prop data -->
-				<v-menu-item
+				<v-menu
 					v-if="isAuthenticated"
-					:data="item"
+					:items="items"
 				/>
 				<div class="v-main-container__connected__main__router_view">
 					<router-view />
 				</div>
 			</div>
-			<!-- //< -->
-			<!-- <router-view /> -->
 		</div>
 		<div v-if="!isConnected" class="v-main-container__disconnected">
 			<v-disconnection-page></v-disconnection-page>
@@ -22,32 +19,23 @@
 </template>
 
 <script>
+	import config from "../../config";
 	import { mapGetters } from 'vuex';
 	import vDisconnectionPage from './v-disconnection-page';
 	import vHeader from './v-header';
-	import config from "../../config";
-
-	//<
-	import vMenuItem from './v-menu-item';
+	import vMenu from './v-menu';
 
 	export default {
 		name: 'v-main-container',
 		components: {
 			vDisconnectionPage,
 			vHeader,
-			vMenuItem
+			vMenu
 		},
 		props: {},
 		data() {
 			return {
-				//< tmp
-				item: config.menu.items[0]
-				//<
-				// item : {
-				// 	icon: 'tag.svg',
-				// 	code: 'tags',
-				// 	destination: 'tags'
-				// }
+				items: config.menu.items
 			}
 		},
 		computed: {

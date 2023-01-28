@@ -37,10 +37,9 @@
 		},
 		methods: {
 			onClick: function(){
-				//<
-				// router.push(data.destination);
-				//<
 				console.log(`path: ${this.data.path}`);
+				//<
+				// router.push(this.data.destination);
 			}
 		}
 	}
@@ -52,6 +51,8 @@
 		width: 150px;
 		height: 40px;
 		border: 0px solid black;
+		margin-top: 10px;
+		margin-left: 10px;
 
 		&__content {
 			display: flex;
