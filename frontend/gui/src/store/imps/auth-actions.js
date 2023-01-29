@@ -19,9 +19,6 @@ const responseLogin = ({commit, dispatch, router}, response) => {
 		commit(AUTH.LOGIN.ERROR);
 	}
 	dispatch(USER.PROFILE.SET, response);
-	//<
-	console.log(router);
-	//<
 	router.push(config.paths.home);
 };
 

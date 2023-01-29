@@ -24,6 +24,7 @@
 	import vDisconnectionPage from './v-disconnection-page';
 	import vHeader from './v-header';
 	import vMenu from './v-menu';
+	import { ROUTE } from '../sconst/route';
 
 	export default {
 		name: 'v-main-container',
@@ -44,7 +45,12 @@
 				'isAuthenticated'
 			])
 		},
-		methods: {}
+		methods: {},
+		watch: {
+			$route: function(to, /*from*/){
+				this.$store.dispatch(ROUTE.ON.CHANGING, to.path);
+			}
+		}
 	}
 </script>
 
