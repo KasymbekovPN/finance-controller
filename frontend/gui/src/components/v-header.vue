@@ -1,6 +1,8 @@
 <template>
 	<div class="v-header">
 		<div class="v-header__main">
+			<!-- //< -->
+			<p>{{ routeName }}</p>
 		</div>
 		<div class="v-header__logout">
 			<button
@@ -26,6 +28,17 @@
 			...mapGetters([
 				'translate'
 			]),
+			routeName: function(){
+				//<
+				console.log(typeof this);
+				console.log(this);
+				console.log(typeof this.$route);
+				console.log(this.$route);
+				console.log(typeof this.$route.path);
+				console.log(this.$route.path);
+				//<
+				return this.$route.path;
+			}
 		},
 		methods: {
 			logout: function(){

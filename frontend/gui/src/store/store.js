@@ -4,6 +4,7 @@ import i18n from "./modules/i18n";
 import subscription from "./modules/subscription";
 import auth from "./modules/auth";
 import userProfile from "./modules/userProfile";
+import route from "./modules/route";
 
 export default new Vuex.Store({
 	modules: {
@@ -11,6 +12,7 @@ export default new Vuex.Store({
 		i18n,
 		subscription,
 		auth,
-		userProfile
+		userProfile,
+		route
 	}
 });
