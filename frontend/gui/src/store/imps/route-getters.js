@@ -40,6 +40,10 @@ const isActionsRoute = state => {
 	return state.route === config.paths.actions;
 };
 
+const isHomeRoute = state => {
+	return state.route === config.paths.home;
+};
+
 export {
 	isTagsRoute,
 	isProductsRoute,
@@ -50,5 +54,6 @@ export {
 	isAddressesRoute,
 	isSellersRoute,
 	isPaymentsRoute,
-	isActionsRoute
+	isActionsRoute,
+	isHomeRoute
 };

@@ -4,6 +4,7 @@ import {
 	isAddressesRoute,
 	isCitiesRoute,
 	isCountriesRoute,
+	isHomeRoute,
 	isPaymentsRoute,
 	isProductsRoute,
 	isRegionsRoute,
@@ -112,5 +113,15 @@ describe('route-getters.js', () => {
 	test('should check isActionsRoute-getter if it is success', () => {
 		const state = {route: config.paths.actions};
 		expect(isActionsRoute(state)).toBe(true);
+	});
+
+	test('should check isHomeRoute-getter if it is fail', () => {
+		const state = {};
+		expect(isHomeRoute(state)).toBe(false);
+	});
+
+	test('should check isHomeRoute-getter if it is success', () => {
+		const state = {route: config.paths.home};
+		expect(isHomeRoute(state)).toBe(true);
 	});
 });
