@@ -33,6 +33,9 @@
 				{{ translate('btn.logout') }}
 			</button>
 		</div>
+
+		<!-- //< -->
+		<v-tags-dialog v-show="showModal" @close-modal="showModal = false" />
 	</div>
 </template>
 
@@ -42,10 +45,18 @@
 	import { AUTH } from '../sconst/auth';
 	import router from '../router/router';
 
+	//<
+	import vTagsDialog from './v-tags-dialog';
+
 	export default {
 		name: 'v-header',
+		components: {
+			vTagsDialog
+		},
 		data() {
-			return {}
+			return {
+				showModal: false
+			}
 		},
 		computed: {
 			...mapGetters([
@@ -63,6 +74,8 @@
 			onAdd: function() {
 				//<
 				console.log('ON ADD');
+				//<
+				this.showModal = true;
 			}
 		}
 	}
