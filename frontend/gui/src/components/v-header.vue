@@ -35,7 +35,7 @@
 		</div>
 
 		<!-- //< -->
-		<v-tags-dialog v-show="showModal" @close-modal="showModal = false" />
+		<!-- <v-tags-dialog v-show="showModal" @close-modal="showModal = false" /> -->
 	</div>
 </template>
 
@@ -46,16 +46,17 @@
 	import router from '../router/router';
 
 	//<
-	import vTagsDialog from './v-tags-dialog';
+	// import vTagsDialog from './v-tags-dialog';
 
 	export default {
 		name: 'v-header',
 		components: {
-			vTagsDialog
+			// vTagsDialog
 		},
 		data() {
 			return {
-				showModal: false
+				//<
+				// showModal: false
 			}
 		},
 		computed: {
@@ -75,7 +76,7 @@
 				//<
 				console.log('ON ADD');
 				//<
-				this.showModal = true;
+				// this.showModal = true;
 			}
 		}
 	}
