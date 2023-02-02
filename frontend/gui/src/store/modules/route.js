@@ -11,7 +11,8 @@ import {
 	isSellersRoute,
 	isStreetsRoute,
 	isTagsRoute,
-	isHomeRoute
+	isHomeRoute,
+	getRoute
 } from "../imps/route-getters";
 import { mutateOnRouteChanging } from "../imps/route-mutations";
 
@@ -30,7 +31,8 @@ const getters = {
 	isSellersRoute: isSellersRoute,
 	isPaymentsRoute: isPaymentsRoute,
 	isActionsRoute: isActionsRoute,
-	isHomeRoute: isHomeRoute
+	isHomeRoute: isHomeRoute,
+	getRoute: getRoute
 };
 
 const actions = {

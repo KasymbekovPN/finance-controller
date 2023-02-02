@@ -1,5 +1,6 @@
 import config from "../../../config";
 import {
+	getRoute,
 	isActionsRoute,
 	isAddressesRoute,
 	isCitiesRoute,
@@ -123,5 +124,12 @@ describe('route-getters.js', () => {
 	test('should check isHomeRoute-getter if it is success', () => {
 		const state = {route: config.paths.home};
 		expect(isHomeRoute(state)).toBe(true);
+	});
+
+	test('should check getRoute-getter', () => {
+		const route = config.paths.home;
+		const state = {route};
+
+		expect(getRoute(state)).toBe(route);
 	});
 });
