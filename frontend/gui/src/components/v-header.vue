@@ -33,9 +33,6 @@
 				{{ translate('btn.logout') }}
 			</button>
 		</div>
-
-		<!-- //< -->
-		<!-- <v-tags-dialog v-show="showModal" @close-modal="showModal = false" /> -->
 	</div>
 </template>
 
@@ -43,21 +40,13 @@
 	import config from '../../config';
 	import { mapGetters } from 'vuex';
 	import { AUTH } from '../sconst/auth';
+	import { SIGNAL } from '../sconst/signal';
 	import router from '../router/router';
-
-	//<
-	// import vTagsDialog from './v-tags-dialog';
 
 	export default {
 		name: 'v-header',
-		components: {
-			// vTagsDialog
-		},
 		data() {
-			return {
-				//<
-				// showModal: false
-			}
+			return {}
 		},
 		computed: {
 			...mapGetters([
@@ -73,10 +62,7 @@
 				router.push(config.paths.home);
 			},
 			onAdd: function() {
-				//<
-				console.log('ON ADD');
-				//<
-				// this.showModal = true;
+				this.$store.dispatch(SIGNAL.MODAL.TAG.ADD.SHOW);
 			}
 		}
 	}

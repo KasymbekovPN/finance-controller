@@ -1,10 +1,11 @@
-import Vuex from "vuex";
-import connection from "./modules/connection";
-import i18n from "./modules/i18n";
-import subscription from "./modules/subscription";
-import auth from "./modules/auth";
-import userProfile from "./modules/userProfile";
-import route from "./modules/route";
+import Vuex from 'vuex';
+import connection from './modules/connection';
+import i18n from './modules/i18n';
+import subscription from './modules/subscription';
+import auth from './modules/auth';
+import userProfile from './modules/userProfile';
+import route from './modules/route';
+import signal from './modules/signal';
 
 export default new Vuex.Store({
 	modules: {
@@ -13,6 +14,7 @@ export default new Vuex.Store({
 		subscription,
 		auth,
 		userProfile,
-		route
+		route,
+		signal
 	}
 });
