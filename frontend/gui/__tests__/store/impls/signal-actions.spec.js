@@ -1,10 +1,12 @@
 import { SIGNAL } from "../../../src/sconst/signal";
 import {
-	actOnTagAddModelHide,
-	actOnTagAddModelShow
+	actOnSomeModalHide,
+	actOnSomeModalShow
 } from "../../../src/store/imps/signal-actions";
 
 describe('signal-actions.js', () => {
+
+	const route = 'some.route';
 
 	let commitResult;
 	const commit = (command, data) => {
@@ -15,19 +17,19 @@ describe('signal-actions.js', () => {
 		commitResult = undefined;
 	};
 
-	test('should check actOnTagAddModelShow-actions', () => {
-		const expectedResult = {command: SIGNAL.MODAL.TAG.ADD.SHOW};
-		actOnTagAddModelShow({commit});
+	test('should check actOnSomeModalShow action', () => {
+		const expectedCommitResult = {command: SIGNAL.MODAL.SOME.ADD.SHOW, data: route};
 
-		expect(commitResult).toStrictEqual(expectedResult);
+		actOnSomeModalShow({commit}, route);
+		expect(commitResult).toStrictEqual(expectedCommitResult);
 		reset();
 	});
 
-	test('should check actOnTagAddModelHide-actions', () => {
-		const expectedResult = {command: SIGNAL.MODAL.TAG.ADD.HIDE};
-		actOnTagAddModelHide({commit});
+	test('should check actOnSomeModalHide action', () => {
+		const expectedCommitResult = {command: SIGNAL.MODAL.SOME.ADD.HIDE, data: route};
 
-		expect(commitResult).toStrictEqual(expectedResult);
+		actOnSomeModalHide({commit}, route);
+		expect(commitResult).toStrictEqual(expectedCommitResult);
 		reset();
 	});
 });

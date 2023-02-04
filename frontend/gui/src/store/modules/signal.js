@@ -1,30 +1,59 @@
 import { SIGNAL } from "../../sconst/signal";
-import { isTagAddModalVisible } from "../imps/signal-getters";
 import {
-	actOnTagAddModelHide,
-	actOnTagAddModelShow
+	isActionModalVisible,
+	isAddressModalVisible,
+	isCityModalVisible,
+	isCountryModalVisible,
+	isPaymentModalVisible,
+	isProductModalVisible,
+	isRegionModalVisible,
+	isSellerModalVisible,
+	isStreetModalVisible,
+	isTagModalVisible
+} from "../imps/signal-getters";
+import {
+	actOnSomeModalHide,
+	actOnSomeModalShow
 } from "../imps/signal-actions";
 import {
-	mutateOnTagAddModelHide,
-	mutateOnTagAddModelShow
+	mutateOnSomeModalHide,
+	mutateOnSomeModalShow
 } from "../imps/signal-mutations";
 
 const state = {
-	tagAddModalVisible: false
+	actionModalVisible: false,
+	paymentModalVisible: false,
+	sellerModalVisible: false,
+	addressModalVisible: false,
+	streetModalVisible: false,
+	cityModalVisible: false,
+	regionModalVisible: false,
+	countryModalVisible: false,
+	productModalVisible: false,
+	tagModalVisible: false
 };
 
 const getters = {
-	isTagAddModalVisible: isTagAddModalVisible
+	isActionModalVisible: isActionModalVisible,
+	isPaymentModalVisible: isPaymentModalVisible,
+	isSellerModalVisible: isSellerModalVisible,
+	isAddressModalVisible: isAddressModalVisible,
+	isStreetModalVisible: isStreetModalVisible,
+	isCityModalVisible: isCityModalVisible,
+	isRegionModalVisible: isRegionModalVisible,
+	isCountryModalVisible: isCountryModalVisible,
+	isProductModalVisible: isProductModalVisible,
+	isTagModalVisible: isTagModalVisible
 };
 
 const actions = {
-	[SIGNAL.MODAL.TAG.ADD.SHOW]: actOnTagAddModelShow,
-	[SIGNAL.MODAL.TAG.ADD.HIDE]: actOnTagAddModelHide
+	[SIGNAL.MODAL.SOME.ADD.SHOW]: actOnSomeModalShow,
+	[SIGNAL.MODAL.SOME.ADD.HIDE]: actOnSomeModalHide
 };
 
 const mutations = {
-	[SIGNAL.MODAL.TAG.ADD.SHOW]: mutateOnTagAddModelShow,
-	[SIGNAL.MODAL.TAG.ADD.HIDE]: mutateOnTagAddModelHide
+	[SIGNAL.MODAL.SOME.ADD.SHOW]: mutateOnSomeModalShow,
+	[SIGNAL.MODAL.SOME.ADD.HIDE]: mutateOnSomeModalHide
 };
 
 export default {

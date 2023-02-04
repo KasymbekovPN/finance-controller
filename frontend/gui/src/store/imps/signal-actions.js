@@ -1,14 +1,14 @@
 import { SIGNAL } from "../../sconst/signal";
 
-const actOnTagAddModelShow = ({commit}) => {
-	commit(SIGNAL.MODAL.TAG.ADD.SHOW);
+const actOnSomeModalShow = ({commit}, route) => {
+	commit(SIGNAL.MODAL.SOME.ADD.SHOW, route);
 };
 
-const actOnTagAddModelHide = ({commit}) => {
-	commit(SIGNAL.MODAL.TAG.ADD.HIDE);
+const actOnSomeModalHide = ({commit}, route) => {
+	commit(SIGNAL.MODAL.SOME.ADD.HIDE, route);
 };
 
 export {
-	actOnTagAddModelShow,
-	actOnTagAddModelHide
+	actOnSomeModalShow,
+	actOnSomeModalHide
 };

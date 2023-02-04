@@ -51,7 +51,8 @@
 		computed: {
 			...mapGetters([
 				'translate',
-				'isHomeRoute'
+				'isHomeRoute',
+				'getRoute'
 			])
 		},
 		methods: {
@@ -62,7 +63,7 @@
 				router.push(config.paths.home);
 			},
 			onAdd: function() {
-				this.$store.dispatch(SIGNAL.MODAL.TAG.ADD.SHOW);
+				this.$store.dispatch(SIGNAL.MODAL.SOME.ADD.SHOW, this.getRoute);
 			}
 		}
 	}
