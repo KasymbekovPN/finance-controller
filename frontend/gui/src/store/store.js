@@ -6,6 +6,7 @@ import auth from './modules/auth';
 import userProfile from './modules/userProfile';
 import route from './modules/route';
 import signal from './modules/signal';
+import domain from './modules/domain';
 
 export default new Vuex.Store({
 	modules: {
@@ -15,6 +16,7 @@ export default new Vuex.Store({
 		auth,
 		userProfile,
 		route,
-		signal
+		signal,
+		domain
 	}
 });

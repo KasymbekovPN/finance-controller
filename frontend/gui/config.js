@@ -24,7 +24,12 @@ export default {
 		auth: '/authRequest',
 		i18n: '/i18nRequest',
 		clientParams: '/clientParamsRequest',
-		logout: '/logoutRequest'
+		logout: '/logoutRequest',
+		tag: {
+			create: '/tagCreationRequest',
+			update: '/tagUpdatingRequest',
+			delete: '/tagDeletingRequest'
+		}
 	},
 	paths: paths,
 	menu: {

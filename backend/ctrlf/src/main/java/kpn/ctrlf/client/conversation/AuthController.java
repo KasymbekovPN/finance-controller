@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.util.function.Function;
@@ -17,10 +18,16 @@ import java.util.function.Function;
 public final class AuthController implements RequestController<AuthController.Request, AuthController.Response>{
 	private final UserSecureService<User> userSecureService;
 
+	// TODO: 04.02.2023 del
+//	private final SimpMessagingTemplate template;
+
 	@Override
 	@MessageMapping("/authRequest/{sessionId}")
 	@SendTo("/topic/authResponse/{sessionId}")
 	public Response response(@DestinationVariable String sessionId, Request request) {
+		// TODO: 04.02.2023 del
+//		System.out.println(template);
+
 		User user = new Converter().apply(request);
 		boolean success = userSecureService.checkCredential(user);
 		return new Response(success, sessionId, user.getUsername());

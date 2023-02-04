@@ -1,0 +1,7 @@
+export const DOMAIN = {
+	TAG: {
+		CREATE: 'DOMAIN_TAG_CREATE',
+		UPDATE: 'DOMAIN_TAG_UPDATE',
+		DELETE: 'DOMAIN_TAG_DELETE'
+	}
+};

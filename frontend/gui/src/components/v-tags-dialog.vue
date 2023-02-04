@@ -1,15 +1,38 @@
 <template>
   <transition name="modal-fade">
-    <div class="modal-overlay" @click="$emit('close-modal')">
-      <div class="modal" @click.stop>
+    <div
+		class="modal-overlay"
+		@click="$emit('close-modal')"
+	>
+    <div
+		class="modal"
+		@click.stop
+	>
 		<p class="modal-title">{{ translate('dialog.tag.title') }}</p>
 		<hr>
-		<input class="modal-name-input" v-model="name" :placeholder="[[ translate('dialog.tag.input.placeholder') ]]" />
+		<input
+			class="modal-name-input"
+			v-model="name"
+			:placeholder="[[ translate('dialog.tag.input.placeholder') ]]"
+		/>
 		<div class="modal-buttons">
-			<button class="modal-btn-save">{{ translate('dialog.btn.save.name') }}</button>
-			<button class="modal-btn-close" @click="$emit('close-modal')">{{ translate('dialog.btn.close.name') }}</button>
+			<button
+				class="modal-btn-save"
+				@click="onSaveButtonClick"
+			>
+				{{ translate('dialog.btn.save.name') }}
+			</button>
+			<button
+				class="modal-btn-close"
+				@click="$emit('close-modal')"
+			>
+				{{ translate('dialog.btn.close.name') }}
+			</button>
 			<!-- //< v-if!!! -->
-			<button class="modal-btn-delete">{{ translate('dialog.btn.delete.name') }}</button>
+			<button
+				class="modal-btn-delete"
+				@click="onDeleteButtonClick"
+			>{{ translate('dialog.btn.delete.name') }}</button>
 		</div>
       </div>
     </div>
@@ -24,6 +47,7 @@
 		components: {},
 		data() {
 			return {
+				id : undefined,
 				name: ''
 			}
 		},
@@ -32,7 +56,20 @@
 				'translate'
 			])
 		},
-		methods: {}
+		methods: {
+			onSaveButtonClick: function() {
+				//<
+				console.log('save button is clicked')
+				//<
+
+				//<
+				// use DOMAIN.TAG.CREATE
+			},
+			onDeleteButtonClick: function() {
+				//<
+				console.log('delete button is clicked')
+			}
+		}
 	}
 </script>
 
