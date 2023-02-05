@@ -9,7 +9,7 @@ import {
 describe('domain-actions.js', () => {
 
 	const id = 123;
-	const username = 'username';
+	const name = 'tag.name';
 
 	let dispatchResult;
 	const dispatch = (command, data) => {
@@ -26,11 +26,11 @@ describe('domain-actions.js', () => {
 			data: {
 				destination: config.requests.tag.create,
 				headers: {},
-				body: {username}
+				body: {name}
 			}
 		};
 
-		actOnTagCreation({dispatch}, {username});
+		actOnTagCreation({dispatch}, {name});
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();
 	});
@@ -41,11 +41,11 @@ describe('domain-actions.js', () => {
 			data: {
 				destination: config.requests.tag.update,
 				headers: {},
-				body: {id, username}
+				body: {id, name}
 			}
 		};
 
-		actOnTagUpdating({dispatch}, {id, username});
+		actOnTagUpdating({dispatch}, {id, name});
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();
 	});

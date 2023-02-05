@@ -1,19 +1,22 @@
 import config from "../../../config";
 import { CONNECTION } from "../../sconst/connection";
 
-const actOnTagCreation = ({dispatch}, {username}) => {
+const actOnTagCreation = ({dispatch}, {name}) => {
+	//<
+	console.log(`actOnTagCreation : name = '${name}'`);
+	//<
 	dispatch(CONNECTION.SEND, {
 		destination: config.requests.tag.create,
 		headers: {},
-		body: {username}
+		body: {name}
 	});
 };
 
-const actOnTagUpdating = ({dispatch}, {id, username}) => {
+const actOnTagUpdating = ({dispatch}, {id, name}) => {
 	dispatch(CONNECTION.SEND, {
 		destination: config.requests.tag.update,
 		headers: {},
-		body: {id, username}
+		body: {id, name}
 	});
 };
 

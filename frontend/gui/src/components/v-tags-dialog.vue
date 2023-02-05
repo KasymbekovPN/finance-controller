@@ -40,7 +40,8 @@
 </template>
 
 <script>
-	import { mapGetters } from 'vuex';
+	import { mapGetters, mapActions } from 'vuex';
+	import { DOMAIN } from '../sconst/domain';
 
 	export default {
 		name: 'v-header',
@@ -57,18 +58,14 @@
 			])
 		},
 		methods: {
+			...mapActions({
+				sendNewTag: DOMAIN.TAG.CREATE
+			}),
 			onSaveButtonClick: function() {
-				//<
-				console.log('save button is clicked')
-				//<
-
-				//<
-				// use DOMAIN.TAG.CREATE
+				this.sendNewTag({name: this.name});
+				this.$emit('close-modal');
 			},
-			onDeleteButtonClick: function() {
-				//<
-				console.log('delete button is clicked')
-			}
+			onDeleteButtonClick: function() {}
 		}
 	}
 </script>
