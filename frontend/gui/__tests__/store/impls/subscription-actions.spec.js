@@ -3,11 +3,14 @@ import {
 	processAuthRequestSubscription,
 	processClientParamsSubscription,
 	processI18nSubscription,
-	processLogoutRequestSubscription
+	processLogoutRequestSubscription,
+	processTagCreationSubscription
 } from "../../../src/store/imps/subscription-actions";
 import { CONNECTION } from "../../../src/sconst/connection";
 import { I18N } from "../../../src/sconst/i18n";
 import { AUTH } from "../../../src/sconst/auth";
+import { TAG } from "../../../src/sconst/tag";
+import { NOTIFICATION } from "../../../src/sconst/notification";
 
 describe('subscription-actions.js', () => {
 
@@ -72,4 +75,40 @@ describe('subscription-actions.js', () => {
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();
 	});
+
+	test('should check tag creation subscription action if success', () => {
+		const value = {id: 1, name: "name"};
+		const expectedDispatchResult = {
+			[TAG.CREATED]: value
+		};
+		const body = {
+			success: true,
+			value
+		};
+		const response = {
+			body: JSON.stringify(body)
+		};
+
+		processTagCreationSubscription({dispatch}, response);
+		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
+		reset();
+	})
+
+	test('should check tag creation subscription action if fail', () => {
+		const seed = {code: 'some.code'};
+		const expectedDispatchResult = {
+			[NOTIFICATION.ERROR]: seed
+		};
+		const body = {
+			success: false,
+			seed
+		};
+		const response = {
+			body: JSON.stringify(body)
+		};
+
+		processTagCreationSubscription({dispatch}, response);
+		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
+		reset();
+	})
 });

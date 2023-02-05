@@ -1,7 +1,9 @@
+import { TAG } from "../../sconst/tag";
 import config from "../../../config";
 import { AUTH } from "../../sconst/auth";
 import { CONNECTION } from "../../sconst/connection";
 import { I18N } from "../../sconst/i18n";
+import { NOTIFICATION } from "../../sconst/notification";
 
 const processClientParamsSubscription = ({dispatch}, response) => {
 	const clientParams = JSON.parse(response.body);
@@ -28,9 +30,19 @@ const processLogoutRequestSubscription = ({dispatch}, response) => {
 	dispatch(AUTH.LOGOUT.RESPONSE, data);
 };
 
+const processTagCreationSubscription = ({dispatch}, response) => {
+	const data = JSON.parse(response.body);
+	if (data.success){
+		dispatch(TAG.CREATED, data.value);
+	} else {
+		dispatch(NOTIFICATION.ERROR, data.seed);
+	}
+};
+
 export {
 	processClientParamsSubscription,
 	processI18nSubscription,
 	processAuthRequestSubscription,
-	processLogoutRequestSubscription
+	processLogoutRequestSubscription,
+	processTagCreationSubscription
 };

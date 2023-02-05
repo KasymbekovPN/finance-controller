@@ -1,9 +1,9 @@
 import config from "../../../config";
 import { CONNECTION } from "../../sconst/connection";
 
-const actOnTagCreation = ({dispatch}, {name}) => {
+const processTagCreationRequest = ({dispatch}, {name}) => {
 	//<
-	console.log(`actOnTagCreation : name = '${name}'`);
+	console.log(`processTagCreationRequest : name = '${name}'`);
 	//<
 	dispatch(CONNECTION.SEND, {
 		destination: config.requests.tag.create,
@@ -12,7 +12,7 @@ const actOnTagCreation = ({dispatch}, {name}) => {
 	});
 };
 
-const actOnTagUpdating = ({dispatch}, {id, name}) => {
+const processTagUpdatingRequest = ({dispatch}, {id, name}) => {
 	dispatch(CONNECTION.SEND, {
 		destination: config.requests.tag.update,
 		headers: {},
@@ -20,7 +20,7 @@ const actOnTagUpdating = ({dispatch}, {id, name}) => {
 	});
 };
 
-const actOnTagDeleting = ({dispatch}, {id})  => {
+const processTagDeletingRequest = ({dispatch}, {id})  => {
 	dispatch(CONNECTION.SEND, {
 		destination: config.requests.tag.delete,
 		headers: {},
@@ -29,7 +29,7 @@ const actOnTagDeleting = ({dispatch}, {id})  => {
 };
 
 export {
-	actOnTagCreation,
-	actOnTagUpdating,
-	actOnTagDeleting
+	processTagCreationRequest,
+	processTagUpdatingRequest,
+	processTagDeletingRequest
 };

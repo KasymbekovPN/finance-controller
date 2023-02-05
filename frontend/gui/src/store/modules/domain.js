@@ -1,8 +1,8 @@
 import { DOMAIN } from "../../sconst/domain";
 import {
-	actOnTagCreation,
-	actOnTagDeleting,
-	actOnTagUpdating
+	processTagCreationRequest,
+	processTagDeletingRequest,
+	processTagUpdatingRequest
 } from "../imps/domain-actions";
 
 const state = {};
@@ -10,9 +10,9 @@ const state = {};
 const getters = {};
 
 const actions = {
-	[DOMAIN.TAG.CREATE]: actOnTagCreation,
-	[DOMAIN.TAG.UPDATE]: actOnTagUpdating,
-	[DOMAIN.TAG.DELETE]: actOnTagDeleting
+	[DOMAIN.TAG.REQUEST.CREATE]: processTagCreationRequest,
+	[DOMAIN.TAG.REQUEST.UPDATE]: processTagUpdatingRequest,
+	[DOMAIN.TAG.REQUEST.DELETE]: processTagDeletingRequest
 };
 
 const mutations = {};

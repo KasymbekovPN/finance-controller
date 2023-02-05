@@ -59,7 +59,7 @@
 		},
 		methods: {
 			...mapActions({
-				sendNewTag: DOMAIN.TAG.CREATE
+				sendNewTag: DOMAIN.TAG.REQUEST.CREATE
 			}),
 			onSaveButtonClick: function() {
 				this.sendNewTag({name: this.name});

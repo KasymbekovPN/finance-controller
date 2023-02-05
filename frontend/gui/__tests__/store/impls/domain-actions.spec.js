@@ -1,9 +1,9 @@
 import config from "../../../config";
 import { CONNECTION } from "../../../src/sconst/connection";
 import {
-	actOnTagCreation,
-	actOnTagDeleting,
-	actOnTagUpdating
+	processTagCreationRequest,
+	processTagDeletingRequest,
+	processTagUpdatingRequest
  } from "../../../src/store/imps/domain-actions";
 
 describe('domain-actions.js', () => {
@@ -30,7 +30,7 @@ describe('domain-actions.js', () => {
 			}
 		};
 
-		actOnTagCreation({dispatch}, {name});
+		processTagCreationRequest({dispatch}, {name});
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();
 	});
@@ -45,7 +45,7 @@ describe('domain-actions.js', () => {
 			}
 		};
 
-		actOnTagUpdating({dispatch}, {id, name});
+		processTagUpdatingRequest({dispatch}, {id, name});
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();
 	});
@@ -60,7 +60,7 @@ describe('domain-actions.js', () => {
 			}
 		};
 
-		actOnTagDeleting({dispatch}, {id});
+		processTagDeletingRequest({dispatch}, {id});
 		expect(dispatchResult).toStrictEqual(expectedDispatchResult);
 		reset();
 	});
