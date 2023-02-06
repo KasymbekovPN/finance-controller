@@ -1,16 +1,31 @@
 <template>
 	<div class="v-home-page">
 		<p>HOME</p>
+		<v-notification-item
+			:seed="seed"
+			:level="level"
+		/>
 	</div>
 </template>
 
 <script>
+	//< tmp
+	import vNotificationItem from './notification/v-notification-item';
+	import { NOTIFICATION } from '../sconst/notification';
+
 	export default {
 		name: 'v-home-page',
-		components: {},
+		components: {
+			//< tmp
+			vNotificationItem
+		},
 		props: {},
 		data() {
-			return {}
+			return {
+				//< tmp
+				seed: {},
+				level: NOTIFICATION.INFO
+			}
 		},
 		computed: {},
 		methods: {}

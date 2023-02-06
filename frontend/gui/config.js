@@ -85,5 +85,8 @@ export default {
 				path: paths.tags
 			}
 		]
+	},
+	notification: {
+		delay: 5_000
 	}
 };
