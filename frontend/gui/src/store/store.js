@@ -7,6 +7,8 @@ import userProfile from './modules/userProfile';
 import route from './modules/route';
 import signal from './modules/signal';
 import domain from './modules/domain';
+import notification from './modules/notification';
+import tag from './modules/tag';
 
 export default new Vuex.Store({
 	modules: {
@@ -17,6 +19,8 @@ export default new Vuex.Store({
 		userProfile,
 		route,
 		signal,
-		domain
+		domain,
+		notification,
+		tag
 	}
 });

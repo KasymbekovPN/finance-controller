@@ -1,8 +1,10 @@
-package kpn.ctrlf.client.conversation.tag;
+package kpn.ctrlf.client.conversation.domain;
 
+import kpn.ctrlf.client.conversation.domain.TagCreationController;
 import kpn.ctrlf.data.domain.Tag;
 import kpn.ctrlf.fakes.FakeTagService;
 import kpn.lib.result.ImmutableResult;
+import kpn.lib.result.Result;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -17,19 +19,19 @@ class TagCreationControllerTest {
 	@Test
 	void shouldCheckTagSaving_ifFail() {
 		TagCreationController controller = new TagCreationController(createFailTagService());
-		TagCreationController.Response response = controller.response("", new TagCreationController.Request());
+		Result<Tag> response = controller.response("", new TagCreationController.Request());
 
 		ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>fail(CODE);
-		assertThat(response.getResult()).isEqualTo(expectedResult);
+		assertThat(response).isEqualTo(expectedResult);
 	}
 
 	@Test
 	void shouldCheckTagSaving() {
 		TagCreationController controller = new TagCreationController(createTagService());
-		TagCreationController.Response response = controller.response("", new TagCreationController.Request());
+		Result<Tag> response = controller.response("", new TagCreationController.Request());
 
 		ImmutableResult<Tag> expectedResult = ImmutableResult.<Tag>ok(new Tag(ID, NAME));
-		assertThat(response.getResult()).isEqualTo(expectedResult);
+		assertThat(response).isEqualTo(expectedResult);
 	}
 
 	private FakeTagService createFailTagService() {

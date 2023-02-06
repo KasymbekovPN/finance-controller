@@ -5,7 +5,12 @@ const state = {};
 const getters = {};
 
 const actions = {
-	[TAG.CREATED]: ({}) => {
+	[TAG.CREATED]: ({commit}, tag) => {
+		//<
+		console.log(commit);
+		console.log(tag);
+		//<
+
 		//< impl it
 	}
 };
