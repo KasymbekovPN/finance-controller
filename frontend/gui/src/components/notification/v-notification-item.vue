@@ -15,7 +15,7 @@
 				:src="require(`../../assets/icons/info.svg`)"
 				alt=""
 			>
-			<p class="v-notification-item-content"> Message </p>
+			<p class="v-notification-item-content"> Message Message Message Message Message Message Message Message Message Message Message</p>
 		</div>
 	</div>
 </template>
@@ -38,15 +38,16 @@
 
 <style lang="scss">
 	.v-notification-item {
-		border: solid red 1px;
-		height: 700px;
-		width: 700px;
+		height: 100px;
+		width: 400px;
+		border: solid $notificationItemBorderColor 1px;
+		border-radius: 20px;
+		box-shadow: 10px 5px 5px $notificationItemShadowColor;
 	}
 
 	.v-notification-item-top {
 		display: flex;
 		justify-content: flex-end;
-		border: solid red 1px;
 		height: 30px;
 		margin-right: 5px;
 	}
@@ -54,8 +55,8 @@
 	.v-notification-item-close-btn {
 		width: 20px;
 		height: 20px;
-		background: #ffffff;;
-		border-width: 1px;
+		background: #ffffff;
+		border-width: 0px;
 		cursor: $buttonCursor;
 		margin-top: 5px;
 		margin-left: 5px;
@@ -68,10 +69,20 @@
 		margin: 0px;
 	}
 
-	.v-notification-item-bottom {}
+	.v-notification-item-bottom {
+		display: flex;
+	}
 
-	.v-notification-item-level-img {}
+	.v-notification-item-level-img {
+		height: 40px;
+		width: 40px;
+		margin-left: 10px;
+	}
 
-	.v-notification-item-content {}
+	.v-notification-item-content {
+		margin-left: 10px;
+		margin-top: 0px;
+		text-align: left;
+	}
 
 </style>
