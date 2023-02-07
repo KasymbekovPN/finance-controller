@@ -1,7 +1,10 @@
 <template>
 	<div class="v-notification-item">
 		<div class="v-notification-item-top">
-			<button class="v-notification-item-close-btn">
+			<button
+				class="v-notification-item-close-btn"
+				@click="onClose"
+			>
 				<img
 					class="v-notification-item-close-img"
 					:src="require(`../../assets/icons/close-cross.svg`)"
@@ -12,27 +15,46 @@
 		<div class="v-notification-item-bottom">
 			<img
 				class="v-notification-item-level-img"
-				:src="require(`../../assets/icons/info.svg`)"
+				:src="require(`../../assets/icons/${icon}.svg`)"
 				alt=""
 			>
-			<p class="v-notification-item-content"> Message Message Message Message Message Message Message Message Message Message Message</p>
+			<p class="v-notification-item-content">{{ message }}</p>
 		</div>
 	</div>
 </template>
 
 <script>
+	import { mapGetters } from 'vuex';
+	import { getIcon } from '../../sconst/notification';
+
 	export default {
 		name: 'v-notification-item',
 		components: {},
 		props: {
+			id: String,
 			seed: Object,
 			level: String
 		},
 		data() {
 			return {}
 		},
-		computed: {},
-		methods: {}
+		computed: {
+			...mapGetters([
+				'translate'
+			]),
+			message: function(){
+				return this.translate(this.seed.code, this.seed.args);
+			},
+			icon: function() {
+				return getIcon(this.level);
+			}
+		},
+		methods: {
+			onClose: function() {
+				//<
+				console.log(`v-notivication-item onClic id=${this.id}`);
+			}
+		}
 	}
 </script>
 
@@ -84,5 +106,4 @@
 		margin-top: 0px;
 		text-align: left;
 	}
-
 </style>

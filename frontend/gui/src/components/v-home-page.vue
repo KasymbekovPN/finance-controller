@@ -1,7 +1,9 @@
 <template>
 	<div class="v-home-page">
 		<p>HOME</p>
+		<!-- //< temp -->
 		<v-notification-item
+			:id="id"
 			:seed="seed"
 			:level="level"
 		/>
@@ -12,19 +14,29 @@
 	//< tmp
 	import vNotificationItem from './notification/v-notification-item';
 	import { NOTIFICATION } from '../sconst/notification';
+	//<
 
 	export default {
 		name: 'v-home-page',
 		components: {
 			//< tmp
 			vNotificationItem
+			//<
 		},
 		props: {},
 		data() {
 			return {
 				//< tmp
-				seed: {},
-				level: NOTIFICATION.INFO
+				id: 'some.id',
+				seed: {
+					code: '{arg0} some.code {arg1}',
+					args: {
+						arg0: 'value0',
+						arg1: 'value1'
+					}
+				},
+				level: NOTIFICATION.WARNING
+				//<
 			}
 		},
 		computed: {},
