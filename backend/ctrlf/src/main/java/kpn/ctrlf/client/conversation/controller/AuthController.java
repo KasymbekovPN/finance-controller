@@ -1,4 +1,4 @@
-package kpn.ctrlf.client.conversation;
+package kpn.ctrlf.client.conversation.controller;
 
 import kpn.ctrlf.data.domain.User;
 import kpn.ctrlf.secure.UserSecureService;
@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.util.function.Function;

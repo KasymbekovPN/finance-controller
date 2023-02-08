@@ -25,7 +25,7 @@ public final class FakeTagServiceImpl implements FakeTagService {
 	}
 
 	public Result<Tag> save(Tag tag) {
-		return ImmutableResult.<Tag>bFail("some.code").arg(tag.getName()).build();
+		return ImmutableResult.<Tag>bFail("domain.creation.tag.error.already-exist").arg(tag.getName()).build();
 		// TODO: 06.02.2023 ??
 //		String name = tag.getName();
 //		if (names.contains(name)){

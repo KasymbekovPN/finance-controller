@@ -1,5 +1,6 @@
-package kpn.ctrlf.client.conversation;
+package kpn.ctrlf.client.conversation.controller;
 
+import kpn.ctrlf.client.conversation.controller.ClientParamsController;
 import kpn.ctrlf.client.params.ClientParams;
 import org.junit.jupiter.api.Test;
 

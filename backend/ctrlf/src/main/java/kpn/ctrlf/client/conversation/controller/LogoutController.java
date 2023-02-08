@@ -1,4 +1,4 @@
-package kpn.ctrlf.client.conversation;
+package kpn.ctrlf.client.conversation.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

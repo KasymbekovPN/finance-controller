@@ -1,5 +1,6 @@
-package kpn.ctrlf.client.conversation;
+package kpn.ctrlf.client.conversation.controller;
 
+import kpn.ctrlf.client.conversation.controller.I18nController;
 import kpn.ctrlf.client.i18n.I18nSource;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

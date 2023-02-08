@@ -1,4 +1,4 @@
-package kpn.ctrlf.client.conversation;
+package kpn.ctrlf.client.conversation.controller;
 
 import kpn.ctrlf.client.i18n.I18nSource;
 import lombok.Getter;

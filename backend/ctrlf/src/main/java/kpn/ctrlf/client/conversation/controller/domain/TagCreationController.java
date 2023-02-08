@@ -1,6 +1,6 @@
-package kpn.ctrlf.client.conversation.domain;
+package kpn.ctrlf.client.conversation.controller.domain;
 
-import kpn.ctrlf.client.conversation.RequestController;
+import kpn.ctrlf.client.conversation.controller.RequestController;
 import kpn.ctrlf.data.domain.Tag;
 import kpn.ctrlf.fakes.FakeTagService;
 import kpn.lib.result.Result;

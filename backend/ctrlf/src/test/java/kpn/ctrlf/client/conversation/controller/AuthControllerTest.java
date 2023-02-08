@@ -1,5 +1,6 @@
-package kpn.ctrlf.client.conversation;
+package kpn.ctrlf.client.conversation.controller;
 
+import kpn.ctrlf.client.conversation.controller.AuthController;
 import kpn.ctrlf.data.domain.User;
 import kpn.ctrlf.secure.UserSecureService;
 import org.junit.jupiter.api.Test;
